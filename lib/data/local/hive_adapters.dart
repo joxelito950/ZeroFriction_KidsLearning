@@ -15,7 +15,7 @@ final class LevelStateAdapter extends TypeAdapter<LevelState> {
     final levelId = reader.readString();
     final isCompleted = reader.readBool();
     final stars = reader.readInt();
-    if (stars < 0 || stars > 3) {
+    if (stars < LevelState.minStars || stars > LevelState.maxStars) {
       throw HiveError('Invalid stars value for "$levelId": $stars');
     }
     return LevelState(

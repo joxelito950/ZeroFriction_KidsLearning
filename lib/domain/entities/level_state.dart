@@ -1,10 +1,17 @@
 class LevelState {
+  static const int minStars = 0;
+  static const int maxStars = 3;
+
+  static void validateStars(int value, {String fieldName = 'stars'}) {
+    RangeError.checkValueInInterval(value, minStars, maxStars, fieldName);
+  }
+
   LevelState({
     required this.levelId,
     required this.isCompleted,
     required this.stars,
   }) {
-    RangeError.checkValueInInterval(stars, 0, 3, 'stars');
+    validateStars(stars);
   }
 
   final String levelId;
@@ -17,7 +24,7 @@ class LevelState {
     int? stars,
   }) {
     if (stars != null) {
-      RangeError.checkValueInInterval(stars, 0, 3, 'stars');
+      validateStars(stars);
     }
 
     return LevelState(
