@@ -18,10 +18,10 @@ final class HivePersistenceConfig {
   static Future<void> initialize({
     required String hivePath,
   }) async {
-    if (_initialized) return;
     if (_initializationCompleter != null) {
       return _initializationCompleter!.future;
     }
+    if (_initialized) return;
 
     final completer = Completer<void>();
     _initializationCompleter = completer;
