@@ -1,0 +1,15 @@
+name: toddler_logic
+description: Local-first cognitive development app for toddlers.
+publish_to: 'none'
+
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  hive: ^2.2.3
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.25.8
