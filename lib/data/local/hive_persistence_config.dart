@@ -33,8 +33,18 @@ final class HivePersistenceConfig {
   }
 
   static Box<LevelState> get levelStateBox =>
-      Hive.box<LevelState>(levelStateBoxName);
+      _getOpenBox<LevelState>(levelStateBoxName);
 
   static Box<UserProfile> get userProfileBox =>
-      Hive.box<UserProfile>(userProfileBoxName);
+      _getOpenBox<UserProfile>(userProfileBoxName);
+
+  static Box<T> _getOpenBox<T>(String boxName) {
+    if (!_initialized || !Hive.isBoxOpen(boxName)) {
+      throw StateError(
+        'HivePersistenceConfig is not initialized. '
+        'Call initialize(hivePath: ...) before requesting boxes.',
+      );
+    }
+    return Hive.box<T>(boxName);
+  }
 }

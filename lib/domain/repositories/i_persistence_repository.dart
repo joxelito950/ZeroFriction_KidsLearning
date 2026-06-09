@@ -10,7 +10,7 @@ abstract interface class IPersistenceRepository {
 
   Future<void> saveLevelStates(Iterable<LevelState> levelStates);
 
-  Future<UserProfile> readUserProfile();
+  Future<UserProfile?> readUserProfile();
 
   Future<void> saveUserProfile(UserProfile userProfile);
 }
