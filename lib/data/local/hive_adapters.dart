@@ -12,6 +12,7 @@ final class LevelStateAdapter extends TypeAdapter<LevelState> {
 
   @override
   LevelState read(BinaryReader reader) {
+    // Binary order: levelId, isCompleted, stars.
     final levelId = reader.readString();
     final isCompleted = reader.readBool();
     final stars = reader.readInt();
@@ -37,6 +38,7 @@ final class UserProfileAdapter extends TypeAdapter<UserProfile> {
 
   @override
   UserProfile read(BinaryReader reader) {
+    // Binary order: isPremium, soundEnabled.
     final isPremium = reader.readBool();
     final soundEnabled = reader.readBool();
     return UserProfile(

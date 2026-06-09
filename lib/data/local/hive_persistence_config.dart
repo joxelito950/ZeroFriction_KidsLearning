@@ -37,11 +37,21 @@ final class HivePersistenceConfig {
         Hive.registerAdapter(UserProfileAdapter());
       }
 
-      await Hive.openBox<LevelState>(levelStateBoxName);
-      await Hive.openBox<UserProfile>(userProfileBoxName);
+      if (!Hive.isBoxOpen(levelStateBoxName)) {
+        await Hive.openBox<LevelState>(levelStateBoxName);
+      }
+      if (!Hive.isBoxOpen(userProfileBoxName)) {
+        await Hive.openBox<UserProfile>(userProfileBoxName);
+      }
       _initialized = true;
       completer.complete();
     } catch (error, stackTrace) {
+      if (Hive.isBoxOpen(levelStateBoxName)) {
+        await Hive.box<LevelState>(levelStateBoxName).close();
+      }
+      if (Hive.isBoxOpen(userProfileBoxName)) {
+        await Hive.box<UserProfile>(userProfileBoxName).close();
+      }
       completer.completeError(error, stackTrace);
       rethrow;
     } finally {
