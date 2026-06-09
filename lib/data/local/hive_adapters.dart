@@ -15,7 +15,6 @@ final class LevelStateAdapter extends TypeAdapter<LevelState> {
     final levelId = reader.readString();
     final isCompleted = reader.readBool();
     final stars = reader.readInt();
-    LevelState.validateStars(stars, fieldName: 'stars for level "$levelId"');
     return LevelState(
       levelId: levelId,
       isCompleted: isCompleted,
