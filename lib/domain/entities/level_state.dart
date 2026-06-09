@@ -16,6 +16,10 @@ class LevelState {
     bool? isCompleted,
     int? stars,
   }) {
+    if (stars != null) {
+      RangeError.checkValueInInterval(stars, 0, 3, 'stars');
+    }
+
     return LevelState(
       levelId: levelId ?? this.levelId,
       isCompleted: isCompleted ?? this.isCompleted,
