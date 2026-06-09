@@ -1,9 +1,11 @@
 class LevelState {
-  const LevelState({
+  LevelState({
     required this.levelId,
     required this.isCompleted,
     required this.stars,
-  }) : assert(stars >= 0 && stars <= 3, 'stars must be between 0 and 3');
+  }) {
+    RangeError.checkValueInInterval(stars, 0, 3, 'stars');
+  }
 
   final String levelId;
   final bool isCompleted;

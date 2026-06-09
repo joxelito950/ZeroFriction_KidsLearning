@@ -15,10 +15,11 @@ final class LevelStateAdapter extends TypeAdapter<LevelState> {
     final levelId = reader.readString();
     final isCompleted = reader.readBool();
     final stars = reader.readInt();
+    final normalizedStars = stars.clamp(0, 3).toInt();
     return LevelState(
       levelId: levelId,
       isCompleted: isCompleted,
-      stars: stars,
+      stars: normalizedStars,
     );
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hive/hive.dart';
 
 import '../../domain/entities/level_state.dart';
@@ -11,25 +13,40 @@ final class HivePersistenceConfig {
   static const String userProfileBoxName = 'user_profile';
 
   static bool _initialized = false;
+  static Completer<void>? _initializationCompleter;
 
   static Future<void> initialize({
     required String hivePath,
   }) async {
     if (_initialized) return;
-
-    Hive.init(hivePath);
-
-    if (!Hive.isAdapterRegistered(kLevelStateTypeId)) {
-      Hive.registerAdapter(LevelStateAdapter());
+    if (_initializationCompleter != null) {
+      return _initializationCompleter!.future;
     }
 
-    if (!Hive.isAdapterRegistered(kUserProfileTypeId)) {
-      Hive.registerAdapter(UserProfileAdapter());
-    }
+    final completer = Completer<void>();
+    _initializationCompleter = completer;
 
-    await Hive.openBox<LevelState>(levelStateBoxName);
-    await Hive.openBox<UserProfile>(userProfileBoxName);
-    _initialized = true;
+    try {
+      Hive.init(hivePath);
+
+      if (!Hive.isAdapterRegistered(kLevelStateTypeId)) {
+        Hive.registerAdapter(LevelStateAdapter());
+      }
+
+      if (!Hive.isAdapterRegistered(kUserProfileTypeId)) {
+        Hive.registerAdapter(UserProfileAdapter());
+      }
+
+      await Hive.openBox<LevelState>(levelStateBoxName);
+      await Hive.openBox<UserProfile>(userProfileBoxName);
+      _initialized = true;
+      completer.complete();
+    } catch (error, stackTrace) {
+      completer.completeError(error, stackTrace);
+      rethrow;
+    } finally {
+      _initializationCompleter = null;
+    }
   }
 
   static Box<LevelState> get levelStateBox =>
