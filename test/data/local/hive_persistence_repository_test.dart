@@ -88,12 +88,13 @@ void main() {
       await repository.saveLevelStates(levelStates);
 
       verify(
-        () => levelStateBox.putAll({
-          'level_10': levelStates[0],
-          'level_11': levelStates[1],
-        }),
+        () => levelStateBox.putAll(
+          any(that: predicate<Map<dynamic, LevelState>>((m) =>
+              m.length == 2 &&
+              m['level_10'] == levelStates[0] &&
+              m['level_11'] == levelStates[1])),
+        ),
       ).called(1);
-    });
 
     test('readUserProfile returns saved profile when it exists', () async {
       const savedProfile = UserProfile(isPremium: true, isSoundEnabled: false);
