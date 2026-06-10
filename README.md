@@ -57,9 +57,7 @@ El MVP se compone de 4 módulos interactivos desconectados de la red:
 ---
 
 ## ⚙️ Reglas de Negocio & Seguridad (Local-First)
----
 
-## ⚙️ Reglas de Negocio & Seguridad (Local-First)
 
 ### Reglas de Negocio
 *   **Persistencia del Premium:** Al iniciar, la app lee la bandera local `is_premium`. Si es `false`, los niveles avanzados muestran un candado sutil. Al procesar el pago con éxito a través de Google Play, la bandera cambia a `true` permanentemente.
