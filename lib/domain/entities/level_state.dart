@@ -1,3 +1,8 @@
+import 'package:hive/hive.dart';
+
+part 'level_state.g.dart';
+
+@HiveType(typeId: 0)
 class LevelState {
   static const int minStars = 0;
   static const int maxStars = 3;
@@ -14,8 +19,11 @@ class LevelState {
     validateStars(stars);
   }
 
+  @HiveField(0)
   final String levelId;
+  @HiveField(1)
   final bool isCompleted;
+  @HiveField(2)
   final int stars;
 
   LevelState copyWith({

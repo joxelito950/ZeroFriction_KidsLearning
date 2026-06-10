@@ -1,19 +1,28 @@
+import 'package:hive/hive.dart';
+
+part 'user_profile.g.dart';
+
+@HiveType(typeId: 1)
 class UserProfile {
   const UserProfile({
     required this.isPremium,
-    required this.soundEnabled,
+    required this.isSoundEnabled,
   });
 
+  @HiveField(0)
   final bool isPremium;
-  final bool soundEnabled;
+  @HiveField(1)
+  final bool isSoundEnabled;
+
+  bool get soundEnabled => isSoundEnabled;
 
   UserProfile copyWith({
     bool? isPremium,
-    bool? soundEnabled,
+    bool? isSoundEnabled,
   }) {
     return UserProfile(
       isPremium: isPremium ?? this.isPremium,
-      soundEnabled: soundEnabled ?? this.soundEnabled,
+      isSoundEnabled: isSoundEnabled ?? this.isSoundEnabled,
     );
   }
 
@@ -22,9 +31,9 @@ class UserProfile {
     if (identical(this, other)) return true;
     return other is UserProfile &&
         other.isPremium == isPremium &&
-        other.soundEnabled == soundEnabled;
+        other.isSoundEnabled == isSoundEnabled;
   }
 
   @override
-  int get hashCode => Object.hash(isPremium, soundEnabled);
+  int get hashCode => Object.hash(isPremium, isSoundEnabled);
 }
