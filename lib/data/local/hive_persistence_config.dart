@@ -4,7 +4,6 @@ import 'package:hive/hive.dart';
 
 import '../../domain/entities/level_state.dart';
 import '../../domain/entities/user_profile.dart';
-import 'hive_adapters.dart';
 
 final class HivePersistenceConfig {
   HivePersistenceConfig._();
@@ -29,11 +28,11 @@ final class HivePersistenceConfig {
     try {
       Hive.init(hivePath);
 
-      if (!Hive.isAdapterRegistered(kLevelStateTypeId)) {
+      if (!Hive.isAdapterRegistered(0)) {
         Hive.registerAdapter(LevelStateAdapter());
       }
 
-      if (!Hive.isAdapterRegistered(kUserProfileTypeId)) {
+      if (!Hive.isAdapterRegistered(1)) {
         Hive.registerAdapter(UserProfileAdapter());
       }
 
