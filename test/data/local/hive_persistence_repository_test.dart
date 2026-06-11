@@ -95,6 +95,7 @@ void main() {
               m['level_11'] == levelStates[1])),
         ),
       ).called(1);
+    });
 
     test('readUserProfile returns saved profile when it exists', () async {
       const savedProfile = UserProfile(isPremium: true, isSoundEnabled: false);
