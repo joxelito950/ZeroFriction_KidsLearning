@@ -1,4 +1,4 @@
-ToddlerLogic 🚀 • Zero-Friction Kids Learning
+# ToddlerLogic 🚀 • Zero-Friction Kids Learning
 
 Una aplicación móvil premium de desarrollo cognitivo diseñada específicamente para niños de 3 años. Este proyecto nace de la frustración real de un padre desarrollador ante el estado del mercado actual: aplicaciones infantiles saturadas de anuncios invasivos, mecánicas frenéticas o suscripciones mensuales costosas que rompen el flujo de atención y frustran a los niños.
 
