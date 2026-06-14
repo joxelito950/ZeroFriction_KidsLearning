@@ -51,7 +51,7 @@ class MemoryVictoryDialog extends StatelessWidget {
               children: List.generate(
                 3,
                 (index) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Icon(Icons.star_rounded, key: ValueKey<String>('memory-victory-star-$index'), color: Color(0xFFFFC107), size: 34),
                 ),
               ),
