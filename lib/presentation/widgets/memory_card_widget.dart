@@ -44,7 +44,13 @@ class MemoryCardWidget extends StatelessWidget {
                   transform: Matrix4.identity()
                     ..setEntry(3, 2, 0.0018)
                     ..rotateY(angle),
-                  child: showFront ? _FrontFace(symbol: card.assetPath) : _BackFace(id: card.id),
+                  child: showFront
+                      ? Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.identity()..rotateY(math.pi),
+                          child: _FrontFace(symbol: card.assetPath),
+                        )
+                      : _BackFace(id: card.id),
                 );
               },
             ),
