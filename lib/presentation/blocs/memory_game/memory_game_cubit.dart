@@ -76,13 +76,15 @@ class MemoryGameCubit extends Cubit<MemoryGameState> {
 
       if (isMatch) {
         // Marcamos las cartas como emparejadas de forma permanente
-        updatedCards[firstIndex] = updatedCards[firstIndex].copyWith(isMatched: true);
-        updatedCards[index] = updatedCards[index].copyWith(isMatched: true);
+        // Importante: no mutar `updatedCards` después de haberlo emitido.
+        final matchedCards = List<MemoryCard>.from(updatedCards);
+        matchedCards[firstIndex] = matchedCards[firstIndex].copyWith(isMatched: true);
+        matchedCards[index] = matchedCards[index].copyWith(isMatched: true);
 
-        final bool hasWon = updatedCards.every((card) => card.isMatched);
+        final bool hasWon = matchedCards.every((card) => card.isMatched);
 
         emit(state.copyWith(
-          cards: updatedCards,
+          cards: matchedCards,
           isProcessing: false,
           clearSelection: true,
           isCompleted: hasWon,
