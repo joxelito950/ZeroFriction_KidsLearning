@@ -1,37 +1,21 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
-import 'package:toddler_logic/domain/entities/user_profile.dart';
-import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_game_cubit.dart';
-
-class _MockPersistenceRepository extends Mock implements IPersistenceRepository {}
-
-class _FakeLevelState extends Fake implements LevelState {}
-
-class _FakeUserProfile extends Fake implements UserProfile {}
+import '../../memory_game_test_support.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(_FakeLevelState());
-    registerFallbackValue(_FakeUserProfile());
+    registerMemoryGameFallbacks();
   });
 
   group('MemoryGameCubit', () {
-    late _MockPersistenceRepository repository;
+    late MockPersistenceRepository repository;
     late MemoryGameCubit cubit;
 
     setUp(() {
-      repository = _MockPersistenceRepository();
-
-      when(() => repository.saveLevelState(any())).thenAnswer((_) async {});
-      when(() => repository.readAllLevelStates()).thenAnswer((_) async => const []);
-      when(() => repository.readLevelState(any())).thenAnswer((_) async => null);
-      when(() => repository.readUserProfile()).thenAnswer(
-        (_) async => const UserProfile(isPremium: false, isSoundEnabled: true),
-      );
-      when(() => repository.saveUserProfile(any())).thenAnswer((_) async {});
-      when(() => repository.saveLevelStates(any())).thenAnswer((_) async {});
+      repository = MockPersistenceRepository();
+      stubPersistenceRepository(repository);
 
       cubit = MemoryGameCubit(
         persistenceRepository: repository,

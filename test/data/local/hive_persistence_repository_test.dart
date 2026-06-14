@@ -1,22 +1,18 @@
 import 'package:hive/hive.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/data/local/hive_persistence_repository.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import '../../presentation/memory_game_test_support.dart';
 
 class _MockLevelStateBox extends Mock implements Box<LevelState> {}
 
 class _MockUserProfileBox extends Mock implements Box<UserProfile> {}
 
-class _FakeLevelState extends Fake implements LevelState {}
-
-class _FakeUserProfile extends Fake implements UserProfile {}
-
 void main() {
   setUpAll(() {
-    registerFallbackValue(_FakeLevelState());
-    registerFallbackValue(_FakeUserProfile());
+    registerMemoryGameFallbacks();
   });
 
   group('HivePersistenceRepository', () {
