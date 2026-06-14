@@ -8,29 +8,11 @@ ToddlerLogic ofrece un entorno seguro, limpio y de paz mental en un solo pago, e
 
 El mercado de aplicaciones infantiles en Google Play se divide en tres fallos críticos que este proyecto resuelve:
 
-Categoría Actual
-
-Problema
-
-Solución ToddlerLogic
-
-Apps Gratuitas (Ad-Supported)
-
-Anuncios invasivos cada 60s, clics accidentales y frustración.
-
-Cero anuncios invasivos. Entorno limpio, fluido y seguro.
-
-SaaS Infantil (Suscripciones)
-
-Barrera económica alta ($5-$10 USD mensuales recurrentes).
-
-Freemium ético. Contenido base gratis y un único pago de por vida.
-
-Pésimo Diseño Técnico
-
-Apps pesadas (>300MB), rastreo de datos y consumo de batería.
-
-Local-First & Ultraligera. <50MB, sin red y sin consumo en background.
+| Categoría Actual | Problema | Solución ToddlerLogic |
+| :--- | :--- | :--- |
+| **Apps Gratuitas (Ad-Supported)** | Anuncios invasivos cada 60s, clics accidentales y frustración. | **Cero anuncios invasivos.** Entorno limpio, fluido y seguro. |
+| **SaaS Infantil (Suscripciones)** | Barrera económica alta ($5-$10 USD mensuales recurrentes). | **Freemium ético.** Contenido base gratis y un único pago de por vida. |
+| **Pésimo Diseño Técnico** | Apps pesadas (>300MB), rastreo de datos y consumo de batería. | **Local-First & Ultraligera.** <50MB, sin red y sin consumo en background. |
 
 📐 Arquitectura del Software
 
