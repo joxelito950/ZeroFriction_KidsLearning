@@ -7,125 +7,100 @@ import '../blocs/memory_game/memory_game_state.dart';
 import '../widgets/memory_card_widget.dart';
 import '../widgets/memory_victory_dialog.dart';
 
-class MemoryGameScreen extends StatefulWidget {
+class MemoryGameScreen extends StatelessWidget {
   const MemoryGameScreen({
     super.key,
-    required this.persistenceRepository,
     required this.levelId,
-    this.imageAssets = const ['🐶', '🐱', '🐰'],
-    this.cubit,
+    required this.emojis,
   });
 
-  final IPersistenceRepository persistenceRepository;
   final String levelId;
-  final List<String> imageAssets;
-  final MemoryGameCubit? cubit;
-
-  @override
-  State<MemoryGameScreen> createState() => _MemoryGameScreenState();
-}
-
-class _MemoryGameScreenState extends State<MemoryGameScreen> {
-  late final MemoryGameCubit _cubit;
-  late final bool _ownsCubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _ownsCubit = widget.cubit == null;
-    _cubit = widget.cubit ?? MemoryGameCubit(
-      persistenceRepository: widget.persistenceRepository,
-      levelId: widget.levelId,
-    );
-
-    _cubit.startGame(widget.imageAssets);
-  }
-
-  @override
-  void dispose() {
-    if (_ownsCubit) {
-      _cubit.close();
-    }
-    super.dispose();
-  }
+  final List<String> emojis;
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<MemoryGameCubit, MemoryGameState>(
-      bloc: _cubit,
-      listenWhen: (previous, current) => !previous.isCompleted && current.isCompleted,
-      listener: (context, state) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) {
-            return;
-          }
-
+    return BlocProvider<MemoryGameCubit>(
+      create: (blocContext) {
+        final repository = blocContext.read<IPersistenceRepository>();
+        final cubit = MemoryGameCubit(
+          persistenceRepository: repository,
+          levelId: levelId,
+        );
+        cubit.startGame(emojis);
+        return cubit;
+      },
+      child: BlocListener<MemoryGameCubit, MemoryGameState>(
+        listenWhen: (previous, current) => !previous.isCompleted && current.isCompleted,
+        listener: (dialogContext, state) {
           showDialog<void>(
-            context: context,
+            context: dialogContext,
             barrierDismissible: false,
             builder: (_) => MemoryVictoryDialog(moves: state.moves),
           );
-        });
-      },
-      builder: (context, state) {
-        return Scaffold(
-          body: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFFFFF4D6), Color(0xFFFFE4B5), Color(0xFFFFF8E1)],
-              ),
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _Header(moves: state.moves),
-                    const SizedBox(height: 18),
-                    Expanded(
-                      child: state.cards.isEmpty
-                          ? const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            )
-                          : LayoutBuilder(
-                              builder: (context, constraints) {
-                                final int crossAxisCount = constraints.maxWidth < 420 ? 2 : 3;
+        },
+        child: BlocBuilder<MemoryGameCubit, MemoryGameState>(
+          builder: (builderContext, state) {
+            return Scaffold(
+              body: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0xFFFFF4D6), Color(0xFFFFE4B5), Color(0xFFFFF8E1)],
+                  ),
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _Header(moves: state.moves),
+                        const SizedBox(height: 18),
+                        Expanded(
+                          child: state.cards.isEmpty
+                              ? const Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                )
+                              : LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    final bool isWide = constraints.maxWidth >= 480;
+                                    final int crossAxisCount = isWide ? 3 : 2;
 
-                                return GridView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: crossAxisCount,
-                                    crossAxisSpacing: 14,
-                                    mainAxisSpacing: 14,
-                                    childAspectRatio: 0.84,
-                                  ),
-                                  itemCount: state.cards.length,
-                                  itemBuilder: (context, index) {
-                                    return MemoryCardWidget(
-                                      key: ValueKey<String>('memory-card-$index'),
-                                      card: state.cards[index],
-                                      onTap: () => _cubit.flipCard(index),
+                                    return GridView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: crossAxisCount,
+                                        crossAxisSpacing: 14,
+                                        mainAxisSpacing: 14,
+                                        childAspectRatio: 0.84,
+                                      ),
+                                      itemCount: state.cards.length,
+                                      itemBuilder: (context, index) {
+                                        return MemoryCardWidget(
+                                          key: ValueKey<String>('memory-card-$index'),
+                                          card: state.cards[index],
+                                          onTap: () => builderContext.read<MemoryGameCubit>().flipCard(index),
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                        ),
+                        const SizedBox(height: 12),
+                        _Footer(
+                          isProcessing: state.isProcessing,
+                          isCompleted: state.isCompleted,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    _Footer(
-                      isProcessing: state.isProcessing,
-                      isCompleted: state.isCompleted,
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }

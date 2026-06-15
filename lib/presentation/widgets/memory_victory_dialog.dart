@@ -35,7 +35,7 @@ class MemoryVictoryDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              '¡Ganaste!',
+              '¡Lo lograste!',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
             ),
@@ -45,18 +45,18 @@ class MemoryVictoryDialog extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 18),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 3,
                 (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Icon(Icons.star_rounded, key: ValueKey<String>('memory-victory-star-$index'), color: Color(0xFFFFC107), size: 34),
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: _AnimatedStar(index: index),
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Text(
               'Completado en $moves movimientos',
               textAlign: TextAlign.center,
@@ -64,17 +64,84 @@ class MemoryVictoryDialog extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             FilledButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
               style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF0EA5E9),
+                backgroundColor: const Color(0xFFFB7185),
                 foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 56),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
               ),
-              child: const Text('Seguir jugando'),
+              child: const Text(
+                'Volver al menú',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AnimatedStar extends StatefulWidget {
+  const _AnimatedStar({required this.index});
+
+  final int index;
+
+  @override
+  State<_AnimatedStar> createState() => _AnimatedStarState();
+}
+
+class _AnimatedStarState extends State<_AnimatedStar>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Curve curve = [Curves.easeInOut, Curves.easeInOutCubic, Curves.easeInOutBack][widget.index % 3];
+    final double beginScale = [0.9, 0.82, 0.88][widget.index % 3];
+
+    final Animation<double> animation = CurvedAnimation(
+      parent: _controller,
+      curve: curve,
+    );
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final double t = animation.value;
+        final double scale = beginScale + (1 - beginScale) * t;
+        final double dy = (1 - t) * 6;
+
+        return Transform.translate(
+          offset: Offset(0, dy),
+          child: Transform.scale(
+            scale: scale,
+            child: child,
+          ),
+        );
+      },
+      child: Icon(
+        Icons.star_rounded,
+        key: ValueKey<String>('memory-victory-star-${widget.index}'),
+        color: const Color(0xFFFFC107),
+        size: 56,
       ),
     );
   }
