@@ -32,9 +32,9 @@ class MemoryCardWidget extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 0.82,
             child: TweenAnimationBuilder<double>(
-              tween: Tween<double>(end: isRevealed ? 1 : 0),
-              duration: const Duration(milliseconds: 360),
-              curve: Curves.easeOutBack,
+              tween: Tween<double>(end: card.isFaceUp ? 1 : 0),
+              duration: const Duration(milliseconds: 420),
+              curve: Curves.easeInOutCubic,
               builder: (context, value, child) {
                 final double angle = value * math.pi;
                 final bool showFront = value > 0.45;
@@ -76,7 +76,7 @@ class _FrontFace extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [Color(0xFFFFF7D6), Color(0xFFFFE0B2)],
         ),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(32),
         border: Border.all(color: const Color(0xFFFFC86E), width: 3),
         boxShadow: const [
           BoxShadow(
@@ -111,9 +111,9 @@ class _BackFace extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF7DD3FC), Color(0xFF38BDF8)],
+          colors: [Color(0xFFCDEFFF), Color(0xFFB8E3FF)],
         ),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(32),
         border: Border.all(color: Colors.white.withValues(alpha: 0.8), width: 3),
         boxShadow: const [
           BoxShadow(

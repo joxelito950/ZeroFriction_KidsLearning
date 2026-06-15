@@ -15,10 +15,10 @@ void main() {
     );
 
     expect(find.byKey(const ValueKey<String>('memory-victory-dialog')), findsOneWidget);
-    expect(find.text('¡Ganaste!'), findsOneWidget);
+    expect(find.text('¡Lo lograste!'), findsOneWidget);
     expect(find.text('Encontraste todas las parejas.'), findsOneWidget);
     expect(find.byIcon(Icons.star_rounded), findsNWidgets(3));
     expect(find.text('Completado en 4 movimientos'), findsOneWidget);
-    expect(find.text('Seguir jugando'), findsOneWidget);
+    expect(find.text('Volver al menú'), findsOneWidget);
   });
 }

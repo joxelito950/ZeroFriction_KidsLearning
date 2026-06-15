@@ -118,13 +118,11 @@ class MainMenuScreen extends StatelessWidget {
                 backgroundColor: const Color(0xFFFFEBEE), // Rojo pastel
                 textColor: Colors.red[800]!,
                 onTap: () {
-                  final repository = context.read<IPersistenceRepository>();
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => MemoryGameScreen(
-                        persistenceRepository: repository,
                         levelId: 'farm_easy',
-                        imageAssets: farmAnimals.take(2).toList(), // 2 parejas (4 cartas)
+                        emojis: farmAnimals.take(2).toList(), // 2 parejas (4 cartas)
                       ),
                     ),
                   );
@@ -140,13 +138,11 @@ class MainMenuScreen extends StatelessWidget {
                 backgroundColor: const Color(0xFFE8F5E9), // Verde pastel
                 textColor: Colors.green[800]!,
                 onTap: () {
-                  final repository = context.read<IPersistenceRepository>();
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => MemoryGameScreen(
-                        persistenceRepository: repository,
                         levelId: 'wild_medium',
-                        imageAssets: wildAnimals.take(3).toList(), // 3 parejas (6 cartas)
+                        emojis: wildAnimals.take(3).toList(), // 3 parejas (6 cartas)
                       ),
                     ),
                   );
