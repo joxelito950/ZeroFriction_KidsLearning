@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_game_cubit.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import '../memory_game_test_support.dart';
