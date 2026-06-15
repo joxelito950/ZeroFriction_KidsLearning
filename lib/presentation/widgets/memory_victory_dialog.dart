@@ -117,10 +117,15 @@ class _AnimatedStarState extends State<_AnimatedStar>
     final Curve curve = [Curves.easeInOut, Curves.easeInOutCubic, Curves.easeInOutBack][widget.index % 3];
     final double beginScale = [0.9, 0.82, 0.88][widget.index % 3];
 
+    final Animation<double> animation = CurvedAnimation(
+      parent: _controller,
+      curve: curve,
+    );
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        final double t = CurvedAnimation(parent: _controller, curve: curve).value;
+        final double t = animation.value;
         final double scale = beginScale + (1 - beginScale) * t;
         final double dy = (1 - t) * 6;
 
