@@ -50,9 +50,9 @@ class ToddlerLogicApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color(0xFF98FFD9), // Pastel menta amigable
-            background: const Color(0xFFF9F9FB), // Fondo limpio y claro
+            surface: const Color(0xFFF9F9FB), // Fondo limpio y claro
           ),
-          cardTheme: CardTheme(
+          cardTheme: CardThemeData(
             elevation: 2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
@@ -119,11 +119,13 @@ class MainMenuScreen extends StatelessWidget {
                 backgroundColor: const Color(0xFFFFEBEE), // Rojo pastel
                 textColor: Colors.red[800]!,
                 onTap: () {
+                  final repository = context.read<IPersistenceRepository>();
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => MemoryGameScreen(
+                        persistenceRepository: repository,
                         levelId: 'farm_easy',
-                        emojis: farmAnimals.take(2).toList(), // 2 parejas (4 cartas)
+                        imageAssets: farmAnimals.take(2).toList(), // 2 parejas (4 cartas)
                       ),
                     ),
                   );
@@ -139,11 +141,13 @@ class MainMenuScreen extends StatelessWidget {
                 backgroundColor: const Color(0xFFE8F5E9), // Verde pastel
                 textColor: Colors.green[800]!,
                 onTap: () {
+                  final repository = context.read<IPersistenceRepository>();
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => MemoryGameScreen(
+                        persistenceRepository: repository,
                         levelId: 'wild_medium',
-                        emojis: wildAnimals.take(3).toList(), // 3 parejas (6 cartas)
+                        imageAssets: wildAnimals.take(3).toList(), // 3 parejas (6 cartas)
                       ),
                     ),
                   );
@@ -207,7 +211,7 @@ class _MenuButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -237,7 +241,7 @@ class _MenuButton extends StatelessWidget {
                     subtitle,
                     style: TextStyle(
                       fontSize: 12,
-                      color: textColor.withOpacity(0.8),
+                      color: textColor.withValues(alpha: 0.8),
                     ),
                   ),
                 ],
