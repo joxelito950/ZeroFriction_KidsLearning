@@ -73,8 +73,8 @@ class MainMenuScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     // Set de emojis temáticos locales (zero-assets)
-    final List<String> farmAnimals = ['🐶', '🐱', '🐷', '🐮', '🐑', '🐔'];
-    final List<String> wildAnimals = ['🦁', '🐯', '🐼', '🐨', '🦊', '🐵'];
+    const List<String> farmAnimals = ['🐶', '🐱', '🐷', '🐮', '🐑', '🐔'];
+    const List<String> wildAnimals = ['🦁', '🐯', '🐼', '🐨', '🦊', '🐵'];
 
     return Scaffold(
       body: SafeArea(
