@@ -52,12 +52,13 @@ class ToddlerLogicApp extends StatelessWidget {
             seedColor: const Color(0xFF98FFD9), // Pastel menta amigable
             surface: const Color(0xFFF9F9FB), // Fondo limpio y claro
           ),
-          cardTheme: CardTheme(
+          cardTheme: CardThemeData(
             elevation: 2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
             ),
           ),
+        ),
         home: const MainMenuScreen(),
       ),
     );
