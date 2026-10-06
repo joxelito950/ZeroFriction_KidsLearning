@@ -97,7 +97,7 @@ Sigue estos pasos para clonar el proyecto y levantar el entorno local en tu máq
 
 1. Prerrequisitos
 
-Tener instalado el SDK de Flutter (versión compatible con Dart $\ge$ 3.0.0). El SDK de Dart se configurará automáticamente con tu instalación de Flutter.
+Tener instalado el SDK de Flutter (versión compatible con Dart $\ge$ 3.3.0; probado con Flutter 3.47.5 / Dart 3.13.4) y el Android SDK (vía Android Studio). El SDK de Dart se configurará automáticamente con tu instalación de Flutter.
 
 Verifica que tu entorno esté listo ejecutando:
 
@@ -108,8 +108,8 @@ flutter doctor
 
 Clona este repositorio de forma local y descarga las librerías configuradas en el pubspec.yaml:
 
-git clone [https://github.com/tu-usuario/toddler_logic.git](https://github.com/tu-usuario/toddler_logic.git)
-cd toddler_logic
+git clone https://github.com/joxelito950/ZeroFriction_KidsLearning.git
+cd ZeroFriction_KidsLearning
 flutter pub get
 
 
@@ -117,7 +117,7 @@ flutter pub get
 
 Dado que el proyecto utiliza el generador automático de código para los adaptadores de Hive (*.g.dart), debes ejecutar el compilador local. Los archivos generados están excluidos de Git por buenas prácticas:
 
-flutter pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 
 
 4. Ejecutar las Pruebas Unitarias y de Integración
@@ -144,19 +144,16 @@ flutter run
 📁 Estructura del Proyecto
 
 lib/
-├── core/                  # Configuraciones globales, temas y utilidades locales
-│   └── theme/             # Paleta de colores amigable, tipografía redondeada
 ├── data/                  # Capa de datos (Persistencia local)
-│   ├── database/          # Configuración e inicialización segura de Hive
-│   └── repositories/      # Implementación del repositorio de datos
+│   └── local/             # Inicialización segura de Hive e implementación del repositorio
 ├── domain/                # Modelos de negocio puros y abstracciones
 │   ├── entities/          # LevelState, UserProfile (Modelos puros)
 │   └── repositories/      # Interfaces de contratos (IPersistenceRepository)
 ├── presentation/          # Capa de UI y Gestión de Estado (Cubit)
-│   ├── blocs/             # MemoryGameCubit, SettingsCubit
+│   ├── blocs/             # MemoryGameCubit
 │   ├── screens/           # Tablero de juego, menús y portones parentales
 │   └── widgets/           # Cartas animadas, diálogos no-invasivos
-└── main.dart              # Punto de entrada de la aplicación
+└── main.dart              # Punto de entrada y menú principal
 
 
 Diseñado con ❤️ por un papá desarrollador.
