@@ -17,6 +17,30 @@ class MemoryGameScreen extends StatelessWidget {
   final String levelId;
   final List<String> emojis;
 
+  static const double _boardSpacing = 14;
+  static const double _preferredAspectRatio = 0.84;
+
+  /// Calcula la proporción de las cartas para que todas las filas quepan sin scroll,
+  /// sin estirarlas más allá de la proporción preferida cuando sobra espacio.
+  static double _fittingAspectRatio({
+    required BoxConstraints constraints,
+    required int crossAxisCount,
+    required int itemCount,
+  }) {
+    if (!constraints.hasBoundedHeight) return _preferredAspectRatio;
+
+    final int rowCount = (itemCount / crossAxisCount).ceil();
+    final double cellWidth =
+        (constraints.maxWidth - _boardSpacing * (crossAxisCount - 1)) / crossAxisCount;
+    final double cellHeight =
+        (constraints.maxHeight - _boardSpacing * (rowCount - 1)) / rowCount;
+
+    if (cellWidth <= 0 || cellHeight <= 0) return _preferredAspectRatio;
+
+    final double fittingRatio = cellWidth / cellHeight;
+    return fittingRatio > _preferredAspectRatio ? fittingRatio : _preferredAspectRatio;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MemoryGameCubit>(
@@ -71,9 +95,13 @@ class MemoryGameScreen extends StatelessWidget {
                                       physics: const NeverScrollableScrollPhysics(),
                                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: crossAxisCount,
-                                        crossAxisSpacing: 14,
-                                        mainAxisSpacing: 14,
-                                        childAspectRatio: 0.84,
+                                        crossAxisSpacing: _boardSpacing,
+                                        mainAxisSpacing: _boardSpacing,
+                                        childAspectRatio: _fittingAspectRatio(
+                                          constraints: constraints,
+                                          crossAxisCount: crossAxisCount,
+                                          itemCount: state.cards.length,
+                                        ),
                                       ),
                                       itemCount: state.cards.length,
                                       itemBuilder: (context, index) {

@@ -27,6 +27,15 @@ void main() {
       expect(find.text('Zona de Padres'), findsOneWidget);
     });
 
+    testWidgets('shows a coming-soon notice for the parents zone', (tester) async {
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository));
+
+      await tester.tap(find.text('Zona de Padres'));
+      await tester.pump();
+
+      expect(find.text('🔒 Zona de padres (Próximamente)'), findsOneWidget);
+    });
+
     testWidgets('opens the memory game when tapping a level', (tester) async {
       await tester.pumpWidget(ToddlerLogicApp(repository: repository));
 

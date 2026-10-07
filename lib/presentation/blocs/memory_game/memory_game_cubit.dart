@@ -114,6 +114,8 @@ class MemoryGameCubit extends Cubit<MemoryGameState> {
   }
 
   /// Guarda el progreso del nivel en el repositorio persistente de Hive.
+  /// Un fallo al guardar no debe interrumpir la celebración del niño:
+  /// se reporta vía `addError` (visible en `onError` / `BlocObserver`).
   Future<void> _saveCompletedLevel() async {
     // Calculamos las estrellas basadas en el rendimiento o simplemente otorgamos 3 por completar.
     // Para un niño de 3 años, lo ideal es siempre celebrar su logro positivamente.
@@ -123,6 +125,10 @@ class MemoryGameCubit extends Cubit<MemoryGameState> {
       stars: 3, 
     );
 
-    await _persistenceRepository.saveLevelState(finalState);
+    try {
+      await _persistenceRepository.saveLevelState(finalState);
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+    }
   }
 }

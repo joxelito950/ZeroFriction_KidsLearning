@@ -51,6 +51,9 @@ final class HivePersistenceConfig {
       if (Hive.isBoxOpen(userProfileBoxName)) {
         await Hive.box<UserProfile>(userProfileBoxName).close();
       }
+      // El llamador original recibe el error vía `rethrow`; si no hubo llamadas
+      // concurrentes nadie escucha este future, así que evitamos un error no capturado.
+      completer.future.ignore();
       completer.completeError(error, stackTrace);
       rethrow;
     } finally {
