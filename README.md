@@ -18,6 +18,8 @@ El mercado de aplicaciones infantiles en Google Play se divide en tres fallos cr
 
 El proyecto se rige bajo los principios de Clean Architecture y la segregación de responsabilidades mediante Bounded Contexts (Dominios Hermanos). Esto garantiza desacoplamiento absoluto y escalabilidad sin fricciones.
 
+> 📘 Las reglas técnicas obligatorias (arquitectura, buenas prácticas, cobertura mínima, flujo de trabajo y registro de decisiones) están en [SPECIFICATION.md](SPECIFICATION.md).
+
                     Capa de Presentación (UI / Cubits)
          ┌──────────────────────────┴──────────────────────────┐
          ▼                                                     ▼
