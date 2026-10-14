@@ -18,14 +18,17 @@ void main() {
       stubPersistenceRepository(repository);
     });
 
-    Future<void> pumpScreen(WidgetTester tester) async {
+    Future<void> pumpScreen(
+      WidgetTester tester, {
+      List<String> emojis = const ['🐶'],
+    }) async {
       await tester.pumpWidget(
         MaterialApp(
           home: RepositoryProvider<IPersistenceRepository>.value(
             value: repository,
-            child: const MemoryGameScreen(
+            child: MemoryGameScreen(
               levelId: 'memory_level_test',
-              emojis: ['🐶'],
+              emojis: emojis,
             ),
           ),
         ),
@@ -38,7 +41,21 @@ void main() {
 
       expect(find.byIcon(Icons.question_mark_rounded), findsNWidgets(2));
       expect(find.text('🐶'), findsNothing);
-      expect(find.text('¡Ganaste!'), findsNothing);
+      expect(find.text('¡Lo lograste!'), findsNothing);
+    });
+
+    testWidgets('fits a 2x3 board entirely above the footer on a phone screen', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.625;
+      addTearDown(tester.view.reset);
+
+      await pumpScreen(tester, emojis: const ['🦁', '🐯', '🐼']);
+
+      final double footerTop = tester.getTopLeft(find.text('Busquemos la pareja correcta.')).dy;
+      for (var index = 0; index < 6; index++) {
+        final Rect cardRect = tester.getRect(find.byKey(ValueKey<String>('memory-card-$index')));
+        expect(cardRect.bottom, lessThan(footerTop), reason: 'card $index is clipped');
+      }
     });
 
     testWidgets('tapping a card triggers cubit logic and starts the reveal animation', (tester) async {

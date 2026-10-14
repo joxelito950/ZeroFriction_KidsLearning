@@ -4,6 +4,22 @@ import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_game_cubit.dart';
 import '../../memory_game_test_support.dart';
 
+class _ErrorRecordingCubit extends MemoryGameCubit {
+  _ErrorRecordingCubit({
+    required super.persistenceRepository,
+    required super.levelId,
+    required this.onErrorReported,
+  });
+
+  final void Function(Object error) onErrorReported;
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    onErrorReported(error);
+    super.onError(error, stackTrace);
+  }
+}
+
 void main() {
   setUpAll(() {
     registerMemoryGameFallbacks();
@@ -98,6 +114,25 @@ void main() {
           ),
         ),
       ).called(1);
+    });
+
+    test('keeps the victory state and reports the error when persisting fails', () async {
+      final persistenceError = StateError('disk full');
+      when(() => repository.saveLevelState(any())).thenThrow(persistenceError);
+      final reportedErrors = <Object>[];
+      final errorCubit = _ErrorRecordingCubit(
+        persistenceRepository: repository,
+        levelId: 'level_memory_1',
+        onErrorReported: reportedErrors.add,
+      );
+      addTearDown(errorCubit.close);
+
+      errorCubit.startGame(const ['a.png']);
+      await errorCubit.flipCard(0);
+      await errorCubit.flipCard(1);
+
+      expect(errorCubit.state.isCompleted, isTrue);
+      expect(reportedErrors, [persistenceError]);
     });
 
     test('non-matching second card increments moves and flips both cards back down', () async {

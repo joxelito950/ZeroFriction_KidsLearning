@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +18,57 @@ class MemoryGameScreen extends StatelessWidget {
 
   final String levelId;
   final List<String> emojis;
+
+  static const double _boardSpacing = 14;
+  static const double _preferredAspectRatio = 0.84;
+
+  static const int _fallbackCrossAxisCount = 2;
+
+  static Size _cellSize(BoxConstraints constraints, int crossAxisCount, int itemCount) {
+    final int rowCount = (itemCount / crossAxisCount).ceil();
+    return Size(
+      (constraints.maxWidth - _boardSpacing * (crossAxisCount - 1)) / crossAxisCount,
+      (constraints.maxHeight - _boardSpacing * (rowCount - 1)) / rowCount,
+    );
+  }
+
+  /// Elige el número de columnas que da las cartas más grandes, considerando solo
+  /// tableros con filas completas (p. ej. 4 cartas: 2x2 en vertical, 1x4 en horizontal).
+  static int _bestCrossAxisCount({
+    required BoxConstraints constraints,
+    required int itemCount,
+  }) {
+    if (!constraints.hasBoundedHeight) return _fallbackCrossAxisCount;
+
+    int bestCount = _fallbackCrossAxisCount;
+    double bestCardWidth = 0;
+    for (var columns = 1; columns <= itemCount; columns++) {
+      if (itemCount % columns != 0) continue;
+
+      final Size cell = _cellSize(constraints, columns, itemCount);
+      final double cardWidth = math.min(cell.width, cell.height * _preferredAspectRatio);
+      if (cardWidth > bestCardWidth) {
+        bestCount = columns;
+        bestCardWidth = cardWidth;
+      }
+    }
+    return bestCount;
+  }
+
+  /// Calcula la proporción de las cartas para que todas las filas quepan sin scroll,
+  /// sin estirarlas más allá de la proporción preferida cuando sobra espacio.
+  static double _fittingAspectRatio({
+    required BoxConstraints constraints,
+    required int crossAxisCount,
+    required int itemCount,
+  }) {
+    if (!constraints.hasBoundedHeight) return _preferredAspectRatio;
+
+    final Size cell = _cellSize(constraints, crossAxisCount, itemCount);
+    if (cell.width <= 0 || cell.height <= 0) return _preferredAspectRatio;
+
+    return math.max(cell.width / cell.height, _preferredAspectRatio);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +117,22 @@ class MemoryGameScreen extends StatelessWidget {
                                 )
                               : LayoutBuilder(
                                   builder: (context, constraints) {
-                                    final bool isWide = constraints.maxWidth >= 480;
-                                    final int crossAxisCount = isWide ? 3 : 2;
+                                    final int crossAxisCount = _bestCrossAxisCount(
+                                      constraints: constraints,
+                                      itemCount: state.cards.length,
+                                    );
 
                                     return GridView.builder(
                                       physics: const NeverScrollableScrollPhysics(),
                                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: crossAxisCount,
-                                        crossAxisSpacing: 14,
-                                        mainAxisSpacing: 14,
-                                        childAspectRatio: 0.84,
+                                        crossAxisSpacing: _boardSpacing,
+                                        mainAxisSpacing: _boardSpacing,
+                                        childAspectRatio: _fittingAspectRatio(
+                                          constraints: constraints,
+                                          crossAxisCount: crossAxisCount,
+                                          itemCount: state.cards.length,
+                                        ),
                                       ),
                                       itemCount: state.cards.length,
                                       itemBuilder: (context, index) {
