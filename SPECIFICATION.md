@@ -5,7 +5,7 @@
 | **Versión de la app** | `0.0.1-beta+1` (línea base) |
 | **Fecha de la línea base** | 2026-10-13 |
 | **Estado** | Beta interna · solo Android · sin publicar |
-| **Documentos relacionados** | [README.md](README.md) (visión de producto y alcance MVP) · [DOCUMENTATION.md](DOCUMENTATION.md) (detalle de persistencia Hive) |
+| **Documentos relacionados** | [README.md](README.md) (visión de producto y alcance MVP) · [DOCUMENTATION.md](DOCUMENTATION.md) (detalle de persistencia Hive) · [BACKLOG.md](BACKLOG.md) (trabajo pendiente y refinamientos en `docs/hu/`) |
 
 Este documento fija **cómo se construye** ToddlerLogic: arquitectura, buenas prácticas, criterios de calidad y las decisiones tomadas hasta ahora. El **qué** (visión, módulos del MVP, reglas de negocio) vive en el README. Las palabras **DEBE**, **NO DEBE** y **DEBERÍA** indican reglas obligatorias, prohibiciones y recomendaciones fuertes.
 
