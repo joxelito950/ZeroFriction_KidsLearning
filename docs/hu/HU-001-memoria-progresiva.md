@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-16; el desarrollo **no** ha empezado) |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-16 y ajustado el 2026-10-17; el desarrollo **no** ha empezado) |
 | **Épica** | E1 · Juego de memoria |
 | **Prioridad** | P1 |
 | **Tamaño** | L: unas 2 semanas, repartidas en 5 entregas (sección 10) |
@@ -52,17 +52,20 @@ La serie de límites es **sin tiempo → 90 → 60 → 45 → 30 s**. 30 s es el
 | R5 | **Al perder** (el tiempo llega a 0): se baja un nivel **conservando el límite actual**. Ejemplo: se pierde en 3×4 con 45 s → 2×4 con 45 s. |
 | R6 | Perder en el 2×2 cronometrado **reinicia**: 2×2 sin tiempo, y la siguiente subida vuelve a empezar en 90 s. |
 | R7 | **Insignia dorada:** se gana al completar el nivel 5 (4×4). Como el límite solo baja al ganar, al nivel 5 siempre se llega con 30 s. |
-| R8 | La insignia es **permanente**: no se pierde aunque luego se pierdan partidas. |
+| R8 | La insignia es **permanente**: no se pierde aunque luego se pierdan partidas. Tras conseguirla, el juego **vuelve a empezar en el 2×2 sin tiempo**. Elegir otro tablero o tiempo de inicio será una opción de la Zona de Padres (HU-010). |
 | R9 | Con la insignia conseguida, el botón «Memoria» del menú se muestra **dorado**. Es una regla general: cada juego que se supera por completo queda dorado en el menú. |
 | R10 | El cronómetro arranca **al tocar la primera carta**, no al mostrar el tablero. |
 | R11 | El cronómetro **se pausa** con la app en segundo plano y durante las transiciones. |
 | R12 | **Persistencia:** se guardan el nivel actual y la insignia. **No** se guardan el tiempo ni la partida en curso. Al volver a entrar al juego (o al reabrir la app) hay un tablero nuevo, con las cartas ocultas y barajadas, y el límite es el de llegada de ese nivel (tabla 4.1). |
-| R13 | **Sin botones dentro del juego.** Tras ganar o perder, la app avanza **sola** con una transición suave. Así el niño no sale del juego por accidente ni necesita ayuda de un adulto para volver. Se sale con el gesto o botón «atrás» del sistema. |
+| R13 | **Sin botones dentro del juego.** Tras ganar o perder, la app avanza **sola** con una transición suave. Así el niño no sale del juego por accidente ni necesita ayuda de un adulto para volver. |
 | R14 | **Al ganar:** una celebración breve (unos 2 s, la actual sin el botón) y transición al siguiente tablero. Al conseguir la insignia, una celebración especial dorada. |
 | R15 | **Al perder:** el mensaje «¡Se acabó el tiempo! Probemos con menos cartas» (unos 2,5 s), sin sonido, y transición al tablero anterior. En el reinicio desde el 2×2: «¡Se acabó el tiempo! Empecemos de nuevo, sin prisa». |
 | R16 | **Tiempo visible:** una barra que se vacía de forma continua. Sin números, sin color rojo, sin parpadeos ni sonidos. |
 | R17 | **Contenido:** cada tablero toma una **temática al azar** y, dentro de ella, emojis al azar. Temáticas iniciales: animales de granja, animales salvajes, vehículos, construcción, emociones, alimentos, frutas, banderas y objetos del hogar. Cada temática debe tener al menos 8 emojis (lo que pide el 4×4). |
 | R18 | Dentro de una temática, los emojis deben ser **fáciles de distinguir** a simple vista (en emociones, caras claramente diferentes; en banderas, colores contrastados). |
+| R19 | **Salida protegida.** Cualquier intento de salir con el gesto o botón «atrás» del sistema (del juego al menú, o del menú fuera de la app) muestra un **aviso pequeño**: «Repite el gesto para salir». Solo se sale si se repite dentro de 2 segundos; si no, el aviso desaparece solo. |
+| R20 | El aviso de R19 **no ocupa toda la pantalla y no tiene botones** (ni continuar, ni cancelar, ni volver). Mientras se muestra, el juego sigue visible y el cronómetro sigue su curso. |
+| R21 | En el **menú**, junto a «Zona de Padres», hay un botón **«Salir»** que cierra la app **sin pedir confirmación**. Es la única salida sin confirmación. |
 
 ### 4.3 Diagrama de estados
 
@@ -77,7 +80,7 @@ stateDiagram-v2
   Cronometrado --> Cronometrado: pierde y N > 1 → N−1, mismo T
   Cronometrado --> Libre: pierde en el nivel 1
   Dorado: Insignia conseguida (permanente)
-  Dorado --> Cronometrado: sigue jugando el nivel 5 con 30 s
+  Dorado --> Libre: vuelve a empezar en 2×2 sin tiempo
 ```
 
 ### 4.4 Ejemplo de partida
@@ -90,7 +93,7 @@ stateDiagram-v2
 | 4 | 2 · 2×3 | 60 s | gana | 3 · 2×4 · 45 s |
 | 5 | 3 · 2×4 | 45 s | gana | 4 · 3×4 · 30 s |
 | 6 | 4 · 3×4 | 30 s | gana | 5 · 4×4 · 30 s |
-| 7 | 5 · 4×4 | 30 s | gana | 🏅 dorado · sigue en 5 · 4×4 · 30 s |
+| 7 | 5 · 4×4 | 30 s | gana | 🏅 dorado · vuelve a 1 · 2×2 · sin tiempo |
 
 ## 5. Viabilidad del tiempo
 
@@ -117,7 +120,7 @@ Con la serie acordada, todos los niveles son alcanzables y el último es un reto
 5. **Dado** que gano un nivel cronometrado inferior al 5, **entonces** paso solo al siguiente tablero y el límite es el siguiente valor de la serie 90 → 60 → 45 → 30, sin bajar de 30.
 6. **Dado** que el tiempo llega a 0 en un nivel mayor que 1, **entonces** veo «¡Se acabó el tiempo! Probemos con menos cartas», sin sonido, y paso solo al tablero anterior con el mismo límite.
 7. **Dado** que el tiempo llega a 0 en el nivel 1 cronometrado, **entonces** veo «¡Se acabó el tiempo! Empecemos de nuevo, sin prisa» y paso al 2×2 sin tiempo; la siguiente subida empieza en 90 s.
-8. **Dado** que gano el nivel 5, **entonces** veo una celebración dorada, la insignia queda guardada y sigo jugando el 4×4 con 30 s.
+8. **Dado** que gano el nivel 5, **entonces** veo una celebración dorada, la insignia queda guardada y la siguiente partida es el 2×2 sin tiempo.
 9. **Dado** que tengo la insignia, **cuando** vuelvo al menú o reabro la app, **entonces** el botón «Memoria» se muestra dorado.
 10. **Dado** que pierdo partidas después de conseguir la insignia, **entonces** el botón sigue dorado.
 11. **Dado** que la app pasa a segundo plano con el cronómetro en marcha, **cuando** vuelvo, **entonces** la barra continúa desde donde estaba.
@@ -126,6 +129,9 @@ Con la serie acordada, todos los niveles son alcanzables y el último es un reto
 14. **Dado** cualquier tablero, **entonces** todas las cartas de esa partida pertenecen a una misma temática, sin emojis repetidos salvo la pareja.
 15. **Dado** cualquier nivel de la escalera, **entonces** el tablero se ve completo y sin overflow en vertical y en horizontal, en los tamaños de referencia 1129 × 508 y 914 × 411 dp.
 16. **Dado** que la barra de tiempo se vacía, **entonces** no muestra números, no cambia a rojo y no emite sonido.
+17. **Dado** que estoy en el juego, **cuando** hago una vez el gesto o botón «atrás», **entonces** veo el aviso pequeño «Repite el gesto para salir», sin botones, y sigo en el juego; **cuando** lo repito antes de 2 s, **entonces** vuelvo al menú; **cuando** no lo repito, **entonces** el aviso desaparece y sigo jugando.
+18. **Dado** que estoy en el menú, **cuando** hago una vez «atrás», **entonces** veo el mismo aviso y la app no se cierra; **cuando** lo repito antes de 2 s, **entonces** la app se cierra.
+19. **Dado** que estoy en el menú, **cuando** toco «Salir», junto a «Zona de Padres», **entonces** la app se cierra sin pedir confirmación.
 
 ## 7. Restricciones técnicas
 
@@ -135,6 +141,8 @@ Con la serie acordada, todos los niveles son alcanzables y el último es un reto
 | T2 | El cronómetro es testeable sin esperas reales | Tests con `fake_async`; en la lógica, el tiempo se recibe inyectado y no se lee directamente de un reloj |
 | T3 | Las reglas de la escalera son lógica pura de dominio | Todas las transiciones de la sección 4.3 se prueban con tests unitarios, sin UI |
 | T4 | Nuevo typeId de Hive: **2** (`MemoryProgress`) | Según el registro de la sección 3.4 de la especificación; el siguiente libre pasa a ser 3 |
+| T5 | La salida protegida (R19) solo puede interceptar «atrás». Los gestos o botones de **inicio** y **recientes** los gestiona Android y ninguna app puede bloquearlos | Limitación del sistema operativo. Para bloquearlos existe «Fijar pantalla» de Android, que podría proponerse desde la Zona de Padres (HU-004/HU-009) |
+| T6 | Usar `PopScope` con `onPopInvokedWithResult`, compatible con el gesto «atrás» predictivo de Android 13 o superior | La API antigua (`WillPopScope`) está obsoleta en Flutter 3.47 |
 
 ## 8. Impacto técnico
 
@@ -142,9 +150,9 @@ Con la serie acordada, todos los niveles son alcanzables y el último es un reto
 |---|---|
 | Dominio | `MemoryLadder`: la tabla 4.1 y las transiciones al ganar o perder. `MemoryProgress` (nivel actual, insignia) con typeId 2. Catálogo de temáticas. Nuevos métodos en `IPersistenceRepository` |
 | Datos | Una caja Hive nueva y su implementación en `HivePersistenceRepository`. `LevelState` deja de usarse; su typeId 0 queda reservado |
-| Presentación | `MemoryGameCubit`: la escalera, el cronómetro (arranque, pausa y derrota) y las transiciones automáticas. `MemoryGameScreen`: barra de tiempo, indicador de nivel y encabezado en español. `MemoryVictoryDialog` sin botón, con cierre automático. Nuevo aviso de «se acabó el tiempo». `MainMenuScreen`: botón por juego con estado dorado |
-| Tests | Reglas de la escalera (unitarios); cronómetro y pausas (`fake_async`); persistencia con Hive real; transiciones automáticas (widget); layout de los 5 tableros en las dos orientaciones; menú dorado |
-| Especificación | D-009 sustituida por D-020; nuevas D-021 a D-024; nota de 16 cartas en D-011; typeId 2 en el registro de la sección 3.4 |
+| Presentación | `MemoryGameCubit`: la escalera, el cronómetro (arranque, pausa y derrota) y las transiciones automáticas. `MemoryGameScreen`: barra de tiempo, indicador de nivel y encabezado en español. `MemoryVictoryDialog` sin botón, con cierre automático. Nuevo aviso de «se acabó el tiempo». `MainMenuScreen`: botón por juego con estado dorado y botón «Salir» (`SystemNavigator.pop()`). Un widget reutilizable de salida protegida (`PopScope` + aviso pequeño con ventana de 2 s) para el menú y para cada juego |
+| Tests | Reglas de la escalera (unitarios); cronómetro y pausas (`fake_async`); persistencia con Hive real; transiciones automáticas (widget); salida protegida (un «atrás», dos «atrás», ventana vencida); layout de los 5 tableros en las dos orientaciones; menú dorado |
+| Especificación | D-009 sustituida por D-020; nuevas D-021 a D-025; nota de 16 cartas en D-011; typeId 2 en el registro de la sección 3.4 |
 
 ## 9. Decisiones del refinamiento
 
@@ -161,15 +169,15 @@ Respuestas del product owner del 2026-10-16:
 | P7 | Avance tras ganar | Automático, con transición suave y sin botones |
 | P8 | Emojis | Temática al azar en cada tablero, con varias temáticas |
 
-### Supuestos pendientes de confirmar (no bloquean)
+Confirmaciones del product owner del 2026-10-17:
 
-| # | Supuesto | Valor aplicado |
+| # | Tema | Decisión |
 |---|---|---|
-| S1 | Mensaje al reiniciar desde el 2×2 | «¡Se acabó el tiempo! Empecemos de nuevo, sin prisa» |
-| S2 | Qué pasa tras conseguir la insignia | Se sigue jugando el 4×4 con 30 s, sin volver al menú |
-| S3 | Mostrar el nombre de la temática | No se muestra; solo el indicador de nivel |
-| S4 | Indicador de nivel | Cinco puntos en el encabezado; los alcanzados, rellenos |
-| S5 | Salida del juego | Solo con «atrás» del sistema (no hay botón en pantalla) |
+| S1 | Mensaje al reiniciar desde el 2×2 | «¡Se acabó el tiempo! Empecemos de nuevo, sin prisa» (aceptado) |
+| S2 | Qué pasa tras conseguir la insignia | Vuelve a empezar en el 2×2 sin tiempo. Elegir tablero y tiempos de inicio será una opción de la Zona de Padres (HU-010) |
+| S3 | Mostrar el nombre de la temática | No se muestra |
+| S4 | Indicador de nivel | Cinco puntos en el encabezado; los alcanzados, rellenos. Muestra el alcance del juego y el avance logrado |
+| S5 | Salida | Todo «atrás» del sistema pide repetir el gesto, con un aviso pequeño sin botones. En el menú, un botón «Salir» junto a «Zona de Padres» cierra la app sin confirmación (R19–R21) |
 
 ## 10. Plan de entregas (un PR cada una)
 
@@ -178,8 +186,8 @@ Respuestas del product owner del 2026-10-16:
 | 1 | Reglas de dominio y temáticas | `MemoryLadder`, catálogo de temáticas con la restricción T1, tests unitarios | Base de 4–8 y 14 |
 | 2 | Persistencia del progreso | `MemoryProgress` (typeId 2), caja Hive, repositorio y tests (después de TD-002) | 9, 10 y 12 |
 | 3 | Cubit con cronómetro y transiciones | Arranque, pausa y derrota, resultados de la escalera y tests con `fake_async` | 3–8, 11 |
-| 4 | Pantalla de juego | Barra de tiempo, indicador de nivel, celebraciones y avisos automáticos, encabezado en español y tests de layout | 2, 13, 15, 16 |
-| 5 | Menú | Botón único «Memoria» con estado dorado; retirar los dos niveles | 1, 9 |
+| 4 | Pantalla de juego | Barra de tiempo, indicador de nivel, celebraciones y avisos automáticos, encabezado en español, salida protegida en el juego y tests de layout | 2, 13, 15, 16, 17 |
+| 5 | Menú | Botón único «Memoria» con estado dorado, botón «Salir», salida protegida en el menú; retirar los dos niveles | 1, 9, 18, 19 |
 
 ## 11. Fuera de alcance
 
@@ -188,3 +196,5 @@ Respuestas del product owner del 2026-10-16:
 - Estadísticas o historial de partidas.
 - Cambiar el icono de la app en el launcher.
 - Botón de salida dentro del juego (decisión R13).
+- Configurar el tablero y los tiempos de inicio (HU-010, en la Zona de Padres).
+- Bloquear los gestos de inicio y recientes (limitación T5; posible con «Fijar pantalla» desde la Zona de Padres).
