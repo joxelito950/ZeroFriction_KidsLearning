@@ -157,6 +157,8 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - Las zonas táctiles DEBERÍAN ser grandes: las cartas actuales ocupan toda su celda de la cuadrícula.
 - Los elementos interactivos llevan `Semantics` con una etiqueta en español (ver `MemoryCardWidget`).
 - Las acciones de adulto (compras, ajustes) DEBEN quedar tras el Gatekeeper cuando exista.
+- Dentro de un juego NO DEBE haber botones que saquen al niño de él: las transiciones tras ganar o perder son automáticas (D-022, desde HU-001).
+- El tiempo, si existe, se muestra sin números, sin rojo y sin sonidos (D-021).
 
 ### 4.3 Privacidad y seguridad
 
@@ -246,9 +248,9 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-006 | `applicationId` `com.zerofriction.toddler_logic` | Es permanente una vez publicada la app en Google Play | Vigente · **no cambiar tras publicar** |
 | D-007 | `flutter_lints` 6 como base de análisis | Estándar recomendado para apps Flutter | Vigente |
 | D-008 | Se versiona `pubspec.lock`; no se versionan `*.g.dart` | Compilaciones reproducibles; el código generado se regenera con `build_runner` | Vigente |
-| D-009 | Siempre 3 estrellas al completar un nivel | A los 3 años se celebra el logro, no la eficiencia | Vigente |
+| D-009 | Siempre 3 estrellas al completar un nivel | A los 3 años se celebra el logro, no la eficiencia | Vigente · **se sustituye por D-020 al implementar HU-001** |
 | D-010 | Los errores de persistencia se reportan con `addError` y no se muestran al niño | La victoria nunca debe interrumpirse por un fallo técnico | Vigente |
-| D-011 | El tablero elige el número de columnas que da las cartas más grandes, solo con filas completas | Evita tableros 3+1 y cartas recortadas en cualquier orientación | Vigente |
+| D-011 | El tablero elige el número de columnas que da las cartas más grandes, solo con filas completas | Evita tableros 3+1 y cartas recortadas en cualquier orientación | Vigente · con HU-001 debe admitir hasta 16 cartas |
 | D-012 | Las entidades de dominio llevan anotaciones de Hive (`@HiveType`) | Simplicidad en la beta; contradice la «capa pura» del README | **Deuda aceptada**: separar modelos de persistencia antes de la 1.0 |
 | D-013 | Se soportan vertical y horizontal | Los niños giran el teléfono; bloquear la orientación es peor experiencia | Vigente |
 | D-014 | Se mantiene Hive 2.2.3 / `hive_generator` 2.0.1 en la beta | Funciona; migrar no aporta funcionalidad todavía | **Revisar**: el generador fija `analyzer` 6.4.1 (incompatible a futuro) y `Hive.openBox` filtra errores no capturados. Migrar a `hive_ce` |
@@ -257,6 +259,11 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-017 | La monetización usará Google Play Billing (pago único) | Lo exige Google Play para contenido digital; añadirá el permiso `BILLING` | Planificada |
 | D-018 | Cobertura mínima de líneas: 90 % total y 80 % por archivo (sección 6.3) | Equilibra seguridad y velocidad; la línea base está en 97,4 % | Vigente |
 | D-019 | El APK release se firma con la clave de debug | Plantilla por defecto de Flutter | **Pendiente**: configurar una keystore de release (`key.properties`, fuera de git) antes de distribuir |
+| D-020 | El juego de memoria es un único modo progresivo: escalera 2×2 → 2×3 → 2×4 → 3×4 → 4×4 y límites sin tiempo → 90 → 60 → 45 → 30 s. Al perder se baja un nivel conservando el límite. Insignia dorada al superar el 4×4 | Progreso adaptado al ritmo del niño, con un reto final alcanzable (análisis de viabilidad en HU-001) | Aprobada · se implementa en HU-001 |
+| D-021 | El tiempo se muestra como una barra que se vacía: sin números, sin rojo, sin sonidos. Perder se comunica como ayuda («Probemos con menos cartas») | Introduce un cronómetro sin contradecir «sin mecánicas frenéticas ni penalizaciones» del README | Aprobada · se implementa en HU-001 |
+| D-022 | Dentro de un juego no hay botones que saquen al niño: tras ganar o perder, la app avanza sola con una transición suave. Se sale con «atrás» del sistema | Los niños tocan botones sin intención, salen del juego y necesitan a un adulto para volver | Aprobada · aplica a todos los juegos desde HU-001 |
+| D-023 | Cada juego superado por completo se muestra en dorado en el menú, de forma permanente | Recompensa visible y extensible a los juegos futuros | Aprobada · se implementa en HU-001 |
+| D-024 | El contenido de cada tablero es una temática elegida al azar, con emojis de la versión Emoji 4.0 o anterior | Variedad sin assets; `minSdk` 24 no muestra emojis más nuevos | Aprobada · se implementa en HU-001 |
 
 ---
 

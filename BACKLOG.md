@@ -42,9 +42,9 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 
 | ID | Título | Épica | Estado | Prio | Tamaño | Notas |
 |---|---|---|---|---|---|---|
-| [HU-001](docs/hu/HU-001-memoria-progresiva.md) | Memoria progresiva con tiempo e insignia dorada | E1 | En refinamiento | P1 | L (estimado) | Sustituye los dos niveles actuales por un único modo. Tiene preguntas abiertas que bloquean. |
-| HU-002 | Mostrar el progreso del niño en el menú | E1 | Idea | P2 | S | En parte cubierta por HU-001 (nivel actual e insignia). Revisar tras cerrar HU-001. |
-| HU-003 | Temática Dinosaurios (Premium) con candado | E1, E3 | Idea | P3 | M | Depende de cómo encaje la temática en el modo progresivo de HU-001, y del candado (HU-006). |
+| [HU-001](docs/hu/HU-001-memoria-progresiva.md) | Memoria progresiva con tiempo e insignia dorada | E1 | Lista | P1 | L (5 entregas) | Refinamiento cerrado el 2026-10-16; decisiones D-020 a D-024. Quedan 5 supuestos menores por confirmar (no bloquean). |
+| HU-002 | Mostrar el progreso del niño en el menú | E1 | Idea | P3 | S | HU-001 ya cubre el dorado por juego superado (D-023). Revisar si hace falta algo más, por ejemplo el nivel actual en el menú. |
+| HU-003 | Temática Dinosaurios (Premium) con candado | E1, E3 | Idea | P3 | M | Con HU-001 sería una temática más del catálogo aleatorio, disponible solo con Premium. Depende de HU-006. |
 | HU-004 | Gatekeeper de la Zona de Padres | E2 | Idea | P2 | M | Desafío lógico o matemático para adultos. Requisito previo de HU-005, HU-006 y HU-009. |
 | HU-005 | Ajustes: sonido y dificultad | E2 | Idea | P3 | M | La app todavía no tiene audio. `isSoundEnabled` ya se persiste. |
 | HU-006 | Pago único con Google Play Billing y restauración | E3 | Idea | P3 | L | Añadirá el permiso `BILLING` (D-017). Requiere HU-004 y TD-003. |
@@ -65,5 +65,5 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 ## Orden propuesto
 
 1. **TD-002** (y si es posible **TD-001**): dejan la base estable antes de añadir persistencia nueva.
-2. **HU-001**: en cuanto pase a `Lista`.
+2. **HU-001**: ya está `Lista`. Se desarrolla en 5 entregas; la 2 (persistencia) después de TD-002.
 3. **HU-004**, luego HU-002 y HU-005, luego E3 (HU-006, HU-003) y E4 (HU-007, HU-008).
