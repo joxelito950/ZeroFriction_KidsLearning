@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinada el 2026-10-18; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollo iniciado el 2026-10-18 en `chore/td-001-ci`) |
 | **Épica** | E5 · Plataforma y calidad |
 | **Prioridad** | P1: antes de HU-001 |
 | **Tamaño** | S (medio día) |

@@ -180,7 +180,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - **Commits:** prefijos de Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`).
 - **Versionado:** SemVer con sufijo de pre-release en `pubspec.yaml` (`MAJOR.MINOR.PATCH-beta+BUILD`). El número `+BUILD` es el `versionCode` de Android y DEBE subir en cada build que se distribuya.
 - **Corrección de fallos:** primero un test que reproduzca el fallo y falle; después la corrección.
-- **Checklist antes de abrir un PR** (hasta que exista CI, D-016):
+- **Checklist de calidad.** El CI (`.github/workflows/ci.yml`, D-016) la ejecuta en cada PR hacia `develop` o `main` y en cada push a esas ramas; el check se llama `CI / quality`. Conviene ejecutarla también en local antes de abrir el PR:
 
 ```powershell
 flutter pub get
@@ -256,7 +256,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-013 | Se soportan vertical y horizontal | Los niños giran el teléfono; bloquear la orientación es peor experiencia | Vigente |
 | D-014 | Se mantiene Hive 2.2.3 / `hive_generator` 2.0.1 en la beta | Funciona; migrar no aporta funcionalidad todavía | **Revisar**: el generador fija `analyzer` 6.4.1 (incompatible a futuro) y `Hive.openBox` filtra errores no capturados. Migrar a `hive_ce` |
 | D-015 | Interfaz solo en español, con los textos en el código | Mercado inicial hispanohablante | Vigente · revisar si se internacionaliza |
-| D-016 | Calidad verificada en local con un checklist; sin CI todavía | Proyecto de una sola persona en fase beta | **Pendiente**: añadir GitHub Actions con el checklist de la sección 5 |
+| D-016 | La checklist de calidad de la sección 5 se ejecuta en GitHub Actions (`CI / quality`) con la misma versión de Flutter que en local; GitHub bloquea la fusión si falla | Las reglas de calidad no dependen de la disciplina manual (TD-001) | Vigente desde TD-001 · el bloqueo de fusión requiere activar la protección de ramas en GitHub |
 | D-017 | La monetización usará Google Play Billing (pago único) | Lo exige Google Play para contenido digital; añadirá el permiso `BILLING` | Planificada |
 | D-018 | Cobertura mínima de líneas: 90 % total y 80 % por archivo (sección 6.3) | Equilibra seguridad y velocidad; la línea base está en 97,4 % | Vigente |
 | D-019 | El APK release se firma con la clave de debug | Plantilla por defecto de Flutter | **Pendiente**: configurar una keystore de release (`key.properties`, fuera de git) antes de distribuir |
@@ -266,7 +266,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-023 | Cada juego superado por completo se muestra en dorado en el menú, de forma permanente | Recompensa visible y extensible a los juegos futuros | Aprobada · se implementa en HU-001 |
 | D-024 | El contenido de cada tablero es una temática elegida al azar, con emojis de la versión **Emoji 5.0 o anterior** | Variedad sin assets; con `minSdk` 26 (D-026), Emoji 5.0 es lo máximo que se ve en todos los dispositivos | Aprobada · se implementa en HU-001 |
 | D-025 | **Salida protegida:** todo «atrás» del sistema pide repetir el gesto en 2 s, con un aviso pequeño sin botones ni pantalla completa. La única salida directa es el botón «Salir» del menú. Los gestos de inicio y recientes no se pueden interceptar (limitación de Android) | Evita salidas accidentales sin añadir botones que el niño pueda tocar | Aprobada · aplica a toda la app desde HU-001 |
-| D-026 | Versión mínima de Android: **8.0 Oreo (API 26)**, fijada explícitamente en `android/app/build.gradle.kts` y no heredada de Flutter | Garantiza Emoji 5.0 (incluye 🦕 🦖 para la temática Dinosaurios) y mantiene la compatibilidad con dispositivos antiguos. Todo emoji de la app, incluida la UI fuera de los juegos, DEBE ser de Emoji 5.0 o anterior | Vigente desde 2026-10-18 · **Pendiente:** la mascota 🧸 del menú es de Emoji 11.0 (solo se ve desde Android 9) |
+| D-026 | Versión mínima de Android: **8.0 Oreo (API 26)**, fijada explícitamente en `android/app/build.gradle.kts` y no heredada de Flutter | Garantiza Emoji 5.0 (incluye 🦕 🦖 para la temática Dinosaurios) y mantiene la compatibilidad con dispositivos antiguos. Todo emoji de la app, incluida la UI fuera de los juegos, DEBE ser de Emoji 5.0 o anterior | Vigente desde 2026-10-18 · **Pendiente:** la mascota 🧸 del menú es de Emoji 11.0 (solo se ve desde Android 9); se retira junto con los iconos de los juegos en TD-006, y la identidad visual se define en HU-013 |
 
 ---
 
@@ -278,7 +278,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | `Hive.openBox` filtra errores no capturados al fallar | Ruido en los logs; tolerado en un test | Desaparece con la migración |
 | Dominio acoplado a Hive | Contradice la arquitectura documentada | Separar modelos de persistencia (D-012) |
 | `LevelState` e `isPremium` se guardan pero no se leen | El progreso no se ve; el candado premium no existe | Implementar junto con el módulo Premium |
-| Sin CI | Las reglas de este documento dependen de la disciplina manual | GitHub Actions (D-016) |
+| Versión de Flutter fijada en dos sitios (local y `ci.yml`) | Si solo se actualiza una, los resultados de local y del CI pueden diferir | Actualizarlas en el mismo PR (TD-001, C2) |
 | Firma release con la clave de debug | No se puede publicar en Google Play | Keystore de release (D-019) |
 | Encabezado del juego en inglés («Memory Game») | Inconsistente con D-015 | Traducir |
 | Sin carpeta `ios/` | No hay build para iOS | Ejecutar `flutter create --platforms=ios .` cuando se decida |
