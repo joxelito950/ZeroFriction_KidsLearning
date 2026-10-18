@@ -49,6 +49,16 @@ Un workflow no puede bloquear fusiones por sí solo. Una vez que el CI esté en 
 
 Para verificarlo se abre un PR de prueba con un fallo intencionado (por ejemplo, un test que falla), se comprueba el rojo, se corrige y se comprueba el verde. Ese PR no se fusiona.
 
+### Verificación realizada (PR #18, 2026-10-18)
+
+| Criterio | Prueba | Resultado |
+|---|---|---|
+| 1 y 3 | Primera ejecución del PR | ✅ [Verde en 2 min 25 s](https://github.com/joxelito950/ZeroFriction_KidsLearning/actions/runs/39159938784); artefacto `coverage` publicado |
+| 2 | Commit con un test que falla a propósito (`4ed7c3a`) | ✅ [Rojo](https://github.com/joxelito950/ZeroFriction_KidsLearning/actions/runs/39160231254) en «Test with coverage»; «Coverage thresholds» se salta |
+| 2 | Commit que lo revierte (`40939cb`) | ✅ [Vuelve a verde](https://github.com/joxelito950/ZeroFriction_KidsLearning/actions/runs/39160403976) |
+| 4 | Protección de ramas activa | ⏳ Pendiente: la activa el dueño del repo tras fusionar (sección 4) |
+| 5 | Mismo resultado que en local | ✅ Misma secuencia verde en local, con Flutter 3.47.5 |
+
 ## 6. Fuera de alcance (posibles mejoras futuras)
 
 - Compilar el APK en el CI: tarda varios minutos más y no aporta a la calidad del código hasta que haya firma de release (TD-003).
