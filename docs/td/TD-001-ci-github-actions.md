@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinada el 2026-10-18; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollo iniciado el 2026-10-18 en `chore/td-001-ci`) |
 | **Épica** | E5 · Plataforma y calidad |
 | **Prioridad** | P1: antes de HU-001 |
 | **Tamaño** | S (medio día) |
@@ -48,6 +48,16 @@ Un workflow no puede bloquear fusiones por sí solo. Una vez que el CI esté en 
 5. **Dado** el mismo commit, **entonces** el resultado en el CI coincide con la ejecución local de la checklist (misma versión de Flutter).
 
 Para verificarlo se abre un PR de prueba con un fallo intencionado (por ejemplo, un test que falla), se comprueba el rojo, se corrige y se comprueba el verde. Ese PR no se fusiona.
+
+### Verificación realizada (PR #18, 2026-10-18)
+
+| Criterio | Prueba | Resultado |
+|---|---|---|
+| 1 y 3 | Primera ejecución del PR | ✅ [Verde en 2 min 25 s](https://github.com/joxelito950/ZeroFriction_KidsLearning/actions/runs/39159938784); artefacto `coverage` publicado |
+| 2 | Commit con un test que falla a propósito (`4ed7c3a`) | ✅ [Rojo](https://github.com/joxelito950/ZeroFriction_KidsLearning/actions/runs/39160231254) en «Test with coverage»; «Coverage thresholds» se salta |
+| 2 | Commit que lo revierte (`40939cb`) | ✅ [Vuelve a verde](https://github.com/joxelito950/ZeroFriction_KidsLearning/actions/runs/39160403976) |
+| 4 | Protección de ramas activa | ⏳ Pendiente: la activa el dueño del repo tras fusionar (sección 4) |
+| 5 | Mismo resultado que en local | ✅ Misma secuencia verde en local, con Flutter 3.47.5 |
 
 ## 6. Fuera de alcance (posibles mejoras futuras)
 
