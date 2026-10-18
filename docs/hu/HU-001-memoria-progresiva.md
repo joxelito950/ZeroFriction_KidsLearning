@@ -137,7 +137,7 @@ Con la serie acordada, todos los niveles son alcanzables y el último es un reto
 
 | # | Restricción | Motivo |
 |---|---|---|
-| T1 | Solo emojis de la versión **Emoji 4.0 o anterior** | `minSdk` 24 (Android 7) no muestra emojis más nuevos y aparecerían como cuadros vacíos. Las banderas cumplen. Alternativa futura: incluir una fuente de emoji propia (cuesta MB) o subir el `minSdk` |
+| T1 | Solo emojis de la versión **Emoji 5.0 o anterior** | `minSdk` 26 (Android 8.0, D-026) no muestra emojis más nuevos y aparecerían como cuadros vacíos. Las banderas cumplen. Un test DEBERÍA verificar el catálogo de temáticas contra una lista de emojis permitidos |
 | T2 | El cronómetro es testeable sin esperas reales | Tests con `fake_async`; en la lógica, el tiempo se recibe inyectado y no se lee directamente de un reloj |
 | T3 | Las reglas de la escalera son lógica pura de dominio | Todas las transiciones de la sección 4.3 se prueban con tests unitarios, sin UI |
 | T4 | Nuevo typeId de Hive: **2** (`MemoryProgress`) | Según el registro de la sección 3.4 de la especificación; el siguiente libre pasa a ser 3 |

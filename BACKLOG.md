@@ -57,11 +57,12 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 
 | ID | Título | Estado | Prio | Tamaño | Notas |
 |---|---|---|---|---|---|
-| [TD-001](docs/td/TD-001-ci-github-actions.md) | CI con GitHub Actions (checklist de la sección 5) | Lista | P1 | S | Hace automáticas las reglas de la especificación (D-016). Incluye la regla de protección de ramas, que el dueño del repo configura a mano en GitHub. |
-| TD-002 | Migrar `hive`/`hive_generator` a `hive_ce` | Idea | P1 | S | Conviene hacerla **antes** que HU-001, porque HU-001 añade un tipo nuevo a Hive (typeId 2) (D-014). |
+| [TD-001](docs/td/TD-001-ci-github-actions.md) | CI con GitHub Actions (checklist de la sección 5) | Lista (refinada; sin implementar) | P1 | S | Hace automáticas las reglas de la especificación (D-016). Incluye la regla de protección de ramas, que el dueño del repo configura a mano en GitHub. |
+| [TD-002](docs/td/TD-002-migracion-hive-ce.md) | Migrar `hive`/`hive_generator` a `hive_ce` | En refinamiento | P1 | S | Conviene hacerla **antes** que HU-001, porque HU-001 añade un tipo nuevo a Hive (typeId 2) (D-014). |
 | TD-003 | Keystore de release y firma | Idea | P2 | S | Bloquea la publicación en Google Play (D-019). |
 | TD-004 | Separar los modelos de persistencia del dominio | Idea | P3 | M | Deuda aceptada D-012; antes de la 1.0. |
 | TD-005 | Generar la plataforma iOS | Idea | P3 | S | Cuando se decida publicar en iOS. |
+| TD-006 | Mascota 🧸 del menú incompatible con Android 8 | Idea | P1 | S | 🧸 es de Emoji 11.0 y solo se ve desde Android 9; en Android 8 sale un cuadro vacío (D-026). Opciones: sustituirla por un emoji de Emoji 5.0 o anterior (por ejemplo 🐻) o por una imagen propia. Requiere decisión de producto. |
 
 ## Orden propuesto
 
