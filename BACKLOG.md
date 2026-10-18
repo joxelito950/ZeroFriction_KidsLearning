@@ -68,7 +68,7 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 | TD-003 | Keystore de release y firma | Idea | P2 | S | Bloquea la publicación en Google Play (D-019). |
 | TD-004 | Separar los modelos de persistencia del dominio | Idea | P3 | M | Deuda aceptada D-012; antes de la 1.0. |
 | TD-005 | Generar la plataforma iOS | Idea | P3 | S | Cuando se decida publicar en iOS. |
-| TD-006 | Retirar los iconos del menú hasta definir la identidad visual | En curso (falta verificar en dispositivo) | P1 | S | Decisión del 2026-10-18: la mascota 🧸 (Emoji 11.0, no se ve en Android 8, D-026) y los iconos de los juegos (🚜, 🌴) se deciden más adelante junto con el icono de la app (HU-013). **Por ahora el menú no usa iconos.** Se hace después de TD-001, en su propio PR. |
+| TD-006 | Retirar los iconos del menú hasta definir la identidad visual | Hecha | P1 | S | Decisión del 2026-10-18: la mascota 🧸 (Emoji 11.0, no se ve en Android 8, D-026) y los iconos de los juegos (🚜, 🌴) se deciden más adelante junto con el icono de la app (HU-013). **Por ahora el menú no usa iconos.** Se hace después de TD-001, en su propio PR. |
 
 ## Orden propuesto
 
