@@ -8,7 +8,7 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 - **Estados:** `Idea` → `En refinamiento` → `Lista` → `En curso` → `Hecha` (o `Descartada`, con el motivo).
 - **Prioridad:** `P1` es lo siguiente que se trabaja; `P2` va después; `P3` queda para más adelante.
 - **Tamaño:** S (≤ 1 día), M (2–3 días), L (≥ 1 semana), según la estimación al refinar.
-- Cada historia que pase a `En refinamiento` tiene su ficha en `docs/hu/`. La rama de trabajo usa el ID: `feature/hu-001-...`.
+- Cada elemento que pase a `En refinamiento` tiene su ficha: las historias en `docs/hu/` y la deuda técnica en `docs/td/`. La rama de trabajo usa el ID: `feature/hu-001-...`.
 
 ### Definición de «Lista» (puede empezar a desarrollarse)
 
@@ -50,14 +50,14 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 | HU-006 | Pago único con Google Play Billing y restauración | E3 | Idea | P3 | L | Añadirá el permiso `BILLING` (D-017). Requiere HU-004 y TD-003. |
 | HU-007 | Shadow Matching (arrastrar a la silueta) | E4 | Idea | P3 | L | Módulo 2 del MVP. |
 | HU-008 | Clasificación por tamaño | E4 | Idea | P3 | L | Módulo 3 del MVP. |
-| HU-009 | Control de tiempo diario y límite de sesiones | E2 | Idea | P3 | M | Del dominio «Gestión Parental» del README. Podría incluir activar «Fijar pantalla» de Android (los gestos de inicio y recientes no se pueden bloquear desde la app). |
+| HU-009 | Control de tiempo diario y límite de sesiones | E2 | Idea | P3 | M | Del dominio «Gestión Parental» del README. Incluir «Fijar pantalla» de Android: primero como instrucciones para los padres y más adelante, si se quiere, un botón que la inicie (Android siempre pide confirmación; requiere código nativo). |
 | HU-010 | Configurar el tablero y los tiempos de inicio del juego de memoria | E2 | Idea | P3 | S | Desde la Zona de Padres, una vez superado el juego (insignia de HU-001). Depende de HU-001 y HU-004. Por refinar: si se configura por juego y qué rangos se permiten. |
 
 ## Deuda técnica y plataforma
 
 | ID | Título | Estado | Prio | Tamaño | Notas |
 |---|---|---|---|---|---|
-| TD-001 | CI con GitHub Actions (checklist de la sección 5) | Idea | P1 | S | Hace automáticas las reglas de la especificación (D-016). |
+| [TD-001](docs/td/TD-001-ci-github-actions.md) | CI con GitHub Actions (checklist de la sección 5) | Lista | P1 | S | Hace automáticas las reglas de la especificación (D-016). Incluye la regla de protección de ramas, que el dueño del repo configura a mano en GitHub. |
 | TD-002 | Migrar `hive`/`hive_generator` a `hive_ce` | Idea | P1 | S | Conviene hacerla **antes** que HU-001, porque HU-001 añade un tipo nuevo a Hive (typeId 2) (D-014). |
 | TD-003 | Keystore de release y firma | Idea | P2 | S | Bloquea la publicación en Google Play (D-019). |
 | TD-004 | Separar los modelos de persistencia del dominio | Idea | P3 | M | Deuda aceptada D-012; antes de la 1.0. |
