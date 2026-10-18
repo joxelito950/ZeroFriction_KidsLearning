@@ -54,7 +54,7 @@ La versión 0.0.1-beta congela el estado tras los PRs #1–#9 más las ramas `fi
 | `path_provider` | 2.1.6 | Ruta del directorio de documentos de la app |
 | `mocktail` | 1.0.5 | Mocks en tests |
 | `flutter_lints` | 6.0.0 | Reglas de análisis estático |
-| Android | `applicationId` `com.zerofriction.toddler_logic` · minSdk 24 · target/compile SDK 36 · Kotlin DSL · JVM 17 | Única plataforma generada |
+| Android | `applicationId` `com.zerofriction.toddler_logic` · **minSdk 26 (Android 8.0 Oreo)** · target/compile SDK 36 · Kotlin DSL · JVM 17 | Única plataforma generada |
 
 Las versiones exactas están en `pubspec.lock`, que se versiona (D-008).
 
@@ -264,8 +264,9 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-021 | El tiempo se muestra como una barra que se vacía: sin números, sin rojo, sin sonidos. Perder se comunica como ayuda («Probemos con menos cartas») | Introduce un cronómetro sin contradecir «sin mecánicas frenéticas ni penalizaciones» del README | Aprobada · se implementa en HU-001 |
 | D-022 | Dentro de un juego no hay botones que saquen al niño: tras ganar o perder, la app avanza sola con una transición suave. Se sale con «atrás» del sistema, protegido por D-025 | Los niños tocan botones sin intención, salen del juego y necesitan a un adulto para volver | Aprobada · aplica a todos los juegos desde HU-001 |
 | D-023 | Cada juego superado por completo se muestra en dorado en el menú, de forma permanente | Recompensa visible y extensible a los juegos futuros | Aprobada · se implementa en HU-001 |
-| D-024 | El contenido de cada tablero es una temática elegida al azar, con emojis de la versión Emoji 4.0 o anterior | Variedad sin assets; `minSdk` 24 no muestra emojis más nuevos | Aprobada · se implementa en HU-001 |
+| D-024 | El contenido de cada tablero es una temática elegida al azar, con emojis de la versión **Emoji 5.0 o anterior** | Variedad sin assets; con `minSdk` 26 (D-026), Emoji 5.0 es lo máximo que se ve en todos los dispositivos | Aprobada · se implementa en HU-001 |
 | D-025 | **Salida protegida:** todo «atrás» del sistema pide repetir el gesto en 2 s, con un aviso pequeño sin botones ni pantalla completa. La única salida directa es el botón «Salir» del menú. Los gestos de inicio y recientes no se pueden interceptar (limitación de Android) | Evita salidas accidentales sin añadir botones que el niño pueda tocar | Aprobada · aplica a toda la app desde HU-001 |
+| D-026 | Versión mínima de Android: **8.0 Oreo (API 26)**, fijada explícitamente en `android/app/build.gradle.kts` y no heredada de Flutter | Garantiza Emoji 5.0 (incluye 🦕 🦖 para la temática Dinosaurios) y mantiene la compatibilidad con dispositivos antiguos. Todo emoji de la app, incluida la UI fuera de los juegos, DEBE ser de Emoji 5.0 o anterior | Vigente desde 2026-10-18 · **Pendiente:** la mascota 🧸 del menú es de Emoji 11.0 (solo se ve desde Android 9) |
 
 ---
 
