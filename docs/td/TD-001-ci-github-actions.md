@@ -24,7 +24,7 @@ Que GitHub ejecute automáticamente la checklist de la sección 5 de la especifi
 |---|---|
 | C1 | Un workflow `.github/workflows/ci.yml` que se dispara en `pull_request` hacia `develop` y `main`, y en `push` a `develop` y `main` |
 | C2 | Usa la **misma versión de Flutter que el equipo local**: 3.47.5 stable, fijada en el workflow. Actualizarla es un cambio explícito en un PR |
-| C3 | Pasos, en orden: `flutter pub get` → `dart run build_runner build --delete-conflicting-outputs` → `flutter analyze` → `flutter test --coverage` → `dart run tool/coverage_check.dart` |
+| C3 | Pasos, en orden: `flutter pub get` → `dart run build_runner build` → `flutter analyze` → `flutter test --coverage` → `dart run tool/coverage_check.dart` |
 | C4 | Si un paso falla, el job falla y el PR muestra el check en rojo |
 | C5 | Se publica `coverage/lcov.info` como artefacto del job, para consultarlo sin repetir la ejecución en local |
 | C6 | Caché del SDK de Flutter y de los paquetes de pub, para que el job tarde pocos minutos |

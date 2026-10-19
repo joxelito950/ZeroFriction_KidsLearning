@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../domain/entities/level_state.dart';
 import '../../domain/entities/user_profile.dart';

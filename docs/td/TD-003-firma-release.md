@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (borrador del 2026-10-19; el desarrollo **no** ha empezado) |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-19; la clave la genera el dueño con la guía de la sección 7) |
 | **Épica** | E6 · Publicación y distribución |
-| **Prioridad** | P2: bloquea HU-014 (primera publicación) |
+| **Prioridad** | P1: pendientes técnicos antes de las historias; bloquea HU-014 (primera publicación) |
 | **Tamaño** | S (medio día) |
 | **Decisión que cierra** | D-019 («el APK release se firma con la clave de debug») |
 
@@ -45,16 +45,92 @@ Firmar las compilaciones *release* con una clave propia, para poder publicar en 
 4. **Dado** el CI, **entonces** sigue en verde sin cambios.
 5. **Dado** el procedimiento documentado, **entonces** otra persona podría generar una compilación firmada siguiéndolo, si tuviera el keystore.
 
-## 6. Preguntas abiertas
+## 6. Decisiones (2026-10-19)
 
-| # | Pregunta | Recomendación | Bloquea |
-|---|---|---|---|
-| P1 | ¿Dónde se guardan el keystore y sus contraseñas? | En un gestor de contraseñas (por ejemplo Bitwarden o 1Password), con el `.jks` como adjunto, más una copia cifrada fuera del equipo | Sí |
-| P2 | Sin `key.properties`, ¿el *release* firma con debug (F4) o falla? | Firma con debug y avisa, para no romper el CI. Las compilaciones para publicar se hacen siempre en tu equipo | No (hay recomendación) |
-| P3 | ¿Qué nombre figura en el certificado (CN, O)? | El mismo titular que la cuenta de Google Play: persona u organización (ver HU-014, tipo de cuenta) | Sí, depende de HU-014 |
-| P4 | ¿El CI debería generar AAB firmados? | Más adelante, con *GitHub Secrets*. Fuera de alcance aquí | No |
+| # | Pregunta | Decisión |
+|---|---|---|
+| P1 | ¿Dónde se guardan el keystore y sus contraseñas? | Recomendación aceptada como punto de partida: gestor de contraseñas con el `.jks` adjunto, más una copia cifrada fuera del equipo (pasos 4 y 5 de la guía) |
+| P2 | Sin `key.properties`, ¿firmar con debug o fallar? | Firmar con debug y avisar (F4), para no romper el CI |
+| P3 | Titular del certificado | **Cuenta personal** (no existe organización). El certificado lleva el nombre del dueño como persona |
+| P4 | ¿Firmar en el CI? | Fuera de alcance |
 
-## 7. Fuera de alcance
+Es la primera app del dueño: la sección 7 es una guía completa. El desarrollo de F3–F5 lo puedo hacer en paralelo, porque no necesita la clave (la configuración funciona sin `key.properties`, criterio 2).
+
+## 7. Guía paso a paso: crear y guardar la clave de subida
+
+> **Regla de oro:** las contraseñas y el archivo `.jks` **nunca** se escriben en el chat, en el repositorio ni en capturas de pantalla. Solo tú los conoces.
+
+### Paso 1. Elegir las contraseñas
+Genera en tu gestor de contraseñas **una contraseña larga** (20 caracteres o más). El formato PKCS12 usa **la misma contraseña** para el almacén y para la clave, así que basta con una. Guárdala en una entrada nueva, por ejemplo «ToddlerLogic · upload key».
+
+### Paso 2. Crear la carpeta fuera del repositorio
+En PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.android\keys"
+```
+
+### Paso 3. Generar la clave
+En PowerShell (es un solo comando):
+
+```powershell
+& "$env:JAVA_HOME\bin\keytool.exe" -genkeypair -v `
+  -keystore "$env:USERPROFILE\.android\keys\toddler_logic_upload.jks" `
+  -storetype PKCS12 -keyalg RSA -keysize 4096 -validity 10000 -alias upload
+```
+
+`keytool` hará estas preguntas (en el idioma del sistema):
+
+| Pregunta | Qué responder (cuenta personal) |
+|---|---|
+| Contraseña del almacén (dos veces) | La del paso 1. No se ve mientras escribes; es normal |
+| Nombre y apellido (CN) | Tu nombre completo, el mismo que pondrás en la cuenta de Google Play |
+| Unidad organizativa (OU) | Déjalo vacío (Enter) |
+| Organización (O) | Tu nombre o déjalo vacío: no hay organización |
+| Ciudad (L), Estado o provincia (ST) | Tu ciudad y tu departamento |
+| Código de país (C) | `CO` |
+| ¿Es correcto? | `sí` (o `yes`) |
+
+`-validity 10000` son unos 27 años: Google Play exige que la clave sea válida al menos hasta 2033.
+
+### Paso 4. Comprobar la clave y anotar su huella
+```powershell
+& "$env:JAVA_HOME\bin\keytool.exe" -list -v -keystore "$env:USERPROFILE\.android\keys\toddler_logic_upload.jks" -alias upload
+```
+Te pedirá la contraseña. Copia la línea **`SHA256:`** en la misma entrada del gestor de contraseñas. La huella es **pública** (no es un secreto) y sirve para verificar más adelante que Google Play reconoce tu clave.
+
+### Paso 5. Copia de seguridad
+1. **Adjunta** el archivo `toddler_logic_upload.jks` a la entrada del gestor de contraseñas.
+2. Guarda **otra copia** fuera del portátil (por ejemplo, en un USB guardado en casa, o en la nube dentro de un archivo cifrado con contraseña).
+3. Comprueba que puedes abrir la copia (repite el paso 4 apuntando a la copia).
+
+Si pierdes la clave de subida, Google permite restablecerla gracias a Play App Signing, pero tarda días y hay que contactar con soporte. Con copia de seguridad, nunca hace falta.
+
+### Paso 6. Crear `android/key.properties` (solo en tu equipo)
+Crea el archivo `android/key.properties` con este contenido, sustituyendo la contraseña. Usa **barras normales** (`/`) en la ruta:
+
+```properties
+storePassword=LA_CONTRASEÑA_DEL_PASO_1
+keyPassword=LA_CONTRASEÑA_DEL_PASO_1
+keyAlias=upload
+storeFile=C:/Users/User/.android/keys/toddler_logic_upload.jks
+```
+
+`android/.gitignore` ya lo excluye de git. Antes de cada commit, `git status` **no** debe mostrar `key.properties`.
+
+### Paso 7. Avisarme
+Con eso, compilo `flutter build appbundle --release` y verifico el criterio 1 **sin ver la contraseña**: compruebo que el AAB esté firmado con tu certificado y no con el de debug.
+
+### Qué hará Google Play con esta clave (HU-014)
+Al crear la app en Play Console, se activa **Play App Signing** (es el valor por defecto). Google genera y custodia la clave de firma de la app; tú subes el AAB firmado con tu **clave de subida**, y Play la registra en la primera subida.
+
+### Notas de la cuenta personal (para HU-014)
+- Cuota única de registro de 25 USD y verificación de identidad.
+- **Prueba cerrada obligatoria:** al menos 12 testers durante 14 días seguidos antes de publicar en producción.
+- No hace falta número D-U-N-S, que solo se pide a las organizaciones.
+
+## 8. Fuera de alcance
+
 
 - Firmar en el CI (P4).
 - Subir a Google Play (HU-014).

@@ -2,17 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:toddler_logic/data/local/hive_persistence_config.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
-/// `Hive.openBox` (hive 2.2.3) completa con error un Completer interno que nadie
-/// escucha, así que cada fallo al abrir una caja filtra un error no capturado
-/// propio de Hive. Solo toleramos ese; cualquier otro vendría de nuestro código.
-const int _hiveOpenBoxLeakedErrors = 1;
-
 /// Ejecuta [body] en una zona aislada y devuelve los errores no capturados.
+/// Un fallo de inicialización no debe dejar ninguno: ni de nuestro código ni de
+/// `Hive.openBox` (hive 2.2.3 filtraba uno; `hive_ce` lo corrigió, TD-002).
 Future<List<Object>> _collectUncaughtErrors(Future<void> Function() body) async {
   final uncaught = <Object>[];
   final done = Completer<void>();
@@ -59,7 +56,7 @@ void main() {
       });
 
       expect(thrown, isA<FileSystemException>());
-      expect(uncaught, hasLength(lessThanOrEqualTo(_hiveOpenBoxLeakedErrors)));
+      expect(uncaught, isEmpty);
       expect(Hive.isBoxOpen(HivePersistenceConfig.levelStateBoxName), isFalse);
       expect(Hive.isBoxOpen(HivePersistenceConfig.userProfileBoxName), isFalse);
       expect(() => HivePersistenceConfig.levelStateBox, throwsStateError);
@@ -81,7 +78,7 @@ void main() {
 
       expect(thrown, [isA<FileSystemException>(), isA<FileSystemException>()]);
       expect(thrown.first, same(thrown.last));
-      expect(uncaught, hasLength(lessThanOrEqualTo(_hiveOpenBoxLeakedErrors)));
+      expect(uncaught, isEmpty);
     });
 
     test('concurrent initialization opens both typed boxes once', () async {

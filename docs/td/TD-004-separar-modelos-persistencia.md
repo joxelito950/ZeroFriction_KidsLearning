@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (borrador del 2026-10-19; el desarrollo **no** ha empezado) |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-19; el desarrollo **no** ha empezado) |
 | **Épica** | E5 · Plataforma y calidad |
-| **Prioridad** | P3 hoy; propuesta de subirla a **P2** (ver P1) |
+| **Prioridad** | P1: todos los pendientes técnicos se terminan antes de las historias (decisión del 2026-10-19) |
 | **Tamaño** | M (2–3 días) |
 | **Decisión que cierra** | D-012 («las entidades de dominio llevan anotaciones de Hive», deuda aceptada) |
 
@@ -41,7 +41,7 @@ Como se mantienen los typeIds y los índices de campo, **el formato en disco es 
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Cuándo hacerlo? | **Antes de la entrega 2 de HU-001**, para que `MemoryProgress` nazca ya separado. Implica subirla de P3 a P2 | Sí (orden del backlog) |
+| P1 | ¿Cuándo hacerlo? | ✅ Decidido: **antes de empezar cualquier historia de usuario**, junto con el resto de pendientes técnicos. `MemoryProgress` (HU-001) nacerá ya separado | — |
 | P2 | ¿Los modelos de guardado usan `@HiveType` o el estilo nuevo de `hive_ce` (`@GenerateAdapters`)? | `@GenerateAdapters`: ya no contamina el dominio, y es la recomendación actual de `hive_ce`. Hay que comprobar que respeta los typeIds existentes | No (se valida al implementar) |
 | P3 | ¿La validación de estrellas (0–3) se queda en la entidad? | Sí: es una regla de negocio. Los modelos de guardado no validan | No |
 

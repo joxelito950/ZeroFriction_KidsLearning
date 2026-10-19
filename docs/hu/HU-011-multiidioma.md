@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (análisis del 2026-10-18; idiomas decididos el 2026-10-19; el desarrollo **no** ha empezado) |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-19; se desarrolla después de los pendientes técnicos) |
 | **Épica** | E5 · Plataforma y calidad (habilita la publicación en varios mercados) |
 | **Prioridad** | P1: **antes de HU-001**, para que los textos nuevos nazcan ya en el catálogo |
 | **Tamaño** | L (~1 semana: 9 idiomas, RTL y tests de layout por idioma) |
@@ -113,9 +113,9 @@ Con el locale `ar`, Flutter activa `TextDirection.rtl` en toda la app: las filas
 |---|---|---|
 | P1 | Idiomas iniciales | ✅ Decidido: los 9 de la sección 6 |
 | P2 | Idioma por defecto | ✅ Decidido: inglés (EE. UU.) |
-| P3 | ¿El nombre «ToddlerLogic» se traduce? | ⏳ **Pendiente.** Recomendación: no, es una marca (sección 5). Bloquea |
-| P4 | Español neutro o con variantes | ✅ Interpretado: un solo español neutro para Latinoamérica y España. Confirmar |
-| P5 | ¿Quién traduce? | ⏳ Pendiente. Propuesta: borradores generados por mí y revisión nativa al menos del español, el inglés y el portugués antes de publicar; el resto, revisión nativa antes de abrir cada mercado en la tienda (HU-014/HU-015) |
+| P3 | ¿El nombre «ToddlerLogic» se traduce? | ✅ Decidido: **no**. Es una marca y se muestra igual en todos los idiomas (sección 5) |
+| P4 | Español neutro o con variantes | ✅ Confirmado: un solo español neutro; la app tiene pocos textos y la mayoría serán de configuración |
+| P5 | ¿Quién traduce? | ✅ Decidido: esta historia crea **la base de los 9 idiomas** (catálogo completo con borradores de traducción) y **revisores externos** revisan todas las traducciones. Cada ARB se marca como «borrador» hasta su revisión (sección 12) |
 
 ## 9. Criterios de aceptación (borrador)
 
@@ -147,3 +147,10 @@ Con el locale `ar`, Flutter activa `TextDirection.rtl` en toda la app: las filas
 - Traducir la ficha de la tienda (HU-014).
 - La preferencia de idioma por app de Android 13 (*per-app language*): se evaluará en HU-012.
 - Hebreo y otros idiomas RTL: la base RTL que deja esta historia los facilitará, pero no se incluyen.
+
+## 12. Base de traducciones y revisión externa
+
+- **Base completa:** los 9 ARB se crean con **todas** las claves. `app_en.arb` es la plantilla; el resto llevan borradores de traducción generados en el desarrollo.
+- **Contexto para los revisores:** cada clave de la plantilla lleva su metadato `@clave` con `description` (dónde aparece y quién lo lee: niño o adulto) y, si aplica, la longitud máxima recomendada y los `placeholders` explicados. Sin contexto, un traductor externo no puede elegir bien el tono ni la longitud.
+- **Seguimiento de la revisión:** `docs/i18n/REVISION.md` registra por idioma el estado (*borrador* → *en revisión* → *revisado*), el revisor y la fecha. Ningún idioma se anuncia en la ficha de la tienda (HU-014) hasta estar *revisado*.
+- **Entrega a los revisores:** se les envían los ARB (JSON legible) o una exportación a hoja de cálculo con columnas clave, contexto, inglés, traducción. Sus correcciones vuelven por PR, y el CI comprueba la paridad de claves y plurales.

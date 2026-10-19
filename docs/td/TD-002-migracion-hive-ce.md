@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (borrador del 2026-10-18; el desarrollo **no** ha empezado) |
+| **Estado** | Hecha (todos los criterios verificados el 2026-10-19, incluido el dispositivo) |
 | **Épica** | E5 · Plataforma y calidad |
 | **Prioridad** | P1: antes de la entrega 2 de HU-001 |
 | **Tamaño** | S (≤ 1 día) |
@@ -41,7 +41,7 @@ Problemas conocidos que esta migración debería resolver o dejar documentados:
 
 ## 4. Criterios de aceptación
 
-1. **Dado** el proyecto migrado, **cuando** ejecuto `dart run build_runner build --delete-conflicting-outputs`, **entonces** termina sin errores y sin avisos de versión de `analyzer`.
+1. **Dado** el proyecto migrado, **cuando** ejecuto `dart run build_runner build`, **entonces** termina sin errores y sin avisos de versión de `analyzer`.
 2. **Dado** el proyecto migrado, **entonces** `flutter analyze` no da incidencias, todos los tests pasan y `tool/coverage_check.dart` está OK.
 3. **Dado** un directorio con cajas `level_states` y `user_profile` escritas con Hive 2.2.3, **cuando** la app migrada las abre, **entonces** lee los mismos `LevelState` y `UserProfile`. Se verifica con un test que usa datos generados con la versión anterior.
 4. **Dado** el teléfono de pruebas con la versión anterior instalada y progreso guardado, **cuando** instalo la versión migrada encima (sin desinstalar), **entonces** la app abre sin errores y conserva los datos.
@@ -55,6 +55,23 @@ Problemas conocidos que esta migración debería resolver o dejar documentados:
 | P1 | ¿Adoptamos ya el estilo nuevo de `hive_ce` (`@GenerateAdapters` y registro automático de adapters) o mantenemos `@HiveType`? | Mantener `@HiveType` en TD-002, para un cambio mínimo y fácil de revisar. El estilo nuevo encaja mejor con TD-004 (separar los modelos de persistencia del dominio) | No (hay recomendación) |
 | P2 | ¿Hace falta conservar los datos de las versiones anteriores? | Sí, como buena práctica, aunque la app no se ha publicado y solo afectaría a los dispositivos de prueba. El criterio 3 lo comprueba | No (hay recomendación) |
 | P3 | ¿La implementamos antes o después de TD-001 (CI)? | Después: así el CI valida la migración en su propio PR | No |
+
+### Decisiones (2026-10-19)
+
+- **P1:** cambios mínimos: se mantienen `@HiveType`/`@HiveField`.
+- **P2:** se conservan los datos de versiones anteriores (criterios 3 y 4).
+- **P3:** el CI (TD-001) ya está activo y valida el PR.
+
+### Resultados de la implementación
+
+| Criterio | Resultado |
+|---|---|
+| 1 | ✅ `build_runner` genera los 7 archivos sin avisos de `analyzer` (6.4.1 → 14.4.0). Nota: `build_runner` 2.16 eliminó la opción `--delete-conflicting-outputs`; se quitó del CI y de la documentación |
+| 2 | ✅ `flutter analyze` sin incidencias; todos los tests pasan; cobertura OK |
+| 3 | ✅ `test/data/local/hive_v2_compatibility_test.dart` abre con `hive_ce` cajas escritas con hive 2.2.3 (`test/fixtures/hive_v2/`) y lee los mismos datos |
+| 4 | ✅ moto g55 5G (Android 16), 2026-10-19: la versión con hive 2.2.3 tenía 2 niveles ganados (`farm_easy` y `wild_medium`, completados con 3★). Se instaló la versión migrada encima (`adb install -r`), se abrió la app sin errores y, al leer con `hive_ce` las cajas copiadas antes y después, el contenido es idéntico |
+| 5 | ✅ No quedan referencias a `package:hive/` ni a `hive_generator` |
+| 6 | ✅ `hive_ce` **corrige** la fuga de errores de `openBox`: el test de `HivePersistenceConfig` exige ahora 0 errores no capturados |
 
 ## 6. Riesgos
 
