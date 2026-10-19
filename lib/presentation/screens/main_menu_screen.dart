@@ -51,7 +51,7 @@ class MainMenuScreen extends StatelessWidget {
   }
 }
 
-/// Encabezado amigable con la mascota y el nombre de la app.
+/// Encabezado con el nombre de la app. La mascota llegará con la identidad visual (HU-013).
 class _MenuHeader extends StatelessWidget {
   const _MenuHeader();
 
@@ -62,11 +62,6 @@ class _MenuHeader extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
-          '🧸',
-          style: TextStyle(fontSize: 80),
-        ),
-        const SizedBox(height: 8),
         Text(
           'ToddlerLogic',
           style: theme.textTheme.headlineLarge?.copyWith(
@@ -104,7 +99,6 @@ class _MenuActions extends StatelessWidget {
         _MenuButton(
           title: 'Animales de la Granja',
           subtitle: 'Nivel Inicial (2x2)',
-          emojiIcon: '🚜',
           backgroundColor: const Color(0xFFFFEBEE), // Rojo pastel
           textColor: Colors.red[800]!,
           onTap: () {
@@ -124,7 +118,6 @@ class _MenuActions extends StatelessWidget {
         _MenuButton(
           title: 'Selva Sorpresa',
           subtitle: 'Nivel Explorador (2x3)',
-          emojiIcon: '🌴',
           backgroundColor: const Color(0xFFE8F5E9), // Verde pastel
           textColor: Colors.green[800]!,
           onTap: () {
@@ -168,7 +161,6 @@ class _MenuActions extends StatelessWidget {
 class _MenuButton extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String emojiIcon;
   final Color backgroundColor;
   final Color textColor;
   final VoidCallback onTap;
@@ -176,7 +168,6 @@ class _MenuButton extends StatelessWidget {
   const _MenuButton({
     required this.title,
     required this.subtitle,
-    required this.emojiIcon,
     required this.backgroundColor,
     required this.textColor,
     required this.onTap,
@@ -202,11 +193,6 @@ class _MenuButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(
-              emojiIcon,
-              style: const TextStyle(fontSize: 40),
-            ),
-            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

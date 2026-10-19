@@ -27,6 +27,15 @@ void main() {
       expect(find.text('Zona de Padres'), findsOneWidget);
     });
 
+    // TD-006: sin mascota ni iconos de juegos hasta definir la identidad visual (HU-013).
+    testWidgets('does not show the mascot or game icons in the menu', (tester) async {
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository));
+
+      for (final icon in ['🧸', '🚜', '🌴']) {
+        expect(find.text(icon), findsNothing, reason: '$icon should not be shown');
+      }
+    });
+
     testWidgets('shows a coming-soon notice for the parents zone', (tester) async {
       await tester.pumpWidget(ToddlerLogicApp(repository: repository));
 
