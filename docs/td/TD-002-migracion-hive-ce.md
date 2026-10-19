@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (refinamiento cerrado y desarrollo iniciado el 2026-10-19 en `chore/td-002-hive-ce`) |
+| **Estado** | Hecha (todos los criterios verificados el 2026-10-19, incluido el dispositivo) |
 | **Épica** | E5 · Plataforma y calidad |
 | **Prioridad** | P1: antes de la entrega 2 de HU-001 |
 | **Tamaño** | S (≤ 1 día) |
@@ -69,7 +69,7 @@ Problemas conocidos que esta migración debería resolver o dejar documentados:
 | 1 | ✅ `build_runner` genera los 7 archivos sin avisos de `analyzer` (6.4.1 → 14.4.0). Nota: `build_runner` 2.16 eliminó la opción `--delete-conflicting-outputs`; se quitó del CI y de la documentación |
 | 2 | ✅ `flutter analyze` sin incidencias; todos los tests pasan; cobertura OK |
 | 3 | ✅ `test/data/local/hive_v2_compatibility_test.dart` abre con `hive_ce` cajas escritas con hive 2.2.3 (`test/fixtures/hive_v2/`) y lee los mismos datos |
-| 4 | Ver la verificación en el dispositivo en el PR |
+| 4 | ✅ moto g55 5G (Android 16), 2026-10-19: la versión con hive 2.2.3 tenía 2 niveles ganados (`farm_easy` y `wild_medium`, completados con 3★). Se instaló la versión migrada encima (`adb install -r`), se abrió la app sin errores y, al leer con `hive_ce` las cajas copiadas antes y después, el contenido es idéntico |
 | 5 | ✅ No quedan referencias a `package:hive/` ni a `hive_generator` |
 | 6 | ✅ `hive_ce` **corrige** la fuga de errores de `openBox`: el test de `HivePersistenceConfig` exige ahora 0 errores no capturados |
 
