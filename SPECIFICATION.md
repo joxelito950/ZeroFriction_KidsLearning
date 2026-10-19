@@ -50,7 +50,7 @@ La versión 0.0.1-beta congela el estado tras los PRs #1–#9 más las ramas `fi
 |---|---|---|
 | Flutter / Dart | 3.47.5 stable / 3.13.4 (restricción `sdk: '>=3.3.0 <4.0.0'`) | Framework y lenguaje |
 | `bloc` / `flutter_bloc` | 9.2.1 / 9.1.1 | Gestión de estado con Cubit |
-| `hive` / `hive_generator` | 2.2.3 / 2.0.1 | Persistencia local y generación de adapters |
+| `hive_ce` / `hive_ce_generator` | 2.22.0 / 1.12.0 (con `build_runner` 2.16.2) | Persistencia local y generación de adapters (D-014) |
 | `path_provider` | 2.1.6 | Ruta del directorio de documentos de la app |
 | `mocktail` | 1.0.5 | Mocks en tests |
 | `flutter_lints` | 6.0.0 | Reglas de análisis estático |
@@ -184,7 +184,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 
 ```powershell
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 flutter analyze                          # 0 incidencias
 flutter test --coverage                  # todos pasan
 dart run tool/coverage_check.dart        # umbrales de la sección 6.3
@@ -254,7 +254,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-011 | El tablero elige el número de columnas que da las cartas más grandes, solo con filas completas | Evita tableros 3+1 y cartas recortadas en cualquier orientación | Vigente · con HU-001 debe admitir hasta 16 cartas |
 | D-012 | Las entidades de dominio llevan anotaciones de Hive (`@HiveType`) | Simplicidad en la beta; contradice la «capa pura» del README | **Deuda aceptada**: separar modelos de persistencia antes de la 1.0 |
 | D-013 | Se soportan vertical y horizontal | Los niños giran el teléfono; bloquear la orientación es peor experiencia | Vigente |
-| D-014 | Se mantiene Hive 2.2.3 / `hive_generator` 2.0.1 en la beta | Funciona; migrar no aporta funcionalidad todavía | **Revisar**: el generador fija `analyzer` 6.4.1 (incompatible a futuro) y `Hive.openBox` filtra errores no capturados. Migrar a `hive_ce` |
+| D-014 | Persistencia con `hive_ce` (continuación mantenida de Hive v2), conservando `@HiveType`/`@HiveField` y los typeIds | Hive 2.2.3 no se publica desde 2022 y su generador fijaba `analyzer` 6.4.1; `hive_ce` usa `analyzer` 14, corrige la fuga de errores de `openBox` y lee los datos de Hive 2.2.3 (test con fixtures en `test/fixtures/hive_v2/`) | Vigente desde TD-002. El estilo `@GenerateAdapters` de `hive_ce` se evaluará con TD-004 |
 | D-015 | Interfaz solo en español, con los textos en el código | Mercado inicial hispanohablante | Vigente · revisar si se internacionaliza |
 | D-016 | La checklist de calidad de la sección 5 se ejecuta en GitHub Actions (`CI / quality`) con la misma versión de Flutter que en local; GitHub bloquea la fusión si falla | Las reglas de calidad no dependen de la disciplina manual (TD-001) | Vigente desde TD-001 · el bloqueo de fusión requiere activar la protección de ramas en GitHub |
 | D-017 | La monetización usará Google Play Billing (pago único) | Lo exige Google Play para contenido digital; añadirá el permiso `BILLING` | Planificada |
@@ -274,8 +274,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 
 | Tema | Impacto | Acción propuesta |
 |---|---|---|
-| `hive_generator` fija `analyzer` 6.4.1 | `build_runner` puede dejar de funcionar al actualizar Dart | Migrar a `hive_ce` (D-014) |
-| `Hive.openBox` filtra errores no capturados al fallar | Ruido en los logs; tolerado en un test | Desaparece con la migración |
+| `hive_ce_generator` admite `analyzer` < 14.5.0 | Al actualizar Flutter o Dart, `pub` podría no encontrar una combinación compatible | Revisarlo en el mismo PR que actualice Flutter (local y CI) |
 | Dominio acoplado a Hive | Contradice la arquitectura documentada | Separar modelos de persistencia (D-012) |
 | `LevelState` e `isPremium` se guardan pero no se leen | El progreso no se ve; el candado premium no existe | Implementar junto con el módulo Premium |
 | Versión de Flutter fijada en dos sitios (local y `ci.yml`) | Si solo se actualiza una, los resultados de local y del CI pueden diferir | Actualizarlas en el mismo PR (TD-001, C2) |

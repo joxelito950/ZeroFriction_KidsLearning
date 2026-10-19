@@ -119,7 +119,7 @@ flutter pub get
 
 Dado que el proyecto utiliza el generador automático de código para los adaptadores de Hive (*.g.dart), debes ejecutar el compilador local. Los archivos generados están excluidos de Git por buenas prácticas:
 
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 
 
 4. Ejecutar las Pruebas Unitarias y de Integración
