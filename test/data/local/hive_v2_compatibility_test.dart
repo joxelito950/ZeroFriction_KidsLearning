@@ -31,16 +31,16 @@ void main() {
     final levels = HivePersistenceConfig.levelStateBox;
     expect(levels.length, 2);
     expect(
-      levels.get('farm_easy'),
+      levels.get('farm_easy')!.toEntity(),
       LevelState(levelId: 'farm_easy', isCompleted: true, stars: 3),
     );
     expect(
-      levels.get('wild_medium'),
+      levels.get('wild_medium')!.toEntity(),
       LevelState(levelId: 'wild_medium', isCompleted: false, stars: 1),
     );
 
     expect(
-      HivePersistenceConfig.userProfileBox.get('current_user_profile'),
+      HivePersistenceConfig.userProfileBox.get('current_user_profile')!.toEntity(),
       const UserProfile(isPremium: true, isSoundEnabled: false),
     );
   });

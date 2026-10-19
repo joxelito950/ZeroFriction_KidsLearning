@@ -1,17 +1,10 @@
-import 'package:hive_ce/hive.dart';
-
-part 'user_profile.g.dart';
-
-@HiveType(typeId: 1)
 class UserProfile {
   const UserProfile({
     required this.isPremium,
     required this.isSoundEnabled,
   });
 
-  @HiveField(0)
   final bool isPremium;
-  @HiveField(1)
   final bool isSoundEnabled;
 
   bool get soundEnabled => isSoundEnabled;
