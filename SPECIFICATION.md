@@ -88,7 +88,7 @@ flowchart TB
 
 | Capa | Puede importar | NO DEBE importar |
 |---|---|---|
-| `domain` | Dart puro y anotaciones de Hive (excepción temporal, D-012) | `flutter`, `data`, `presentation` |
+| `domain` | Solo Dart puro (D-012; lo comprueba `test/architecture/domain_purity_test.dart`) | `flutter`, `hive_ce` y cualquier paquete de infraestructura, `data`, `presentation` |
 | `data` | `domain`, Hive, `path_provider` | `presentation`, `flutter/material` |
 | `presentation` | `domain`, `flutter`, `bloc` | `data` (accede a la persistencia solo por `IPersistenceRepository`) |
 | `main.dart` | Todo | Contener lógica de UI o de negocio: solo compone e inicia la app |
@@ -99,8 +99,9 @@ flowchart TB
 lib/
 ├── main.dart                          # Arranque: Hive → repositorio → ToddlerLogicApp
 ├── data/local/                        # HivePersistenceConfig, HivePersistenceRepository
+│   └── models/                        # Modelos de guardado Hive (+ *.g.dart generados) con fromEntity/toEntity
 ├── domain/
-│   ├── entities/                      # LevelState, UserProfile (+ *.g.dart generados)
+│   ├── entities/                      # LevelState, UserProfile (Dart puro)
 │   └── repositories/                  # IPersistenceRepository
 └── presentation/
     ├── blocs/<feature>/               # <feature>_cubit, _state, modelos de UI
@@ -122,10 +123,13 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 
 ### 3.4 Persistencia
 
-| Caja Hive | Tipo | Clave | typeId |
+| Caja Hive | Modelo de guardado → entidad | Clave | typeId |
 |---|---|---|---|
-| `level_states` | `LevelState` | `levelId` | 0 |
-| `user_profile` | `UserProfile` | `current_user_profile` | 1 |
+| `level_states` | `LevelStateHiveModel` → `LevelState` | `levelId` | 0 |
+| `user_profile` | `UserProfileHiveModel` → `UserProfile` | `current_user_profile` | 1 |
+
+- Las cajas guardan **modelos de guardado** (`data/local/models/`), nunca entidades de dominio. El repositorio convierte con `fromEntity`/`toEntity`; las reglas de negocio (por ejemplo, estrellas entre 0 y 3) las valida la entidad al convertir.
+- `test/data/local/hive_v2_compatibility_test.dart` y los fixtures de `test/fixtures/hive_v2/` garantizan que el formato en disco no cambia. Si cambia, el test falla.
 
 - Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **2**.
 - Identificadores de nivel en uso: `farm_easy`, `wild_medium`. Un `levelId` ya publicado NO DEBE renombrarse.
@@ -252,7 +256,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-009 | Siempre 3 estrellas al completar un nivel | A los 3 años se celebra el logro, no la eficiencia | Vigente · **se sustituye por D-020 al implementar HU-001** |
 | D-010 | Los errores de persistencia se reportan con `addError` y no se muestran al niño | La victoria nunca debe interrumpirse por un fallo técnico | Vigente |
 | D-011 | El tablero elige el número de columnas que da las cartas más grandes, solo con filas completas | Evita tableros 3+1 y cartas recortadas en cualquier orientación | Vigente · con HU-001 debe admitir hasta 16 cartas |
-| D-012 | Las entidades de dominio llevan anotaciones de Hive (`@HiveType`) | Simplicidad en la beta; contradice la «capa pura» del README | **Deuda aceptada**: separar modelos de persistencia antes de la 1.0 |
+| D-012 | El dominio es Dart puro; la persistencia usa modelos de guardado propios en `data/local/models/` con los mismos typeIds e índices de campo | Cumple la arquitectura del README y desacopla el formato en disco de las reglas de negocio | Vigente desde TD-004 (antes: deuda aceptada) |
 | D-013 | Se soportan vertical y horizontal | Los niños giran el teléfono; bloquear la orientación es peor experiencia | Vigente |
 | D-014 | Persistencia con `hive_ce` (continuación mantenida de Hive v2), conservando `@HiveType`/`@HiveField` y los typeIds | Hive 2.2.3 no se publica desde 2022 y su generador fijaba `analyzer` 6.4.1; `hive_ce` usa `analyzer` 14, corrige la fuga de errores de `openBox` y lee los datos de Hive 2.2.3 (test con fixtures en `test/fixtures/hive_v2/`) | Vigente desde TD-002. El estilo `@GenerateAdapters` de `hive_ce` se evaluará con TD-004 |
 | D-015 | Interfaz solo en español, con los textos en el código | Mercado inicial hispanohablante | Vigente · revisar si se internacionaliza |
@@ -275,7 +279,6 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | Tema | Impacto | Acción propuesta |
 |---|---|---|
 | `hive_ce_generator` admite `analyzer` < 14.5.0 | Al actualizar Flutter o Dart, `pub` podría no encontrar una combinación compatible | Revisarlo en el mismo PR que actualice Flutter (local y CI) |
-| Dominio acoplado a Hive | Contradice la arquitectura documentada | Separar modelos de persistencia (D-012) |
 | `LevelState` e `isPremium` se guardan pero no se leen | El progreso no se ve; el candado premium no existe | Implementar junto con el módulo Premium |
 | Versión de Flutter fijada en dos sitios (local y `ci.yml`) | Si solo se actualiza una, los resultados de local y del CI pueden diferir | Actualizarlas en el mismo PR (TD-001, C2) |
 | Firma release con la clave de debug | No se puede publicar en Google Play | Keystore de release (D-019) |

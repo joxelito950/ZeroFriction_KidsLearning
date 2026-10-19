@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-19; el desarrollo **no** ha empezado) |
+| **Estado** | Hecha (implementada y verificada el 2026-10-19 en `chore/td-004-pure-domain`) |
 | **Épica** | E5 · Plataforma y calidad |
 | **Prioridad** | P1: todos los pendientes técnicos se terminan antes de las historias (decisión del 2026-10-19) |
 | **Tamaño** | M (2–3 días) |
@@ -44,6 +44,21 @@ Como se mantienen los typeIds y los índices de campo, **el formato en disco es 
 | P1 | ¿Cuándo hacerlo? | ✅ Decidido: **antes de empezar cualquier historia de usuario**, junto con el resto de pendientes técnicos. `MemoryProgress` (HU-001) nacerá ya separado | — |
 | P2 | ¿Los modelos de guardado usan `@HiveType` o el estilo nuevo de `hive_ce` (`@GenerateAdapters`)? | `@GenerateAdapters`: ya no contamina el dominio, y es la recomendación actual de `hive_ce`. Hay que comprobar que respeta los typeIds existentes | No (se valida al implementar) |
 | P3 | ¿La validación de estrellas (0–3) se queda en la entidad? | Sí: es una regla de negocio. Los modelos de guardado no validan | No |
+
+### Implementación y desviaciones respecto a la propuesta
+
+- **Conversión en el propio modelo** (`fromEntity`/`toEntity` en `LevelStateHiveModel` y `UserProfileHiveModel`) en lugar de una carpeta `data/local/mappers/`: para dos entidades pequeñas, archivos aparte no aportaban nada. La regla «la capa de datos convierte, el dominio no conoce Hive» se mantiene.
+- **P2: se mantiene `@HiveType`/`@HiveField`** en los modelos de guardado, con los typeIds explícitos. `@GenerateAdapters` asigna los typeIds de forma automática y habría exigido migrar su esquema; no aporta nada mientras los modelos vivan fuera del dominio.
+
+### Resultados
+
+| Criterio | Resultado |
+|---|---|
+| 1 | ✅ `test/architecture/domain_purity_test.dart` comprueba que `lib/domain/` no importa `hive_ce`, Flutter, bloc, `path_provider` ni otras capas, y que no tiene `part` de código generado. Falló antes del cambio (4 errores) y pasa después |
+| 2 | ✅ El test de compatibilidad con los fixtures de hive 2.2.3 pasa sin cambios en los datos. En el moto g55 5G, tras instalar encima de la versión de TD-002, el repositorio nuevo lee los 2 niveles guardados idénticos |
+| 3 | ✅ `IPersistenceRepository`, los Cubits y las pantallas no cambian |
+| 4 | ✅ `test/data/local/models/hive_models_test.dart`: ida y vuelta de ambos modelos, y una estrella fuera de rango guardada se sigue rechazando al convertir |
+| 5 | ✅ 60 tests en verde, `analyze` sin incidencias, cobertura total del 97,5 % (modelos y repositorio al 100 %) |
 
 ## 6. Riesgos
 

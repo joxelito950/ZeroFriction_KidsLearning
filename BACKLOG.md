@@ -66,13 +66,13 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 | [TD-001](docs/td/TD-001-ci-github-actions.md) | CI con GitHub Actions (checklist de la sección 5) | Hecha | P1 | S | Hace automáticas las reglas de la especificación (D-016). Incluye la regla de protección de ramas, que el dueño del repo configura a mano en GitHub. |
 | [TD-002](docs/td/TD-002-migracion-hive-ce.md) | Migrar `hive`/`hive_generator` a `hive_ce` | Hecha | P1 | S | Conviene hacerla **antes** que HU-001, porque HU-001 añade un tipo nuevo a Hive (typeId 2) (D-014). |
 | [TD-003](docs/td/TD-003-firma-release.md) | Keystore de release y firma | Lista | P1 | S | Bloquea la publicación en Google Play (D-019). Cuenta **personal**; el keystore lo genera el dueño siguiendo la guía paso a paso de la ficha, fuera del repo, con Play App Signing. |
-| [TD-004](docs/td/TD-004-separar-modelos-persistencia.md) | Separar los modelos de persistencia del dominio | Lista | P1 | M | Deuda aceptada D-012. Decisión del 2026-10-19: todos los pendientes técnicos se terminan antes de empezar las historias de usuario. |
+| [TD-004](docs/td/TD-004-separar-modelos-persistencia.md) | Separar los modelos de persistencia del dominio | Hecha | P1 | M | Deuda aceptada D-012. Decisión del 2026-10-19: todos los pendientes técnicos se terminan antes de empezar las historias de usuario. |
 | TD-005 | Generar la plataforma iOS | Idea | P3 | S | Cuando se decida publicar en iOS. |
 | TD-006 | Retirar los iconos del menú hasta definir la identidad visual | Hecha | P1 | S | Decisión del 2026-10-18: la mascota 🧸 (Emoji 11.0, no se ve en Android 8, D-026) y los iconos de los juegos (🚜, 🌴) se deciden más adelante junto con el icono de la app (HU-013). **Por ahora el menú no usa iconos.** Se hace después de TD-001, en su propio PR. |
 
 ## Orden propuesto
 
-1. **Pendientes técnicos primero** (decisión del 2026-10-19): TD-001, TD-002 y TD-006 ✅ hechas; **TD-004** (dominio puro) y **TD-003** (firma; la clave la genera el dueño con la guía de la ficha). TD-005 (iOS) queda para cuando se decida publicar en iOS.
+1. **Pendientes técnicos primero** (decisión del 2026-10-19): TD-001, TD-002, TD-004 y TD-006 ✅ hechas; queda **TD-003** (firma; la clave la genera el dueño con la guía de la ficha). TD-005 (iOS) queda para cuando se decida publicar en iOS.
 2. **HU-011** (multiidioma): antes de HU-001, para no traducir dos veces.
 3. **HU-001**: ya está `Lista`. Se desarrolla en 5 entregas.
 4. **HU-004** y HU-012; luego HU-013 y **HU-014** (primera publicación).
