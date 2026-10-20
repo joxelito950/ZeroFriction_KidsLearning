@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-19; se desarrolla después de los pendientes técnicos) |
+| **Estado** | Hecha (implementada y verificada el 2026-10-20 en `feature/hu-011-i18n`) |
 | **Épica** | E5 · Plataforma y calidad (habilita la publicación en varios mercados) |
 | **Prioridad** | P1: **antes de HU-001**, para que los textos nuevos nazcan ya en el catálogo |
 | **Tamaño** | L (~1 semana: 9 idiomas, RTL y tests de layout por idioma) |
@@ -154,3 +154,30 @@ Con el locale `ar`, Flutter activa `TextDirection.rtl` en toda la app: las filas
 - **Contexto para los revisores:** cada clave de la plantilla lleva su metadato `@clave` con `description` (dónde aparece y quién lo lee: niño o adulto) y, si aplica, la longitud máxima recomendada y los `placeholders` explicados. Sin contexto, un traductor externo no puede elegir bien el tono ni la longitud.
 - **Seguimiento de la revisión:** `docs/i18n/REVISION.md` registra por idioma el estado (*borrador* → *en revisión* → *revisado*), el revisor y la fecha. Ningún idioma se anuncia en la ficha de la tienda (HU-014) hasta estar *revisado*.
 - **Entrega a los revisores:** se les envían los ARB (JSON legible) o una exportación a hoja de cálculo con columnas clave, contexto, inglés, traducción. Sus correcciones vuelven por PR, y el CI comprueba la paridad de claves y plurales.
+
+## 13. Implementación y resultados (2026-10-20)
+
+### Decisiones tomadas al implementar
+
+- **Portugués:** `gen-l10n` exige un idioma base cuando existe una variante, así que el catálogo tiene **un solo `app_pt.arb` con el portugués de Brasil**. Los teléfonos en `pt_BR` y `pt_PT` lo usan, que es lo decidido (sección 6).
+- **Nombre en el icono del teléfono:** como la marca no se traduce, basta con **un único** `res/values/strings.xml` (`translatable="false"`). Si algún día se tradujera, se añade `res/values-xx/`.
+- **Código generado:** `lib/l10n/app_localizations*.dart` se regenera con `flutter pub get` y no se versiona (D-008); también se excluye de la cobertura.
+- **Título del juego:** el encabezado «Memory Game» pasa al catálogo; en español, «Juego de memoria».
+- **Corrección gramatical:** «Completado en 1 movimientos» pasa a «Completado en 1 movimiento» gracias a los plurales.
+
+### Resultados por criterio
+
+| Criterio | Resultado |
+|---|---|
+| 1 | ✅ `test/architecture/no_hardcoded_texts_test.dart` revisa `lib/presentation` y `main.dart`; se comprobó que detecta un texto fijo añadido a propósito |
+| 2 | ✅ Tests de `resolveStartupLocale`. En el moto g55 (sistema en `es-CO`) la app arrancó en español y guardó `languageCode=es`, conservando los 2 niveles ganados |
+| 3 | ✅ Idioma no soportado → inglés (tests de `AppLanguage` y de `resolveStartupLocale`) |
+| 4 | ✅ `es-MX`, `es-ES`, `es-419` → `es`; `pt-BR`, `pt-PT` → `pt` |
+| 5 | ✅ En el teléfono, con el idioma de la app forzado a inglés desde el sistema, la app siguió en español (configuración restaurada después) |
+| 6 | ✅ `test/l10n/arb_parity_test.dart` (claves, marcadores, plurales y las 6 formas del árabe, marca sin traducir, contexto en la plantilla); se comprobó que detecta una clave borrada y un plural incompleto |
+| 7 | ✅ `test/presentation/responsive_layout_test.dart`: 108 casos (9 idiomas × vertical/horizontal × 2 tamaños × menú y 2 tableros) sin overflow ni cartas recortadas |
+| 8 | ✅ En árabe la app está en RTL y la flecha de los botones queda a la izquierda del título |
+| 9 | ✅ Las etiquetas de accesibilidad de las cartas salen del catálogo |
+| 10 | ✅ El manifiesto usa `@string/app_name` |
+
+**Total:** 235 tests en verde, `analyze` sin incidencias, cobertura del 97,6 %. Las traducciones quedan en **borrador** hasta su revisión externa (`docs/i18n/REVISION.md`).
