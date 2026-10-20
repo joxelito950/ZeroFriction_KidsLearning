@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../blocs/memory_game/memory_card_model.dart';
 
 class MemoryCardWidget extends StatelessWidget {
@@ -17,7 +18,10 @@ class MemoryCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isRevealed = card.isFaceUp || card.isMatched;
-    final String semanticLabel = isRevealed ? 'Carta abierta con ${card.assetPath}' : 'Carta cerrada';
+    final l10n = AppLocalizations.of(context);
+    final String semanticLabel = isRevealed
+        ? l10n.memoryCardOpenSemantics(card.assetPath)
+        : l10n.memoryCardClosedSemantics;
 
     return Semantics(
       button: true,

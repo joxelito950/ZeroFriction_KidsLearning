@@ -1,0 +1,23 @@
+{
+  "@@locale": "es",
+  "appTitle": "ToddlerLogic",
+  "menuTagline": "Juegos de lógica y atención",
+  "menuFarmLevelTitle": "Animales de la Granja",
+  "menuFarmLevelSubtitle": "Nivel Inicial (2x2)",
+  "menuJungleLevelTitle": "Selva Sorpresa",
+  "menuJungleLevelSubtitle": "Nivel Explorador (2x3)",
+  "menuParentsZone": "Zona de Padres",
+  "menuParentsZoneComingSoon": "🔒 Zona de padres (Próximamente)",
+  "memoryGameTitle": "Juego de memoria",
+  "memoryGameInstructions": "Toca las cartas y encuentra las parejas",
+  "memoryGameMovesCounter": "Movs. {count}",
+  "memoryGameHintPlaying": "Busquemos la pareja correcta.",
+  "memoryGameHintProcessing": "Observa bien... la carta se está volteando.",
+  "memoryGameHintCompleted": "¡Excelente! Encontraste todas las parejas.",
+  "memoryCardOpenSemantics": "Carta abierta con {symbol}",
+  "memoryCardClosedSemantics": "Carta cerrada",
+  "victoryTitle": "¡Lo lograste!",
+  "victoryMessage": "Encontraste todas las parejas.",
+  "victoryMovesSummary": "{count, plural, =1{Completado en 1 movimiento} other{Completado en {count} movimientos}}",
+  "victoryBackToMenu": "Volver al menú"
+}

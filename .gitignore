@@ -30,6 +30,8 @@ migrate_working_dir/
 
 # Generated code (regenerate with `dart run build_runner build`)
 *.g.dart
+# Catálogo de textos generado desde lib/l10n/*.arb (se regenera con `flutter pub get`)
+/lib/l10n/app_localizations*.dart
 
 # Coverage
 /coverage/

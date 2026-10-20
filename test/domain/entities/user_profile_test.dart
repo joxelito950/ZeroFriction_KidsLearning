@@ -18,6 +18,17 @@ void main() {
       expect(profile.copyWith(), profile);
     });
 
+    test('languageCode is empty until set and survives copyWith', () {
+      expect(profile.languageCode, isNull);
+
+      final spanish = profile.copyWith(languageCode: 'es');
+
+      expect(spanish.languageCode, 'es');
+      expect(spanish.copyWith(isPremium: true).languageCode, 'es');
+      expect(spanish, isNot(profile));
+      expect(spanish, const UserProfile(isPremium: false, isSoundEnabled: true, languageCode: 'es'));
+    });
+
     test('implements value equality and a consistent hashCode', () {
       const same = UserProfile(isPremium: false, isSoundEnabled: true);
       const different = UserProfile(isPremium: true, isSoundEnabled: true);

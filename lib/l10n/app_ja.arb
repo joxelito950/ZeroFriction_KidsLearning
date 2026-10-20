@@ -1,0 +1,23 @@
+{
+  "@@locale": "ja",
+  "appTitle": "ToddlerLogic",
+  "menuTagline": "ロジックと集中力のゲーム",
+  "menuFarmLevelTitle": "牧場のどうぶつ",
+  "menuFarmLevelSubtitle": "はじめのレベル（2x2）",
+  "menuJungleLevelTitle": "ジャングルのサプライズ",
+  "menuJungleLevelSubtitle": "たんけんレベル（2x3）",
+  "menuParentsZone": "保護者エリア",
+  "menuParentsZoneComingSoon": "🔒 保護者エリア（近日公開）",
+  "memoryGameTitle": "神経衰弱ゲーム",
+  "memoryGameInstructions": "カードをタッチして、ペアをみつけよう",
+  "memoryGameMovesCounter": "{count}回",
+  "memoryGameHintPlaying": "おなじペアをさがそう。",
+  "memoryGameHintProcessing": "よく見てね…カードがうらがえるよ。",
+  "memoryGameHintCompleted": "すごい！ぜんぶのペアをみつけたね。",
+  "memoryCardOpenSemantics": "{symbol}のカード（表）",
+  "memoryCardClosedSemantics": "うらがえしのカード",
+  "victoryTitle": "できたね！",
+  "victoryMessage": "ぜんぶのペアをみつけたよ。",
+  "victoryMovesSummary": "{count, plural, other{{count}回でクリア}}",
+  "victoryBackToMenu": "メニューにもどる"
+}

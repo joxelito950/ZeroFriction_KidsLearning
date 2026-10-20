@@ -32,7 +32,14 @@ void main() {
 
       expect(model.isPremium, isTrue);
       expect(model.isSoundEnabled, isFalse);
+      expect(model.languageCode, isNull);
       expect(model.toEntity(), entity);
+    });
+
+    test('round-trips the language code', () {
+      const entity = UserProfile(isPremium: false, isSoundEnabled: true, languageCode: 'ar');
+
+      expect(UserProfileHiveModel.fromEntity(entity).toEntity(), entity);
     });
   });
 }

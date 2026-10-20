@@ -43,5 +43,10 @@ void main() {
       HivePersistenceConfig.userProfileBox.get('current_user_profile')!.toEntity(),
       const UserProfile(isPremium: true, isSoundEnabled: false),
     );
+    // Los perfiles guardados antes de HU-011 no tienen idioma: se leen como null.
+    expect(
+      HivePersistenceConfig.userProfileBox.get('current_user_profile')!.languageCode,
+      isNull,
+    );
   });
 }

@@ -11,12 +11,14 @@ class UserProfileHiveModel {
   const UserProfileHiveModel({
     required this.isPremium,
     required this.isSoundEnabled,
+    this.languageCode,
   });
 
   factory UserProfileHiveModel.fromEntity(UserProfile entity) {
     return UserProfileHiveModel(
       isPremium: entity.isPremium,
       isSoundEnabled: entity.isSoundEnabled,
+      languageCode: entity.languageCode,
     );
   }
 
@@ -25,10 +27,15 @@ class UserProfileHiveModel {
   @HiveField(1)
   final bool isSoundEnabled;
 
+  /// Añadido en HU-011. Los perfiles guardados antes no lo tienen y se leen como `null`.
+  @HiveField(2)
+  final String? languageCode;
+
   UserProfile toEntity() {
     return UserProfile(
       isPremium: isPremium,
       isSoundEnabled: isSoundEnabled,
+      languageCode: languageCode,
     );
   }
 }

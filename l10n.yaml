@@ -1,0 +1,10 @@
+# Catálogo de textos (HU-011). La plantilla es el inglés de EE. UU., que también
+# es el idioma por defecto. Las traducciones se revisan según docs/i18n/REVISION.md.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false
+# Informe de claves sin traducir. Lo que hace fallar el CI es el test de paridad
+# (test/l10n/arb_parity_test.dart).
+untranslated-messages-file: build/untranslated_messages.json
