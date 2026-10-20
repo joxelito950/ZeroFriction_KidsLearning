@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-19; la clave la genera el dueño con la guía de la sección 7) |
+| **Estado** | En curso: configuración de firma lista y verificada; **falta que el dueño genere su clave** (sección 7) |
 | **Épica** | E6 · Publicación y distribución |
 | **Prioridad** | P1: pendientes técnicos antes de las historias; bloquea HU-014 (primera publicación) |
 | **Tamaño** | S (medio día) |
@@ -55,6 +55,21 @@ Firmar las compilaciones *release* con una clave propia, para poder publicar en 
 | P4 | ¿Firmar en el CI? | Fuera de alcance |
 
 Es la primera app del dueño: la sección 7 es una guía completa. El desarrollo de F3–F5 lo puedo hacer en paralelo, porque no necesita la clave (la configuración funciona sin `key.properties`, criterio 2).
+
+### Implementación de la configuración (2026-10-19, rama `chore/td-003-release-signing`)
+
+- `android/app/build.gradle.kts` lee `android/key.properties` si existe y firma el *release* con esa clave (F3). Si falta alguna de las cuatro propiedades, la compilación se detiene con un mensaje que indica cuál.
+- Sin `key.properties`, firma con debug y Gradle muestra «ATENCIÓN: no existe android/key.properties…» (F4). `flutter build` solo enseña ese aviso en modo detallado (`-v`).
+
+| Criterio | Resultado |
+|---|---|
+| 1 | ✅ Mecanismo verificado con una **clave de prueba desechable** (contraseña aleatoria, borrada después): el AAB quedó firmado con «CN=TD003 Throwaway Test». ⏳ Falta repetirlo con la clave real del dueño |
+| 2 | ✅ Sin `key.properties`: compila, firma con «CN=Android Debug» y muestra el aviso |
+| 3 | ✅ `git check-ignore` confirma que `android/key.properties` está ignorado; el repositorio no contiene claves |
+| 4 | Se comprueba en el CI del PR |
+| 5 | ✅ Guía de la sección 7 |
+
+**Cómo se comprueba la firma:** el AAB usa firma JAR, así que vale `keytool -printcert -jarfile app-release.aab`. El APK, con `minSdk` 26, usa el esquema v2, que `keytool` no lee; para el APK hay que usar `apksigner verify --print-certs` (incluido en el Android SDK).
 
 ## 7. Guía paso a paso: crear y guardar la clave de subida
 
