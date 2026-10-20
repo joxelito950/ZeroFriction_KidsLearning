@@ -19,7 +19,7 @@ La versión 0.0.1-beta congela el estado tras los PRs #1–#9 más las ramas `fi
 
 | Área (README) | Estado en 0.0.1-beta |
 |---|---|
-| Módulo 1 · Memory Game | **Implementado parcialmente.** Dos niveles con emojis: «Animales de la Granja» (4 cartas) y «Selva Sorpresa» (6 cartas). Volteo animado, emparejamiento, diálogo de victoria, guardado del nivel completado. Falta: temática Dinosaurios (Premium) y candado de niveles premium. |
+| Módulo 1 · Memory Game | **Implementado parcialmente.** Dos niveles con emojis: «Animales de la Granja» (4 cartas) y «Selva Sorpresa» (6 cartas). Volteo animado, emparejamiento, diálogo de victoria, guardado del nivel completado. La temática Dinosaurios Premium y su candado se descartaron: el juego de memoria es 100 % gratuito (D-028). |
 | Módulo 2 · Shadow Matching | No iniciado. |
 | Módulo 3 · Clasificación por tamaño | No iniciado. |
 | Módulo 4 · Zona de Padres (Gatekeeper) | Solo un botón que muestra «Próximamente». |
@@ -278,6 +278,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-025 | **Salida protegida:** todo «atrás» del sistema pide repetir el gesto en 2 s, con un aviso pequeño sin botones ni pantalla completa. La única salida directa es el botón «Salir» del menú. Los gestos de inicio y recientes no se pueden interceptar (limitación de Android) | Evita salidas accidentales sin añadir botones que el niño pueda tocar | Aprobada · aplica a toda la app desde HU-001 |
 | D-026 | Versión mínima de Android: **8.0 Oreo (API 26)**, fijada explícitamente en `android/app/build.gradle.kts` y no heredada de Flutter | Garantiza Emoji 5.0 (incluye 🦕 🦖 para la temática Dinosaurios) y mantiene la compatibilidad con dispositivos antiguos. Todo emoji de la app, incluida la UI fuera de los juegos, DEBE ser de Emoji 5.0 o anterior | Vigente desde 2026-10-18 · La mascota 🧸 (Emoji 11.0) y los iconos de los juegos se retiraron en TD-006; la identidad visual se define en HU-013 |
 | D-027 | **Multiidioma:** 9 idiomas (inglés de EE. UU. por defecto y plantilla, español neutro, portugués de Brasil, alemán, japonés, francés, italiano, coreano y árabe RTL) desde un catálogo ARB con `gen-l10n`. El idioma se toma del teléfono en el primer arranque y se guarda en `UserProfile.languageCode`; después manda el guardado. La marca «ToddlerLogic» no se traduce | Llegar a varios mercados sin textos en el código; el idioma del niño no cambia por sorpresa | Vigente desde HU-011. Traducciones en borrador hasta su revisión externa (`docs/i18n/REVISION.md`); cambiarlo será una opción de la Zona de Padres (HU-012) |
+| D-028 | **Modelo de acceso por juego:** el juego de memoria es **100 % gratuito**, sin candados ni contenido Premium, y sirve de muestra completa del contenido y la funcionalidad de la app. Los juegos siguientes combinan niveles gratis y niveles Premium, o son 100 % Premium; el modelo de cada uno se decide al refinarlo | Las familias prueban todo lo que ofrece la app antes de pagar (freemium ético del README) | Vigente desde 2026-10-20. Descarta HU-002 y HU-003 |
 
 ---
 
@@ -286,7 +287,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | Tema | Impacto | Acción propuesta |
 |---|---|---|
 | `hive_ce_generator` admite `analyzer` < 14.5.0 | Al actualizar Flutter o Dart, `pub` podría no encontrar una combinación compatible | Revisarlo en el mismo PR que actualice Flutter (local y CI) |
-| `LevelState` e `isPremium` se guardan pero no se leen | El progreso no se ve; el candado premium no existe | Implementar junto con el módulo Premium |
+| `isPremium` se guarda pero no se lee | El candado Premium aún no existe | Implementar con HU-006 y los juegos 2 y 3 (HU-007, HU-008); nunca en el juego de memoria (D-028) |
 | Versión de Flutter fijada en dos sitios (local y `ci.yml`) | Si solo se actualiza una, los resultados de local y del CI pueden diferir | Actualizarlas en el mismo PR (TD-001, C2) |
 | Firma release con la clave de debug | No se puede publicar en Google Play | Keystore de release (D-019) |
 | Sin carpeta `ios/` | No hay build para iOS | Ejecutar `flutter create --platforms=ios .` cuando se decida |
@@ -298,7 +299,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 Orden propuesto, sujeto a revisión:
 
 1. **Cierre de la beta técnica:** CI, migración a `hive_ce` y keystore de release.
-2. **Memory Game completo:** mostrar el progreso guardado, temática Dinosaurios y candado premium leyendo `isPremium`.
+2. **Juego de memoria completo y 100 % gratuito (D-028):** HU-001.
 3. **Zona de Padres (Gatekeeper):** desafío para adultos, ajustes de sonido y dificultad.
 4. **Google Play Billing:** pago único y restauración de la compra.
 5. **Módulos 2 y 3:** Shadow Matching y Clasificación por tamaño.

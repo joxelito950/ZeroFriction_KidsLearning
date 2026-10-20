@@ -192,7 +192,7 @@ Confirmaciones del product owner del 2026-10-17:
 ## 11. Fuera de alcance
 
 - Sonidos y música (HU-005).
-- Temática Dinosaurios premium y candados (HU-003).
+- Contenido Premium y candados: el juego de memoria es **100 % gratuito** (D-028); HU-003 se descartó.
 - Estadísticas o historial de partidas.
 - Cambiar el icono de la app en el launcher.
 - Botón de salida dentro del juego (decisión R13).
