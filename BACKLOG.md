@@ -44,7 +44,7 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 | ID | Título | Épica | Estado | Prio | Tamaño | Notas |
 |---|---|---|---|---|---|---|
 | [HU-001](docs/hu/HU-001-memoria-progresiva.md) | Memoria progresiva con tiempo e insignia dorada | E1 | Lista | P1 | L (5 entregas) | Refinamiento cerrado el 2026-10-16 y supuestos confirmados el 2026-10-17; decisiones D-020 a D-025. **100 % gratuito** (D-028). |
-| HU-002 | Mostrar el progreso del niño en el menú | E1 | Descartada | — | — | 2026-10-20: lo cubre HU-001 (juego dorado al superarlo, D-023, e indicador de nivel en el juego). |
+| [HU-002](docs/hu/HU-002-progreso-dorado-y-estrellas.md) | Icono dorado progresivo y estrellas por nivel | E1 | En refinamiento | P3 | M | Reabierta el 2026-10-20: el icono de cada juego se vuelve dorado según las estrellas conseguidas (100 % = 3★ en todos los niveles), y las estrellas se calculan por movimientos. Umbrales recalibrados por simulación. Depende de HU-001 y HU-013; se desarrolla con HU-013 o después. |
 | HU-003 | Temática Dinosaurios (Premium) con candado | E1, E3 | Descartada | — | — | 2026-10-20: el juego de memoria es 100 % gratuito (D-028). El contenido Premium llegará con los juegos siguientes. |
 | [HU-004](docs/hu/HU-004-zona-de-padres.md) | Gatekeeper de la Zona de Padres | E2 | En refinamiento | P2 | M | Propuesta: multiplicación escrita en palabras con teclado numérico propio (ejemplo válido de Apple). Requisito previo de HU-005, HU-006, HU-009, HU-010 y HU-012. Preguntas abiertas P1–P6. |
 | HU-005 | Ajustes: sonido y dificultad | E2 | Idea | P3 | M | La app todavía no tiene audio. `isSoundEnabled` ya se persiste. |
