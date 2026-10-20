@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/repositories/i_persistence_repository.dart';
+import '../../l10n/app_localizations.dart';
 import '../blocs/memory_game/memory_game_cubit.dart';
 import '../blocs/memory_game/memory_game_state.dart';
 import '../widgets/memory_card_widget.dart';
@@ -171,6 +172,8 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.68),
@@ -193,18 +196,18 @@ class _Header extends StatelessWidget {
               child: Icon(Icons.child_care_rounded, color: Colors.white, size: 28),
             ),
             const SizedBox(width: 14),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Memory Game',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                    l10n.memoryGameTitle,
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
                   ),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text(
-                    'Toca las cartas y encuentra las parejas',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    l10n.memoryGameInstructions,
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -216,7 +219,7 @@ class _Header extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'Movs. $moves',
+                l10n.memoryGameMovesCounter(moves),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -242,11 +245,12 @@ class _Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final String message = isCompleted
-        ? '¡Excelente! Encontraste todas las parejas.'
+        ? l10n.memoryGameHintCompleted
         : isProcessing
-            ? 'Observa bien... la carta se está volteando.'
-            : 'Busquemos la pareja correcta.';
+            ? l10n.memoryGameHintProcessing
+            : l10n.memoryGameHintPlaying;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nombre bajo el icono del teléfono. Es la marca y no se traduce (HU-011, P3).
+         Si algún día se tradujera, basta con añadir res/values-xx/strings.xml. -->
+    <string name="app_name" translatable="false">ToddlerLogic</string>
+</resources>

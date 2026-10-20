@@ -52,6 +52,7 @@ La versión 0.0.1-beta congela el estado tras los PRs #1–#9 más las ramas `fi
 | `bloc` / `flutter_bloc` | 9.2.1 / 9.1.1 | Gestión de estado con Cubit |
 | `hive_ce` / `hive_ce_generator` | 2.22.0 / 1.12.0 (con `build_runner` 2.16.2) | Persistencia local y generación de adapters (D-014) |
 | `path_provider` | 2.1.6 | Ruta del directorio de documentos de la app |
+| `flutter_localizations` / `intl` | SDK / 0.20.3 | Catálogo de textos (`gen-l10n`, archivos ARB) y plurales (D-027) |
 | `mocktail` | 1.0.5 | Mocks en tests |
 | `flutter_lints` | 6.0.0 | Reglas de análisis estático |
 | Android | `applicationId` `com.zerofriction.toddler_logic` · **minSdk 26 (Android 8.0 Oreo)** · target/compile SDK 36 · Kotlin DSL · JVM 17 | Única plataforma generada |
@@ -88,7 +89,7 @@ flowchart TB
 
 | Capa | Puede importar | NO DEBE importar |
 |---|---|---|
-| `domain` | Dart puro y anotaciones de Hive (excepción temporal, D-012) | `flutter`, `data`, `presentation` |
+| `domain` | Solo Dart puro (D-012; lo comprueba `test/architecture/domain_purity_test.dart`) | `flutter`, `hive_ce` y cualquier paquete de infraestructura, `data`, `presentation` |
 | `data` | `domain`, Hive, `path_provider` | `presentation`, `flutter/material` |
 | `presentation` | `domain`, `flutter`, `bloc` | `data` (accede a la persistencia solo por `IPersistenceRepository`) |
 | `main.dart` | Todo | Contener lógica de UI o de negocio: solo compone e inicia la app |
@@ -97,13 +98,16 @@ flowchart TB
 
 ```
 lib/
-├── main.dart                          # Arranque: Hive → repositorio → ToddlerLogicApp
+├── main.dart                          # Arranque: Hive → repositorio → idioma → ToddlerLogicApp
+├── l10n/                              # Catálogo de textos: app_<idioma>.arb (el .dart se genera; no se versiona)
 ├── data/local/                        # HivePersistenceConfig, HivePersistenceRepository
+│   └── models/                        # Modelos de guardado Hive (+ *.g.dart generados) con fromEntity/toEntity
 ├── domain/
-│   ├── entities/                      # LevelState, UserProfile (+ *.g.dart generados)
+│   ├── entities/                      # LevelState, UserProfile, AppLanguage (Dart puro)
 │   └── repositories/                  # IPersistenceRepository
 └── presentation/
     ├── blocs/<feature>/               # <feature>_cubit, _state, modelos de UI
+    ├── l10n/                          # Idioma de arranque (resolveStartupLocale)
     ├── screens/                       # Una pantalla por archivo
     └── widgets/                       # Widgets reutilizables de una o más pantallas
 test/                                  # Refleja la estructura de lib/ (sección 6.1)
@@ -122,11 +126,15 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 
 ### 3.4 Persistencia
 
-| Caja Hive | Tipo | Clave | typeId |
+| Caja Hive | Modelo de guardado → entidad | Clave | typeId |
 |---|---|---|---|
-| `level_states` | `LevelState` | `levelId` | 0 |
-| `user_profile` | `UserProfile` | `current_user_profile` | 1 |
+| `level_states` | `LevelStateHiveModel` → `LevelState` | `levelId` | 0 |
+| `user_profile` | `UserProfileHiveModel` → `UserProfile` | `current_user_profile` | 1 |
 
+- Las cajas guardan **modelos de guardado** (`data/local/models/`), nunca entidades de dominio. El repositorio convierte con `fromEntity`/`toEntity`; las reglas de negocio (por ejemplo, estrellas entre 0 y 3) las valida la entidad al convertir.
+- `test/data/local/hive_v2_compatibility_test.dart` y los fixtures de `test/fixtures/hive_v2/` garantizan que el formato en disco no cambia. Si cambia, el test falla.
+
+- Campos de `UserProfileHiveModel`: 0 `isPremium`, 1 `isSoundEnabled`, 2 `languageCode` (opcional, HU-011; los perfiles anteriores lo leen como `null`). El próximo índice libre es 3.
 - Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **2**.
 - Identificadores de nivel en uso: `farm_easy`, `wild_medium`. Un `levelId` ya publicado NO DEBE renombrarse.
 
@@ -145,7 +153,8 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 
 - Las reglas de `flutter_lints` aplican; `flutter analyze` DEBE terminar con 0 incidencias.
 - Nombres de código en inglés; comentarios y documentación en español (convención actual del repo).
-- Los textos de la interfaz están en español, escritos directamente en los widgets (D-015).
+- **Ningún texto visible se escribe en el código:** todos salen del catálogo (`AppLocalizations.of(context)`), incluidas las etiquetas de accesibilidad. Un texto nuevo se añade primero a `lib/l10n/app_en.arb` con su `@descripción` para los traductores, y después a los otros 8 idiomas. Lo comprueban `test/architecture/no_hardcoded_texts_test.dart` y `test/l10n/arb_parity_test.dart` (D-027).
+- **RTL (árabe):** se usan APIs direccionales (`EdgeInsetsDirectional`, `AlignmentDirectional`, `PositionedDirectional`, `TextAlign.start`/`end`); nunca `left`/`right` para elementos con sentido de lectura. Los iconos con dirección se invierten en RTL (D-027).
 - Widgets y Cubits con una sola responsabilidad. Una pantalla que pase de unas 250 líneas DEBERÍA dividirse en widgets privados o en `widgets/`.
 - Los widgets que los tests buscan llevan `ValueKey` estables (por ejemplo `memory-card-$index`). Cambiar una key implica actualizar los tests en el mismo PR.
 - Los archivos se guardan en UTF-8 **sin BOM**.
@@ -203,11 +212,12 @@ Un cambio de UI DEBERÍA probarse además en un dispositivo real o en un emulado
 | Unitario | Entidades, modelos, Cubits | `flutter_test`, `mocktail` | `memory_game_cubit_test.dart` |
 | Widget | Pantallas y widgets, navegación, diálogos | `testWidgets`, `MockPersistenceRepository` | `memory_game_screen_test.dart` |
 | Integración local | Hive real en un directorio temporal | `dart:io`, Hive | `hive_persistence_config_test.dart` |
-| Layout | Sin overflow ni recortes en tamaños de teléfono y en ambas orientaciones | `tester.view.physicalSize`, `FakeViewPadding` | `landscape_layout_test.dart` |
+| Layout | Sin overflow ni recortes en tamaños de teléfono, en ambas orientaciones y en los 9 idiomas (incluido árabe en RTL) | `tester.view.physicalSize`, `FakeViewPadding`, `lookupAppLocalizations` | `responsive_layout_test.dart` |
 
 - `test/` refleja la estructura de `lib/` (`lib/x/y.dart` se prueba en `test/x/y_test.dart`).
 - Los mocks y stubs compartidos viven en `test/presentation/memory_game_test_support.dart`.
-- Cada pantalla de juego nueva DEBE tener tests de layout en vertical y horizontal con al menos los dos tamaños de referencia (1129 × 508 dp y 914 × 411 dp).
+- Cada pantalla de juego nueva DEBE tener tests de layout en vertical y horizontal con al menos los dos tamaños de referencia (1129 × 508 dp y 914 × 411 dp), en **todos los idiomas** del catálogo.
+- Los tests que buscan textos fijan el idioma explícitamente (`test/presentation/l10n_test_support.dart`, español por defecto).
 
 ### 6.2 Qué se espera probar
 
@@ -222,7 +232,7 @@ Un cambio de UI DEBERÍA probarse además en un dispositivo real o en un emulado
 | Cobertura total de líneas | **≥ 90 %** |
 | Cobertura por archivo | **≥ 80 %** |
 | Archivos nuevos o modificados en un PR | DEBERÍAN alcanzar ≥ 90 % |
-| Excluidos del cálculo | `*.g.dart` (generados) y `lib/main.dart` (arranque dependiente de la plataforma; se verifica al ejecutar la app) |
+| Excluidos del cálculo | Código generado (`*.g.dart` y `lib/l10n/app_localizations*.dart`) y `lib/main.dart` (arranque dependiente de la plataforma; se verifica al ejecutar la app) |
 
 El script `tool/coverage_check.dart` aplica estos umbrales sobre `coverage/lcov.info` y termina con código de salida 1 si no se cumplen. La medida es de **líneas**: subir un umbral exige actualizar el script y esta tabla en el mismo PR.
 
@@ -252,10 +262,10 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-009 | Siempre 3 estrellas al completar un nivel | A los 3 años se celebra el logro, no la eficiencia | Vigente · **se sustituye por D-020 al implementar HU-001** |
 | D-010 | Los errores de persistencia se reportan con `addError` y no se muestran al niño | La victoria nunca debe interrumpirse por un fallo técnico | Vigente |
 | D-011 | El tablero elige el número de columnas que da las cartas más grandes, solo con filas completas | Evita tableros 3+1 y cartas recortadas en cualquier orientación | Vigente · con HU-001 debe admitir hasta 16 cartas |
-| D-012 | Las entidades de dominio llevan anotaciones de Hive (`@HiveType`) | Simplicidad en la beta; contradice la «capa pura» del README | **Deuda aceptada**: separar modelos de persistencia antes de la 1.0 |
+| D-012 | El dominio es Dart puro; la persistencia usa modelos de guardado propios en `data/local/models/` con los mismos typeIds e índices de campo | Cumple la arquitectura del README y desacopla el formato en disco de las reglas de negocio | Vigente desde TD-004 (antes: deuda aceptada) |
 | D-013 | Se soportan vertical y horizontal | Los niños giran el teléfono; bloquear la orientación es peor experiencia | Vigente |
 | D-014 | Persistencia con `hive_ce` (continuación mantenida de Hive v2), conservando `@HiveType`/`@HiveField` y los typeIds | Hive 2.2.3 no se publica desde 2022 y su generador fijaba `analyzer` 6.4.1; `hive_ce` usa `analyzer` 14, corrige la fuga de errores de `openBox` y lee los datos de Hive 2.2.3 (test con fixtures en `test/fixtures/hive_v2/`) | Vigente desde TD-002. El estilo `@GenerateAdapters` de `hive_ce` se evaluará con TD-004 |
-| D-015 | Interfaz solo en español, con los textos en el código | Mercado inicial hispanohablante | Vigente · revisar si se internacionaliza |
+| D-015 | Interfaz solo en español, con los textos en el código | Mercado inicial hispanohablante | **Sustituida por D-027** (HU-011) |
 | D-016 | La checklist de calidad de la sección 5 se ejecuta en GitHub Actions (`CI / quality`) con la misma versión de Flutter que en local; GitHub bloquea la fusión si falla | Las reglas de calidad no dependen de la disciplina manual (TD-001) | Vigente desde TD-001 · el bloqueo de fusión requiere activar la protección de ramas en GitHub |
 | D-017 | La monetización usará Google Play Billing (pago único) | Lo exige Google Play para contenido digital; añadirá el permiso `BILLING` | Planificada |
 | D-018 | Cobertura mínima de líneas: 90 % total y 80 % por archivo (sección 6.3) | Equilibra seguridad y velocidad; la línea base está en 97,4 % | Vigente |
@@ -267,6 +277,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-024 | El contenido de cada tablero es una temática elegida al azar, con emojis de la versión **Emoji 5.0 o anterior** | Variedad sin assets; con `minSdk` 26 (D-026), Emoji 5.0 es lo máximo que se ve en todos los dispositivos | Aprobada · se implementa en HU-001 |
 | D-025 | **Salida protegida:** todo «atrás» del sistema pide repetir el gesto en 2 s, con un aviso pequeño sin botones ni pantalla completa. La única salida directa es el botón «Salir» del menú. Los gestos de inicio y recientes no se pueden interceptar (limitación de Android) | Evita salidas accidentales sin añadir botones que el niño pueda tocar | Aprobada · aplica a toda la app desde HU-001 |
 | D-026 | Versión mínima de Android: **8.0 Oreo (API 26)**, fijada explícitamente en `android/app/build.gradle.kts` y no heredada de Flutter | Garantiza Emoji 5.0 (incluye 🦕 🦖 para la temática Dinosaurios) y mantiene la compatibilidad con dispositivos antiguos. Todo emoji de la app, incluida la UI fuera de los juegos, DEBE ser de Emoji 5.0 o anterior | Vigente desde 2026-10-18 · La mascota 🧸 (Emoji 11.0) y los iconos de los juegos se retiraron en TD-006; la identidad visual se define en HU-013 |
+| D-027 | **Multiidioma:** 9 idiomas (inglés de EE. UU. por defecto y plantilla, español neutro, portugués de Brasil, alemán, japonés, francés, italiano, coreano y árabe RTL) desde un catálogo ARB con `gen-l10n`. El idioma se toma del teléfono en el primer arranque y se guarda en `UserProfile.languageCode`; después manda el guardado. La marca «ToddlerLogic» no se traduce | Llegar a varios mercados sin textos en el código; el idioma del niño no cambia por sorpresa | Vigente desde HU-011. Traducciones en borrador hasta su revisión externa (`docs/i18n/REVISION.md`); cambiarlo será una opción de la Zona de Padres (HU-012) |
 
 ---
 
@@ -275,11 +286,9 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | Tema | Impacto | Acción propuesta |
 |---|---|---|
 | `hive_ce_generator` admite `analyzer` < 14.5.0 | Al actualizar Flutter o Dart, `pub` podría no encontrar una combinación compatible | Revisarlo en el mismo PR que actualice Flutter (local y CI) |
-| Dominio acoplado a Hive | Contradice la arquitectura documentada | Separar modelos de persistencia (D-012) |
 | `LevelState` e `isPremium` se guardan pero no se leen | El progreso no se ve; el candado premium no existe | Implementar junto con el módulo Premium |
 | Versión de Flutter fijada en dos sitios (local y `ci.yml`) | Si solo se actualiza una, los resultados de local y del CI pueden diferir | Actualizarlas en el mismo PR (TD-001, C2) |
 | Firma release con la clave de debug | No se puede publicar en Google Play | Keystore de release (D-019) |
-| Encabezado del juego en inglés («Memory Game») | Inconsistente con D-015 | Traducir |
 | Sin carpeta `ios/` | No hay build para iOS | Ejecutar `flutter create --platforms=ios .` cuando se decida |
 
 ---

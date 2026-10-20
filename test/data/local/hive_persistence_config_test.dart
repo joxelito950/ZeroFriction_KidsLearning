@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:toddler_logic/data/local/hive_persistence_config.dart';
+import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
+import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
@@ -87,29 +89,34 @@ void main() {
         HivePersistenceConfig.initialize(hivePath: tempDir.path),
       ]);
 
-      expect(HivePersistenceConfig.levelStateBox, isA<Box<LevelState>>());
-      expect(HivePersistenceConfig.userProfileBox, isA<Box<UserProfile>>());
+      expect(HivePersistenceConfig.levelStateBox, isA<Box<LevelStateHiveModel>>());
+      expect(HivePersistenceConfig.userProfileBox, isA<Box<UserProfileHiveModel>>());
       expect(Hive.isAdapterRegistered(0), isTrue);
       expect(Hive.isAdapterRegistered(1), isTrue);
     });
 
     test('initializing again after success is a no-op that keeps the same boxes', () async {
-      final Box<LevelState> boxBefore = HivePersistenceConfig.levelStateBox;
+      final Box<LevelStateHiveModel> boxBefore = HivePersistenceConfig.levelStateBox;
 
       await HivePersistenceConfig.initialize(hivePath: tempDir.path);
 
       expect(HivePersistenceConfig.levelStateBox, same(boxBefore));
     });
 
-    test('opened boxes persist entities through the generated adapters', () async {
+    test('opened boxes persist models through the generated adapters', () async {
       final level = LevelState(levelId: 'farm_easy', isCompleted: true, stars: 3);
       const profile = UserProfile(isPremium: true, isSoundEnabled: false);
 
-      await HivePersistenceConfig.levelStateBox.put(level.levelId, level);
-      await HivePersistenceConfig.userProfileBox.put('current_user_profile', profile);
+      await HivePersistenceConfig.levelStateBox
+          .put(level.levelId, LevelStateHiveModel.fromEntity(level));
+      await HivePersistenceConfig.userProfileBox
+          .put('current_user_profile', UserProfileHiveModel.fromEntity(profile));
 
-      expect(HivePersistenceConfig.levelStateBox.get('farm_easy'), level);
-      expect(HivePersistenceConfig.userProfileBox.get('current_user_profile'), profile);
+      expect(HivePersistenceConfig.levelStateBox.get('farm_easy')!.toEntity(), level);
+      expect(
+        HivePersistenceConfig.userProfileBox.get('current_user_profile')!.toEntity(),
+        profile,
+      );
     });
   });
 }

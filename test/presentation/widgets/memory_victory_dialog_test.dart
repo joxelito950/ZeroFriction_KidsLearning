@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/presentation/widgets/memory_victory_dialog.dart';
 
+import '../l10n_test_support.dart';
+
 void main() {
   testWidgets('shows celebration copy and three stars', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
+      localizedApp(
+        home: const Scaffold(
           body: Center(
             child: MemoryVictoryDialog(moves: 4),
           ),

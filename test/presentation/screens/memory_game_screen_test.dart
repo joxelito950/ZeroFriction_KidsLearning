@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import '../memory_game_test_support.dart';
+import '../l10n_test_support.dart';
 
 void main() {
   setUpAll(() {
@@ -23,7 +24,7 @@ void main() {
       List<String> emojis = const ['🐶'],
     }) async {
       await tester.pumpWidget(
-        MaterialApp(
+        localizedApp(
           home: RepositoryProvider<IPersistenceRepository>.value(
             value: repository,
             child: MemoryGameScreen(
@@ -82,7 +83,7 @@ void main() {
       expect(find.text('¡Lo lograste!'), findsOneWidget);
       expect(find.text('Encontraste todas las parejas.'), findsOneWidget);
       expect(find.byIcon(Icons.star_rounded), findsNWidgets(3));
-      expect(find.textContaining('Completado en 1 movimientos'), findsOneWidget);
+      expect(find.textContaining('Completado en 1 movimiento'), findsOneWidget);
     });
   });
 }

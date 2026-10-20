@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class MemoryVictoryDialog extends StatelessWidget {
   const MemoryVictoryDialog({
     super.key,
@@ -10,6 +12,8 @@ class MemoryVictoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Dialog(
       key: const ValueKey<String>('memory-victory-dialog'),
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
@@ -34,16 +38,16 @@ class MemoryVictoryDialog extends StatelessWidget {
               child: Icon(Icons.emoji_events_rounded, size: 36, color: Colors.white),
             ),
             const SizedBox(height: 16),
-            const Text(
-              '¡Lo lograste!',
+            Text(
+              l10n.victoryTitle,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Encontraste todas las parejas.',
+            Text(
+              l10n.victoryMessage,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 18),
             Row(
@@ -58,7 +62,7 @@ class MemoryVictoryDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Completado en $moves movimientos',
+              l10n.victoryMovesSummary(moves),
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
             ),
@@ -72,9 +76,9 @@ class MemoryVictoryDialog extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
               ),
-              child: const Text(
-                'Volver al menú',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              child: Text(
+                l10n.victoryBackToMenu,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
               ),
             ),
           ],
