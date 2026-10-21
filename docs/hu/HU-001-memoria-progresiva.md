@@ -53,12 +53,12 @@ La serie de límites es **sin tiempo → 90 → 60 → 45 → 30 s**. 30 s es el
 | R6 | Perder en el 2×2 cronometrado **reinicia**: 2×2 sin tiempo, y la siguiente subida vuelve a empezar en 90 s. |
 | R7 | **Insignia dorada:** se gana al completar el nivel 5 (4×4). Como el límite solo baja al ganar, al nivel 5 siempre se llega con 30 s. |
 | R8 | La insignia es **permanente**: no se pierde aunque luego se pierdan partidas. Tras conseguirla, el juego **vuelve a empezar en el 2×2 sin tiempo**. Elegir otro tablero o tiempo de inicio será una opción de la Zona de Padres (HU-010). |
-| R9 | Con la insignia conseguida, el botón «Memoria» del menú se muestra **dorado**. Es una regla general: cada juego que se supera por completo queda dorado en el menú. |
+| R9 | Con la insignia conseguida, junto al botón «Memoria» del menú aparece una **medalla**. El **dorado progresivo** del icono según las estrellas llega con HU-002 (D-030) |
 | R10 | El cronómetro arranca **al tocar la primera carta**, no al mostrar el tablero. |
 | R11 | El cronómetro **se pausa** con la app en segundo plano y durante las transiciones. |
-| R12 | **Persistencia:** se guardan el nivel actual y la insignia. **No** se guardan el tiempo ni la partida en curso. Al volver a entrar al juego (o al reabrir la app) hay un tablero nuevo, con las cartas ocultas y barajadas, y el límite es el de llegada de ese nivel (tabla 4.1). |
+| R12 | **Persistencia:** se guardan el nivel actual, la insignia y, por cada nivel, el **mejor resultado en estrellas con su fecha**, además de la **fecha de la última partida** (los datos que necesita HU-002). **No** se guardan el tiempo ni la partida en curso. Al volver a entrar al juego (o al reabrir la app) hay un tablero nuevo, con las cartas ocultas y barajadas, y el límite es el de llegada de ese nivel (tabla 4.1) |
 | R13 | **Sin botones dentro del juego.** Tras ganar o perder, la app avanza **sola** con una transición suave. Así el niño no sale del juego por accidente ni necesita ayuda de un adulto para volver. |
-| R14 | **Al ganar:** una celebración breve (unos 2 s, la actual sin el botón) y transición al siguiente tablero. Al conseguir la insignia, una celebración especial dorada. |
+| R14 | **Al ganar:** una celebración breve (unos 2 s, sin botón) con las **estrellas conseguidas** según D-030 (3★ si ≤ mínimo + número de nivel movimientos, 2★ hasta el doble, 1★ hasta el triple), y transición al siguiente tablero. La celebración es igual de alegre con cualquier número de estrellas. Al conseguir la insignia, una celebración especial dorada |
 | R15 | **Al perder:** el mensaje «¡Se acabó el tiempo! Probemos con menos cartas» (unos 2,5 s), sin sonido, y transición al tablero anterior. En el reinicio desde el 2×2: «¡Se acabó el tiempo! Empecemos de nuevo, sin prisa». |
 | R16 | **Tiempo visible:** una barra que se vacía de forma continua. Sin números, sin color rojo, sin parpadeos ni sonidos. |
 | R17 | **Contenido:** cada tablero toma una **temática al azar** y, dentro de ella, emojis al azar. Temáticas iniciales: animales de granja, animales salvajes, vehículos, construcción, emociones, alimentos, frutas, banderas y objetos del hogar. Cada temática debe tener al menos 8 emojis (lo que pide el 4×4). |
@@ -132,6 +132,8 @@ Con la serie acordada, todos los niveles son alcanzables y el último es un reto
 17. **Dado** que estoy en el juego, **cuando** hago una vez el gesto o botón «atrás», **entonces** veo el aviso pequeño «Repite el gesto para salir», sin botones, y sigo en el juego; **cuando** lo repito antes de 2 s, **entonces** vuelvo al menú; **cuando** no lo repito, **entonces** el aviso desaparece y sigo jugando.
 18. **Dado** que estoy en el menú, **cuando** hago una vez «atrás», **entonces** veo el mismo aviso y la app no se cierra; **cuando** lo repito antes de 2 s, **entonces** la app se cierra.
 19. **Dado** que estoy en el menú, **cuando** toco «Salir», junto a «Zona de Padres», **entonces** la app se cierra sin pedir confirmación.
+20. **Dado** que gano el nivel *N*, **entonces** la celebración muestra 3, 2, 1 o 0 estrellas según D-030, y es igual de alegre en todos los casos.
+21. **Dado** que vuelvo a ganar un nivel, **entonces** se guarda su mejor resultado con la fecha; y en cualquier partida, ganada o perdida, se actualiza la fecha de la última partida.
 
 ## 7. Restricciones técnicas
 
@@ -148,7 +150,7 @@ Con la serie acordada, todos los niveles son alcanzables y el último es un reto
 
 | Área | Cambio |
 |---|---|
-| Dominio | `MemoryLadder`: la tabla 4.1 y las transiciones al ganar o perder. `MemoryProgress` (nivel actual, insignia) con typeId 2. Catálogo de temáticas. Nuevos métodos en `IPersistenceRepository` |
+| Dominio | `MemoryLadder`: la tabla 4.1 y las transiciones al ganar o perder. `MemoryProgress` (nivel actual, insignia, mejor resultado y fecha por nivel, fecha de la última partida) con typeId 2. Regla de estrellas de D-030. Catálogo de temáticas. Nuevos métodos en `IPersistenceRepository` |
 | Datos | Una caja Hive nueva y su implementación en `HivePersistenceRepository`. `LevelState` deja de usarse; su typeId 0 queda reservado |
 | Presentación | `MemoryGameCubit`: la escalera, el cronómetro (arranque, pausa y derrota) y las transiciones automáticas. `MemoryGameScreen`: barra de tiempo, indicador de nivel y encabezado en español. `MemoryVictoryDialog` sin botón, con cierre automático. Nuevo aviso de «se acabó el tiempo». `MainMenuScreen`: botón por juego con estado dorado y botón «Salir» (`SystemNavigator.pop()`). Un widget reutilizable de salida protegida (`PopScope` + aviso pequeño con ventana de 2 s) para el menú y para cada juego |
 | Tests | Reglas de la escalera (unitarios); cronómetro y pausas (`fake_async`); persistencia con Hive real; transiciones automáticas (widget); salida protegida (un «atrás», dos «atrás», ventana vencida); layout de los 5 tableros en las dos orientaciones; menú dorado |
@@ -183,11 +185,11 @@ Confirmaciones del product owner del 2026-10-17:
 
 | # | Entrega | Incluye | Criterios cubiertos |
 |---|---|---|---|
-| 1 | Reglas de dominio y temáticas | `MemoryLadder`, catálogo de temáticas con la restricción T1, tests unitarios | Base de 4–8 y 14 |
+| 1 | Reglas de dominio y temáticas | `MemoryLadder`, regla de estrellas (D-030), catálogo de temáticas con la restricción T1, tests unitarios | Base de 4–8 y 14 |
 | 2 | Persistencia del progreso | `MemoryProgress` (typeId 2), caja Hive, repositorio y tests (después de TD-002) | 9, 10 y 12 |
 | 3 | Cubit con cronómetro y transiciones | Arranque, pausa y derrota, resultados de la escalera y tests con `fake_async` | 3–8, 11 |
 | 4 | Pantalla de juego | Barra de tiempo, indicador de nivel, celebraciones y avisos automáticos, encabezado en español, salida protegida en el juego y tests de layout | 2, 13, 15, 16, 17 |
-| 5 | Menú | Botón único «Memoria» con estado dorado, botón «Salir», salida protegida en el menú; retirar los dos niveles | 1, 9, 18, 19 |
+| 5 | Menú | Botón único «Memoria» con la medalla de la insignia, botón «Salir», salida protegida en el menú; retirar los dos niveles | 1, 9, 18, 19 |
 
 ## 11. Fuera de alcance
 

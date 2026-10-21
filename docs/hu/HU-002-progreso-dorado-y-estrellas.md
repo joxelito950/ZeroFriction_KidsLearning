@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (reabierta el 2026-10-20; regla por nivel y análisis de pérdida de logros añadidos el mismo día; el desarrollo **no** ha empezado) |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-21; el aspecto del dorado se decide en HU-013; el desarrollo **no** ha empezado) |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3–4 días), por confirmar |
@@ -118,6 +118,21 @@ Las tres son viables en Flutter: un `ShaderMask` para A y C, y un `CustomPainter
 | **D2. Brillo que se apaga** | El dorado se va **apagando** (más mate y menos brillante) poco a poco, pero **no se pierde ninguna estrella**. Con la primera partida, el brillo vuelve entero al momento | ✅ **Recomendada:** mantiene la invitación a volver sin castigar |
 | D3. Opción para los padres | D1 o D2 solo si un adulto lo activa en la Zona de Padres (desactivado por defecto) | Posible mejora futura; depende de HU-004 |
 
+### Decisión (2026-10-21): pérdida real (D1)
+
+El product owner elige **D1**, como control de progreso y refuerzo de las habilidades (D-031). Para que no se viva como un castigo:
+
+| # | Regla |
+|---|---|
+| R7 | **Periodo de gracia:** mientras se juegue al juego al menos una vez cada **7 días**, no se pierde nada. Cuenta como jugar ganar o perder cualquier nivel |
+| R8 | **Pérdida:** pasados los 7 días sin jugar, se pierde **una estrella cada 3 días**, empezando por el **logro más antiguo** (el nivel cuyo mejor resultado se consiguió hace más tiempo). Desde el 100 % dorado (15★), se llega a 0 en unos 52 días |
+| R9 | **Recuperación:** volver a jugar detiene la pérdida en ese momento. Las estrellas perdidas se recuperan **ganando de nuevo** ese nivel; el resultado nuevo cuenta como mejor resultado con su fecha |
+| R10 | **La insignia de superar el 4×4 no se pierde nunca** (HU-001, R8) |
+| R11 | **Sin mensajes negativos:** la pérdida es silenciosa; el icono simplemente tiene menos dorado. No hay avisos de «vas a perder» ni contadores de días |
+| R12 | Se calcula con el **reloj del teléfono**, inyectado en la lógica de dominio para poder probarlo. Si alguien adelanta o atrasa el reloj, solo afecta a ese teléfono; se acepta |
+
+Riesgo aceptado: va contra la idea de «sin penalizaciones» del README y se parece a las «rachas» que el borrador del código infantil del ICO desaconsejaba. Una posible mejora futura es que los padres puedan pausarla desde la Zona de Padres (D3).
+
 ### Datos necesarios
 
 Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor resultado en estrellas, la **fecha en que lo logró**, y el juego guarda la **fecha de la última partida**. El cálculo del dorado efectivo es **lógica pura de dominio** con el reloj inyectado: se puede probar «dentro de 10 días» sin esperar.
@@ -135,13 +150,13 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Qué regla de estrellas usamos? | ✅ Propuesta del product owner: 3★ si ≤ mínimo + número de nivel; 2★ hasta el doble y 1★ hasta el triple del mínimo. La simulación la respalda (sección 4). Confirmar | Sí |
-| P2 | ¿Qué pasa con la insignia de superar el 4×4 (HU-001)? | Se mantiene como logro aparte (una medalla junto al botón). El dorado del icono mide las estrellas | Sí |
-| P3 | ¿Cómo se ve el dorado? | Opción B (pecas), si el diseño de HU-013 lo permite; si no, A. Decidirlo junto con el diseñador del icono | No (se decide en HU-013) |
-| P4 | ¿HU-001 guarda ya las estrellas por nivel, aunque se muestren en HU-002? | Sí: el mejor resultado de cada nivel **y su fecha**, más la fecha de la última partida. Un campo más en `MemoryProgress` evita migrar los datos después | Sí (afecta a HU-001) |
-| P5 | Hasta que llegue HU-002, ¿qué muestra el diálogo de victoria de HU-001? | Las estrellas calculadas desde HU-001: la regla es lógica de dominio sencilla y ya sustituye a D-009. HU-002 queda solo con el icono dorado | No (hay recomendación) |
-| P6 | ¿Cuenta el nivel 1 (2×2 sin tiempo) para el dorado? | Sí, son 5 niveles × 3 estrellas | No (hay recomendación) |
-| P7 | ¿Se pierden los logros si no se juega? | **D2: el brillo se apaga, pero no se pierde ninguna estrella** (sección 6). Si prefieres D1, propongo 7 días de gracia y una estrella menos cada 3 días, empezando por el logro más antiguo (el 100 % dorado se perdería del todo en unos 50 días) | Sí |
+| P1 | ¿Qué regla de estrellas usamos? | ✅ Decidido: 3★ si ≤ mínimo + número de nivel; 2★ hasta el doble y 1★ hasta el triple del mínimo (D-030) | — |
+| P2 | ¿Qué pasa con la insignia de superar el 4×4 (HU-001)? | ✅ Decidido: se mantiene como logro aparte, una medalla junto al botón del juego. El dorado mide las estrellas | — |
+| P3 | ¿Cómo se ve el dorado? | ⏭️ Se decide en HU-013, con el diseño del icono (opciones A, B y C de la sección 5) | No |
+| P4 | ¿HU-001 guarda ya las estrellas por nivel? | ✅ Decidido: sí. Mejor resultado y fecha de cada nivel, y fecha de la última partida del juego, en `MemoryProgress` | — |
+| P5 | Hasta que llegue HU-002, ¿qué muestra el diálogo de victoria de HU-001? | ✅ Asumida la recomendación: las estrellas calculadas desde HU-001. HU-002 queda con el icono dorado y la pérdida de logros | — |
+| P6 | ¿Cuenta el nivel 1 (2×2 sin tiempo) para el dorado? | ✅ Decidido: sí, son 5 niveles × 3 estrellas | — |
+| P7 | ¿Se pierden los logros si no se juega? | ✅ Decidido: **sí, pérdida real (D1)**, como control de progreso y refuerzo de las habilidades (D-031). Parámetros asumidos en la sección 6 | — |
 
 ## 9. Criterios de aceptación (borrador)
 
@@ -153,7 +168,9 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 6. **Dado** cualquier número de estrellas, **entonces** la celebración es igual de alegre y no hay mensajes negativos.
 7. **Dado** el lector de pantalla, **entonces** el botón del juego anuncia su porcentaje dorado y sus estrellas.
 8. **Dado** que cierro y abro la app, **entonces** el dorado y las estrellas se conservan.
-9. **Dado** que no juego durante más de 7 días, **entonces** el dorado se apaga poco a poco según la opción elegida en P7; **cuando** vuelvo a jugar, **entonces** recupero el brillo (D2) o puedo recuperar las estrellas ganando de nuevo los niveles (D1).
+9. **Dado** que no juego durante más de 7 días, **entonces** pierdo una estrella cada 3 días, empezando por la más antigua, y el icono pierde dorado en proporción, sin mensajes negativos.
+10. **Dado** que vuelvo a jugar, **entonces** la pérdida se detiene; **cuando** gano de nuevo un nivel, **entonces** recupero sus estrellas según el resultado.
+11. **Dado** que tenía la insignia del 4×4, **entonces** la conservo aunque pierda estrellas.
 
 ## 10. Fuera de alcance
 
