@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (P1–P3 decididas el 2026-10-21; faltan P4–P6; el desarrollo **no** ha empezado) |
+| **Estado** | En refinamiento (P1–P3 decididas y doble toque de entrada añadido el 2026-10-21; faltan P4–P6; el desarrollo **no** ha empezado) |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 |
 | **Tamaño** | M (3–4 días), por confirmar con las preguntas de la sección 8 |
@@ -50,7 +50,7 @@ Conclusión: un **desafío matemático propio** cumple con Apple (para el futuro
 
 | # | Regla |
 |---|---|
-| R1 | El botón «Zona de Padres» del menú abre el desafío. Superarlo abre la Zona de Padres |
+| R1 | **Doble toque para entrar:** el primer toque en «Zona de Padres» muestra un **aviso pequeño** («Toca otra vez para entrar»), sin botones ni pantalla completa, como la salida protegida (D-025). Solo un **segundo toque dentro de 2 segundos** abre el desafío; si no, el aviso desaparece y no pasa nada. Superar el desafío abre la Zona de Padres |
 | R2 | La pregunta es una multiplicación de dos factores al azar **entre 3 y 9** (resultados de 9 a 81), escritos **con palabras** en el idioma de la app («siete», «seven», «sieben», «七», «سبعة»…). Así un niño no puede «copiar» las cifras en el teclado |
 | R3 | La respuesta se escribe con un **teclado numérico propio** (0–9, borrar, aceptar), no con el del sistema. **Las cifras aparecen en orden aleatorio**, distinto en cada desafío, para que no se pueda memorizar la posición de las teclas ni pulsarlas de memoria |
 | R4 | **Respuesta incorrecta:** aparece un **mensaje** para el adulto o el niño que indica cuántos intentos quedan, con tres opciones: **«Reintentar»**, una **«X»** para cerrar y un botón **«Volver al menú»**. La «X» y «Volver al menú» llevan al menú principal |
@@ -78,7 +78,7 @@ Conclusión: un **desafío matemático propio** cumple con Apple (para el futuro
 
 ## 6. Criterios de aceptación (borrador)
 
-1. **Dado** el menú, **cuando** toco «Zona de Padres», **entonces** veo una multiplicación escrita en palabras en el idioma de la app y un teclado numérico.
+1. **Dado** el menú, **cuando** toco una vez «Zona de Padres», **entonces** veo el aviso pequeño «Toca otra vez para entrar», sin botones, y sigo en el menú; **cuando** vuelvo a tocar antes de 2 segundos, **entonces** veo una multiplicación escrita en palabras en el idioma de la app y un teclado numérico; **cuando** no vuelvo a tocar, **entonces** el aviso desaparece.
 2. **Dado** el desafío, **cuando** escribo el resultado correcto y acepto, **entonces** entro en la Zona de Padres.
 3. **Dado** el desafío, **cuando** escribo un resultado incorrecto, **entonces** veo un mensaje con los intentos que me quedan y las opciones «Reintentar», «X» y «Volver al menú», sin sonido ni color rojo.
 4. **Dado** el mensaje de respuesta incorrecta, **cuando** pasan 5 segundos sin elegir nada, **entonces** vuelvo al menú principal; **cuando** pulso «Reintentar», **entonces** veo una pregunta nueva con el teclado barajado de nuevo; **cuando** pulso «X» o «Volver al menú», **entonces** vuelvo al menú principal.
@@ -115,7 +115,7 @@ Conclusión: un **desafío matemático propio** cumple con Apple (para el futuro
 
 Sin esperas ni bloqueos, un niño que toca al azar puede repetir el desafío sin límite. Cada intento acierta por azar en torno al **1 %**; con 3 intentos por entrada, en torno al **3 % de las entradas**, es decir, unas **30 entradas de media** para entrar por casualidad. Propongo aceptarlo porque:
 
-- Para llegar a «Reintentar», el niño debe tocar justo ese botón **antes de 5 segundos**; si no, vuelve solo a sus juegos. Y cada entrada nueva exige volver a pulsar «Zona de Padres».
+- Para llegar a «Reintentar», el niño debe tocar justo ese botón **antes de 5 segundos**; si no, vuelve solo a sus juegos. Y cada entrada nueva exige tocar **dos veces seguidas** «Zona de Padres» (R1).
 - El teclado barajado impide repetir de memoria una secuencia de toques.
 - En esta historia, la Zona de Padres no contiene nada dañino (estructura e instrucciones). Las compras (HU-006) tendrán además la autenticación de Google Play.
 - Si en la prueba cerrada (HU-014) se viera que algún niño entra, se puede añadir una espera breve solo tras muchas entradas fallidas seguidas.
@@ -128,6 +128,7 @@ Sin esperas ni bloqueos, un niño que toca al azar puede repetir el desafío sin
 | S2 | ¿«Reintentar» muestra la misma pregunta o una nueva? | Una nueva, con el teclado barajado de nuevo: evita probar respuestas una a una |
 | S3 | ¿Cómo se ve el temporizador de 5 s del mensaje? | Una barra que se vacía, sin números, como la del juego (D-021) |
 | S4 | ¿El minuto de inactividad cuenta también en la pantalla del desafío? | Sí: si nadie toca nada durante 1 minuto, vuelve al menú |
+| S5 | ¿Cuánto tiempo hay para el segundo toque en «Zona de Padres»? | **2 segundos**, igual que la salida protegida (D-025), para que toda la app se comporte igual |
 
 ## 9. Fuera de alcance
 
