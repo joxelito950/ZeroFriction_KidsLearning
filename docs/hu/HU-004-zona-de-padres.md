@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (P1–P3 decididas y doble toque de entrada añadido el 2026-10-21; faltan P4–P6; el desarrollo **no** ha empezado) |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-21; el desarrollo **no** ha empezado) |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 |
-| **Tamaño** | M (3–4 días), por confirmar con las preguntas de la sección 8 |
+| **Tamaño** | M (3–4 días) |
 | **Desbloquea** | HU-005 (ajustes), HU-006 (compras), HU-009 (tiempo diario y «Fijar pantalla»), HU-010 (inicio del juego de memoria), HU-012 (idioma) |
 
 ## 1. Historia
@@ -60,7 +60,7 @@ Conclusión: un **desafío matemático propio** cumple con Apple (para el futuro
 | R8 | La lógica del desafío (generar la pregunta, barajar el teclado, validar la respuesta, contar los intentos) es **lógica pura de dominio**, con el azar y el reloj inyectados para poder probarla |
 | R9 | **Regla general para el futuro:** toda compra (HU-006), enlace externo (por ejemplo, la política de privacidad de HU-014) o petición de permiso pasa por el mismo desafío |
 
-### Contenido de la Zona de Padres en esta historia (propuesta, ver P4)
+### Contenido de la Zona de Padres en esta historia (P4: lo básico)
 
 - La **estructura**: título, una lista de secciones y el botón «Volver al menú».
 - **«Fijar pantalla»:** instrucciones breves para activarlo en el teléfono (parte informativa de HU-009, sin código nativo).
@@ -107,20 +107,20 @@ Conclusión: un **desafío matemático propio** cumple con Apple (para el futuro
 | P1 | ¿Qué tipo de desafío? | ✅ Decidido: opción A, multiplicación escrita en palabras, con un teclado numérico propio cuyas cifras aparecen **en orden aleatorio** | — |
 | P2 | ¿Qué pasa al fallar? | ✅ Decidido: mensaje con los intentos que quedan, «Reintentar», «X» y «Volver al menú», y vuelta automática al menú a los 5 s. Sin esperas ni bloqueos (R4, R5) | — |
 | P3 | ¿Cuánto dura el acceso? | ✅ Decidido: mínima exposición. Se cierra al salir, al apagar la pantalla, al pasar a segundo plano o tras 1 minuto sin acciones (R7) | — |
-| P4 | ¿Qué contiene la Zona de Padres en esta historia? | Solo la estructura y las instrucciones de «Fijar pantalla». Cada sección nueva llega con su historia (HU-012, HU-010, HU-005…) | Sí |
-| P5 | ¿El «atrás» del sistema dentro de la Zona de Padres también pide repetir el gesto (D-025)? | No: es una zona de adultos y el «atrás» vuelve al menú directamente | No (hay recomendación) |
-| P6 | ¿El teclado usa cifras occidentales (0–9) también en árabe? | Sí: son las que se usan habitualmente en los teléfonos de los países árabes, y la respuesta se compara como número | No (hay recomendación) |
+| P4 | ¿Qué contiene la Zona de Padres en esta historia? | ✅ Decidido: lo básico. La estructura y las instrucciones de «Fijar pantalla»; cada sección nueva llega con su historia (HU-012, HU-010, HU-005…) | — |
+| P5 | ¿El «atrás» del sistema dentro de la Zona de Padres también pide repetir el gesto (D-025)? | ✅ Asumida la recomendación: no; es una zona de adultos y el «atrás» vuelve al menú directamente | — |
+| P6 | ¿El teclado usa cifras occidentales (0–9) también en árabe? | ✅ Asumida la recomendación: sí; la respuesta se compara como número | — |
 
-### Riesgo (propuesta: aceptarlo): sin penalización, un niño puede insistir
+### Riesgo aceptado (2026-10-21): sin penalización, un niño puede insistir
 
-Sin esperas ni bloqueos, un niño que toca al azar puede repetir el desafío sin límite. Cada intento acierta por azar en torno al **1 %**; con 3 intentos por entrada, en torno al **3 % de las entradas**, es decir, unas **30 entradas de media** para entrar por casualidad. Propongo aceptarlo porque:
+Sin esperas ni bloqueos, un niño que toca al azar puede repetir el desafío sin límite. Cada intento acierta por azar en torno al **1 %**; con 3 intentos por entrada, en torno al **3 % de las entradas**, es decir, unas **30 entradas de media** para entrar por casualidad. Se acepta porque:
 
 - Para llegar a «Reintentar», el niño debe tocar justo ese botón **antes de 5 segundos**; si no, vuelve solo a sus juegos. Y cada entrada nueva exige tocar **dos veces seguidas** «Zona de Padres» (R1).
 - El teclado barajado impide repetir de memoria una secuencia de toques.
 - En esta historia, la Zona de Padres no contiene nada dañino (estructura e instrucciones). Las compras (HU-006) tendrán además la autenticación de Google Play.
 - Si en la prueba cerrada (HU-014) se viera que algún niño entra, se puede añadir una espera breve solo tras muchas entradas fallidas seguidas.
 
-### Supuestos sobre P2 y P3 (no bloquean; confirmar)
+### Supuestos sobre P2, P3 y R1 (confirmados el 2026-10-21)
 
 | # | Supuesto | Valor aplicado |
 |---|---|---|
