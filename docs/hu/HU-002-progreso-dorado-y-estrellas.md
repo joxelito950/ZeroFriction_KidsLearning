@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (reabierta el 2026-10-20 con un alcance nuevo; el desarrollo **no** ha empezado) |
+| **Estado** | En refinamiento (reabierta el 2026-10-20; regla por nivel y análisis de pérdida de logros añadidos el mismo día; el desarrollo **no** ha empezado) |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3–4 días), por confirmar |
@@ -52,18 +52,29 @@ El **mínimo de movimientos** es el número de parejas (*m*): acertar todas a la
 1. Las 3★ en 3×4 y 4×4 dependen de la suerte **incluso con memoria perfecta**. El 100 % dorado (3★ en todos los niveles) sería prácticamente inalcanzable para cualquiera, adulto o niño.
 2. En 2×2, la franja de 2★ está vacía: *m* + 2 y 2 · *m* valen lo mismo (4).
 
-### Umbrales propuestos (calibrados)
+### Regla por nivel (propuesta del product owner, 2026-10-20) ✅ recomendada
 
-La referencia para 3★ es lo que logra alguien con **buena memoria** (aproximadamente 1,5 · *m*). Así, las 3★ son exigentes pero alcanzables, y el resto de franjas distingue jugar con poca memoria de jugar al azar.
+**3★ si los movimientos son ≤ mínimo + número de nivel.** El nivel 1 se vuelve más exigente (*m* + 1), el nivel 2 se queda como estaba (*m* + 2) y la holgura crece en los niveles altos. Para 2★ y 1★ se mantienen las franjas de la petición: hasta el doble y hasta el triple del mínimo.
 
-| Estrellas | Regla | 2×2 | 2×3 | 2×4 | 3×4 | 4×4 |
+| Nivel | Tablero | *m* | ★★★ (≤ *m* + nivel) | ★★ (≤ 2 · *m*) | ★ (≤ 3 · *m*) | — |
 |---|---|---|---|---|---|---|
-| ★★★ | ≤ ⌊1,5 · *m*⌋ + 1 | ≤ 4 | ≤ 5 | ≤ 7 | ≤ 10 | ≤ 13 |
-| ★★ | ≤ ⌊2,5 · *m*⌋ | ≤ 5 | ≤ 7 | ≤ 10 | ≤ 15 | ≤ 20 |
-| ★ | ≤ 4 · *m* | ≤ 8 | ≤ 12 | ≤ 16 | ≤ 24 | ≤ 32 |
-| — | > 4 · *m* | > 8 | > 12 | > 16 | > 24 | > 32 |
+| 1 | 2×2 | 2 | ≤ 3 | 4 | 5–6 | > 6 |
+| 2 | 2×3 | 3 | ≤ 5 | 6 | 7–9 | > 9 |
+| 3 | 2×4 | 4 | ≤ 7 | 8 | 9–12 | > 12 |
+| 4 | 3×4 | 6 | ≤ 10 | 11–12 | 13–18 | > 18 |
+| 5 | 4×4 | 8 | ≤ 13 | 14–16 | 17–24 | > 24 |
 
-**Resultado esperado:** memoria perfecta, 3★ en el 90 % o más de las partidas de todos los tableros; memoria del 50 %, 3★ en los tableros pequeños y 2★ en los grandes; jugar al azar, 0–1★ en los tableros grandes. Los umbrales se guardan en una **tabla por tablero** fácil de ajustar, y conviene revisarlos con los testers de la prueba cerrada de HU-014 (la app no recoge datos, así que la calibración real es con familias).
+**Probabilidad de 3★ en un intento** (simulación de 8 000 partidas por caso) y número medio de intentos para lograrlas:
+
+| Nivel | Memoria perfecta | Memoria del 50 % | Al azar |
+|---|---|---|---|
+| 1 · 2×2 | 100 % (1 intento) | 78 % (~1,3) | 57 % (~1,8) |
+| 2 · 2×3 | 100 % (1) | 70 % (~1,4) | 27 % (~3,7) |
+| 3 · 2×4 | 100 % (1) | 62 % (~1,6) | 11 % (~9) |
+| 4 · 3×4 | 99,5 % (1) | 29 % (~3,4) | 0,7 % (~150) |
+| 5 · 4×4 | 96 % (1) | 11 % (~9,4) | ≈ 0 % |
+
+**Conclusión:** con esta regla el 100 % dorado es **exigente pero alcanzable**. Un niño con media memoria necesita repetir el 4×4 unas 9 veces de media, y nadie lo consigue tocando al azar. Además, la franja de 2★ existe en todos los niveles. La regla coincide casi exactamente con la calibración por simulación (solo el nivel 1 es un movimiento más exigente). Los umbrales viven en una **tabla por nivel**, fácil de ajustar tras la prueba cerrada con familias (HU-014), porque la app no recoge datos de uso.
 
 ## 5. Regla del dorado (propuesta)
 
@@ -86,7 +97,32 @@ La referencia para 3★ es lo que logra alguien con **buena memoria** (aproximad
 
 Las tres son viables en Flutter: un `ShaderMask` para A y C, y un `CustomPainter` con posiciones fijas por juego para B, para que las pecas no «salten» entre aperturas. El acabado final depende del diseño del icono de HU-013.
 
-## 6. Conflictos con lo ya decidido
+## 6. Pérdida gradual de logros si no se juega (análisis)
+
+**Petición:** si el niño deja de jugar una semana, va perdiendo los logros más antiguos, poco a poco, hasta que el icono vuelve a no tener dorado, salvo que los renueve jugando.
+
+### A favor y en contra
+
+| A favor | En contra |
+|---|---|
+| Invita a volver a practicar: la memoria se entrena con constancia | Es una mecánica de **aversión a la pérdida**, como las «rachas». El borrador del Código de diseño infantil del Reino Unido (ICO) citaba las rachas como técnica que no debe usarse con niños; la versión final se limita a la privacidad, pero la tendencia regulatoria va en esa dirección |
+| Da sentido a repetir niveles ya superados | Choca con los principios del README («paz mental», «sin penalizaciones»), y el programa *Teacher Approved* de Google Play valora el desarrollo saludable |
+| | Un niño de 3 años no entiende por qué «pierde» su dorado tras unas vacaciones o una enfermedad: lo vive como un castigo sin causa |
+| | Depende del reloj del teléfono, que se puede cambiar |
+
+### Opciones
+
+| Opción | Qué pasa tras 7 días sin jugar | Valoración |
+|---|---|---|
+| **D1. Pérdida real** (la petición) | Cada pocos días el logro más antiguo pierde una estrella; para recuperarla hay que volver a ganar ese nivel con las mismas estrellas | ⚠️ Viable técnicamente, pero con los riesgos de la tabla anterior |
+| **D2. Brillo que se apaga** | El dorado se va **apagando** (más mate y menos brillante) poco a poco, pero **no se pierde ninguna estrella**. Con la primera partida, el brillo vuelve entero al momento | ✅ **Recomendada:** mantiene la invitación a volver sin castigar |
+| D3. Opción para los padres | D1 o D2 solo si un adulto lo activa en la Zona de Padres (desactivado por defecto) | Posible mejora futura; depende de HU-004 |
+
+### Datos necesarios
+
+Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor resultado en estrellas, la **fecha en que lo logró**, y el juego guarda la **fecha de la última partida**. El cálculo del dorado efectivo es **lógica pura de dominio** con el reloj inyectado: se puede probar «dentro de 10 días» sin esperar.
+
+## 7. Conflictos con lo ya decidido
 
 | Decisión | Conflicto | Resolución propuesta |
 |---|---|---|
@@ -95,20 +131,21 @@ Las tres son viables en Flutter: un `ShaderMask` para A y C, y un `CustomPainter
 | README, «sin penalizaciones» | Ver menos estrellas podría sentirse como castigo | R5 |
 | HU-001, entrega 2 | `MemoryProgress` guarda nivel e insignia, no estrellas | Guardar ya el **mejor resultado en estrellas de cada nivel** en HU-001 (coste bajo) y evitar una migración de datos después (P4) |
 
-## 7. Preguntas abiertas
+## 8. Preguntas abiertas
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Usamos los umbrales calibrados de la sección 4? | Sí: los de la petición hacen el 100 % dorado casi imposible y dejan vacía la franja de 2★ en 2×2 | Sí |
+| P1 | ¿Qué regla de estrellas usamos? | ✅ Propuesta del product owner: 3★ si ≤ mínimo + número de nivel; 2★ hasta el doble y 1★ hasta el triple del mínimo. La simulación la respalda (sección 4). Confirmar | Sí |
 | P2 | ¿Qué pasa con la insignia de superar el 4×4 (HU-001)? | Se mantiene como logro aparte (una medalla junto al botón). El dorado del icono mide las estrellas | Sí |
 | P3 | ¿Cómo se ve el dorado? | Opción B (pecas), si el diseño de HU-013 lo permite; si no, A. Decidirlo junto con el diseñador del icono | No (se decide en HU-013) |
-| P4 | ¿HU-001 guarda ya las estrellas por nivel, aunque se muestren en HU-002? | Sí: un campo más en `MemoryProgress` evita migrar los datos después | Sí (afecta a HU-001) |
+| P4 | ¿HU-001 guarda ya las estrellas por nivel, aunque se muestren en HU-002? | Sí: el mejor resultado de cada nivel **y su fecha**, más la fecha de la última partida. Un campo más en `MemoryProgress` evita migrar los datos después | Sí (afecta a HU-001) |
 | P5 | Hasta que llegue HU-002, ¿qué muestra el diálogo de victoria de HU-001? | Las estrellas calculadas desde HU-001: la regla es lógica de dominio sencilla y ya sustituye a D-009. HU-002 queda solo con el icono dorado | No (hay recomendación) |
 | P6 | ¿Cuenta el nivel 1 (2×2 sin tiempo) para el dorado? | Sí, son 5 niveles × 3 estrellas | No (hay recomendación) |
+| P7 | ¿Se pierden los logros si no se juega? | **D2: el brillo se apaga, pero no se pierde ninguna estrella** (sección 6). Si prefieres D1, propongo 7 días de gracia y una estrella menos cada 3 días, empezando por el logro más antiguo (el 100 % dorado se perdería del todo en unos 50 días) | Sí |
 
-## 8. Criterios de aceptación (borrador)
+## 9. Criterios de aceptación (borrador)
 
-1. **Dado** que gano un nivel del juego de memoria, **entonces** recibo 3, 2, 1 o 0 estrellas según la tabla de umbrales de su tablero.
+1. **Dado** que gano el nivel *N* del juego de memoria, **entonces** recibo 3★ si usé como mucho mínimo + *N* movimientos, 2★ hasta el doble del mínimo, 1★ hasta el triple y ninguna si lo supero.
 2. **Dado** que vuelvo a ganar un nivel con más estrellas, **entonces** se guarda el nuevo mejor resultado; con menos estrellas, el mejor no cambia.
 3. **Dado** que pierdo por tiempo, **entonces** no gano estrellas y el mejor resultado no cambia.
 4. **Dado** que tengo 9 de las 15 estrellas posibles, **entonces** el icono del juego está dorado en un 60 %.
@@ -116,8 +153,9 @@ Las tres son viables en Flutter: un `ShaderMask` para A y C, y un `CustomPainter
 6. **Dado** cualquier número de estrellas, **entonces** la celebración es igual de alegre y no hay mensajes negativos.
 7. **Dado** el lector de pantalla, **entonces** el botón del juego anuncia su porcentaje dorado y sus estrellas.
 8. **Dado** que cierro y abro la app, **entonces** el dorado y las estrellas se conservan.
+9. **Dado** que no juego durante más de 7 días, **entonces** el dorado se apaga poco a poco según la opción elegida en P7; **cuando** vuelvo a jugar, **entonces** recupero el brillo (D2) o puedo recuperar las estrellas ganando de nuevo los niveles (D1).
 
-## 9. Fuera de alcance
+## 10. Fuera de alcance
 
 - El diseño del icono de cada juego (HU-013).
 - Las estrellas de los juegos 2 y 3: cada uno define su regla al refinarse (HU-007, HU-008).
