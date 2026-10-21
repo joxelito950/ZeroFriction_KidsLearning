@@ -4,6 +4,7 @@ import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 
 import 'presentation/memory_game_test_support.dart';
+import 'presentation/l10n_test_support.dart';
 
 void main() {
   setUpAll(() {
@@ -19,7 +20,7 @@ void main() {
     });
 
     testWidgets('shows the main menu with both memory levels', (tester) async {
-      await tester.pumpWidget(ToddlerLogicApp(repository: repository));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
       expect(find.text('ToddlerLogic'), findsOneWidget);
       expect(find.text('Animales de la Granja'), findsOneWidget);
@@ -27,8 +28,17 @@ void main() {
       expect(find.text('Zona de Padres'), findsOneWidget);
     });
 
+    // TD-006: sin mascota ni iconos de juegos hasta definir la identidad visual (HU-013).
+    testWidgets('does not show the mascot or game icons in the menu', (tester) async {
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+
+      for (final icon in ['🧸', '🚜', '🌴']) {
+        expect(find.text(icon), findsNothing, reason: '$icon should not be shown');
+      }
+    });
+
     testWidgets('shows a coming-soon notice for the parents zone', (tester) async {
-      await tester.pumpWidget(ToddlerLogicApp(repository: repository));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
       await tester.tap(find.text('Zona de Padres'));
       await tester.pump();
@@ -37,7 +47,7 @@ void main() {
     });
 
     testWidgets('opens the memory game when tapping a level', (tester) async {
-      await tester.pumpWidget(ToddlerLogicApp(repository: repository));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
       await tester.tap(find.text('Animales de la Granja'));
       await tester.pumpAndSettle();

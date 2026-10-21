@@ -5,10 +5,13 @@
 ### `HivePersistenceConfig`
 Responsable de la infraestructura de Hive:
 - Inicializa Hive con la ruta local (`Hive.init(hivePath)`).
-- Registra adapters de entidades (`LevelStateAdapter`, `UserProfileAdapter`).
+- Registra los adapters de los modelos de guardado (`LevelStateHiveModelAdapter`, `UserProfileHiveModelAdapter`), generados por `hive_ce_generator`.
 - Abre y expone las boxes tipadas:
-  - `Box<LevelState>` en `level_states`.
-  - `Box<UserProfile>` en `user_profile`.
+  - `Box<LevelStateHiveModel>` en `level_states`.
+  - `Box<UserProfileHiveModel>` en `user_profile`.
+
+### Modelos de guardado (`data/local/models/`)
+`LevelStateHiveModel` y `UserProfileHiveModel` definen el formato en disco (`@HiveType`/`@HiveField`). Mantienen los typeIds (0 y 1) y los índices de campo originales, por lo que leen los datos guardados por versiones anteriores. Cada uno convierte con `fromEntity` y `toEntity`; las entidades del dominio (`LevelState`, `UserProfile`) son Dart puro y no conocen Hive.
 
 ### `IPersistenceRepository`
 Contrato de dominio para lectura/escritura de datos persistidos:
@@ -20,8 +23,10 @@ La capa de dominio depende de esta abstraccion, no de Hive directamente.
 ### `HivePersistenceRepository`
 Implementacion concreta de `IPersistenceRepository` sobre Hive.
 Recibe por constructor las dependencias tipadas:
-- `Box<LevelState>`
-- `Box<UserProfile>`
+- `Box<LevelStateHiveModel>`
+- `Box<UserProfileHiveModel>`
+
+Convierte entre modelos de guardado y entidades: hacia fuera solo expone entidades de dominio.
 
 Reglas clave:
 - Guarda y lee `LevelState` usando `levelId` como llave.
@@ -50,7 +55,7 @@ Este patron evita condiciones de carrera durante el arranque, como dobles apertu
 1. App bootstrap:
    - Invoca `HivePersistenceConfig.initialize(hivePath: ...)` una sola vez al arrancar.
 2. Composicion de dependencias:
-   - Se crean `Box<LevelState>` y `Box<UserProfile>` desde `HivePersistenceConfig`.
+   - Se crean `Box<LevelStateHiveModel>` y `Box<UserProfileHiveModel>` desde `HivePersistenceConfig`.
    - Se inyectan en `HivePersistenceRepository`.
 3. Uso en capa de dominio/aplicacion:
    - El resto del sistema consume solo `IPersistenceRepository`.

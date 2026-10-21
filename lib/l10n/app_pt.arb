@@ -1,0 +1,23 @@
+{
+  "@@locale": "pt",
+  "appTitle": "ToddlerLogic",
+  "menuTagline": "Jogos de lógica e atenção",
+  "menuFarmLevelTitle": "Animais da Fazenda",
+  "menuFarmLevelSubtitle": "Nível Inicial (2x2)",
+  "menuJungleLevelTitle": "Surpresa na Selva",
+  "menuJungleLevelSubtitle": "Nível Explorador (2x3)",
+  "menuParentsZone": "Área dos Pais",
+  "menuParentsZoneComingSoon": "🔒 Área dos pais (em breve)",
+  "memoryGameTitle": "Jogo da memória",
+  "memoryGameInstructions": "Toque nas cartas e encontre os pares",
+  "memoryGameMovesCounter": "Jogadas: {count}",
+  "memoryGameHintPlaying": "Vamos encontrar o par certo.",
+  "memoryGameHintProcessing": "Olhe bem... a carta está virando.",
+  "memoryGameHintCompleted": "Muito bem! Você encontrou todos os pares.",
+  "memoryCardOpenSemantics": "Carta aberta com {symbol}",
+  "memoryCardClosedSemantics": "Carta fechada",
+  "victoryTitle": "Você conseguiu!",
+  "victoryMessage": "Você encontrou todos os pares.",
+  "victoryMovesSummary": "{count, plural, =1{Concluído em 1 jogada} other{Concluído em {count} jogadas}}",
+  "victoryBackToMenu": "Voltar ao menu"
+}

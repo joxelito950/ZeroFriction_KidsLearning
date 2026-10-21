@@ -69,11 +69,13 @@ Monetización: Google Play Billing Library (Delegación de compras integradas di
 
 El MVP se compone de 4 módulos interactivos desconectados de la red:
 
-Módulo 1: Retención (Memory Game): Cuadrícula de cartas boca abajo ($2\times2$ o $2\times3$). Desarrolla la memoria visual. Temáticas: Animales de la Granja (Gratis), Dinosaurios (Premium).
+Módulo 1: Retención (Juego de memoria): Cartas boca abajo en un modo progresivo de 2×2 a 4×4, con temáticas de emojis al azar. Desarrolla la memoria visual. **100 % gratuito:** es la muestra de todo el contenido y la funcionalidad que ofrece la app.
 
 Módulo 2: Emparejamiento (Shadow Matching): Mecánica de arrastrar y soltar (drag & drop) de objetos coloridos hacia su silueta correspondiente.
 
 Módulo 3: Lógica (Clasificación por Tamaño): Clasificar objetos en tres cestas: Grande, Mediano y Pequeño.
+
+Modelo de acceso por juego: el juego de memoria es **100 % gratuito** y sirve de muestra completa de la app. Los juegos siguientes combinan **niveles gratis y niveles Premium**, o son **100 % Premium**; el modelo de cada juego se decide al refinarlo.
 
 Módulo 4: Control Parental (Gatekeeper): Un desafío de lógica textual/matemática simple para adultos que bloquea el acceso a la tienda y configuraciones, evitando compras accidentales del niño.
 
@@ -81,11 +83,13 @@ Módulo 4: Control Parental (Gatekeeper): Un desafío de lógica textual/matemá
 
 Reglas de Negocio
 
-Persistencia del Premium: Al iniciar, la app lee la bandera local is_premium. Si es false, los niveles avanzados muestran un candado sutil. Al procesar el pago con éxito, la bandera cambia a true de por vida.
+Persistencia del Premium: Al iniciar, la app lee la bandera local is_premium. Si es false, los niveles y juegos Premium muestran un candado sutil (el juego de memoria nunca lo tiene, porque es gratuito). Al procesar el pago con éxito, la bandera cambia a true de por vida.
 
 Restauración Nativa: Inclusión de un botón obligatorio para recuperar el acceso Premium al cambiar de dispositivo sin necesidad de crear credenciales de usuario.
 
 UX del Error Amigable: No existen penalizaciones ni sonidos estridentes ante un fallo. Si el niño se equivoca, el objeto regresa a su origen con una animación suave, reforzando positivamente la persistencia.
+
+Progreso que se mantiene con la práctica: cada nivel da de 0 a 3 estrellas según los movimientos, y el icono de cada juego se va volviendo dorado con ellas. Tras una semana sin jugar, las estrellas se pierden poco a poco y se recuperan jugando: es un refuerzo de la práctica, nunca un mensaje negativo.
 
 Privacidad & Seguridad (Cumplimiento Estricto COPPA / GDPR)
 
@@ -119,7 +123,7 @@ flutter pub get
 
 Dado que el proyecto utiliza el generador automático de código para los adaptadores de Hive (*.g.dart), debes ejecutar el compilador local. Los archivos generados están excluidos de Git por buenas prácticas:
 
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 
 
 4. Ejecutar las Pruebas Unitarias y de Integración

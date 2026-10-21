@@ -3,12 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_card_model.dart';
 import 'package:toddler_logic/presentation/widgets/memory_card_widget.dart';
 
+import '../l10n_test_support.dart';
+
 void main() {
   testWidgets('shows the back face when the card is hidden', (tester) async {
     const card = MemoryCard(id: 7, assetPath: '🐻');
 
     await tester.pumpWidget(
-      MaterialApp(
+      localizedApp(
         home: Scaffold(
           body: Center(
             child: MemoryCardWidget(
@@ -30,7 +32,7 @@ void main() {
     const card = MemoryCard(id: 8, assetPath: '🐻', isFaceUp: true);
 
     await tester.pumpWidget(
-      MaterialApp(
+      localizedApp(
         home: Scaffold(
           body: Center(
             child: MemoryCardWidget(

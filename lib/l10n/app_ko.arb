@@ -1,0 +1,23 @@
+{
+  "@@locale": "ko",
+  "appTitle": "ToddlerLogic",
+  "menuTagline": "논리력과 집중력 게임",
+  "menuFarmLevelTitle": "농장 동물",
+  "menuFarmLevelSubtitle": "시작 단계 (2x2)",
+  "menuJungleLevelTitle": "정글 깜짝 놀이",
+  "menuJungleLevelSubtitle": "탐험가 단계 (2x3)",
+  "menuParentsZone": "부모 공간",
+  "menuParentsZoneComingSoon": "🔒 부모 공간 (곧 공개)",
+  "memoryGameTitle": "기억력 게임",
+  "memoryGameInstructions": "카드를 눌러서 짝을 찾아 보세요",
+  "memoryGameMovesCounter": "{count}번",
+  "memoryGameHintPlaying": "맞는 짝을 찾아 봐요.",
+  "memoryGameHintProcessing": "잘 봐요... 카드가 뒤집히고 있어요.",
+  "memoryGameHintCompleted": "잘했어요! 짝을 모두 찾았어요.",
+  "memoryCardOpenSemantics": "{symbol} 카드 (앞면)",
+  "memoryCardClosedSemantics": "뒤집힌 카드",
+  "victoryTitle": "해냈어요!",
+  "victoryMessage": "짝을 모두 찾았어요.",
+  "victoryMovesSummary": "{count, plural, other{{count}번 만에 완성}}",
+  "victoryBackToMenu": "메뉴로 돌아가기"
+}

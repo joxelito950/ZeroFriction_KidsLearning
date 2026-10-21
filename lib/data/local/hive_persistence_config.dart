@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
-import '../../domain/entities/level_state.dart';
-import '../../domain/entities/user_profile.dart';
+import 'models/level_state_hive_model.dart';
+import 'models/user_profile_hive_model.dart';
 
 final class HivePersistenceConfig {
   HivePersistenceConfig._();
@@ -29,27 +29,27 @@ final class HivePersistenceConfig {
       Hive.init(hivePath);
 
       if (!Hive.isAdapterRegistered(0)) {
-        Hive.registerAdapter(LevelStateAdapter());
+        Hive.registerAdapter(LevelStateHiveModelAdapter());
       }
 
       if (!Hive.isAdapterRegistered(1)) {
-        Hive.registerAdapter(UserProfileAdapter());
+        Hive.registerAdapter(UserProfileHiveModelAdapter());
       }
 
       if (!Hive.isBoxOpen(levelStateBoxName)) {
-        await Hive.openBox<LevelState>(levelStateBoxName);
+        await Hive.openBox<LevelStateHiveModel>(levelStateBoxName);
       }
       if (!Hive.isBoxOpen(userProfileBoxName)) {
-        await Hive.openBox<UserProfile>(userProfileBoxName);
+        await Hive.openBox<UserProfileHiveModel>(userProfileBoxName);
       }
       _initialized = true;
       completer.complete();
     } catch (error, stackTrace) {
       if (Hive.isBoxOpen(levelStateBoxName)) {
-        await Hive.box<LevelState>(levelStateBoxName).close();
+        await Hive.box<LevelStateHiveModel>(levelStateBoxName).close();
       }
       if (Hive.isBoxOpen(userProfileBoxName)) {
-        await Hive.box<UserProfile>(userProfileBoxName).close();
+        await Hive.box<UserProfileHiveModel>(userProfileBoxName).close();
       }
       // El llamador original recibe el error vía `rethrow`; si no hubo llamadas
       // concurrentes nadie escucha este future, así que evitamos un error no capturado.
@@ -61,11 +61,11 @@ final class HivePersistenceConfig {
     }
   }
 
-  static Box<LevelState> get levelStateBox =>
-      _getOpenBox<LevelState>(levelStateBoxName);
+  static Box<LevelStateHiveModel> get levelStateBox =>
+      _getOpenBox<LevelStateHiveModel>(levelStateBoxName);
 
-  static Box<UserProfile> get userProfileBox =>
-      _getOpenBox<UserProfile>(userProfileBoxName);
+  static Box<UserProfileHiveModel> get userProfileBox =>
+      _getOpenBox<UserProfileHiveModel>(userProfileBoxName);
 
   static Box<T> _getOpenBox<T>(String boxName) {
     if (!_initialized || !Hive.isBoxOpen(boxName)) {

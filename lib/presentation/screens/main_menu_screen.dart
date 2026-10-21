@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import 'memory_game_screen.dart';
 
 /// Menú principal súper visual y simplificado para niños de 3 años.
@@ -51,24 +52,20 @@ class MainMenuScreen extends StatelessWidget {
   }
 }
 
-/// Encabezado amigable con la mascota y el nombre de la app.
+/// Encabezado con el nombre de la app. La mascota llegará con la identidad visual (HU-013).
 class _MenuHeader extends StatelessWidget {
   const _MenuHeader();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
-          '🧸',
-          style: TextStyle(fontSize: 80),
-        ),
-        const SizedBox(height: 8),
         Text(
-          'ToddlerLogic',
+          l10n.appTitle,
           style: theme.textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: Colors.blueGrey[800],
@@ -76,7 +73,7 @@ class _MenuHeader extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Juegos de lógica y atención',
+          l10n.menuTagline,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: Colors.blueGrey[500],
           ),
@@ -96,15 +93,16 @@ class _MenuActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Botón de Categoría: Animales de la Granja (Fácil - 4 cartas)
         _MenuButton(
-          title: 'Animales de la Granja',
-          subtitle: 'Nivel Inicial (2x2)',
-          emojiIcon: '🚜',
+          title: l10n.menuFarmLevelTitle,
+          subtitle: l10n.menuFarmLevelSubtitle,
           backgroundColor: const Color(0xFFFFEBEE), // Rojo pastel
           textColor: Colors.red[800]!,
           onTap: () {
@@ -122,9 +120,8 @@ class _MenuActions extends StatelessWidget {
 
         // Botón de Categoría: Animales Salvajes (Medio - 6 cartas)
         _MenuButton(
-          title: 'Selva Sorpresa',
-          subtitle: 'Nivel Explorador (2x3)',
-          emojiIcon: '🌴',
+          title: l10n.menuJungleLevelTitle,
+          subtitle: l10n.menuJungleLevelSubtitle,
           backgroundColor: const Color(0xFFE8F5E9), // Verde pastel
           textColor: Colors.green[800]!,
           onTap: () {
@@ -146,14 +143,14 @@ class _MenuActions extends StatelessWidget {
             onPressed: () {
               // Aquí se integrará el Gatekeeper en el futuro
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('🔒 Zona de padres (Próximamente)'),
-                  duration: Duration(seconds: 1),
+                SnackBar(
+                  content: Text(l10n.menuParentsZoneComingSoon),
+                  duration: const Duration(seconds: 1),
                 ),
               );
             },
             icon: const Icon(Icons.security, size: 18),
-            label: const Text('Zona de Padres'),
+            label: Text(l10n.menuParentsZone),
             style: TextButton.styleFrom(
               foregroundColor: Colors.blueGrey[600],
             ),
@@ -168,7 +165,6 @@ class _MenuActions extends StatelessWidget {
 class _MenuButton extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String emojiIcon;
   final Color backgroundColor;
   final Color textColor;
   final VoidCallback onTap;
@@ -176,7 +172,6 @@ class _MenuButton extends StatelessWidget {
   const _MenuButton({
     required this.title,
     required this.subtitle,
-    required this.emojiIcon,
     required this.backgroundColor,
     required this.textColor,
     required this.onTap,
@@ -202,11 +197,6 @@ class _MenuButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(
-              emojiIcon,
-              style: const TextStyle(fontSize: 40),
-            ),
-            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

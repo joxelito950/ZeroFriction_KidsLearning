@@ -7,6 +7,8 @@ import 'dart:io';
 
 const List<String> _excludedSuffixes = ['.g.dart'];
 const List<String> _excludedFiles = ['lib/main.dart'];
+// Catálogo de textos generado por gen-l10n desde lib/l10n/*.arb (HU-011).
+final RegExp _generatedLocalizations = RegExp(r'lib/l10n/app_localizations[\w]*\.dart$');
 
 void main(List<String> args) {
   final double minTotal = _readThreshold(args, '--min-total=', 90);
@@ -75,4 +77,6 @@ Map<String, (int, int)> _parseLcov(List<String> lines) {
 }
 
 bool _isExcluded(String path) =>
-    _excludedSuffixes.any(path.endsWith) || _excludedFiles.any(path.endsWith);
+    _excludedSuffixes.any(path.endsWith) ||
+    _excludedFiles.any(path.endsWith) ||
+    _generatedLocalizations.hasMatch(path);
