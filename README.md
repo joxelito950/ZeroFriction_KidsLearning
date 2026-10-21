@@ -89,6 +89,8 @@ Restauración Nativa: Inclusión de un botón obligatorio para recuperar el acce
 
 UX del Error Amigable: No existen penalizaciones ni sonidos estridentes ante un fallo. Si el niño se equivoca, el objeto regresa a su origen con una animación suave, reforzando positivamente la persistencia.
 
+Progreso que se mantiene con la práctica: cada nivel da de 0 a 3 estrellas según los movimientos, y el icono de cada juego se va volviendo dorado con ellas. Tras una semana sin jugar, las estrellas se pierden poco a poco y se recuperan jugando: es un refuerzo de la práctica, nunca un mensaje negativo.
+
 Privacidad & Seguridad (Cumplimiento Estricto COPPA / GDPR)
 
 Cero Permisos: La aplicación requiere exactamente 0 permisos en el AndroidManifest.xml (sin acceso a cámara, ubicación ni almacenamiento externo).
