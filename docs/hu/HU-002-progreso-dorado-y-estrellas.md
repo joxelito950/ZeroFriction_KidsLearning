@@ -131,7 +131,7 @@ El product owner elige **D1**, como control de progreso y refuerzo de las habili
 | R11 | **Sin mensajes negativos:** la pérdida es silenciosa; el icono simplemente tiene menos dorado. No hay avisos de «vas a perder» ni contadores de días |
 | R12 | Se calcula con el **reloj del teléfono**, inyectado en la lógica de dominio para poder probarlo. Si alguien adelanta o atrasa el reloj, solo afecta a ese teléfono; se acepta |
 
-Riesgo aceptado: va contra la idea de «sin penalizaciones» del README y se parece a las «rachas» que el borrador del código infantil del ICO desaconsejaba. Una posible mejora futura es que los padres puedan pausarla desde la Zona de Padres (D3).
+Riesgo aceptado: va contra la idea de «sin penalizaciones» del README y se parece a las «rachas» que el borrador del código infantil del ICO desaconsejaba. Los padres podrán activarla o desactivarla desde la Zona de Padres en **HU-016** (opción D3).
 
 ### Datos necesarios
 
