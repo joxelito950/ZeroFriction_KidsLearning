@@ -23,6 +23,7 @@ enum MemoryRoundPhase {
 class MemoryLadderState {
   const MemoryLadderState({
     this.phase = MemoryRoundPhase.loading,
+    this.round = 0,
     this.position = MemoryLadder.start,
     this.cards = const [],
     this.firstSelectedCardIndex,
@@ -37,6 +38,9 @@ class MemoryLadderState {
   });
 
   final MemoryRoundPhase phase;
+
+  /// Número de tablero repartido; cambia con cada ronda nueva (para animar la transición).
+  final int round;
   final MemoryLadderPosition position;
   final List<MemoryCard> cards;
   final int? firstSelectedCardIndex;
@@ -95,6 +99,7 @@ class MemoryLadderState {
   }) {
     return MemoryLadderState(
       phase: phase ?? this.phase,
+      round: round,
       position: position,
       cards: cards ?? this.cards,
       firstSelectedCardIndex:
