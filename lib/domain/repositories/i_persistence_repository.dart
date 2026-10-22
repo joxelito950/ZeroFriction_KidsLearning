@@ -1,4 +1,5 @@
 import '../entities/level_state.dart';
+import '../entities/memory_progress.dart';
 import '../entities/user_profile.dart';
 
 abstract interface class IPersistenceRepository {
@@ -13,4 +14,9 @@ abstract interface class IPersistenceRepository {
   Future<UserProfile?> readUserProfile();
 
   Future<void> saveUserProfile(UserProfile userProfile);
+
+  /// Progreso del juego de memoria; [MemoryProgress.initial] si nunca se ha jugado.
+  Future<MemoryProgress> readMemoryProgress();
+
+  Future<void> saveMemoryProgress(MemoryProgress progress);
 }
