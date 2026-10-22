@@ -104,6 +104,7 @@ lib/
 │   └── models/                        # Modelos de guardado Hive (+ *.g.dart generados) con fromEntity/toEntity
 ├── domain/
 │   ├── entities/                      # LevelState, UserProfile, AppLanguage (Dart puro)
+│   ├── memory/                        # Reglas del juego de memoria: escalera, estrellas, temáticas (Dart puro)
 │   └── repositories/                  # IPersistenceRepository
 └── presentation/
     ├── blocs/<feature>/               # <feature>_cubit, _state, modelos de UI

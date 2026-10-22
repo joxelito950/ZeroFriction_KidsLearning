@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-16 y ajustado el 2026-10-17; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (entrega 1 de 5 hecha el 2026-10-22) |
 | **Épica** | E1 · Juego de memoria |
 | **Prioridad** | P1 |
 | **Tamaño** | L: unas 2 semanas, repartidas en 5 entregas (sección 10) |
@@ -190,6 +190,16 @@ Confirmaciones del product owner del 2026-10-17:
 | 3 | Cubit con cronómetro y transiciones | Arranque, pausa y derrota, resultados de la escalera y tests con `fake_async` | 3–8, 11 |
 | 4 | Pantalla de juego | Barra de tiempo, indicador de nivel, celebraciones y avisos automáticos, encabezado en español, salida protegida en el juego y tests de layout | 2, 13, 15, 16, 17 |
 | 5 | Menú | Botón único «Memoria» con la medalla de la insignia, botón «Salir», salida protegida en el menú; retirar los dos niveles | 1, 9, 18, 19 |
+
+### Avance
+
+| # | Entrega | Estado | Rama | Notas |
+|---|---|---|---|---|
+| 1 | Reglas de dominio y temáticas | ✅ Hecha (2026-10-22) | `feature/hu-001-1-domain-rules` | `lib/domain/memory/`: `MemoryLadder` (tabla 4.1, transiciones al ganar y perder, posición de llegada por nivel), `MemoryStars` (D-030) y `MemoryThemes` (9 temáticas de 10–12 emojis, todos de Emoji 5.0 o anterior). 35 tests unitarios: todas las transiciones del diagrama 4.3, el ejemplo 4.4, 500 partidas aleatorias que confirman que al nivel 5 siempre se llega con 30 s, los umbrales de estrellas de cada nivel y la comprobación automática de la versión de los emojis. Cobertura del 100 % |
+| 2 | Persistencia del progreso | Pendiente | | |
+| 3 | Cubit con cronómetro y transiciones | Pendiente | | |
+| 4 | Pantalla de juego | Pendiente | | |
+| 5 | Menú | Pendiente | | |
 
 ## 11. Fuera de alcance
 
