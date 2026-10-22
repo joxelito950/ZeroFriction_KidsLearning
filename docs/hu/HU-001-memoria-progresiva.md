@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (entregas 1 y 2 de 5 hechas el 2026-10-22) |
+| **Estado** | En curso (entregas 1, 2 y 3 de 5 hechas el 2026-10-22) |
 | **Épica** | E1 · Juego de memoria |
 | **Prioridad** | P1 |
 | **Tamaño** | L: unas 2 semanas, repartidas en 5 entregas (sección 10) |
@@ -196,8 +196,8 @@ Confirmaciones del product owner del 2026-10-17:
 | # | Entrega | Estado | Rama | Notas |
 |---|---|---|---|---|
 | 1 | Reglas de dominio y temáticas | ✅ Hecha (2026-10-22) | `feature/hu-001-1-domain-rules` | `lib/domain/memory/`: `MemoryLadder` (tabla 4.1, transiciones al ganar y perder, posición de llegada por nivel), `MemoryStars` (D-030) y `MemoryThemes` (9 temáticas de 10–12 emojis, todos de Emoji 5.0 o anterior). 35 tests unitarios: todas las transiciones del diagrama 4.3, el ejemplo 4.4, 500 partidas aleatorias que confirman que al nivel 5 siempre se llega con 30 s, los umbrales de estrellas de cada nivel y la comprobación automática de la versión de los emojis. Cobertura del 100 % |
-| 2 | Persistencia del progreso | ✅ Hecha (2026-10-22) | `feature/hu-001-2-progress-persistence` | `MemoryProgress` (dominio: nivel actual, insignia permanente, mejor resultado y fecha por nivel, última partida; `recordWin` renueva el récord si iguala o mejora, `recordLoss`). `MemoryProgressHiveModel` (typeId 2), caja `memory_progress`, `readMemoryProgress`/`saveMemoryProgress` en el repositorio. 19 tests nuevos, incluida la escritura y relectura real en disco de mapas con fechas y la compatibilidad con los datos anteriores (caja nueva vacía → progreso inicial). Pendiente: verificar en el teléfono al instalar encima (no estaba conectado) |
-| 3 | Cubit con cronómetro y transiciones | Pendiente | | |
+| 2 | Persistencia del progreso | ✅ Hecha (2026-10-22) | `feature/hu-001-2-progress-persistence` | `MemoryProgress` (dominio: nivel actual, insignia permanente, mejor resultado y fecha por nivel, última partida; `recordWin` renueva el récord si iguala o mejora, `recordLoss`). `MemoryProgressHiveModel` (typeId 2), caja `memory_progress`, `readMemoryProgress`/`saveMemoryProgress` en el repositorio. 19 tests nuevos, incluida la escritura y relectura real en disco de mapas con fechas y la compatibilidad con los datos anteriores (caja nueva vacía → progreso inicial). Verificado en el moto g55 (2026-10-22): instalada encima de la versión de HU-011, la app crea la caja nueva vacía, sin errores, y conserva los 2 niveles guardados y el idioma |
+| 3 | Cubit con cronómetro y transiciones | ✅ Hecha (2026-10-22) | `feature/hu-001-3-ladder-cubit` | `MemoryLadderCubit` y `MemoryLadderState`: arranque en el nivel guardado con su límite de llegada, reparto de una temática al azar, cronómetro que empieza en el primer toque (paso de 100 ms) y se pausa en segundo plano, derrota por tiempo, estrellas (D-030), guardado del progreso, celebración (2 s) y aviso de tiempo (2,5 s) automáticos. Es un cubit **nuevo** junto al actual, para que la app siga funcionando: la entrega 4 conecta la pantalla y retira `MemoryGameCubit` y el uso de `LevelState`. 18 tests con `fake_async`, sin esperas reales (T2), incluidos el reinicio desde el 2×2, el tiempo agotado durante un fallo y el cierre de la pantalla. Cobertura del 98,9 % |
 | 4 | Pantalla de juego | Pendiente | | |
 | 5 | Menú | Pendiente | | |
 
