@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:hive_ce/hive.dart';
 
 import 'models/level_state_hive_model.dart';
+import 'models/memory_progress_hive_model.dart';
 import 'models/user_profile_hive_model.dart';
 
 final class HivePersistenceConfig {
@@ -10,6 +11,7 @@ final class HivePersistenceConfig {
 
   static const String levelStateBoxName = 'level_states';
   static const String userProfileBoxName = 'user_profile';
+  static const String memoryProgressBoxName = 'memory_progress';
 
   static bool _initialized = false;
   static Completer<void>? _initializationCompleter;
@@ -36,11 +38,18 @@ final class HivePersistenceConfig {
         Hive.registerAdapter(UserProfileHiveModelAdapter());
       }
 
+      if (!Hive.isAdapterRegistered(2)) {
+        Hive.registerAdapter(MemoryProgressHiveModelAdapter());
+      }
+
       if (!Hive.isBoxOpen(levelStateBoxName)) {
         await Hive.openBox<LevelStateHiveModel>(levelStateBoxName);
       }
       if (!Hive.isBoxOpen(userProfileBoxName)) {
         await Hive.openBox<UserProfileHiveModel>(userProfileBoxName);
+      }
+      if (!Hive.isBoxOpen(memoryProgressBoxName)) {
+        await Hive.openBox<MemoryProgressHiveModel>(memoryProgressBoxName);
       }
       _initialized = true;
       completer.complete();
@@ -50,6 +59,9 @@ final class HivePersistenceConfig {
       }
       if (Hive.isBoxOpen(userProfileBoxName)) {
         await Hive.box<UserProfileHiveModel>(userProfileBoxName).close();
+      }
+      if (Hive.isBoxOpen(memoryProgressBoxName)) {
+        await Hive.box<MemoryProgressHiveModel>(memoryProgressBoxName).close();
       }
       // El llamador original recibe el error vía `rethrow`; si no hubo llamadas
       // concurrentes nadie escucha este future, así que evitamos un error no capturado.
@@ -66,6 +78,9 @@ final class HivePersistenceConfig {
 
   static Box<UserProfileHiveModel> get userProfileBox =>
       _getOpenBox<UserProfileHiveModel>(userProfileBoxName);
+
+  static Box<MemoryProgressHiveModel> get memoryProgressBox =>
+      _getOpenBox<MemoryProgressHiveModel>(memoryProgressBoxName);
 
   static Box<T> _getOpenBox<T>(String boxName) {
     if (!_initialized || !Hive.isBoxOpen(boxName)) {

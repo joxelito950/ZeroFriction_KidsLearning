@@ -15,6 +15,7 @@ Future<HivePersistenceRepository> createRepository({required String hivePath}) a
   return HivePersistenceRepository(
     levelStateBox: HivePersistenceConfig.levelStateBox,
     userProfileBox: HivePersistenceConfig.userProfileBox,
+    memoryProgressBox: HivePersistenceConfig.memoryProgressBox,
   );
 }
 

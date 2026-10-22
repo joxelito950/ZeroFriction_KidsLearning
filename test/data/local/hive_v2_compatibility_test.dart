@@ -48,5 +48,7 @@ void main() {
       HivePersistenceConfig.userProfileBox.get('current_user_profile')!.languageCode,
       isNull,
     );
+    // Los datos anteriores a HU-001 no tienen progreso de memoria: caja nueva y vacía.
+    expect(HivePersistenceConfig.memoryProgressBox.isEmpty, isTrue);
   });
 }

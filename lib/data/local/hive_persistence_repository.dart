@@ -1,24 +1,30 @@
 import 'package:hive_ce/hive.dart';
 
 import '../../domain/entities/level_state.dart';
+import '../../domain/entities/memory_progress.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import 'models/level_state_hive_model.dart';
+import 'models/memory_progress_hive_model.dart';
 import 'models/user_profile_hive_model.dart';
 
 /// Implementa el contrato de dominio sobre Hive. Guarda modelos de persistencia
 /// y entrega entidades de dominio: el resto de la app nunca ve tipos de Hive.
 class HivePersistenceRepository implements IPersistenceRepository {
   static const String _userProfileKey = 'current_user_profile';
+  static const String _memoryProgressKey = 'current_memory_progress';
 
   const HivePersistenceRepository({
     required Box<LevelStateHiveModel> levelStateBox,
     required Box<UserProfileHiveModel> userProfileBox,
+    required Box<MemoryProgressHiveModel> memoryProgressBox,
   })  : _levelStateBox = levelStateBox,
-        _userProfileBox = userProfileBox;
+        _userProfileBox = userProfileBox,
+        _memoryProgressBox = memoryProgressBox;
 
   final Box<LevelStateHiveModel> _levelStateBox;
   final Box<UserProfileHiveModel> _userProfileBox;
+  final Box<MemoryProgressHiveModel> _memoryProgressBox;
 
   @override
   Future<List<LevelState>> readAllLevelStates() async {
@@ -68,5 +74,15 @@ class HivePersistenceRepository implements IPersistenceRepository {
       _userProfileKey,
       UserProfileHiveModel.fromEntity(userProfile),
     );
+  }
+
+  @override
+  Future<MemoryProgress> readMemoryProgress() async {
+    return _memoryProgressBox.get(_memoryProgressKey)?.toEntity() ?? MemoryProgress.initial;
+  }
+
+  @override
+  Future<void> saveMemoryProgress(MemoryProgress progress) async {
+    await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromEntity(progress));
   }
 }

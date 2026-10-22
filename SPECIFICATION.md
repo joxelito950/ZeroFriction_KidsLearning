@@ -131,12 +131,14 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 |---|---|---|---|
 | `level_states` | `LevelStateHiveModel` → `LevelState` | `levelId` | 0 |
 | `user_profile` | `UserProfileHiveModel` → `UserProfile` | `current_user_profile` | 1 |
+| `memory_progress` | `MemoryProgressHiveModel` → `MemoryProgress` | `current_memory_progress` | 2 |
 
 - Las cajas guardan **modelos de guardado** (`data/local/models/`), nunca entidades de dominio. El repositorio convierte con `fromEntity`/`toEntity`; las reglas de negocio (por ejemplo, estrellas entre 0 y 3) las valida la entidad al convertir.
 - `test/data/local/hive_v2_compatibility_test.dart` y los fixtures de `test/fixtures/hive_v2/` garantizan que el formato en disco no cambia. Si cambia, el test falla.
 
 - Campos de `UserProfileHiveModel`: 0 `isPremium`, 1 `isSoundEnabled`, 2 `languageCode` (opcional, HU-011; los perfiles anteriores lo leen como `null`). El próximo índice libre es 3.
-- Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **2**.
+- Campos de `MemoryProgressHiveModel` (HU-001): 0 `currentLevel`, 1 `hasBadge`, 2 `bestStarsByLevel` (nivel → estrellas), 3 `achievedAtByLevel` (nivel → fecha), 4 `lastPlayedAt`. El próximo índice libre es 5.
+- Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **3**. `LevelState` (typeId 0) dejará de usarse cuando el juego pase a `MemoryProgress` (HU-001, entrega 3); su typeId queda reservado.
 - Identificadores de nivel en uso: `farm_easy`, `wild_medium`. Un `levelId` ya publicado NO DEBE renombrarse.
 
 ### 3.5 Estado (Cubit)

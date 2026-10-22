@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (entrega 1 de 5 hecha el 2026-10-22) |
+| **Estado** | En curso (entregas 1 y 2 de 5 hechas el 2026-10-22) |
 | **Épica** | E1 · Juego de memoria |
 | **Prioridad** | P1 |
 | **Tamaño** | L: unas 2 semanas, repartidas en 5 entregas (sección 10) |
@@ -196,7 +196,7 @@ Confirmaciones del product owner del 2026-10-17:
 | # | Entrega | Estado | Rama | Notas |
 |---|---|---|---|---|
 | 1 | Reglas de dominio y temáticas | ✅ Hecha (2026-10-22) | `feature/hu-001-1-domain-rules` | `lib/domain/memory/`: `MemoryLadder` (tabla 4.1, transiciones al ganar y perder, posición de llegada por nivel), `MemoryStars` (D-030) y `MemoryThemes` (9 temáticas de 10–12 emojis, todos de Emoji 5.0 o anterior). 35 tests unitarios: todas las transiciones del diagrama 4.3, el ejemplo 4.4, 500 partidas aleatorias que confirman que al nivel 5 siempre se llega con 30 s, los umbrales de estrellas de cada nivel y la comprobación automática de la versión de los emojis. Cobertura del 100 % |
-| 2 | Persistencia del progreso | Pendiente | | |
+| 2 | Persistencia del progreso | ✅ Hecha (2026-10-22) | `feature/hu-001-2-progress-persistence` | `MemoryProgress` (dominio: nivel actual, insignia permanente, mejor resultado y fecha por nivel, última partida; `recordWin` renueva el récord si iguala o mejora, `recordLoss`). `MemoryProgressHiveModel` (typeId 2), caja `memory_progress`, `readMemoryProgress`/`saveMemoryProgress` en el repositorio. 19 tests nuevos, incluida la escritura y relectura real en disco de mapas con fechas y la compatibilidad con los datos anteriores (caja nueva vacía → progreso inicial). Pendiente: verificar en el teléfono al instalar encima (no estaba conectado) |
 | 3 | Cubit con cronómetro y transiciones | Pendiente | | |
 | 4 | Pantalla de juego | Pendiente | | |
 | 5 | Menú | Pendiente | | |
