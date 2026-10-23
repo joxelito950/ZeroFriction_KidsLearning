@@ -83,13 +83,9 @@ class _MenuHeader extends StatelessWidget {
   }
 }
 
-/// Niveles del juego de memoria y acceso a la zona de padres.
+/// Juego de memoria y acceso a la zona de padres.
 class _MenuActions extends StatelessWidget {
   const _MenuActions();
-
-  // Set de emojis temáticos locales (zero-assets)
-  static const List<String> _farmAnimals = ['🐶', '🐱', '🐷', '🐮', '🐑', '🐔'];
-  static const List<String> _wildAnimals = ['🦁', '🐯', '🐼', '🐨', '🦊', '🐵'];
 
   @override
   Widget build(BuildContext context) {
@@ -99,39 +95,15 @@ class _MenuActions extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Botón de Categoría: Animales de la Granja (Fácil - 4 cartas)
+        // Un solo botón: el juego retoma el nivel alcanzado (HU-001 R1).
         _MenuButton(
-          title: l10n.menuFarmLevelTitle,
-          subtitle: l10n.menuFarmLevelSubtitle,
-          backgroundColor: const Color(0xFFFFEBEE), // Rojo pastel
-          textColor: Colors.red[800]!,
+          title: l10n.menuMemoryTitle,
+          subtitle: l10n.menuMemorySubtitle,
+          backgroundColor: const Color(0xFFFFF3C4), // Dorado pastel (D-023)
+          textColor: const Color(0xFF8D6E00),
           onTap: () {
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => MemoryGameScreen(
-                  levelId: 'farm_easy',
-                  emojis: _farmAnimals.take(2).toList(), // 2 parejas (4 cartas)
-                ),
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 16),
-
-        // Botón de Categoría: Animales Salvajes (Medio - 6 cartas)
-        _MenuButton(
-          title: l10n.menuJungleLevelTitle,
-          subtitle: l10n.menuJungleLevelSubtitle,
-          backgroundColor: const Color(0xFFE8F5E9), // Verde pastel
-          textColor: Colors.green[800]!,
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => MemoryGameScreen(
-                  levelId: 'wild_medium',
-                  emojis: _wildAnimals.take(3).toList(), // 3 parejas (6 cartas)
-                ),
-              ),
+              MaterialPageRoute(builder: (_) => const MemoryGameScreen()),
             );
           },
         ),

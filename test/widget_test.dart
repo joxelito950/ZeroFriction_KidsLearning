@@ -19,12 +19,12 @@ void main() {
       stubPersistenceRepository(repository);
     });
 
-    testWidgets('shows the main menu with both memory levels', (tester) async {
+    testWidgets('shows the main menu with a single memory game button', (tester) async {
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
       expect(find.text('ToddlerLogic'), findsOneWidget);
-      expect(find.text('Animales de la Granja'), findsOneWidget);
-      expect(find.text('Selva Sorpresa'), findsOneWidget);
+      expect(find.text('Memoria'), findsOneWidget);
+      expect(find.text('Encuentra las parejas'), findsOneWidget);
       expect(find.text('Zona de Padres'), findsOneWidget);
     });
 
@@ -46,11 +46,12 @@ void main() {
       expect(find.text('🔒 Zona de padres (Próximamente)'), findsOneWidget);
     });
 
-    testWidgets('opens the memory game when tapping a level', (tester) async {
+    testWidgets('opens the memory game at the saved level', (tester) async {
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
-      await tester.tap(find.text('Animales de la Granja'));
-      await tester.pumpAndSettle();
+      await tester.tap(find.text('Memoria'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
 
       expect(find.byType(MemoryGameScreen), findsOneWidget);
       expect(find.byIcon(Icons.question_mark_rounded), findsNWidgets(4));

@@ -5,8 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:toddler_logic/data/local/hive_persistence_config.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
+import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
+import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
 /// Ejecuta [body] en una zona aislada y devuelve los errores no capturados.
@@ -91,6 +93,8 @@ void main() {
 
       expect(HivePersistenceConfig.levelStateBox, isA<Box<LevelStateHiveModel>>());
       expect(HivePersistenceConfig.userProfileBox, isA<Box<UserProfileHiveModel>>());
+      expect(HivePersistenceConfig.memoryProgressBox, isA<Box<MemoryProgressHiveModel>>());
+      expect(Hive.isAdapterRegistered(2), isTrue);
       expect(Hive.isAdapterRegistered(0), isTrue);
       expect(Hive.isAdapterRegistered(1), isTrue);
     });
@@ -117,6 +121,29 @@ void main() {
         HivePersistenceConfig.userProfileBox.get('current_user_profile')!.toEntity(),
         profile,
       );
+    });
+    test('memory progress with dates survives a real write and reopen of the box', () async {
+      final achieved = DateTime.utc(2026, 10, 20, 8, 30);
+      final progress = MemoryProgress(
+        currentLevel: 4,
+        hasBadge: true,
+        levelRecords: {
+          1: MemoryLevelRecord(bestStars: 3, achievedAt: achieved),
+          3: MemoryLevelRecord(bestStars: 1, achievedAt: achieved.add(const Duration(days: 1))),
+        },
+        lastPlayedAt: achieved.add(const Duration(days: 2)),
+      );
+
+      await HivePersistenceConfig.memoryProgressBox
+          .put('current_memory_progress', MemoryProgressHiveModel.fromEntity(progress));
+      await HivePersistenceConfig.memoryProgressBox.close();
+      final reopened = await Hive.openBox<MemoryProgressHiveModel>(HivePersistenceConfig.memoryProgressBoxName);
+
+      final MemoryProgress read = reopened.get('current_memory_progress')!.toEntity();
+      expect(read.currentLevel, 4);
+      expect(read.hasBadge, isTrue);
+      expect(read.levelRecords, progress.levelRecords);
+      expect(read.lastPlayedAt!.isAtSameMomentAs(progress.lastPlayedAt!), isTrue);
     });
   });
 }

@@ -3,13 +3,19 @@ import 'package:mocktail/mocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/data/local/hive_persistence_repository.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
+import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
+import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
 class _MockLevelStateBox extends Mock implements Box<LevelStateHiveModel> {}
 
 class _MockUserProfileBox extends Mock implements Box<UserProfileHiveModel> {}
+
+class _MockMemoryProgressBox extends Mock implements Box<MemoryProgressHiveModel> {}
+
+class _FakeMemoryProgressHiveModel extends Fake implements MemoryProgressHiveModel {}
 
 class _FakeLevelStateHiveModel extends Fake implements LevelStateHiveModel {}
 
@@ -26,19 +32,23 @@ void main() {
   setUpAll(() {
     registerFallbackValue(_FakeLevelStateHiveModel());
     registerFallbackValue(_FakeUserProfileHiveModel());
+    registerFallbackValue(_FakeMemoryProgressHiveModel());
   });
 
   group('HivePersistenceRepository', () {
     late _MockLevelStateBox levelStateBox;
     late _MockUserProfileBox userProfileBox;
+    late _MockMemoryProgressBox memoryProgressBox;
     late HivePersistenceRepository repository;
 
     setUp(() {
       levelStateBox = _MockLevelStateBox();
       userProfileBox = _MockUserProfileBox();
+      memoryProgressBox = _MockMemoryProgressBox();
       repository = HivePersistenceRepository(
         levelStateBox: levelStateBox,
         userProfileBox: userProfileBox,
+        memoryProgressBox: memoryProgressBox,
       );
     });
 
@@ -147,6 +157,46 @@ void main() {
           .captured
           .single as UserProfileHiveModel;
       expect(saved.toEntity(), userProfile);
+    });
+    test('readMemoryProgress returns the initial progress when nothing is stored', () async {
+      when(() => memoryProgressBox.get('current_memory_progress')).thenReturn(null);
+
+      expect(await repository.readMemoryProgress(), MemoryProgress.initial);
+    });
+
+    test('readMemoryProgress converts the stored model to the domain entity', () async {
+      final playedAt = DateTime.utc(2026, 10, 22, 9);
+      when(() => memoryProgressBox.get('current_memory_progress')).thenReturn(
+        MemoryProgressHiveModel(
+          currentLevel: 3,
+          hasBadge: true,
+          bestStarsByLevel: const {1: 3, 2: 2},
+          achievedAtByLevel: {1: playedAt, 2: playedAt},
+          lastPlayedAt: playedAt,
+        ),
+      );
+
+      final progress = await repository.readMemoryProgress();
+
+      expect(progress.currentLevel, 3);
+      expect(progress.hasBadge, isTrue);
+      expect(progress.levelRecords[2], MemoryLevelRecord(bestStars: 2, achievedAt: playedAt));
+      expect(progress.lastPlayedAt, playedAt);
+    });
+
+    test('saveMemoryProgress stores the persistence model under a fixed key', () async {
+      final progress = MemoryProgress(
+        currentLevel: 4,
+        levelRecords: {3: MemoryLevelRecord(bestStars: 1, achievedAt: DateTime.utc(2026, 10, 22))},
+      );
+      when(() => memoryProgressBox.put(any(), any())).thenAnswer((_) async {});
+
+      await repository.saveMemoryProgress(progress);
+
+      final saved = verify(() => memoryProgressBox.put('current_memory_progress', captureAny()))
+          .captured
+          .single as MemoryProgressHiveModel;
+      expect(saved.toEntity(), progress);
     });
   });
 }

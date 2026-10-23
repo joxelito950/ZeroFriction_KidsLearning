@@ -1,164 +1,148 @@
-import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/memory/memory_ladder.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
-import '../blocs/memory_game/memory_game_cubit.dart';
-import '../blocs/memory_game/memory_game_state.dart';
-import '../widgets/memory_card_widget.dart';
-import '../widgets/memory_victory_dialog.dart';
+import '../blocs/memory_game/memory_ladder_cubit.dart';
+import '../blocs/memory_game/memory_ladder_state.dart';
+import '../widgets/memory_board.dart';
+import '../widgets/memory_level_indicator.dart';
+import '../widgets/memory_round_overlay.dart';
+import '../widgets/memory_time_bar.dart';
+import '../widgets/protected_exit.dart';
 
+/// Juego de memoria progresivo (HU-001): sin botones dentro del juego (R13); se
+/// sale con «atrás» repetido (R19).
 class MemoryGameScreen extends StatelessWidget {
-  const MemoryGameScreen({
-    super.key,
-    required this.levelId,
-    required this.emojis,
-  });
+  const MemoryGameScreen({super.key, this.random, this.now});
 
-  final String levelId;
-  final List<String> emojis;
+  /// Inyectables para tests: azar del reparto y reloj del guardado.
+  final Random? random;
+  final DateTime Function()? now;
 
-  static const double _boardSpacing = 14;
-  static const double _preferredAspectRatio = 0.84;
-
-  static const int _fallbackCrossAxisCount = 2;
-
-  static Size _cellSize(BoxConstraints constraints, int crossAxisCount, int itemCount) {
-    final int rowCount = (itemCount / crossAxisCount).ceil();
-    return Size(
-      (constraints.maxWidth - _boardSpacing * (crossAxisCount - 1)) / crossAxisCount,
-      (constraints.maxHeight - _boardSpacing * (rowCount - 1)) / rowCount,
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<MemoryLadderCubit>(
+      create: (context) => MemoryLadderCubit(
+        repository: context.read<IPersistenceRepository>(),
+        random: random,
+        now: now,
+      )..start(),
+      child: const _MemoryGameView(),
     );
   }
+}
 
-  /// Elige el número de columnas que da las cartas más grandes, considerando solo
-  /// tableros con filas completas (p. ej. 4 cartas: 2x2 en vertical, 1x4 en horizontal).
-  static int _bestCrossAxisCount({
-    required BoxConstraints constraints,
-    required int itemCount,
-  }) {
-    if (!constraints.hasBoundedHeight) return _fallbackCrossAxisCount;
+class _MemoryGameView extends StatefulWidget {
+  const _MemoryGameView();
 
-    int bestCount = _fallbackCrossAxisCount;
-    double bestCardWidth = 0;
-    for (var columns = 1; columns <= itemCount; columns++) {
-      if (itemCount % columns != 0) continue;
+  @override
+  State<_MemoryGameView> createState() => _MemoryGameViewState();
+}
 
-      final Size cell = _cellSize(constraints, columns, itemCount);
-      final double cardWidth = math.min(cell.width, cell.height * _preferredAspectRatio);
-      if (cardWidth > bestCardWidth) {
-        bestCount = columns;
-        bestCardWidth = cardWidth;
-      }
-    }
-    return bestCount;
+class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
-  /// Calcula la proporción de las cartas para que todas las filas quepan sin scroll,
-  /// sin estirarlas más allá de la proporción preferida cuando sobra espacio.
-  static double _fittingAspectRatio({
-    required BoxConstraints constraints,
-    required int crossAxisCount,
-    required int itemCount,
-  }) {
-    if (!constraints.hasBoundedHeight) return _preferredAspectRatio;
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
-    final Size cell = _cellSize(constraints, crossAxisCount, itemCount);
-    if (cell.width <= 0 || cell.height <= 0) return _preferredAspectRatio;
-
-    return math.max(cell.width / cell.height, _preferredAspectRatio);
+  /// El cronómetro se pausa con la app en segundo plano o la pantalla apagada (R11).
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState lifecycle) {
+    final cubit = context.read<MemoryLadderCubit>();
+    if (lifecycle == AppLifecycleState.resumed) {
+      cubit.resume();
+    } else {
+      cubit.pause();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MemoryGameCubit>(
-      create: (blocContext) {
-        final repository = blocContext.read<IPersistenceRepository>();
-        final cubit = MemoryGameCubit(
-          persistenceRepository: repository,
-          levelId: levelId,
-        );
-        cubit.startGame(emojis);
-        return cubit;
-      },
-      child: BlocListener<MemoryGameCubit, MemoryGameState>(
-        listenWhen: (previous, current) => !previous.isCompleted && current.isCompleted,
-        listener: (dialogContext, state) {
-          showDialog<void>(
-            context: dialogContext,
-            barrierDismissible: false,
-            builder: (_) => MemoryVictoryDialog(moves: state.moves),
-          );
-        },
-        child: BlocBuilder<MemoryGameCubit, MemoryGameState>(
-          builder: (builderContext, state) {
-            return Scaffold(
-              body: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xFFFFF4D6), Color(0xFFFFE4B5), Color(0xFFFFF8E1)],
-                  ),
-                ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+    return ProtectedExit(
+      onExit: () => Navigator.of(context).pop(),
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFFFF4D6), Color(0xFFFFE4B5), Color(0xFFFFF8E1)],
+            ),
+          ),
+          child: SafeArea(
+            child: BlocBuilder<MemoryLadderCubit, MemoryLadderState>(
+              builder: (context, state) => Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _Header(moves: state.moves),
-                        const SizedBox(height: 18),
-                        Expanded(
-                          child: state.cards.isEmpty
-                              ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                )
-                              : LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    final int crossAxisCount = _bestCrossAxisCount(
-                                      constraints: constraints,
-                                      itemCount: state.cards.length,
-                                    );
-
-                                    return GridView.builder(
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: crossAxisCount,
-                                        crossAxisSpacing: _boardSpacing,
-                                        mainAxisSpacing: _boardSpacing,
-                                        childAspectRatio: _fittingAspectRatio(
-                                          constraints: constraints,
-                                          crossAxisCount: crossAxisCount,
-                                          itemCount: state.cards.length,
-                                        ),
-                                      ),
-                                      itemCount: state.cards.length,
-                                      itemBuilder: (context, index) {
-                                        return MemoryCardWidget(
-                                          key: ValueKey<String>('memory-card-$index'),
-                                          card: state.cards[index],
-                                          onTap: () => builderContext.read<MemoryGameCubit>().flipCard(index),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                        ),
+                        _Header(level: state.level, moves: state.moves),
+                        if (state.remainingFraction case final double fraction) ...[
+                          const SizedBox(height: 12),
+                          MemoryTimeBar(fraction: fraction),
+                        ],
+                        const SizedBox(height: 14),
+                        Expanded(child: _Board(state: state)),
                         const SizedBox(height: 12),
-                        _Footer(
-                          isProcessing: state.isProcessing,
-                          isCompleted: state.isCompleted,
-                        ),
+                        _Footer(isProcessing: state.isProcessing),
                       ],
                     ),
                   ),
-                ),
+                  Positioned.fill(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: _overlayFor(state),
+                    ),
+                  ),
+                ],
               ),
-            );
-          },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _overlayFor(MemoryLadderState state) {
+    return switch (state.phase) {
+      MemoryRoundPhase.celebrating => MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.badgeEarned),
+      MemoryRoundPhase.timeUp => MemoryTimeUpNotice(loss: state.loss ?? MemoryLoss.fewerCards),
+      _ => const SizedBox.shrink(),
+    };
+  }
+}
+
+class _Board extends StatelessWidget {
+  const _Board({required this.state});
+
+  final MemoryLadderState state;
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.cards.isEmpty) {
+      return const Center(child: CircularProgressIndicator.adaptive());
+    }
+    // Transición suave al repartir un tablero nuevo (R13).
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 400),
+      child: KeyedSubtree(
+        key: ValueKey<int>(state.round),
+        child: MemoryBoard(
+          cards: state.cards,
+          onCardTap: (index) => context.read<MemoryLadderCubit>().flipCard(index),
         ),
       ),
     );
@@ -166,8 +150,9 @@ class MemoryGameScreen extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.moves});
+  const _Header({required this.level, required this.moves});
 
+  final int level;
   final int moves;
 
   @override
@@ -178,55 +163,46 @@ class _Header extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.68),
         borderRadius: BorderRadius.circular(28),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 16,
-            offset: Offset(0, 8),
-          ),
-        ],
+        boxShadow: const [BoxShadow(color: Color(0x1A000000), blurRadius: 16, offset: Offset(0, 8))],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        child: Row(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+        // Los puntos de nivel van en su propia fila: junto al contador no caben
+        // en teléfonos estrechos con textos largos (árabe, portugués).
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
-              radius: 24,
-              backgroundColor: Color(0xFFFFC857),
-              child: Icon(Icons.child_care_rounded, color: Colors.white, size: 28),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.memoryGameTitle,
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    l10n.memoryGameInstructions,
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0EA5E9),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                l10n.memoryGameMovesCounter(moves),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
+            Row(
+              children: [
+                const CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Color(0xFFFFC857),
+                  child: Icon(Icons.child_care_rounded, color: Colors.white, size: 26),
                 ),
-              ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.memoryGameTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                      const SizedBox(height: 2),
+                      Text(l10n.memoryGameInstructions,
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(color: const Color(0xFF0EA5E9), borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    l10n.memoryGameMovesCounter(moves),
+                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 10),
+            MemoryLevelIndicator(level: level, total: MemoryLadder.maxLevel),
           ],
         ),
       ),
@@ -235,32 +211,19 @@ class _Header extends StatelessWidget {
 }
 
 class _Footer extends StatelessWidget {
-  const _Footer({
-    required this.isProcessing,
-    required this.isCompleted,
-  });
+  const _Footer({required this.isProcessing});
 
   final bool isProcessing;
-  final bool isCompleted;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final String message = isCompleted
-        ? l10n.memoryGameHintCompleted
-        : isProcessing
-            ? l10n.memoryGameHintProcessing
-            : l10n.memoryGameHintPlaying;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(24),
-      ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.7), borderRadius: BorderRadius.circular(24)),
       child: Text(
-        message,
+        isProcessing ? l10n.memoryGameHintProcessing : l10n.memoryGameHintPlaying,
         textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
       ),
