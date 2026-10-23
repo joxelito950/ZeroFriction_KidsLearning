@@ -4,6 +4,8 @@
   "menuTagline": "ألعاب المنطق والانتباه",
   "menuParentsZone": "ركن الوالدين",
   "menuParentsZoneComingSoon": "🔒 ركن الوالدين (قريبًا)",
+  "menuExit": "خروج",
+  "menuBadgeSemantics": "تم الحصول على الشارة الذهبية",
   "memoryGameTitle": "لعبة الذاكرة",
   "memoryGameInstructions": "المس البطاقات وابحث عن الأزواج",
   "memoryGameMovesCounter": "المحاولات: {count}",

@@ -4,6 +4,8 @@
   "menuTagline": "Giochi di logica e attenzione",
   "menuParentsZone": "Area genitori",
   "menuParentsZoneComingSoon": "🔒 Area genitori (in arrivo)",
+  "menuExit": "Esci",
+  "menuBadgeSemantics": "Medaglia d'oro ottenuta",
   "memoryGameTitle": "Gioco di memoria",
   "memoryGameInstructions": "Tocca le carte e trova le coppie",
   "memoryGameMovesCounter": "Mosse: {count}",

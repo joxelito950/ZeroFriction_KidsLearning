@@ -4,6 +4,8 @@
   "menuTagline": "Jeux de logique et d’attention",
   "menuParentsZone": "Espace parents",
   "menuParentsZoneComingSoon": "🔒 Espace parents (bientôt disponible)",
+  "menuExit": "Quitter",
+  "menuBadgeSemantics": "Badge doré obtenu",
   "memoryGameTitle": "Jeu de mémoire",
   "memoryGameInstructions": "Touche les cartes et trouve les paires",
   "memoryGameMovesCounter": "Coups : {count}",

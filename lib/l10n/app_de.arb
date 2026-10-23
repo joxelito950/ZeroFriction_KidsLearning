@@ -4,6 +4,8 @@
   "menuTagline": "Logik- und Konzentrationsspiele",
   "menuParentsZone": "Elternbereich",
   "menuParentsZoneComingSoon": "🔒 Elternbereich (bald verfügbar)",
+  "menuExit": "Beenden",
+  "menuBadgeSemantics": "Goldenes Abzeichen erhalten",
   "memoryGameTitle": "Memory-Spiel",
   "memoryGameInstructions": "Tippe auf die Karten und finde die Paare",
   "memoryGameMovesCounter": "Züge: {count}",
