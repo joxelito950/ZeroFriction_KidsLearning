@@ -1,30 +1,12 @@
 {
   "@@locale": "en",
-
   "appTitle": "ToddlerLogic",
   "@appTitle": {
     "description": "Brand name of the app, shown in the main menu and in the recent-apps list. DO NOT TRANSLATE: it must be identical in every language."
   },
-
   "menuTagline": "Logic and attention games",
   "@menuTagline": {
     "description": "Main menu, under the app name. Read by parents. Short subtitle, max ~35 characters."
-  },
-  "menuFarmLevelTitle": "Farm Animals",
-  "@menuFarmLevelTitle": {
-    "description": "Main menu button that opens the easy memory game with farm animals. Children see it; keep it short and friendly, max ~25 characters."
-  },
-  "menuFarmLevelSubtitle": "Starter level (2x2)",
-  "@menuFarmLevelSubtitle": {
-    "description": "Small text under 'Farm Animals'. '2x2' is the board size (2 rows by 2 columns); keep it as digits. Max ~25 characters."
-  },
-  "menuJungleLevelTitle": "Jungle Surprise",
-  "@menuJungleLevelTitle": {
-    "description": "Main menu button that opens the medium memory game with wild animals. Children see it; playful tone, max ~25 characters."
-  },
-  "menuJungleLevelSubtitle": "Explorer level (2x3)",
-  "@menuJungleLevelSubtitle": {
-    "description": "Small text under 'Jungle Surprise'. '2x3' is the board size; keep it as digits. Max ~25 characters."
   },
   "menuParentsZone": "Parents' Zone",
   "@menuParentsZone": {
@@ -34,7 +16,14 @@
   "@menuParentsZoneComingSoon": {
     "description": "Brief notice shown when tapping 'Parents' Zone' while it is not available yet. Keep the lock emoji at the start."
   },
-
+  "menuExit": "Exit",
+  "@menuExit": {
+    "description": "Small text button next to 'Parents' Zone' that closes the app right away, without confirmation (HU-001 R21). Max ~12 characters."
+  },
+  "menuBadgeSemantics": "Golden badge earned",
+  "@menuBadgeSemantics": {
+    "description": "Screen reader label for the medal shown next to the Memory button once every level has been beaten."
+  },
   "memoryGameTitle": "Memory Game",
   "@memoryGameTitle": {
     "description": "Title at the top of the memory game screen. Max ~20 characters."
@@ -61,11 +50,6 @@
   "@memoryGameHintProcessing": {
     "description": "Message at the bottom while two different cards are shown before turning back. Calm tone, never negative."
   },
-  "memoryGameHintCompleted": "Great job! You found all the pairs.",
-  "@memoryGameHintCompleted": {
-    "description": "Message at the bottom when the game is won. Celebratory tone."
-  },
-
   "memoryCardOpenSemantics": "Open card showing {symbol}",
   "@memoryCardOpenSemantics": {
     "description": "Screen-reader label (not visible) for a face-up card. {symbol} is an emoji such as 🐶.",
@@ -80,7 +64,6 @@
   "@memoryCardClosedSemantics": {
     "description": "Screen-reader label (not visible) for a face-down card."
   },
-
   "victoryTitle": "You did it!",
   "@victoryTitle": {
     "description": "Big title of the celebration dialog after winning. Children see it; joyful, max ~20 characters."
@@ -89,18 +72,64 @@
   "@victoryMessage": {
     "description": "Line under the celebration title."
   },
-  "victoryMovesSummary": "{count, plural, =1{Completed in 1 move} other{Completed in {count} moves}}",
-  "@victoryMovesSummary": {
-    "description": "Summary in the celebration dialog with the number of attempts. Translate every plural form your language needs.",
+  "menuMemoryTitle": "Memory",
+  "@menuMemoryTitle": {
+    "description": "Main menu button that opens the memory game. Children see it; one short word if possible, max ~20 characters."
+  },
+  "menuMemorySubtitle": "Find the pairs",
+  "@menuMemorySubtitle": {
+    "description": "Small text under the memory game button. Max ~30 characters."
+  },
+  "memoryLevelIndicator": "Level {level} of {total}",
+  "@memoryLevelIndicator": {
+    "description": "Screen-reader label (not visible) of the five dots that show the level reached in the memory game.",
     "placeholders": {
-      "count": {
+      "level": {
+        "type": "int",
+        "example": "2"
+      },
+      "total": {
         "type": "int",
         "example": "5"
       }
     }
   },
-  "victoryBackToMenu": "Back to menu",
-  "@victoryBackToMenu": {
-    "description": "Button in the celebration dialog that returns to the main menu. Max ~20 characters."
+  "memoryTimeBarSemantics": "Time left",
+  "@memoryTimeBarSemantics": {
+    "description": "Screen-reader label (not visible) of the bar that empties as time passes. It never shows numbers."
+  },
+  "memoryStarsSemantics": "{stars} of {total} stars",
+  "@memoryStarsSemantics": {
+    "description": "Screen-reader label (not visible) of the stars shown when a board is won.",
+    "placeholders": {
+      "stars": {
+        "type": "int",
+        "example": "2"
+      },
+      "total": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "memoryBadgeTitle": "Golden badge!",
+  "@memoryBadgeTitle": {
+    "description": "Big title of the special golden celebration when the last level (4x4) is completed. Joyful, max ~25 characters."
+  },
+  "memoryBadgeMessage": "You completed every level.",
+  "@memoryBadgeMessage": {
+    "description": "Line under the golden celebration title."
+  },
+  "memoryTimeUpFewerCards": "Time's up! Let's try with fewer cards",
+  "@memoryTimeUpFewerCards": {
+    "description": "Calm message when time runs out and the next board has fewer cards. Never negative: it is presented as help."
+  },
+  "memoryTimeUpRestart": "Time's up! Let's start again, no rush",
+  "@memoryTimeUpRestart": {
+    "description": "Calm message when time runs out on the smallest board and the game starts again without time. Never negative."
+  },
+  "exitRepeatHint": "Repeat the gesture to exit",
+  "@exitRepeatHint": {
+    "description": "Small notice, without buttons, shown after the first Back gesture: the gesture must be repeated to leave. Read by parents."
   }
 }

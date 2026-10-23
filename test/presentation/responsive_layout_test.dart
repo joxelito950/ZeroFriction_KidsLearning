@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/memory/memory_ladder.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/main.dart';
@@ -59,7 +64,7 @@ void main() {
 
           await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: locale));
 
-          for (final label in [l10n.menuFarmLevelTitle, l10n.menuJungleLevelTitle, l10n.menuParentsZone]) {
+          for (final label in [l10n.menuMemoryTitle, l10n.menuParentsZone, l10n.menuExit]) {
             await tester.ensureVisible(find.text(label));
             expect(find.text(label).hitTestable(), findsOneWidget, reason: label);
           }
@@ -67,7 +72,7 @@ void main() {
           final TextDirection direction =
               Directionality.of(tester.element(find.byType(MainMenuScreen)));
           final double arrowX = tester.getCenter(find.byIcon(Icons.chevron_right_rounded).first).dx;
-          final double titleX = tester.getCenter(find.text(l10n.menuFarmLevelTitle)).dx;
+          final double titleX = tester.getCenter(find.text(l10n.menuMemoryTitle)).dx;
           if (locale.languageCode == 'ar') {
             expect(direction, TextDirection.rtl);
             expect(arrowX, lessThan(titleX), reason: 'in RTL the arrow sits on the left');
@@ -77,35 +82,35 @@ void main() {
           }
         });
 
-        for (final emojis in const [
-          ['🐶', '🐱'],
-          ['🦁', '🐯', '🐼'],
-        ]) {
-          testWidgets('memory board with ${emojis.length * 2} cards fits above the footer', (tester) async {
+        for (final level in MemoryLadder.levels) {
+          testWidgets('memory level ${level.number} (${level.cards} cards) fits above the footer', (tester) async {
             _usePhone(tester, phone);
+            when(() => repository.readMemoryProgress())
+                .thenAnswer((_) async => MemoryProgress(currentLevel: level.number));
 
             await tester.pumpWidget(
               localizedApp(
                 locale: locale,
                 home: RepositoryProvider<IPersistenceRepository>.value(
                   value: repository,
-                  child: MemoryGameScreen(levelId: 'layout_test', emojis: emojis),
+                  child: MemoryGameScreen(random: Random(level.number)),
                 ),
               ),
             );
-            await tester.pumpAndSettle();
+            await tester.pump();
+            await tester.pump(const Duration(milliseconds: 600));
 
             final double footerTop = tester.getTopLeft(find.text(l10n.memoryGameHintPlaying)).dy;
             final cardRects = [
-              for (var index = 0; index < emojis.length * 2; index++)
+              for (var index = 0; index < level.cards; index++)
                 tester.getRect(find.byKey(ValueKey<String>('memory-card-$index'))),
             ];
             for (final (index, cardRect) in cardRects.indexed) {
               expect(cardRect.bottom, lessThan(footerTop), reason: 'card $index is clipped');
             }
 
-            // En horizontal, con tan poco alto, todas las cartas van en una sola fila.
-            if (phone.landscape) {
+            // En horizontal, con tan poco alto, los tableros pequeños van en una sola fila.
+            if (phone.landscape && level.cards <= 6) {
               final rowTops = cardRects.map((rect) => rect.top.round()).toSet();
               expect(rowTops, hasLength(1), reason: 'cards should share a single row');
             }

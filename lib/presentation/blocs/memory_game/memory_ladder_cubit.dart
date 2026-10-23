@@ -113,6 +113,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
     ]..shuffle(_random);
     emit(MemoryLadderState(
       phase: MemoryRoundPhase.playing,
+      round: _round,
       position: position,
       cards: cards,
       hasBadge: _progress.hasBadge,
