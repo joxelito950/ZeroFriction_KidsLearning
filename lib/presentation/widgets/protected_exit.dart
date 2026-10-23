@@ -65,12 +65,12 @@ class _ProtectedExitState extends State<ProtectedExit> {
               child: IgnorePointer(
                 child: SafeArea(
                   child: Center(
-                    child: DecoratedBox(
+                    // El aviso queda fuera del Scaffold de la pantalla: su propio
+                    // Material le da el estilo de texto (sin él sale subrayado).
+                    child: Material(
                       key: const ValueKey<String>('exit-repeat-hint'),
-                      decoration: BoxDecoration(
-                        color: const Color(0xE6334155),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      color: const Color(0xE6334155),
+                      borderRadius: BorderRadius.circular(20),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                         child: Text(
