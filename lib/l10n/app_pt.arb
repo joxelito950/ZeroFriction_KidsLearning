@@ -4,6 +4,8 @@
   "menuTagline": "Jogos de lógica e atenção",
   "menuParentsZone": "Área dos Pais",
   "menuParentsZoneComingSoon": "🔒 Área dos pais (em breve)",
+  "menuExit": "Sair",
+  "menuBadgeSemantics": "Medalha dourada conquistada",
   "memoryGameTitle": "Jogo da memória",
   "memoryGameInstructions": "Toque nas cartas e encontre os pares",
   "memoryGameMovesCounter": "Jogadas: {count}",

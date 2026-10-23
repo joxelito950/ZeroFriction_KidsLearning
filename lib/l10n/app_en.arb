@@ -16,6 +16,14 @@
   "@menuParentsZoneComingSoon": {
     "description": "Brief notice shown when tapping 'Parents' Zone' while it is not available yet. Keep the lock emoji at the start."
   },
+  "menuExit": "Exit",
+  "@menuExit": {
+    "description": "Small text button next to 'Parents' Zone' that closes the app right away, without confirmation (HU-001 R21). Max ~12 characters."
+  },
+  "menuBadgeSemantics": "Golden badge earned",
+  "@menuBadgeSemantics": {
+    "description": "Screen reader label for the medal shown next to the Memory button once every level has been beaten."
+  },
   "memoryGameTitle": "Memory Game",
   "@memoryGameTitle": {
     "description": "Title at the top of the memory game screen. Max ~20 characters."

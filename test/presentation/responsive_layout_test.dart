@@ -64,7 +64,7 @@ void main() {
 
           await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: locale));
 
-          for (final label in [l10n.menuMemoryTitle, l10n.menuParentsZone]) {
+          for (final label in [l10n.menuMemoryTitle, l10n.menuParentsZone, l10n.menuExit]) {
             await tester.ensureVisible(find.text(label));
             expect(find.text(label).hitTestable(), findsOneWidget, reason: label);
           }

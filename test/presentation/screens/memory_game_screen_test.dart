@@ -131,6 +131,7 @@ void main() {
 
       expect(find.byKey(const ValueKey<String>('memory-celebration')), findsOneWidget);
       expect(find.text('¡Lo lograste!'), findsOneWidget);
+      expect(find.text('Busquemos la pareja correcta.'), findsOneWidget);
       for (var star = 0; star < 3; star++) {
         expect(find.byKey(ValueKey<String>('memory-star-$star-earned')), findsOneWidget);
       }
@@ -233,6 +234,10 @@ void main() {
       await tester.pump();
       expect(find.byKey(const ValueKey<String>('exit-repeat-hint')), findsOneWidget);
       expect(find.text('Repite el gesto para salir'), findsOneWidget);
+      final TextStyle hintStyle = tester.widget<RichText>(
+        find.descendant(of: find.byKey(const ValueKey<String>('exit-repeat-hint')), matching: find.byType(RichText)),
+      ).text.style!;
+      expect(hintStyle.decoration, isNot(TextDecoration.underline), reason: 'hint must not use the fallback style');
       expect(find.byType(MemoryGameScreen), findsOneWidget);
 
       await tester.pump(const Duration(seconds: 3));

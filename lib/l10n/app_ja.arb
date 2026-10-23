@@ -4,6 +4,8 @@
   "menuTagline": "ロジックと集中力のゲーム",
   "menuParentsZone": "保護者エリア",
   "menuParentsZoneComingSoon": "🔒 保護者エリア（近日公開）",
+  "menuExit": "終了",
+  "menuBadgeSemantics": "きんのメダルを獲得",
   "memoryGameTitle": "神経衰弱ゲーム",
   "memoryGameInstructions": "カードをタッチして、ペアをみつけよう",
   "memoryGameMovesCounter": "{count}回",

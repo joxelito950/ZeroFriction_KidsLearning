@@ -4,6 +4,8 @@
   "menuTagline": "논리력과 집중력 게임",
   "menuParentsZone": "부모 공간",
   "menuParentsZoneComingSoon": "🔒 부모 공간 (곧 공개)",
+  "menuExit": "나가기",
+  "menuBadgeSemantics": "황금 배지 획득",
   "memoryGameTitle": "기억력 게임",
   "memoryGameInstructions": "카드를 눌러서 짝을 찾아 보세요",
   "memoryGameMovesCounter": "{count}번",

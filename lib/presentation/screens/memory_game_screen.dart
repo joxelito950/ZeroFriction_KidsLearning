@@ -97,7 +97,7 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
                         const SizedBox(height: 14),
                         Expanded(child: _Board(state: state)),
                         const SizedBox(height: 12),
-                        _Footer(isProcessing: state.isProcessing),
+                        _Footer(isProcessing: state.phase == MemoryRoundPhase.playing && state.isProcessing),
                       ],
                     ),
                   ),
