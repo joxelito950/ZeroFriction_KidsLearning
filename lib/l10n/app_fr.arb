@@ -47,5 +47,11 @@
   "parentalGateClose": "Fermer",
   "parentalGateCountdownSemantics": "Temps avant le retour au menu",
   "parentsZoneTitle": "Espace parents",
-  "parentsZoneBackToMenu": "Retour au menu"
+  "parentsZoneBackToMenu": "Retour au menu",
+  "parentsZonePinTitle": "Garder l'application à l'écran",
+  "parentsZonePinIntro": "L'épinglage d'application d'Android garde le téléphone sur ToddlerLogic : les gestes Accueil et Récents ne fonctionnent plus jusqu'à ce qu'un adulte la désépingle.",
+  "parentsZonePinStep1": "Dans Paramètres, recherchez « Épinglage d'application » et activez-le. Activez aussi « Demander le code avant de désépingler ».",
+  "parentsZonePinStep2": "Ouvrez ToddlerLogic, affichez les applis récentes, touchez l'icône de l'appli au-dessus de sa fenêtre et choisissez « Épingler ».",
+  "parentsZonePinStep3": "Pour désépingler, balayez vers le haut et maintenez, ou maintenez « Retour » et « Aperçu » en même temps.",
+  "parentsZonePinNote": "Les noms et les étapes peuvent varier selon la marque du téléphone."
 }

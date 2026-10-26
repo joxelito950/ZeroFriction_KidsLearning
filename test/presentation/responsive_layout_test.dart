@@ -136,6 +136,10 @@ void main() {
 
           expect(find.text(l10n.parentsZoneTitle).hitTestable(), findsOneWidget);
           expect(find.byKey(const ValueKey<String>('parents-zone-back-to-menu')).hitTestable(), findsOneWidget);
+          // ensureVisible desplaza la lista, pero hace falta un fotograma para verlo.
+          await tester.ensureVisible(find.text(l10n.parentsZonePinNote));
+          await tester.pump();
+          expect(find.text(l10n.parentsZonePinNote).hitTestable(), findsOneWidget);
         });
 
         for (final level in MemoryLadder.levels) {

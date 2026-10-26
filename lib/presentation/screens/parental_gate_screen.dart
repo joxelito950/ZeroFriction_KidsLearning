@@ -5,6 +5,7 @@ import '../../domain/parental/parental_gate.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/parental_gate/parental_gate_cubit.dart';
 import '../blocs/parental_gate/parental_gate_state.dart';
+import '../widgets/adult_session_guard.dart';
 import '../widgets/parental_gate_message.dart';
 import '../widgets/parental_keypad.dart';
 import 'parents_zone_screen.dart';
@@ -21,7 +22,8 @@ class ParentalGateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ParentalGateCubit>(
       create: (_) => ParentalGateCubit(gate: gate)..start(),
-      child: const _ParentalGateView(),
+      // También el desafío vuelve al menú si nadie lo toca durante 1 minuto (S4).
+      child: const AdultSessionGuard(child: _ParentalGateView()),
     );
   }
 }

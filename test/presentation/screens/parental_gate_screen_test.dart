@@ -8,6 +8,7 @@ import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/blocs/parental_gate/parental_gate_cubit.dart';
 import 'package:toddler_logic/presentation/screens/parental_gate_screen.dart';
 import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
+import 'package:toddler_logic/presentation/widgets/adult_session_guard.dart';
 import 'package:toddler_logic/presentation/widgets/parental_gate_message.dart';
 import 'package:toddler_logic/presentation/widgets/parental_keypad.dart';
 
@@ -240,6 +241,45 @@ void main() {
 
     final NavigatorState navigator = tester.state(find.byType(Navigator));
     await navigator.maybePop();
+    await tester.pumpAndSettle();
+    expect(_isOnMenu(tester), isTrue);
+  });
+
+  testWidgets('the challenge goes back to the menu after 1 minute without touches (S4)', (tester) async {
+    await _openGate(tester);
+
+    await tester.pump(AdultSessionGuard.defaultInactivity);
+    await tester.pumpAndSettle();
+    expect(_isOnMenu(tester), isTrue);
+  });
+
+  testWidgets('the zone closes in the background and the next entry asks a new challenge (criterio 6)', (tester) async {
+    await _openGate(tester);
+    await _typeAndAccept(tester, _cubit(tester).state.challenge!.answer);
+    await tester.pumpAndSettle();
+    expect(find.byType(ParentsZoneScreen), findsOneWidget);
+
+    // En segundo plano no se dibujan fotogramas: el menú se ve al volver a la app.
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(_isOnMenu(tester), isTrue);
+
+    await tester.tap(find.byKey(_openKey));
+    await tester.pumpAndSettle();
+    expect(_question, findsOneWidget);
+    expect(find.byType(ParentsZoneScreen), findsNothing);
+  });
+
+  testWidgets('the zone goes back to the menu after 1 minute without touches (criterio 6)', (tester) async {
+    await _openGate(tester);
+    await _typeAndAccept(tester, _cubit(tester).state.challenge!.answer);
+    await tester.pumpAndSettle();
+
+    await tester.pump(AdultSessionGuard.defaultInactivity);
     await tester.pumpAndSettle();
     expect(_isOnMenu(tester), isTrue);
   });

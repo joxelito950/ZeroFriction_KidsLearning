@@ -47,5 +47,11 @@
   "parentalGateClose": "閉じる",
   "parentalGateCountdownSemantics": "メニューにもどるまでの時間",
   "parentsZoneTitle": "保護者エリア",
-  "parentsZoneBackToMenu": "メニューへ"
+  "parentsZoneBackToMenu": "メニューへ",
+  "parentsZonePinTitle": "アプリを画面に固定する",
+  "parentsZonePinIntro": "Androidの「アプリ固定」を使うと、大人が解除するまでToddlerLogicから離れません。ホームや履歴の操作もできなくなります。",
+  "parentsZonePinStep1": "設定で「アプリ固定」を検索してオンにします。「固定を解除する前にPINを要求」もオンにしてください。",
+  "parentsZonePinStep2": "ToddlerLogicを開いて最近使ったアプリを表示し、ウィンドウ上のアプリのアイコンをタップして「固定」を選びます。",
+  "parentsZonePinStep3": "解除するには、上にスワイプして長押しするか、「戻る」と「最近」を同時に長押しします。",
+  "parentsZonePinNote": "名前や手順は機種によって異なる場合があります。"
 }
