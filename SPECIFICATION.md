@@ -105,6 +105,7 @@ lib/
 ├── domain/
 │   ├── entities/                      # LevelState, UserProfile, AppLanguage (Dart puro)
 │   ├── memory/                        # Reglas del juego de memoria: escalera, estrellas, temáticas (Dart puro)
+│   ├── parental/                      # Control para adultos de la Zona de Padres: ParentalGate (Dart puro, HU-004)
 │   └── repositories/                  # IPersistenceRepository
 └── presentation/
     ├── blocs/<feature>/               # <feature>_cubit, _state, modelos de UI
