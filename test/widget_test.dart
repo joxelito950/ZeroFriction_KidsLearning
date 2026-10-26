@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/main.dart';
+import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 
 import 'presentation/memory_game_test_support.dart';
@@ -58,13 +59,50 @@ void main() {
       }
     });
 
-    testWidgets('shows a coming-soon notice for the parents zone', (tester) async {
-      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+    // HU-004 R1, criterio 1: doble toque para entrar al desafío.
+    group('Zona de Padres', () {
+      final hint = find.byKey(const ValueKey<String>('parents-zone-tap-again-hint'));
+      final question = find.byKey(const ValueKey<String>('parental-gate-question'));
 
-      await tester.tap(find.text('Zona de Padres'));
-      await tester.pump();
+      testWidgets('a single tap only shows a small notice that goes away by itself', (tester) async {
+        await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
-      expect(find.text('🔒 Zona de padres (Próximamente)'), findsOneWidget);
+        await tester.tap(find.text('Zona de Padres'));
+        await tester.pump();
+
+        expect(find.text('Toca otra vez para entrar'), findsOneWidget);
+        expect(find.descendant(of: hint, matching: find.byType(ButtonStyleButton)), findsNothing);
+        expect(question, findsNothing);
+        expect(find.text('Memoria'), findsOneWidget);
+
+        await tester.pump(MainMenuScreen.parentsZoneTapWindow);
+        expect(hint, findsNothing);
+      });
+
+      testWidgets('a second tap within 2 seconds opens the challenge', (tester) async {
+        await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+
+        await tester.tap(find.text('Zona de Padres'));
+        await tester.pump(const Duration(milliseconds: 1500));
+        await tester.tap(find.text('Zona de Padres'));
+        await tester.pumpAndSettle();
+
+        expect(question, findsOneWidget);
+        expect(hint, findsNothing);
+      });
+
+      testWidgets('a second tap after the window starts over with the notice', (tester) async {
+        await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+
+        await tester.tap(find.text('Zona de Padres'));
+        await tester.pump(MainMenuScreen.parentsZoneTapWindow);
+        await tester.tap(find.text('Zona de Padres'));
+        await tester.pump();
+
+        expect(hint, findsOneWidget);
+        expect(question, findsNothing);
+        await tester.pump(MainMenuScreen.parentsZoneTapWindow);
+      });
     });
 
     testWidgets('opens the memory game at the saved level', (tester) async {

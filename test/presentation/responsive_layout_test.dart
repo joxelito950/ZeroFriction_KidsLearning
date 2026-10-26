@@ -6,11 +6,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
+import 'package:toddler_logic/domain/parental/parental_gate.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/main.dart';
+import 'package:toddler_logic/presentation/blocs/parental_gate/parental_gate_cubit.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
+import 'package:toddler_logic/presentation/screens/parental_gate_screen.dart';
+import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
+import 'package:toddler_logic/presentation/widgets/parental_keypad.dart';
 
 import 'l10n_test_support.dart';
 import 'memory_game_test_support.dart';
@@ -80,6 +85,57 @@ void main() {
             expect(direction, TextDirection.ltr);
             expect(arrowX, greaterThan(titleX));
           }
+        });
+
+        // HU-004, criterio 8: la pregunta, la respuesta y las 12 teclas se ven sin scroll.
+        testWidgets('parental gate fits with every key reachable', (tester) async {
+          _usePhone(tester, phone);
+          await tester.pumpWidget(
+            localizedApp(locale: locale, home: ParentalGateScreen(gate: ParentalGate(random: Random(3)))),
+          );
+
+          for (final key in [
+            'parental-gate-back',
+            'parental-gate-question',
+            'parental-gate-answer',
+            'parental-key-delete',
+            'parental-key-accept',
+            for (var digit = 0; digit <= 9; digit++) 'parental-key-$digit',
+          ]) {
+            expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget, reason: key);
+          }
+
+          final double keyHeight = tester.getSize(find.byKey(const ValueKey<String>('parental-key-0'))).height;
+          expect(keyHeight, greaterThanOrEqualTo(48), reason: 'keys must stay easy to tap');
+        });
+
+        testWidgets('parental gate message fits with every choice reachable', (tester) async {
+          _usePhone(tester, phone);
+          await tester.pumpWidget(
+            localizedApp(locale: locale, home: ParentalGateScreen(gate: ParentalGate(random: Random(3)))),
+          );
+          final ParentalGateCubit cubit =
+              tester.element(find.byType(ParentalKeypad)).read<ParentalGateCubit>();
+          for (final char in '${cubit.state.challenge!.answer + 1}'.split('')) {
+            cubit.typeDigit(int.parse(char));
+          }
+          cubit.submit();
+          await tester.pump();
+
+          for (final key in ['parental-gate-close', 'parental-gate-back-to-menu', 'parental-gate-retry']) {
+            await tester.ensureVisible(find.byKey(ValueKey<String>(key)));
+            expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget, reason: key);
+          }
+          expect(find.text(l10n.parentalGateAttemptsLeft(2)), findsOneWidget);
+          await tester.pump(ParentalGateCubit.messageTimeout);
+        });
+
+        testWidgets('parents zone fits', (tester) async {
+          _usePhone(tester, phone);
+          await tester.pumpWidget(localizedApp(locale: locale, home: const ParentsZoneScreen()));
+
+          expect(find.text(l10n.parentsZoneTitle).hitTestable(), findsOneWidget);
+          expect(find.byKey(const ValueKey<String>('parents-zone-back-to-menu')).hitTestable(), findsOneWidget);
         });
 
         for (final level in MemoryLadder.levels) {
