@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-21; el aspecto del dorado se decide en HU-013; el desarrollo **no** ha empezado) |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-21; aspecto del dorado decidido el 2026-10-26: llenado de abajo arriba; el desarrollo **no** ha empezado) |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3–4 días), por confirmar |
@@ -152,7 +152,7 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 |---|---|---|---|
 | P1 | ¿Qué regla de estrellas usamos? | ✅ Decidido: 3★ si ≤ mínimo + número de nivel; 2★ hasta el doble y 1★ hasta el triple del mínimo (D-030) | — |
 | P2 | ¿Qué pasa con la insignia de superar el 4×4 (HU-001)? | ✅ Decidido: se mantiene como logro aparte, una medalla junto al botón del juego. El dorado mide las estrellas | — |
-| P3 | ¿Cómo se ve el dorado? | ⏭️ Se decide en HU-013, con el diseño del icono (opciones A, B y C de la sección 5) | No |
+| P3 | ¿Cómo se ve el dorado? | ✅ Decidido el 2026-10-26 (HU-013, P5): **opción A, llenado de abajo arriba**, con un `ShaderMask` sobre la silueta del icono del juego | — |
 | P4 | ¿HU-001 guarda ya las estrellas por nivel? | ✅ Decidido: sí. Mejor resultado y fecha de cada nivel, y fecha de la última partida del juego, en `MemoryProgress` | — |
 | P5 | Hasta que llegue HU-002, ¿qué muestra el diálogo de victoria de HU-001? | ✅ Asumida la recomendación: las estrellas calculadas desde HU-001. HU-002 queda con el icono dorado y la pérdida de logros | — |
 | P6 | ¿Cuenta el nivel 1 (2×2 sin tiempo) para el dorado? | ✅ Decidido: sí, son 5 niveles × 3 estrellas | — |
