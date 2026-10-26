@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import 'quiet_hint.dart';
 
 /// Salida protegida (D-025, HU-001 R19–R20): el primer «atrás» del sistema solo
 /// muestra un aviso pequeño, sin botones; únicamente un segundo «atrás» dentro de
@@ -58,31 +59,9 @@ class _ProtectedExitState extends State<ProtectedExit> {
         children: [
           widget.child,
           if (_armed)
-            PositionedDirectional(
-              start: 24,
-              end: 24,
-              bottom: 32,
-              child: IgnorePointer(
-                child: SafeArea(
-                  child: Center(
-                    // El aviso queda fuera del Scaffold de la pantalla: su propio
-                    // Material le da el estilo de texto (sin él sale subrayado).
-                    child: Material(
-                      key: const ValueKey<String>('exit-repeat-hint'),
-                      color: const Color(0xE6334155),
-                      borderRadius: BorderRadius.circular(20),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                        child: Text(
-                          AppLocalizations.of(context).exitRepeatHint,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            QuietHint(
+              key: const ValueKey<String>('exit-repeat-hint'),
+              text: AppLocalizations.of(context).exitRepeatHint,
             ),
         ],
       ),
