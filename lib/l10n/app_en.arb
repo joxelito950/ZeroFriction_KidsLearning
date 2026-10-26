@@ -12,10 +12,6 @@
   "@menuParentsZone": {
     "description": "Small text button at the bottom of the main menu that leads to the adults-only settings. Read by parents. Max ~20 characters."
   },
-  "menuParentsZoneComingSoon": "🔒 Parents' Zone (coming soon)",
-  "@menuParentsZoneComingSoon": {
-    "description": "Brief notice shown when tapping 'Parents' Zone' while it is not available yet. Keep the lock emoji at the start."
-  },
   "menuExit": "Exit",
   "@menuExit": {
     "description": "Small text button next to 'Parents' Zone' that closes the app right away, without confirmation (HU-001 R21). Max ~12 characters."
@@ -131,5 +127,147 @@
   "exitRepeatHint": "Repeat the gesture to exit",
   "@exitRepeatHint": {
     "description": "Small notice, without buttons, shown after the first Back gesture: the gesture must be repeated to leave. Read by parents."
+  },
+  "parentsZoneTapAgainHint": "Tap again to enter",
+  "@parentsZoneTapAgainHint": {
+    "description": "Small notice, without buttons, after the first tap on 'Parents' Zone' in the menu: a second tap within 2 seconds opens the adults-only challenge. Read by parents. Max ~35 characters."
+  },
+  "parentalGateTitle": "For grown-ups only",
+  "@parentalGateTitle": {
+    "description": "Title of the adults-only challenge screen that protects the Parents' Zone. Read by parents. Max ~25 characters."
+  },
+  "parentalGateQuestion": "What is {first} times {second}?",
+  "@parentalGateQuestion": {
+    "description": "Multiplication question of the adults-only challenge. {first} and {second} are numbers from 3 to 9 WRITTEN IN WORDS (keys parentalGateNumber3 to parentalGateNumber9), so a child cannot copy digits. Read by parents.",
+    "placeholders": {
+      "first": {
+        "type": "String",
+        "example": "seven"
+      },
+      "second": {
+        "type": "String",
+        "example": "three"
+      }
+    }
+  },
+  "parentalGateNumber3": "three",
+  "@parentalGateNumber3": {
+    "description": "The number 3 written in words, inserted into parentalGateQuestion. Use the form that reads naturally in a multiplication."
+  },
+  "parentalGateNumber4": "four",
+  "@parentalGateNumber4": {
+    "description": "The number 4 written in words, inserted into parentalGateQuestion. Use the form that reads naturally in a multiplication."
+  },
+  "parentalGateNumber5": "five",
+  "@parentalGateNumber5": {
+    "description": "The number 5 written in words, inserted into parentalGateQuestion. Use the form that reads naturally in a multiplication."
+  },
+  "parentalGateNumber6": "six",
+  "@parentalGateNumber6": {
+    "description": "The number 6 written in words, inserted into parentalGateQuestion. Use the form that reads naturally in a multiplication."
+  },
+  "parentalGateNumber7": "seven",
+  "@parentalGateNumber7": {
+    "description": "The number 7 written in words, inserted into parentalGateQuestion. Use the form that reads naturally in a multiplication."
+  },
+  "parentalGateNumber8": "eight",
+  "@parentalGateNumber8": {
+    "description": "The number 8 written in words, inserted into parentalGateQuestion. Use the form that reads naturally in a multiplication."
+  },
+  "parentalGateNumber9": "nine",
+  "@parentalGateNumber9": {
+    "description": "The number 9 written in words, inserted into parentalGateQuestion. Use the form that reads naturally in a multiplication."
+  },
+  "parentalGateAnswerSemantics": "Answer: {answer}",
+  "@parentalGateAnswerSemantics": {
+    "description": "Screen-reader label (not visible) of the box that shows the digits typed as the answer.",
+    "placeholders": {
+      "answer": {
+        "type": "String",
+        "example": "21"
+      }
+    }
+  },
+  "parentalGateAnswerEmptySemantics": "No answer yet",
+  "@parentalGateAnswerEmptySemantics": {
+    "description": "Screen-reader label (not visible) of the answer box while nothing has been typed."
+  },
+  "parentalGateDelete": "Delete",
+  "@parentalGateDelete": {
+    "description": "Key of the challenge keypad that deletes the last digit. Also its screen-reader label. Max ~10 characters."
+  },
+  "parentalGateAccept": "OK",
+  "@parentalGateAccept": {
+    "description": "Key of the challenge keypad that submits the answer. Max ~10 characters."
+  },
+  "parentalGateBack": "Back",
+  "@parentalGateBack": {
+    "description": "Button at the top of the challenge screen that returns to the main menu. Max ~12 characters."
+  },
+  "parentalGateWrongAnswer": "That's not the answer",
+  "@parentalGateWrongAnswer": {
+    "description": "Title of the message after a wrong answer. A child may see it: neutral, never scolding. Max ~35 characters."
+  },
+  "parentalGateAttemptsLeft": "{count, plural, =1{1 attempt left} other{{count} attempts left}}",
+  "@parentalGateAttemptsLeft": {
+    "description": "Line under parentalGateWrongAnswer with the attempts left in this entry ({count} is 1 or 2). Complete every plural form of your language.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "parentalGateNoAttemptsLeft": "No attempts left. Going back to the menu.",
+  "@parentalGateNoAttemptsLeft": {
+    "description": "Line under parentalGateWrongAnswer after the last wrong attempt; the app goes back to the menu by itself. Calm tone."
+  },
+  "parentalGateRetry": "Try again",
+  "@parentalGateRetry": {
+    "description": "Button of the wrong-answer message that shows a new question. Max ~18 characters."
+  },
+  "parentalGateBackToMenu": "Back to menu",
+  "@parentalGateBackToMenu": {
+    "description": "Button of the wrong-answer message that returns to the main menu. Max ~18 characters."
+  },
+  "parentalGateClose": "Close",
+  "@parentalGateClose": {
+    "description": "Screen-reader label (not visible) of the X that closes the wrong-answer message and returns to the menu."
+  },
+  "parentalGateCountdownSemantics": "Time before going back to the menu",
+  "@parentalGateCountdownSemantics": {
+    "description": "Screen-reader label (not visible) of the bar that empties in 5 seconds before going back to the menu. It never shows numbers."
+  },
+  "parentsZoneTitle": "Parents' Zone",
+  "@parentsZoneTitle": {
+    "description": "Title of the Parents' Zone screen, reached after the challenge. Read by parents. Max ~25 characters."
+  },
+  "parentsZoneBackToMenu": "Back to menu",
+  "@parentsZoneBackToMenu": {
+    "description": "Button of the Parents' Zone that closes it and returns to the main menu. Max ~18 characters."
+  },
+  "parentsZonePinTitle": "Keep the app on screen",
+  "@parentsZonePinTitle": {
+    "description": "Title of the Parents' Zone section that explains Android screen pinning. Read by parents. Max ~35 characters."
+  },
+  "parentsZonePinIntro": "Android's app pinning keeps the phone on ToddlerLogic: the Home and Recents gestures stop working until an adult unpins it.",
+  "@parentsZonePinIntro": {
+    "description": "Intro of the screen pinning section. Use the name Android gives to the feature in your language. ToddlerLogic is the brand: do not translate it."
+  },
+  "parentsZonePinStep1": "In Settings, search for “app pinning” and turn it on. Turn on “Ask for PIN before unpinning” too.",
+  "@parentsZonePinStep1": {
+    "description": "Step 1 of screen pinning: turn the feature on in the system settings, and the PIN request to unpin."
+  },
+  "parentsZonePinStep2": "Open ToddlerLogic, go to recent apps, tap the app icon at the top of its window and choose “Pin”.",
+  "@parentsZonePinStep2": {
+    "description": "Step 2 of screen pinning: pin ToddlerLogic from the recent apps screen. ToddlerLogic is the brand: do not translate it."
+  },
+  "parentsZonePinStep3": "To unpin, swipe up and hold, or touch and hold Back and Overview at the same time.",
+  "@parentsZonePinStep3": {
+    "description": "Step 3 of screen pinning: how an adult unpins the app, with gesture or button navigation."
+  },
+  "parentsZonePinNote": "Names and steps may vary between phone brands.",
+  "@parentsZonePinNote": {
+    "description": "Small note under the screen pinning steps."
   }
 }
