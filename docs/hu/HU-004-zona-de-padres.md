@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-21; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (entrega 1 de 3 hecha el 2026-10-26; plan en la sección 10) |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 |
 | **Tamaño** | M (3–4 días) |
@@ -135,3 +135,17 @@ Sin esperas ni bloqueos, un niño que toca al azar puede repetir el desafío sin
 - Las secciones de ajustes: idioma (HU-012), inicio del juego de memoria (HU-010), sonido y dificultad (HU-005), tiempo diario (HU-009, salvo las instrucciones de «Fijar pantalla»).
 - Compras y restauración (HU-006).
 - Un PIN o contraseña configurables por los padres (se podría valorar más adelante si el desafío resulta incómodo).
+
+## 10. Plan de entregas (un PR cada una)
+
+| # | Entrega | Incluye | Criterios cubiertos |
+|---|---|---|---|
+| 1 | Reglas del desafío | `ParentalGate` en `lib/domain/parental/`: preguntas con factores del 3 al 9, teclado barajado, validación e intentos, con el azar inyectado (R8). Tests unitarios, incluido el estadístico | 7, 10 y base de 2–4 y 11 |
+| 2 | Desafío en pantalla | Doble toque en «Zona de Padres» (R1), `ParentalGateScreen` con la pregunta en palabras y el teclado propio, mensaje de fallo con temporizador de 5 s (R4, R5), botón «Volver» (R6), números del 3 al 9 y textos en los 9 idiomas, tests de widget y de layout | 1–5, 8, 9 y 11 |
+| 3 | Zona de Padres | `ParentsZoneScreen` con su estructura e instrucciones de «Fijar pantalla», cierre por salida, pantalla apagada, segundo plano e inactividad de 1 minuto (R7, S4), tests con `fake_async` y de layout | 6 |
+
+### Avance
+
+| # | Entrega | Estado | Rama | Notas |
+|---|---|---|---|---|
+| 1 | Reglas del desafío | ✅ Hecha (2026-10-26) | `feature/hu-004-1-gate-domain` | `ParentalGate` y `ParentalGateChallenge` (Dart puro): `start` da 3 intentos; `check` devuelve aprobado, fallo con intentos o entrada agotada; `retry` da otra pregunta y otro orden del teclado (nunca los mismos que el desafío fallido) con un intento menos. 14 tests, entre ellos los 49 pares posibles de factores, el teclado con las 10 cifras sin repetir, el sorteo repetido con un `Random` programado y 10 000 respuestas al azar (menos del 2 % aciertan). Cobertura del 100 % |
