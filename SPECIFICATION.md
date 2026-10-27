@@ -110,7 +110,7 @@ lib/
 └── presentation/
     ├── blocs/<feature>/               # <feature>_cubit, _state, modelos de UI
     ├── l10n/                          # Idioma de arranque (resolveStartupLocale)
-    ├── theme/                         # AppPalette: los 7 colores de la app y el tema (D-032, llega con TD-009)
+    ├── theme/                         # AppPalette (los 7 colores, D-032) y AppTheme (ColorScheme color a color) (TD-009)
     ├── screens/                       # Una pantalla por archivo
     └── widgets/                       # Widgets reutilizables de una o más pantallas
 test/                                  # Refleja la estructura de lib/ (sección 6.1)

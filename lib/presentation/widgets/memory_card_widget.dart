@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../blocs/memory_game/memory_card_model.dart';
+import '../theme/app_palette.dart';
 
 class MemoryCardWidget extends StatelessWidget {
   const MemoryCardWidget({
@@ -75,18 +76,14 @@ class _FrontFace extends StatelessWidget {
     return Container(
       key: ValueKey<String>('memory-card-front-$symbol'),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFFFFF7D6), Color(0xFFFFE0B2)],
-        ),
+        color: AppPalette.white,
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: const Color(0xFFFFC86E), width: 3),
-        boxShadow: const [
+        border: Border.all(color: AppPalette.amber, width: 3),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x22000000),
+            color: AppPalette.deepTeal.withValues(alpha: 0.13),
             blurRadius: 12,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -112,18 +109,14 @@ class _BackFace extends StatelessWidget {
     return Container(
       key: ValueKey<int>(id),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFFCDEFFF), Color(0xFFB8E3FF)],
-        ),
+        color: AppPalette.petrolBlue,
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.8), width: 3),
-        boxShadow: const [
+        border: Border.all(color: AppPalette.white.withValues(alpha: 0.8), width: 3),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x26000000),
+            color: AppPalette.deepTeal.withValues(alpha: 0.15),
             blurRadius: 12,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -131,7 +124,7 @@ class _BackFace extends StatelessWidget {
         child: Icon(
           Icons.question_mark_rounded,
           size: 44,
-          color: Colors.white,
+          color: AppPalette.warmCream,
         ),
       ),
     );

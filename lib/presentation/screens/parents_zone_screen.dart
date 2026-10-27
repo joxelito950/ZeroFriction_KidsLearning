@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
 import '../widgets/parents_language_section.dart';
 
@@ -92,7 +93,7 @@ class _ScreenPinningSection extends StatelessWidget {
               ),
             Text(
               l10n.parentsZonePinNote,
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.blueGrey[600]),
+              style: theme.textTheme.bodySmall?.copyWith(color: AppPalette.deepTeal),
             ),
           ],
         ),

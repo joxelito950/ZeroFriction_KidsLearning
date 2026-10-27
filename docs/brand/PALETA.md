@@ -49,25 +49,28 @@ Calculado el 2026-10-27. **Texto normal** exige 4,5:1 (AA); **texto grande** (�
 | C7 | **Sin rojo de error** (SPECIFICATION 4.2): la paleta no tiene color de error a propósito. Un fallo se comunica con calma, sin cambiar a otro color. |
 | C8 | **Excepciones:** los **emojis** del contenido de las cartas (son glifos del sistema con sus propios colores) y lo que dibuja el sistema (barra de estado, icono monocromo temático de Android 13, que el sistema tiñe). |
 
-## Asignación propuesta por elemento (la aplica TD-009)
+## Asignación por elemento (aplicada en TD-009)
 
 | Elemento | Color |
 |---|---|
 | Fondo de las pantallas | Crema cálido |
-| Tarjetas, cabecera del juego, cartas boca arriba | Blanco |
+| Tarjetas, cabecera y pie del juego, celebraciones | Blanco |
 | Títulos y texto | Teal profundo |
-| Botones principales y teclado del desafío («Aceptar») | Azul petróleo con texto blanco |
-| Botones secundarios (texto) | Azul petróleo |
+| Botones principales (botón «Memoria» del menú, «Aceptar» del desafío) | Azul petróleo con texto blanco |
+| Botones secundarios (texto), botón tonal «Volver al menú», teclas de números | Azul petróleo sobre blanco o crema (las teclas, blancas con borde azul petróleo) |
 | Reverso de las cartas | Azul petróleo (con el símbolo «?» en crema) |
-| Pareja encontrada | Borde o brillo en ámbar |
-| Barra de tiempo | Azul petróleo sobre azul petróleo al 15 % (tranquila, D-021) |
-| Estrellas, insignia, dorado progresivo, puntos de nivel alcanzados | Dorado |
-| Celebración | Ámbar y coral (decorativos) con el título en teal profundo |
+| Cartas boca arriba y parejas encontradas | Blanco con borde ámbar |
+| Barra de tiempo, contador de movimientos | Teal profundo (no se tocan, C6); la barra, sobre teal profundo al 15 % (tranquila, D-021) |
+| Estrellas, insignia, dorado progresivo, puntos de nivel alcanzados | Dorado (pendientes: dorado al 20 % o 50 %) |
+| Medalla de la insignia en el botón «Memoria» | Dorado sobre un círculo blanco (sobre azul petróleo no contrasta) |
+| Celebración | Tarjeta blanca con borde ámbar y trofeo coral; con la insignia, borde y medalla dorados; título en teal profundo |
+| Aviso «se acabó el tiempo» | Tarjeta blanca, reloj de arena y texto en teal profundo |
+| Marcador del icono del juego (hasta HU-013) | Teal profundo sobre un círculo ámbar (5,14:1) |
 | Avisos pequeños (`QuietHint`) | Teal profundo al 90 % con texto blanco |
 | Sombras y velos | Teal profundo con transparencia |
 
 ## Cómo se garantiza
 
-- `lib/presentation/theme/app_palette.dart` define los 7 colores y el tema (`ColorScheme` construido color a color, sin `fromSeed`) (TD-009).
+- `lib/presentation/theme/app_palette.dart` define los 7 colores (es el único archivo con literales) y `app_theme.dart` el tema (`ColorScheme` construido color a color, sin `fromSeed`) (TD-009).
 - `test/architecture/palette_test.dart` hace fallar el CI si en `lib/` aparece un color fuera de `AppPalette` (literales `Color(0x…)`, `Colors.*` salvo `transparent`, `fromSeed`) y comprueba que los valores de `AppPalette` son exactamente los de esta tabla y que las combinaciones de texto del tema cumplen el contraste (TD-009).
 - La **definición de «Lista»** del backlog exige que cada historia con interfaz indique qué colores de la paleta usa.

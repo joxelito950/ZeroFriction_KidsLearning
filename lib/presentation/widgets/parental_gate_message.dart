@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 
 /// Mensaje tras una respuesta incorrecta (HU-004 R4, R5, S1, S3): los intentos
 /// que quedan, «Reintentar» (si quedan), una «X» y «Volver al menú», y una barra
@@ -27,7 +28,7 @@ class ParentalGateMessage extends StatelessWidget {
     final bool canRetry = attemptsLeft > 0;
 
     return ColoredBox(
-      color: Colors.black26,
+      color: AppPalette.deepTeal.withValues(alpha: 0.3),
       child: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -121,8 +122,8 @@ class _CountdownBar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: value,
             minHeight: 8,
-            color: const Color(0xFF38BDF8),
-            backgroundColor: const Color(0xFFE2E8F0),
+            color: AppPalette.deepTeal,
+            backgroundColor: AppPalette.deepTeal.withValues(alpha: 0.15),
           ),
         ),
       ),
