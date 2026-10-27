@@ -110,6 +110,7 @@ lib/
 └── presentation/
     ├── blocs/<feature>/               # <feature>_cubit, _state, modelos de UI
     ├── l10n/                          # Idioma de arranque (resolveStartupLocale)
+    ├── theme/                         # AppPalette: los 7 colores de la app y el tema (D-032, llega con TD-009)
     ├── screens/                       # Una pantalla por archivo
     └── widgets/                       # Widgets reutilizables de una o más pantallas
 test/                                  # Refleja la estructura de lib/ (sección 6.1)
@@ -169,6 +170,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - Ningún tablero de juego DEBE requerir scroll ni recortar elementos, en vertical u horizontal, en pantallas desde 914 × 411 dp (D-011, D-013).
 - Las zonas táctiles DEBERÍAN ser grandes: las cartas actuales ocupan toda su celda de la cuadrícula.
 - Los elementos interactivos llevan `Semantics` con una etiqueta en español (ver `MemoryCardWidget`).
+- **Colores:** la app usa **solo** los 7 colores de la paleta ([docs/brand/PALETA.md](docs/brand/PALETA.md), D-032) y sus transparencias. NO DEBEN usarse `Colors.*` de Material (salvo `Colors.transparent`), literales `Color(0x…)` fuera de `AppPalette` ni `ColorScheme.fromSeed`. El texto solo va en las combinaciones de la paleta que cumplen 4,5:1; coral y ámbar son decorativos; el azul petróleo se reserva para lo que se toca. Lo comprueba `test/architecture/palette_test.dart` (TD-009). Un color nuevo exige cambiar PALETA.md con su propia decisión.
 - Las acciones de adulto (compras, ajustes, enlaces externos, peticiones de permiso) DEBEN quedar tras el control para adultos (D-029, desde HU-004).
 - Toda pantalla de adultos DEBE envolverse en `AdultSessionGuard`: vuelve al menú tras 1 minuto sin toques, en segundo plano o con la pantalla apagada (HU-004 R7).
 - Dentro de un juego NO DEBE haber botones que saquen al niño de él: las transiciones tras ganar o perder son automáticas (D-022, desde HU-001).
@@ -260,7 +262,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-002 | Cubit (`flutter_bloc`) para el estado | Flujo unidireccional y fácil de testear, sin la ceremonia de los eventos de Bloc | Vigente |
 | D-003 | Persistencia local con Hive; sin backend | Local-first, funciona sin conexión, coste de infraestructura cero | Vigente |
 | D-004 | Emojis como contenido de las cartas | Cero assets: menor tamaño y sin licencias de imágenes | Vigente (revisable para temáticas premium) |
-| D-005 | Material 3 con color semilla pastel `#98FFD9` | Estética calmada y coherente para niños | Vigente |
+| D-005 | Material 3 con color semilla pastel `#98FFD9` | Estética calmada y coherente para niños | **Sustituida por D-032** (2026-10-27): el tema deja de generarse desde una semilla |
 | D-006 | `applicationId` `com.zerofriction.toddler_logic` | Es permanente una vez publicada la app en Google Play | Vigente · **no cambiar tras publicar** |
 | D-007 | `flutter_lints` 6 como base de análisis | Estándar recomendado para apps Flutter | Vigente |
 | D-008 | Se versiona `pubspec.lock`; no se versionan `*.g.dart` | Compilaciones reproducibles; el código generado se regenera con `build_runner` | Vigente |
@@ -287,6 +289,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-029 | **Control para adultos (parental gate):** se entra con doble toque (aviso pequeño, 2 s, como D-025) y se supera una multiplicación escrita en palabras (factores del 3 al 9) respondida con un teclado numérico propio con las cifras en orden aleatorio. Al fallar: mensaje con los intentos que quedan, «Reintentar», «X» y «Volver al menú», y vuelta automática al menú a los 5 s, sin esperas ni bloqueos. Mínima exposición: se cierra al salir, al apagar la pantalla, en segundo plano o tras 1 minuto sin acciones. Toda compra, enlace externo o petición de permiso pasa por este control | Imposible de superar por azar para un niño de 3 años y válido para Apple (ejemplo de tarea matemática) | Vigente desde HU-004 (2026-10-26) |
 | D-030 | **Estrellas y dorado:** cada nivel da 3★ si se gana en como mucho mínimo + número de nivel movimientos, 2★ hasta el doble del mínimo, 1★ hasta el triple, y ninguna por encima. Cada nivel guarda su mejor resultado. El icono del juego se vuelve dorado en proporción a las estrellas (mejor de cada nivel ÷ niveles × 3); 100 % = 3★ en todos los niveles. La celebración es igual de alegre con cualquier número de estrellas. La insignia por superar el último nivel es un logro aparte | Progreso visible y exigente pero alcanzable (simulación en HU-002) | Aprobada · estrellas en HU-001, icono dorado en HU-002. Sustituye a D-009 y ajusta D-023 |
 | D-031 | **Los logros se mantienen con la práctica:** tras 7 días sin jugar a un juego, sus estrellas se van perdiendo una a una cada 3 días, empezando por la más antigua, hasta quedar sin dorado. Se recuperan volviendo a ganar los niveles. La insignia no se pierde. Sin mensajes negativos | Control de progreso y refuerzo de las habilidades (decisión del product owner) | Aprobada · se implementa en HU-002. Riesgo aceptado: va contra la idea de «sin penalizaciones» y se parece a las «rachas» que el borrador del código infantil del ICO desaconsejaba. Los padres podrán desactivarla (HU-016) |
+| D-032 | **Paleta de colores cerrada:** teal profundo `#00454D` (marca, texto, símbolos), crema cálido `#FFF2E2` (fondo), coral suave `#D9735F` y ámbar `#ECA463` (acentos decorativos), dorado `#A86B12` (progreso de juego), azul petróleo `#176B78` (acción principal, acento frío) y blanco `#FFFFFF` (texto sobre acción, superficies). Solo se permiten sus transparencias; ningún desarrollador ni historia DEBE añadir otro color sin cambiar la paleta con una decisión nueva. Detalle, contrastes y reglas de uso en [docs/brand/PALETA.md](docs/brand/PALETA.md) | Identidad reconocible y coherente («base cálida + acción fría»: el botón destaca sin romperla) y contraste accesible verificado | Aprobada el 2026-10-27 (dueño del producto) · sustituye a D-005 · se aplica en TD-009 y en la identidad de HU-013 |
 
 ---
 
