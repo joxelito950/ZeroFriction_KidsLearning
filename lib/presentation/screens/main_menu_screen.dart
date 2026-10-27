@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 import '../widgets/protected_exit.dart';
 import '../widgets/quiet_hint.dart';
 import 'memory_game_screen.dart';
@@ -85,14 +86,14 @@ class _MenuHeader extends StatelessWidget {
           l10n.appTitle,
           style: theme.textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.blueGrey[800],
+            color: AppPalette.deepTeal,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           l10n.menuTagline,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: Colors.blueGrey[500],
+            color: AppPalette.deepTeal.withValues(alpha: 0.8),
           ),
         ),
       ],
@@ -165,7 +166,7 @@ class _MenuActionsState extends State<_MenuActions> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final ButtonStyle smallButtonStyle = TextButton.styleFrom(foregroundColor: Colors.blueGrey[600]);
+    final ButtonStyle smallButtonStyle = TextButton.styleFrom(foregroundColor: AppPalette.petrolBlue);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -175,17 +176,23 @@ class _MenuActionsState extends State<_MenuActions> {
         _MenuButton(
           title: l10n.menuMemoryTitle,
           subtitle: l10n.menuMemorySubtitle,
-          backgroundColor: const Color(0xFFFFF3C4), // Dorado pastel (D-023)
-          textColor: const Color(0xFF8D6E00),
+          // Azul petróleo: lo que se toca (PALETA.md, C6).
+          backgroundColor: AppPalette.petrolBlue,
+          textColor: AppPalette.white,
           badge: _hasBadge
               ? Semantics(
                   label: l10n.menuBadgeSemantics,
                   excludeSemantics: true,
-                  child: const Icon(
-                    Icons.military_tech_rounded,
-                    key: ValueKey<String>('menu-memory-badge'),
-                    color: Color(0xFFFFB300),
-                    size: 32,
+                  // El dorado no contrasta con el azul petróleo: va sobre un círculo blanco.
+                  child: const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: AppPalette.white,
+                    child: Icon(
+                      Icons.military_tech_rounded,
+                      key: ValueKey<String>('menu-memory-badge'),
+                      color: AppPalette.gold,
+                      size: 30,
+                    ),
                   ),
                 )
               : null,
@@ -259,7 +266,7 @@ class _MenuButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: AppPalette.deepTeal.withValues(alpha: 0.12),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),

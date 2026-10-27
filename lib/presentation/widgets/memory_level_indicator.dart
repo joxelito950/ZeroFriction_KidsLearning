@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 
 /// Indicador de nivel (HU-001, S4): un punto por nivel; los alcanzados, rellenos.
 /// Muestra el alcance del juego y el avance logrado.
@@ -10,8 +11,8 @@ class MemoryLevelIndicator extends StatelessWidget {
   final int level;
   final int total;
 
-  static const Color _reached = Color(0xFFFB923C);
-  static const Color _pending = Color(0x33FB923C);
+  static const Color _reached = AppPalette.gold;
+  static final Color _pending = AppPalette.gold.withValues(alpha: 0.2);
 
   // Sufijos de las claves de test de cada punto.
   static const String _reachedKey = 'reached';

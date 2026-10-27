@@ -41,4 +41,13 @@ void main() {
       expect(AppLanguage.isSupported(null), isFalse);
     });
   });
+
+  group('AppLanguage.nativeNames (HU-012 R2)', () {
+    test('names every supported language, in the same order, in its own language', () {
+      expect(AppLanguage.nativeNames.keys, orderedEquals(AppLanguage.supported));
+      expect(AppLanguage.nativeNames['es'], 'Español');
+      expect(AppLanguage.nativeNames['ja'], '日本語');
+      expect(AppLanguage.nativeNames['ar'], 'العربية');
+    });
+  });
 }

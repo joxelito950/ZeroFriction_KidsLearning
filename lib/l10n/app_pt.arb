@@ -53,5 +53,7 @@
   "parentsZonePinStep1": "Em Configurações, pesquise «Fixar app» e ative. Ative também «Pedir PIN antes de liberar».",
   "parentsZonePinStep2": "Abra o ToddlerLogic, vá para os apps recentes, toque no ícone do app acima da janela e escolha «Fixar».",
   "parentsZonePinStep3": "Para liberar, deslize para cima e segure, ou toque e segure «Voltar» e «Visão geral» ao mesmo tempo.",
-  "parentsZonePinNote": "Os nomes e as etapas podem variar conforme a marca do celular."
+  "parentsZonePinNote": "Os nomes e as etapas podem variar conforme a marca do celular.",
+  "parentsZoneLanguageTitle": "Idioma",
+  "parentsZoneLanguageIntro": "O idioma em que o app fala com seu filho. Muda na hora."
 }

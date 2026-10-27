@@ -5,6 +5,7 @@ import '../../domain/parental/parental_gate.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/parental_gate/parental_gate_cubit.dart';
 import '../blocs/parental_gate/parental_gate_state.dart';
+import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
 import '../widgets/parental_gate_message.dart';
 import '../widgets/parental_keypad.dart';
@@ -155,7 +156,7 @@ class _QuestionPanel extends StatelessWidget {
           label: Text(l10n.parentalGateBack),
         ),
         const SizedBox(height: 8),
-        Text(l10n.parentalGateTitle, style: theme.textTheme.titleMedium?.copyWith(color: Colors.blueGrey[600])),
+        Text(l10n.parentalGateTitle, style: theme.textTheme.titleMedium?.copyWith(color: AppPalette.deepTeal)),
         const SizedBox(height: 8),
         Text(
           l10n.parentalGateQuestion(

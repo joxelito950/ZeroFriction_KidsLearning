@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (2026-10-27) |
+| **Estado** | Hecha (2026-10-27). Revisada en el emulador; queda la revisión en el moto g55 (A5) |
 | **Prioridad** | P1: conviene antes de las capturas de la tienda (HU-014) y de cualquier historia con interfaz nueva (HU-005, HU-009, HU-010) |
 | **Tamaño** | M (1–2 días) |
 | **Decisión que aplica** | D-032 (paleta cerrada, [docs/brand/PALETA.md](../brand/PALETA.md)); sustituye a D-005 (semilla `#98FFD9`) |
@@ -40,7 +40,15 @@ Que toda la app use **solo** los 7 colores de la paleta y que el CI **impida** q
 - **Cambio visual grande:** todo el aspecto cambia de golpe (de los pasteles azul y amarillo actuales a la base cálida). Se acepta: es la identidad decidida. Conviene una revisión del dueño del producto con capturas antes de fusionar.
 - **Componentes de Material** que usan roles del `ColorScheme` no asignados explícitamente (por ejemplo, `surfaceContainerHighest`): A1 los asigna todos para que no aparezcan tonos derivados.
 
-## 6. Fuera de alcance
+## 6. Resultado (2026-10-27)
+
+- `lib/presentation/theme/app_palette.dart` (los 7 colores, único archivo con literales) y `app_theme.dart` (`AppTheme.colorScheme`, con **todos** los roles asignados a mano; `error` es teal profundo porque la paleta no tiene rojo, C7).
+- Los 11 archivos usan solo `AppPalette` y sus transparencias; los degradados se sustituyen por colores lisos (un degradado entre dos colores crea tonos intermedios).
+- `test/architecture/palette_test.dart`: un test por archivo de `lib/` (falla con archivo, línea y regla), los valores leídos de la tabla de PALETA.md, los 7 literales como máximo y el contraste ≥ 4,5:1 de 15 parejas de texto del tema. Comprobado que falla al introducir `Colors.red`.
+- Ajustes respecto a la asignación propuesta, ya reflejados en PALETA.md: la **barra de tiempo** y el **contador de movimientos** van en teal profundo (no se tocan, C6); la **medalla** del menú va en dorado sobre un círculo blanco (el dorado sobre azul petróleo da 1,40:1); las **teclas** del desafío son blancas con borde y número en azul petróleo.
+- 669 tests en verde, cobertura 99,6 %.
+
+## 7. Fuera de alcance
 
 - Los vectores de la identidad (HU-013).
 - Modo oscuro (no está previsto; si se quisiera, la paleta tendría que ampliarse con su propia decisión).

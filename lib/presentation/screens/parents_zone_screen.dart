@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
+import '../widgets/parents_language_section.dart';
 
 /// Zona de Padres (HU-004), a la que solo se llega superando el desafío. Cada
 /// sección llega con su historia (P4); el «atrás» del sistema vuelve al menú (P5).
@@ -32,6 +34,8 @@ class ParentsZoneScreen extends StatelessWidget {
                   label: Text(l10n.parentsZoneBackToMenu),
                 ),
               ),
+              const SizedBox(height: 16),
+              const ParentsLanguageSection(),
               const SizedBox(height: 16),
               const _ScreenPinningSection(),
             ],
@@ -89,7 +93,7 @@ class _ScreenPinningSection extends StatelessWidget {
               ),
             Text(
               l10n.parentsZonePinNote,
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.blueGrey[600]),
+              style: theme.textTheme.bodySmall?.copyWith(color: AppPalette.deepTeal),
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/memory/memory_stars.dart';
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 
 /// Celebración al ganar un tablero (HU-001 R14, D-030): sin botones, desaparece
 /// sola. Es igual de alegre con cualquier número de estrellas; las que faltan se
@@ -19,15 +20,14 @@ class MemoryCelebration extends StatelessWidget {
 
     return _OverlayCard(
       key: ValueKey<String>(badgeEarned ? 'memory-badge-celebration' : 'memory-celebration'),
-      colors: badgeEarned
-          ? const [Color(0xFFFFE082), Color(0xFFFFC107)]
-          : const [Color(0xFFFFFDE7), Color(0xFFFFF3C4)],
-      borderColor: badgeEarned ? const Color(0xFFFFA000) : const Color(0xFFF6C453),
+      color: AppPalette.white,
+      borderColor: badgeEarned ? AppPalette.gold : AppPalette.amber,
+      borderWidth: badgeEarned ? 4 : 2,
       children: [
         Icon(
           badgeEarned ? Icons.military_tech_rounded : Icons.emoji_events_rounded,
           size: 56,
-          color: const Color(0xFFFF8F00),
+          color: badgeEarned ? AppPalette.gold : AppPalette.softCoral,
         ),
         const SizedBox(height: 12),
         Text(
@@ -74,10 +74,10 @@ class MemoryTimeUpNotice extends StatelessWidget {
 
     return _OverlayCard(
       key: const ValueKey<String>('memory-time-up'),
-      colors: const [Color(0xFFE0F2FE), Color(0xFFBAE6FD)],
-      borderColor: const Color(0xFF7DD3FC),
+      color: AppPalette.white,
+      borderColor: AppPalette.deepTeal.withValues(alpha: 0.3),
       children: [
-        const Icon(Icons.hourglass_bottom_rounded, size: 48, color: Color(0xFF0284C7)),
+        const Icon(Icons.hourglass_bottom_rounded, size: 48, color: AppPalette.deepTeal),
         const SizedBox(height: 12),
         Text(
           loss == MemoryLoss.restart ? l10n.memoryTimeUpRestart : l10n.memoryTimeUpFewerCards,
@@ -90,10 +90,17 @@ class MemoryTimeUpNotice extends StatelessWidget {
 }
 
 class _OverlayCard extends StatelessWidget {
-  const _OverlayCard({super.key, required this.colors, required this.borderColor, required this.children});
+  const _OverlayCard({
+    super.key,
+    required this.color,
+    required this.borderColor,
+    this.borderWidth = 2,
+    required this.children,
+  });
 
-  final List<Color> colors;
+  final Color color;
   final Color borderColor;
+  final double borderWidth;
   final List<Widget> children;
 
   @override
@@ -106,9 +113,9 @@ class _OverlayCard extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32),
-            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: colors),
-            border: Border.all(color: borderColor, width: 2),
-            boxShadow: const [BoxShadow(color: Color(0x33000000), blurRadius: 24, offset: Offset(0, 12))],
+            color: color,
+            border: Border.all(color: borderColor, width: borderWidth),
+            boxShadow: [BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.2), blurRadius: 24, offset: const Offset(0, 12))],
           ),
           child: Column(mainAxisSize: MainAxisSize.min, children: children),
         ),
@@ -161,7 +168,7 @@ class _AnimatedStarState extends State<_AnimatedStar> with SingleTickerProviderS
       child: Icon(
         widget.earned ? Icons.star_rounded : Icons.star_outline_rounded,
         key: ValueKey<String>('memory-star-${widget.index}-${widget.earned ? _earnedKey : _emptyKey}'),
-        color: widget.earned ? const Color(0xFFFFC107) : const Color(0x80FFC107),
+        color: widget.earned ? AppPalette.gold : AppPalette.gold.withValues(alpha: 0.5),
         size: 56,
       ),
     );

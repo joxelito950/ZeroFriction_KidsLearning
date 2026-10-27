@@ -6,8 +6,10 @@ import 'data/local/hive_persistence_config.dart';
 import 'data/local/hive_persistence_repository.dart';
 import 'domain/repositories/i_persistence_repository.dart';
 import 'l10n/app_localizations.dart';
+import 'presentation/blocs/app_locale/app_locale_cubit.dart';
 import 'presentation/l10n/startup_locale.dart';
 import 'presentation/screens/main_menu_screen.dart';
+import 'presentation/theme/app_theme.dart';
 
 /// Inicializa el repositorio y abre las cajas de Hive de forma asíncrona.
 Future<HivePersistenceRepository> createRepository({required String hivePath}) async {
@@ -43,7 +45,8 @@ void main() async {
 class ToddlerLogicApp extends StatelessWidget {
   final IPersistenceRepository repository;
 
-  /// Idioma de la app; uno de [AppLocalizations.supportedLocales].
+  /// Idioma de arranque; uno de [AppLocalizations.supportedLocales]. Después se
+  /// puede cambiar desde la Zona de Padres (HU-012).
   final Locale locale;
 
   const ToddlerLogicApp({
@@ -56,26 +59,20 @@ class ToddlerLogicApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider<IPersistenceRepository>.value(
       value: repository,
-      child: MaterialApp(
-        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-        locale: locale,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF98FFD9), // Pastel menta amigable
-            surface: const Color(0xFFF9F9FB), // Fondo limpio y claro
-          ),
-          cardTheme: CardThemeData(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
+      // El idioma cambia en caliente desde la Zona de Padres (HU-012).
+      child: BlocProvider<AppLocaleCubit>(
+        create: (_) => AppLocaleCubit(repository: repository, initial: locale),
+        child: BlocBuilder<AppLocaleCubit, Locale>(
+          builder: (context, locale) => MaterialApp(
+            onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+            locale: locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            home: const MainMenuScreen(),
           ),
         ),
-        home: const MainMenuScreen(),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:toddler_logic/domain/entities/app_language.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
 import 'package:toddler_logic/domain/parental/parental_gate.dart';
@@ -136,9 +137,12 @@ void main() {
 
           expect(find.text(l10n.parentsZoneTitle).hitTestable(), findsOneWidget);
           expect(find.byKey(const ValueKey<String>('parents-zone-back-to-menu')).hitTestable(), findsOneWidget);
-          // ensureVisible desplaza la lista, pero hace falta un fotograma para verlo.
-          await tester.ensureVisible(find.text(l10n.parentsZonePinNote));
-          await tester.pump();
+          // La lista solo construye lo que se ve: se desplaza hasta el final.
+          for (final code in AppLanguage.supported) {
+            await tester.scrollUntilVisible(find.byKey(ValueKey<String>('language-$code')), 100);
+          }
+          await tester.scrollUntilVisible(find.text(l10n.parentsZonePinNote), 200);
+          await tester.pump(); // ensureVisible necesita un fotograma más para verse
           expect(find.text(l10n.parentsZonePinNote).hitTestable(), findsOneWidget);
         });
 

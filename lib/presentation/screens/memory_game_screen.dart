@@ -8,6 +8,7 @@ import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/memory_game/memory_ladder_cubit.dart';
 import '../blocs/memory_game/memory_ladder_state.dart';
+import '../theme/app_palette.dart';
 import '../widgets/memory_board.dart';
 import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
@@ -72,14 +73,8 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
     return ProtectedExit(
       onExit: () => Navigator.of(context).pop(),
       child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFFFFF4D6), Color(0xFFFFE4B5), Color(0xFFFFF8E1)],
-            ),
-          ),
+        body: ColoredBox(
+          color: AppPalette.warmCream,
           child: SafeArea(
             child: BlocBuilder<MemoryLadderCubit, MemoryLadderState>(
               builder: (context, state) => Stack(
@@ -161,9 +156,9 @@ class _Header extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.68),
+        color: AppPalette.white,
         borderRadius: BorderRadius.circular(28),
-        boxShadow: const [BoxShadow(color: Color(0x1A000000), blurRadius: 16, offset: Offset(0, 8))],
+        boxShadow: [BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
@@ -176,8 +171,8 @@ class _Header extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   radius: 22,
-                  backgroundColor: Color(0xFFFFC857),
-                  child: Icon(Icons.child_care_rounded, color: Colors.white, size: 26),
+                  backgroundColor: AppPalette.amber,
+                  child: Icon(Icons.child_care_rounded, color: AppPalette.deepTeal, size: 26),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -193,10 +188,10 @@ class _Header extends StatelessWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(color: const Color(0xFF0EA5E9), borderRadius: BorderRadius.circular(20)),
+                  decoration: BoxDecoration(color: AppPalette.deepTeal, borderRadius: BorderRadius.circular(20)),
                   child: Text(
                     l10n.memoryGameMovesCounter(moves),
-                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                    style: const TextStyle(color: AppPalette.white, fontSize: 14, fontWeight: FontWeight.w800),
                   ),
                 ),
               ],
@@ -221,7 +216,7 @@ class _Footer extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.7), borderRadius: BorderRadius.circular(24)),
+      decoration: BoxDecoration(color: AppPalette.white, borderRadius: BorderRadius.circular(24)),
       child: Text(
         isProcessing ? l10n.memoryGameHintProcessing : l10n.memoryGameHintPlaying,
         textAlign: TextAlign.center,

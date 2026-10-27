@@ -53,5 +53,7 @@
   "parentsZonePinStep1": "Suche in den Einstellungen nach „App anpinnen“ und aktiviere die Funktion. Aktiviere auch „Vor dem Loslösen nach PIN fragen“.",
   "parentsZonePinStep2": "Öffne ToddlerLogic, rufe die Übersicht der letzten Apps auf, tippe oben auf das App-Symbol und wähle „Anpinnen“.",
   "parentsZonePinStep3": "Zum Loslösen nach oben wischen und halten oder „Zurück“ und „Übersicht“ gleichzeitig gedrückt halten.",
-  "parentsZonePinNote": "Bezeichnungen und Schritte können je nach Hersteller abweichen."
+  "parentsZonePinNote": "Bezeichnungen und Schritte können je nach Hersteller abweichen.",
+  "parentsZoneLanguageTitle": "Sprache",
+  "parentsZoneLanguageIntro": "Die Sprache, in der die App mit deinem Kind spricht. Sie ändert sich sofort."
 }
