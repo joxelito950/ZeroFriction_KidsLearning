@@ -9,6 +9,7 @@ import 'l10n/app_localizations.dart';
 import 'presentation/blocs/app_locale/app_locale_cubit.dart';
 import 'presentation/l10n/startup_locale.dart';
 import 'presentation/screens/main_menu_screen.dart';
+import 'presentation/theme/app_theme.dart';
 
 /// Inicializa el repositorio y abre las cajas de Hive de forma asíncrona.
 Future<HivePersistenceRepository> createRepository({required String hivePath}) async {
@@ -68,19 +69,7 @@ class ToddlerLogicApp extends StatelessWidget {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              useMaterial3: true,
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color(0xFF98FFD9), // Pastel menta amigable
-                surface: const Color(0xFFF9F9FB), // Fondo limpio y claro
-              ),
-              cardTheme: CardThemeData(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-              ),
-            ),
+            theme: AppTheme.light,
             home: const MainMenuScreen(),
           ),
         ),

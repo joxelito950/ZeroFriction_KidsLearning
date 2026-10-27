@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 
 /// Tiempo restante como una barra que se vacía (HU-001 R16, D-021): sin números,
 /// sin rojo, sin parpadeos. Se vacía hacia el inicio del sentido de lectura, así
@@ -11,8 +12,8 @@ class MemoryTimeBar extends StatelessWidget {
   /// 1 = tiempo completo, 0 = agotado.
   final double fraction;
 
-  static const Color _fill = Color(0xFF38BDF8);
-  static const Color _track = Color(0x3338BDF8);
+  static const Color _fill = AppPalette.deepTeal;
+  static final Color _track = AppPalette.deepTeal.withValues(alpha: 0.15);
 
   @override
   Widget build(BuildContext context) {

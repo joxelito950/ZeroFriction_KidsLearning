@@ -95,7 +95,8 @@ class _KeypadKey extends StatelessWidget {
         ? FilledButton.styleFrom()
         : FilledButton.styleFrom(
             backgroundColor: colors.surfaceContainerHighest,
-            foregroundColor: colors.onSurface,
+            foregroundColor: colors.primary,
+            side: BorderSide(color: colors.outline),
           );
     final ButtonStyle style = base.copyWith(
       padding: const WidgetStatePropertyAll(EdgeInsets.zero),
