@@ -152,7 +152,7 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 |---|---|---|---|
 | P1 | ¿Qué regla de estrellas usamos? | ✅ Decidido: 3★ si ≤ mínimo + número de nivel; 2★ hasta el doble y 1★ hasta el triple del mínimo (D-030) | — |
 | P2 | ¿Qué pasa con la insignia de superar el 4×4 (HU-001)? | ✅ Decidido: se mantiene como logro aparte, una medalla junto al botón del juego. El dorado mide las estrellas | — |
-| P3 | ¿Cómo se ve el dorado? | ✅ Decidido el 2026-10-26 (HU-013, P5): **opción A, llenado de abajo arriba**, con un `ShaderMask` sobre la silueta del icono del juego | — |
+| P3 | ¿Cómo se ve el dorado? | ✅ Decidido el 2026-10-26 (HU-013, P5): **opción A, llenado de abajo arriba**, con un `ShaderMask` sobre la silueta del icono del juego. El color del llenado es el **dorado de la paleta** `#A86B12` (D-032, `AppPalette.gold`); el brillo del borde, ámbar `#ECA463` | — |
 | P4 | ¿HU-001 guarda ya las estrellas por nivel? | ✅ Decidido: sí. Mejor resultado y fecha de cada nivel, y fecha de la última partida del juego, en `MemoryProgress` | — |
 | P5 | Hasta que llegue HU-002, ¿qué muestra el diálogo de victoria de HU-001? | ✅ Asumida la recomendación: las estrellas calculadas desde HU-001. HU-002 queda con el icono dorado y la pérdida de logros | — |
 | P6 | ¿Cuenta el nivel 1 (2×2 sin tiempo) para el dorado? | ✅ Decidido: sí, son 5 niveles × 3 estrellas | — |

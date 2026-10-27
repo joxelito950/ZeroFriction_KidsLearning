@@ -97,6 +97,24 @@ Cero Permisos: La aplicación requiere exactamente 0 permisos en el AndroidManif
 
 Sin Telemetría: No se recopilan IDs de dispositivos, nombres ni analíticas de comportamiento del menor.
 
+🎨 Identidad Visual: Paleta de Colores
+
+ToddlerLogic usa **solo** estos 7 colores y sus transparencias: una **base cálida** para que la app sea acogedora y una **acción fría** para que los botones destaquen sin romper la identidad. La fuente de verdad, con los contrastes y las reglas de uso, es [docs/brand/PALETA.md](docs/brand/PALETA.md) (decisión D-032).
+
+![Paleta de colores de ToddlerLogic](docs/brand/paleta-colores.jpg)
+
+| Color | Hex | Uso |
+| :--- | :--- | :--- |
+| Teal profundo | `#00454D` | Marca, texto y símbolos |
+| Crema cálido | `#FFF2E2` | Fondo principal |
+| Coral suave | `#D9735F` | Acentos cálidos (decorativo) |
+| Ámbar | `#ECA463` | Acentos alegres (decorativo) |
+| Dorado | `#A86B12` | Progreso de juego (estrellas, insignia, dorado progresivo) |
+| Azul petróleo | `#176B78` | Acción principal y acento frío (botones, lo que se toca) |
+| Blanco | `#FFFFFF` | Texto sobre azul petróleo y superficies de tarjetas |
+
+> ⚠️ **Regla para todo el equipo:** ningún desarrollador ni historia de usuario puede añadir un color fuera de esta paleta. Nada de `Colors.*` de Material (salvo `transparent`), ni colores escritos a mano, ni temas generados desde una semilla: todo sale de `AppPalette`. Un test de arquitectura hace fallar el CI si aparece otro color (TD-009). Si un color nuevo hace falta de verdad, se cambia primero la paleta, con su propia decisión y su PR.
+
 💻 Guía de Instalación para Desarrollo
 
 Sigue estos pasos para clonar el proyecto y levantar el entorno local en tu máquina:
