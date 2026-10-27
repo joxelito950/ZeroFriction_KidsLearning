@@ -53,5 +53,7 @@
   "parentsZonePinStep1": "En Ajustes, busca «Fijar aplicaciones» y actívala. Activa también «Pedir PIN para dejar de fijar».",
   "parentsZonePinStep2": "Abre ToddlerLogic, ve a las apps recientes, toca el icono de la app sobre su ventana y elige «Fijar».",
   "parentsZonePinStep3": "Para dejar de fijarla, desliza hacia arriba y mantén, o mantén pulsados a la vez «Atrás» y «Recientes».",
-  "parentsZonePinNote": "Los nombres y los pasos pueden cambiar según la marca del teléfono."
+  "parentsZonePinNote": "Los nombres y los pasos pueden cambiar según la marca del teléfono.",
+  "parentsZoneLanguageTitle": "Idioma",
+  "parentsZoneLanguageIntro": "El idioma en que la app le habla a tu hijo. Cambia al instante."
 }

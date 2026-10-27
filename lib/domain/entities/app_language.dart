@@ -10,6 +10,20 @@ abstract final class AppLanguage {
 
   static bool isSupported(String? languageCode) => supported.contains(languageCode);
 
+  /// Nombre de cada idioma en su propio idioma (HU-012 R2), para que un adulto
+  /// encuentre el suyo aunque la app esté en otro. No se traducen.
+  static const Map<String, String> nativeNames = {
+    'en': 'English',
+    'es': 'Español',
+    'pt': 'Português (Brasil)',
+    'de': 'Deutsch',
+    'ja': '日本語',
+    'fr': 'Français',
+    'it': 'Italiano',
+    'ko': '한국어',
+    'ar': 'العربية',
+  };
+
   /// Devuelve el primer idioma soportado de [preferredLanguageTags] (en orden de
   /// preferencia del dispositivo, p. ej. `es-CO`, `pt_PT`) o [fallback].
   static String resolve(Iterable<String> preferredLanguageTags) {

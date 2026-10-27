@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
+import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
 
 import 'presentation/memory_game_test_support.dart';
 import 'presentation/l10n_test_support.dart';
@@ -184,6 +186,67 @@ void main() {
       await tester.binding.handlePopRoute();
       await tester.pump();
       expect(closeRequests, 1);
+    });
+
+    // HU-012: el idioma se cambia en caliente desde la Zona de Padres.
+    group('Idioma', () {
+      /// Abre la Zona de Padres directamente (el desafío se prueba aparte).
+      Future<void> openParentsZone(WidgetTester tester) async {
+        await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+        tester.state<NavigatorState>(find.byType(Navigator)).push(
+          MaterialPageRoute<void>(builder: (_) => const ParentsZoneScreen()),
+        );
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> chooseLanguage(WidgetTester tester, String code) async {
+        final tile = find.byKey(ValueKey<String>('language-$code'));
+        await tester.ensureVisible(tile);
+        await tester.pump();
+        await tester.tap(tile);
+        await tester.pumpAndSettle();
+      }
+
+      TextDirection directionOf(WidgetTester tester) =>
+          Directionality.of(tester.element(find.byType(ParentsZoneScreen)));
+
+      testWidgets('switches the whole app right away and stays in the zone (criterio 2)', (tester) async {
+        await openParentsZone(tester);
+        expect(find.text('Zona de Padres'), findsOneWidget);
+
+        await chooseLanguage(tester, 'de');
+
+        expect(find.text('Elternbereich'), findsOneWidget);
+        expect(find.byType(ParentsZoneScreen), findsOneWidget);
+        verify(() => repository.saveUserProfile(any(that: isA<UserProfile>().having((p) => p.languageCode, 'languageCode', 'de'))))
+            .called(1);
+
+        final back = find.byKey(const ValueKey<String>('parents-zone-back-to-menu'));
+        await tester.scrollUntilVisible(back, -200);
+        await tester.tap(back);
+        await tester.pumpAndSettle();
+        expect(find.text('Elternbereich'), findsOneWidget, reason: 'the menu button, now in German');
+      });
+
+      testWidgets('turns right-to-left with Arabic and back (criterio 3)', (tester) async {
+        await openParentsZone(tester);
+        expect(directionOf(tester), TextDirection.ltr);
+
+        await chooseLanguage(tester, 'ar');
+        expect(directionOf(tester), TextDirection.rtl);
+        expect(find.text('ركن الوالدين'), findsOneWidget);
+
+        await chooseLanguage(tester, 'es');
+        expect(directionOf(tester), TextDirection.ltr);
+      });
+
+      testWidgets('does not touch the memory game progress (criterio 5, R7)', (tester) async {
+        await openParentsZone(tester);
+
+        await chooseLanguage(tester, 'ja');
+
+        verifyNever(() => repository.saveMemoryProgress(any()));
+      });
     });
   });
 }

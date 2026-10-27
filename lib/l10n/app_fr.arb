@@ -53,5 +53,7 @@
   "parentsZonePinStep1": "Dans Paramètres, recherchez « Épinglage d'application » et activez-le. Activez aussi « Demander le code avant de désépingler ».",
   "parentsZonePinStep2": "Ouvrez ToddlerLogic, affichez les applis récentes, touchez l'icône de l'appli au-dessus de sa fenêtre et choisissez « Épingler ».",
   "parentsZonePinStep3": "Pour désépingler, balayez vers le haut et maintenez, ou maintenez « Retour » et « Aperçu » en même temps.",
-  "parentsZonePinNote": "Les noms et les étapes peuvent varier selon la marque du téléphone."
+  "parentsZonePinNote": "Les noms et les étapes peuvent varier selon la marque du téléphone.",
+  "parentsZoneLanguageTitle": "Langue",
+  "parentsZoneLanguageIntro": "La langue dans laquelle l'application parle à votre enfant. Elle change aussitôt."
 }
