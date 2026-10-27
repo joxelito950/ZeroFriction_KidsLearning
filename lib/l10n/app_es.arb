@@ -47,5 +47,11 @@
   "parentalGateClose": "Cerrar",
   "parentalGateCountdownSemantics": "Tiempo antes de volver al menú",
   "parentsZoneTitle": "Zona de Padres",
-  "parentsZoneBackToMenu": "Volver al menú"
+  "parentsZoneBackToMenu": "Volver al menú",
+  "parentsZonePinTitle": "Mantener la app en pantalla",
+  "parentsZonePinIntro": "La función de Android «Fijar aplicaciones» mantiene el teléfono en ToddlerLogic: los gestos de inicio y recientes dejan de funcionar hasta que un adulto la desfije.",
+  "parentsZonePinStep1": "En Ajustes, busca «Fijar aplicaciones» y actívala. Activa también «Pedir PIN para dejar de fijar».",
+  "parentsZonePinStep2": "Abre ToddlerLogic, ve a las apps recientes, toca el icono de la app sobre su ventana y elige «Fijar».",
+  "parentsZonePinStep3": "Para dejar de fijarla, desliza hacia arriba y mantén, o mantén pulsados a la vez «Atrás» y «Recientes».",
+  "parentsZonePinNote": "Los nombres y los pasos pueden cambiar según la marca del teléfono."
 }

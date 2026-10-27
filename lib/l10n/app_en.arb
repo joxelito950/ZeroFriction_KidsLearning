@@ -245,5 +245,29 @@
   "parentsZoneBackToMenu": "Back to menu",
   "@parentsZoneBackToMenu": {
     "description": "Button of the Parents' Zone that closes it and returns to the main menu. Max ~18 characters."
+  },
+  "parentsZonePinTitle": "Keep the app on screen",
+  "@parentsZonePinTitle": {
+    "description": "Title of the Parents' Zone section that explains Android screen pinning. Read by parents. Max ~35 characters."
+  },
+  "parentsZonePinIntro": "Android's app pinning keeps the phone on ToddlerLogic: the Home and Recents gestures stop working until an adult unpins it.",
+  "@parentsZonePinIntro": {
+    "description": "Intro of the screen pinning section. Use the name Android gives to the feature in your language. ToddlerLogic is the brand: do not translate it."
+  },
+  "parentsZonePinStep1": "In Settings, search for “app pinning” and turn it on. Turn on “Ask for PIN before unpinning” too.",
+  "@parentsZonePinStep1": {
+    "description": "Step 1 of screen pinning: turn the feature on in the system settings, and the PIN request to unpin."
+  },
+  "parentsZonePinStep2": "Open ToddlerLogic, go to recent apps, tap the app icon at the top of its window and choose “Pin”.",
+  "@parentsZonePinStep2": {
+    "description": "Step 2 of screen pinning: pin ToddlerLogic from the recent apps screen. ToddlerLogic is the brand: do not translate it."
+  },
+  "parentsZonePinStep3": "To unpin, swipe up and hold, or touch and hold Back and Overview at the same time.",
+  "@parentsZonePinStep3": {
+    "description": "Step 3 of screen pinning: how an adult unpins the app, with gesture or button navigation."
+  },
+  "parentsZonePinNote": "Names and steps may vary between phone brands.",
+  "@parentsZonePinNote": {
+    "description": "Small note under the screen pinning steps."
   }
 }
