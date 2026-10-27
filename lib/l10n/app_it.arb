@@ -53,5 +53,7 @@
   "parentsZonePinStep1": "In Impostazioni, cerca «Blocco app su schermo» e attivalo. Attiva anche «Chiedi il PIN prima di sbloccare».",
   "parentsZonePinStep2": "Apri ToddlerLogic, vai alle app recenti, tocca l'icona dell'app sopra la sua finestra e scegli «Blocca».",
   "parentsZonePinStep3": "Per sbloccare, scorri verso l'alto e tieni premuto, oppure tieni premuti insieme «Indietro» e «Panoramica».",
-  "parentsZonePinNote": "Nomi e passaggi possono variare in base alla marca del telefono."
+  "parentsZonePinNote": "Nomi e passaggi possono variare in base alla marca del telefono.",
+  "parentsZoneLanguageTitle": "Lingua",
+  "parentsZoneLanguageIntro": "La lingua con cui l'app parla a tuo figlio. Cambia subito."
 }

@@ -53,5 +53,7 @@
   "parentsZonePinStep1": "設定で「アプリ固定」を検索してオンにします。「固定を解除する前にPINを要求」もオンにしてください。",
   "parentsZonePinStep2": "ToddlerLogicを開いて最近使ったアプリを表示し、ウィンドウ上のアプリのアイコンをタップして「固定」を選びます。",
   "parentsZonePinStep3": "解除するには、上にスワイプして長押しするか、「戻る」と「最近」を同時に長押しします。",
-  "parentsZonePinNote": "名前や手順は機種によって異なる場合があります。"
+  "parentsZonePinNote": "名前や手順は機種によって異なる場合があります。",
+  "parentsZoneLanguageTitle": "言語",
+  "parentsZoneLanguageIntro": "アプリがお子さまに話しかける言語です。すぐに切り替わります。"
 }

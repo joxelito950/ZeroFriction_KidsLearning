@@ -269,5 +269,13 @@
   "parentsZonePinNote": "Names and steps may vary between phone brands.",
   "@parentsZonePinNote": {
     "description": "Small note under the screen pinning steps."
+  },
+  "parentsZoneLanguageTitle": "Language",
+  "@parentsZoneLanguageTitle": {
+    "description": "Title of the Parents' Zone section to choose the app language (HU-012). Read by parents. Max ~20 characters."
+  },
+  "parentsZoneLanguageIntro": "The language the app uses to talk to your child. It changes right away.",
+  "@parentsZoneLanguageIntro": {
+    "description": "Line under the language section title. Each language below is written in its own language and is not translated."
   }
 }

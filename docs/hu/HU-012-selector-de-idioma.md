@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-26; el desarrollo **no** ha empezado) |
+| **Estado** | Hecha (desarrollada y verificada en el moto g55 el 2026-10-27; pasa a fusionada con su PR) |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 |
 | **Tamaño** | S (1 día) |
@@ -86,3 +86,8 @@ Desde Android 13 el sistema permite elegir el idioma de cada app en *Ajustes ›
 - Voz o audio por idioma (HU-005).
 - Idioma distinto para la Zona de Padres y para los juegos.
 - Fichas de la tienda por idioma (HU-014).
+
+## 10. Desarrollo y verificación
+
+- **Rama:** `feature/hu-012-language-selector`. `AppLanguage.nativeNames` (nombre propio de cada idioma, en el dominio), `AppLocaleCubit` por encima de `MaterialApp` (cambia el idioma al instante y lo guarda en `UserProfile.languageCode`; si no se puede guardar, vale para la sesión y el error se reporta) y la sección «Idioma» de la Zona de Padres (`ParentsLanguageSection`: los 9 idiomas en orden fijo, sin banderas, con el actual marcado; el lector de pantalla recibe cada nombre con su idioma). 2 textos nuevos en los 9 idiomas. 611 tests, cobertura total del 99,6 % y del 100 % en los archivos nuevos. El apoyo de tests `localizedApp` incluye ahora el cubit de idioma.
+- **Verificado en el moto g55 (2026-10-27)**, en vertical: la sección muestra los 9 idiomas con «Español» marcado; al elegir «English» la zona y el menú cambian al momento y se conserva al cerrar y reabrir la app; con «العربية» toda la pantalla pasa a derecha-a-izquierda; al volver a «Español» la app queda como estaba. Sin errores en el registro.
