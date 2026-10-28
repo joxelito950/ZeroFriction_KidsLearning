@@ -24,7 +24,7 @@ Cómo puede ocurrir sin que el adulto haya hecho nada:
 |---|---|
 | Primer arranque en un teléfono con otro idioma (D-027) | La app se instaló en el teléfono de la abuela, configurado en alemán, y ahora lo usa una madre hispanohablante |
 | Otro adulto cambió el idioma | Un familiar lo puso en inglés para practicar con el niño |
-| Teléfono heredado o de segunda mano | Se restauró la copia de seguridad de Android (TD-008) con el idioma guardado de otra persona |
+| Teléfono heredado o de segunda mano | Se pasaron los datos de la app con una herramienta del fabricante que no respeta las reglas de Android (desde TD-008, D-033, la app no tiene copia de seguridad) |
 | El niño o una prueba cambiaron el idioma | Alguien entró en la Zona de Padres y eligió por error العربية o 日本語 |
 
 ## 3. Qué no cambia
