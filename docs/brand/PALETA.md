@@ -66,7 +66,8 @@ Calculado el 2026-10-27. **Texto normal** exige 4,5:1 (AA); **texto grande** (�
 | Celebración | Tarjeta blanca con borde ámbar y trofeo coral; con la insignia, borde y medalla dorados; título en teal profundo |
 | Aviso «se acabó el tiempo» | Tarjeta blanca, reloj de arena y texto en teal profundo |
 | Marcador del icono del juego (hasta HU-013) | Teal profundo sobre un círculo ámbar (5,14:1) |
-| Avisos pequeños (`QuietHint`) | Teal profundo al 90 % con texto blanco |
+| Avisos pequeños (`QuietHint`) | Teal profundo al 90 % con texto blanco; la línea de ayuda (HU-021), en blanco al 85 % |
+| Línea de ayuda del desafío y del mensaje de fallo (HU-021) | Teal profundo al 80 % |
 | Sombras y velos | Teal profundo con transparencia |
 
 ## Cómo se garantiza

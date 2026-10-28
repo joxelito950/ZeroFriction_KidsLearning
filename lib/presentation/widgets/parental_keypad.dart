@@ -39,7 +39,15 @@ class ParentalKeypad extends StatelessWidget {
         key: const ValueKey<String>('parental-key-accept'),
         onTap: canAccept ? onAccept : null,
         filled: true,
-        child: Text(l10n.parentalGateAccept),
+        // Con icono, para entenderla sin leer el idioma de la app (HU-021 R7).
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_rounded),
+            const SizedBox(width: 6),
+            Text(l10n.parentalGateAccept),
+          ],
+        ),
       ),
     ];
 
