@@ -2,7 +2,12 @@
     <application
         android:label="@string/app_name"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules">
+        <!-- Sin copia de seguridad ni transferencia entre teléfonos (D-033, TD-008):
+             el progreso se queda solo en este teléfono. allowBackup cubre Android 8 a 11;
+             dataExtractionRules, Android 12 y posteriores. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
