@@ -72,10 +72,10 @@
 | P3 | ¿Música de fondo? | ✅ Asumida la recomendación: **no** en esta historia: distrae, cansa a los padres y aumenta el tamaño. Se puede proponer aparte | — |
 | P4 | ¿Qué paquete de audio? | ✅ Asumida la recomendación: **`audioplayers`**: maduro, mantenido y suficiente para efectos cortos. Se confirma midiendo el tamaño del APK | — |
 | P5 | ¿Quién elige los sonidos? | ✅ Decidido (2026-10-27): **el desarrollo propone** una selección corta de bancos CC0 (Kenney, freesound.org con filtro CC0) y **el dueño del producto aprueba** antes de integrarla | — |
-| P6 | ¿Narración por voz de las instrucciones (para niños que no leen)? | ✅ Asumida la recomendación: **fuera de esta historia**: es otra necesidad (voz por idioma, grabaciones o TTS) y se propone como **HU-018** | — |
+| P6 | ¿Narración por voz de las instrucciones (para niños que no leen)? | ✅ Asumida la recomendación: **fuera de esta historia**: es otra necesidad (voz por idioma, grabaciones o TTS) y se propuso como HU-018, **descartada** el 2026-10-28 (D-034: la app es visual y los sonidos solo acompañan logros e interacciones) | — |
 
 ## 8. Fuera de alcance
 
 - Música de fondo (P3).
-- Narración por voz (HU-018).
+- Narración por voz (descartada, D-034).
 - Sonidos de juegos futuros (llegan con cada juego).
