@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Hecha (2026-10-28). Comprobado en el manifiesto combinado del APK; falta el criterio 3 en el moto g55 (no estaba conectado) |
+| **Estado** | Hecha (2026-10-28). Verificada en el moto g55 el 2026-10-29 |
 | **Prioridad** | P1: antes de las entregas 1 y 2 de HU-014 (formulario de Seguridad de los datos y política de privacidad) |
 | **Tamaño** | S (configuración, sin código de la app) |
 | **Decisión que aplica** | D-033 (dueño del producto, 2026-10-28) |
@@ -40,12 +40,18 @@ Que el progreso y los ajustes de la app (cajas de Hive: nivel, estrellas, insign
 2. **Dado** las reglas, **entonces** excluyen los 9 dominios de datos en la nube y en la transferencia entre teléfonos, sin ningún `<include>`.
 3. **Dado** el APK instalado, **entonces** el sistema la marca sin copia de seguridad (`dumpsys package` sin `ALLOW_BACKUP`) y la app sigue arrancando con su progreso guardado.
 
-## 6. Consecuencias
+## 6. Verificación en el moto g55 (2026-10-29)
+
+- Instalada encima de la versión anterior: `dumpsys package` muestra `flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]`, sin `ALLOW_BACKUP`.
+- Con la copia de seguridad del sistema activada (`bmgr enabled`), la app no aparece entre los paquetes que se pueden copiar (`bmgr list packages`).
+- La app arranca con sus datos guardados (idioma español).
+
+## 7. Consecuencias
 
 - HU-014: el formulario de Seguridad de los datos y la política de privacidad pueden decir, sin matices, que los datos se guardan **solo en el dispositivo** y se borran al desinstalar.
 - HU-021: deja de darse el caso del idioma restaurado desde la copia de otra persona (salvo herramientas de fabricante que no respeten las reglas de Android, que no están documentadas).
 - Riesgo aceptado: Huawei no documenta si Phone Clone respeta estas reglas. Si copiara algo, solo serían nivel, estrellas e idioma, sin datos personales.
 
-## 7. Fuera de alcance
+## 8. Fuera de alcance
 
 - Una copia propia de la app (exportar o importar el progreso): se valoraría solo si los usuarios lo piden.

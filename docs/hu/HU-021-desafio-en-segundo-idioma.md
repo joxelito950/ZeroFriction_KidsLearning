@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Hecha (desarrollada el 2026-10-28; falta la revisión en el moto g55, que no estaba conectado) |
+| **Estado** | Hecha (desarrollada el 2026-10-28 y verificada en el moto g55 el 2026-10-29) |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 |
 | **Tamaño** | S (1–2 días) |
@@ -122,3 +122,8 @@ El resto del camino ya se entiende sin leer el idioma de la app: el botón «Zon
   - Los de diseño del desafío y del mensaje se repiten con la ayuda más larga y con la de dirección contraria (380 casos).
   - El test de la paleta comprueba el contraste de las líneas de ayuda (≥ 4,5:1).
   - 749 tests en verde; cobertura del 99,7 % y del 100 % en los archivos tocados.
+- **Verificado en el moto g55 (2026-10-29)**, con el teléfono en español (Colombia), en vertical, instalada encima de la versión anterior (se conservan los datos):
+  - Con la app en español, la ayuda sale en inglés: «Tap again to enter», «What is four times six?» y «That's not the answer». La tecla «Aceptar» lleva ✓, y «Volver al menú» y «Reintentar» llevan sus iconos.
+  - Al pasar la app a alemán desde la Zona de Padres, la ayuda sale en español: «Toca otra vez para entrar» y «¿Cuánto es nueve por seis?». Con solo esa línea se resuelve el desafío, se entra en el «Elternbereich» y se vuelve a elegir «Español» (criterio 11).
+  - El mensaje de fallo vuelve solo al menú a los 5 s, como antes.
+  - Sin errores en el registro.
