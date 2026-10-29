@@ -48,6 +48,32 @@ void _usePhone(WidgetTester tester, _Phone phone) {
   addTearDown(tester.view.reset);
 }
 
+/// Idiomas de ayuda del desafío que más exigen al diseño (HU-021, criterio 10):
+/// el de la pregunta más larga y, si es otro, el de dirección contraria.
+List<Locale> _worstHelpers(Locale app) {
+  final challenge = ParentalGate(random: Random(3)).start();
+  int length(Locale locale) {
+    final l10n = lookupAppLocalizations(locale);
+    return l10n
+        .parentalGateQuestion(
+          numberInWords(l10n, challenge.firstFactor),
+          numberInWords(l10n, challenge.secondFactor),
+        )
+        .length;
+  }
+
+  final others = AppLocalizations.supportedLocales.where((locale) => locale != app).toList()
+    ..sort((a, b) => length(b).compareTo(length(a)));
+  final bool appIsRtl = app.languageCode == 'ar';
+  final Locale opposite = others.firstWhere((locale) => (locale.languageCode == 'ar') != appIsRtl);
+  return {others.first, opposite}.toList();
+}
+
+void _usePhoneLanguage(WidgetTester tester, Locale locale) {
+  tester.platformDispatcher.localesTestValue = [locale];
+  addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+}
+
 void main() {
   setUpAll(() {
     registerMemoryGameFallbacks();
@@ -88,48 +114,62 @@ void main() {
           }
         });
 
-        // HU-004, criterio 8: la pregunta, la respuesta y las 12 teclas se ven sin scroll.
-        testWidgets('parental gate fits with every key reachable', (tester) async {
-          _usePhone(tester, phone);
-          await tester.pumpWidget(
-            localizedApp(locale: locale, home: ParentalGateScreen(gate: ParentalGate(random: Random(3)))),
-          );
+        // HU-004, criterio 8: la pregunta, la respuesta y las 12 teclas se ven sin scroll,
+        // también con la pregunta repetida en el idioma de ayuda (HU-021, criterio 10).
+        for (final helper in _worstHelpers(locale)) {
+          testWidgets('parental gate fits with every key reachable (helper ${helper.languageCode})', (tester) async {
+            _usePhone(tester, phone);
+            _usePhoneLanguage(tester, helper);
+            await tester.pumpWidget(
+              localizedApp(locale: locale, home: ParentalGateScreen(gate: ParentalGate(random: Random(3)))),
+            );
 
-          for (final key in [
-            'parental-gate-back',
-            'parental-gate-question',
-            'parental-gate-answer',
-            'parental-key-delete',
-            'parental-key-accept',
-            for (var digit = 0; digit <= 9; digit++) 'parental-key-$digit',
-          ]) {
-            expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget, reason: key);
-          }
+            for (final key in [
+              'parental-gate-back',
+              'parental-gate-question',
+              'parental-gate-question-helper',
+              'parental-gate-answer',
+              'parental-key-delete',
+              'parental-key-accept',
+              for (var digit = 0; digit <= 9; digit++) 'parental-key-$digit',
+            ]) {
+              expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget, reason: key);
+            }
 
-          final double keyHeight = tester.getSize(find.byKey(const ValueKey<String>('parental-key-0'))).height;
-          expect(keyHeight, greaterThanOrEqualTo(48), reason: 'keys must stay easy to tap');
-        });
+            final double keyHeight = tester.getSize(find.byKey(const ValueKey<String>('parental-key-0'))).height;
+            expect(keyHeight, greaterThanOrEqualTo(48), reason: 'keys must stay easy to tap');
+          });
+        }
 
-        testWidgets('parental gate message fits with every choice reachable', (tester) async {
-          _usePhone(tester, phone);
-          await tester.pumpWidget(
-            localizedApp(locale: locale, home: ParentalGateScreen(gate: ParentalGate(random: Random(3)))),
-          );
-          final ParentalGateCubit cubit =
-              tester.element(find.byType(ParentalKeypad)).read<ParentalGateCubit>();
-          for (final char in '${cubit.state.challenge!.answer + 1}'.split('')) {
-            cubit.typeDigit(int.parse(char));
-          }
-          cubit.submit();
-          await tester.pump();
+        for (final helper in _worstHelpers(locale)) {
+          testWidgets('parental gate message fits with every choice reachable (helper ${helper.languageCode})',
+              (tester) async {
+            _usePhone(tester, phone);
+            _usePhoneLanguage(tester, helper);
+            await tester.pumpWidget(
+              localizedApp(locale: locale, home: ParentalGateScreen(gate: ParentalGate(random: Random(3)))),
+            );
+            final ParentalGateCubit cubit =
+                tester.element(find.byType(ParentalKeypad)).read<ParentalGateCubit>();
+            for (final char in '${cubit.state.challenge!.answer + 1}'.split('')) {
+              cubit.typeDigit(int.parse(char));
+            }
+            cubit.submit();
+            await tester.pump();
 
-          for (final key in ['parental-gate-close', 'parental-gate-back-to-menu', 'parental-gate-retry']) {
-            await tester.ensureVisible(find.byKey(ValueKey<String>(key)));
-            expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget, reason: key);
-          }
-          expect(find.text(l10n.parentalGateAttemptsLeft(2)), findsOneWidget);
-          await tester.pump(ParentalGateCubit.messageTimeout);
-        });
+            for (final key in [
+              'parental-gate-close',
+              'parental-gate-message-helper',
+              'parental-gate-back-to-menu',
+              'parental-gate-retry',
+            ]) {
+              await tester.ensureVisible(find.byKey(ValueKey<String>(key)));
+              expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget, reason: key);
+            }
+            expect(find.text(l10n.parentalGateAttemptsLeft(2)), findsOneWidget);
+            await tester.pump(ParentalGateCubit.messageTimeout);
+          });
+        }
 
         testWidgets('parents zone fits', (tester) async {
           _usePhone(tester, phone);

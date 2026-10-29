@@ -250,6 +250,7 @@ El script `tool/coverage_check.dart` aplica estos umbrales sobre `coverage/lcov.
 Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Android SDK 36 con cmdline-tools y licencias aceptadas, y VS Code con las extensiones Dart y Flutter. Pasos de instalación en el README. Particularidades conocidas:
 
 - El emulador `Medium_Phone_API_37.0` puede mostrar la app en negro tras arrancar desde un snapshot con el sistema sobrecargado. Solución: arranque en frío (`-no-snapshot-load` o *Cold Boot Now* en Android Studio).
+- **Firma de release (D-019, TD-003):** `android/app/build.gradle.kts` lee `android/key.properties` (ignorado por git) con `storeFile`, `storePassword`, `keyAlias` y `keyPassword`. El keystore vive fuera del repositorio (`%USERPROFILE%\.android\keys\`). Sin ese archivo, el *release* se firma con debug y Gradle lo avisa (solo visible con `flutter build -v`). Guía para generar la clave y comprobar la firma en `docs/td/TD-003-firma-release.md`.
 - En PowerShell 5.1, `Set-Content -Encoding utf8` añade BOM y `Get-Content -Raw` corrompe las tildes. Edita los archivos con el IDE o con herramientas que respeten UTF-8.
 
 ---
@@ -276,7 +277,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-016 | La checklist de calidad de la sección 5 se ejecuta en GitHub Actions (`CI / quality`) con la misma versión de Flutter que en local; GitHub bloquea la fusión si falla | Las reglas de calidad no dependen de la disciplina manual (TD-001) | Vigente desde TD-001 · el bloqueo de fusión requiere activar la protección de ramas en GitHub |
 | D-017 | La monetización usará Google Play Billing (pago único) | Lo exige Google Play para contenido digital; añadirá el permiso `BILLING` | Planificada |
 | D-018 | Cobertura mínima de líneas: 90 % total y 80 % por archivo (sección 6.3) | Equilibra seguridad y velocidad; la línea base está en 97,4 % | Vigente |
-| D-019 | El APK release se firma con la clave de debug | Plantilla por defecto de Flutter | **Pendiente**: configurar una keystore de release (`key.properties`, fuera de git) antes de distribuir |
+| D-019 | El *release* se firma con la clave de subida del dueño, leída de `android/key.properties` (fuera de git). Sin ese archivo, firma con debug y avisa | Google Play rechaza lo firmado con debug; el CI y otros equipos no tienen la clave (TD-003) | Vigente · cerrada con TD-003 (2026-10-29) |
 | D-020 | El juego de memoria es un único modo progresivo: escalera 2×2 → 2×3 → 2×4 → 3×4 → 4×4 y límites sin tiempo → 90 → 60 → 45 → 30 s. Al perder se baja un nivel conservando el límite. Insignia dorada al superar el 4×4; después se vuelve al 2×2 sin tiempo | Progreso adaptado al ritmo del niño, con un reto final alcanzable (análisis de viabilidad en HU-001) | Aprobada · se implementa en HU-001 |
 | D-021 | El tiempo se muestra como una barra que se vacía: sin números, sin rojo, sin sonidos. Perder se comunica como ayuda («Probemos con menos cartas») | Introduce un cronómetro sin contradecir «sin mecánicas frenéticas ni penalizaciones» del README | Aprobada · se implementa en HU-001 |
 | D-022 | Dentro de un juego no hay botones que saquen al niño: tras ganar o perder, la app avanza sola con una transición suave. Se sale con «atrás» del sistema, protegido por D-025 | Los niños tocan botones sin intención, salen del juego y necesitan a un adulto para volver | Aprobada · aplica a todos los juegos desde HU-001 |
@@ -302,7 +303,6 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | `hive_ce_generator` admite `analyzer` < 14.5.0 | Al actualizar Flutter o Dart, `pub` podría no encontrar una combinación compatible | Revisarlo en el mismo PR que actualice Flutter (local y CI) |
 | `isPremium` se guarda pero no se lee | El candado Premium aún no existe | Implementar con HU-006 y los juegos 2 y 3 (HU-007, HU-008); nunca en el juego de memoria (D-028) |
 | Versión de Flutter fijada en dos sitios (local y `ci.yml`) | Si solo se actualiza una, los resultados de local y del CI pueden diferir | Actualizarlas en el mismo PR (TD-001, C2) |
-| Firma release con la clave de debug | No se puede publicar en Google Play | Keystore de release (D-019) |
 | Sin carpeta `ios/` | No hay build para iOS | Ejecutar `flutter create --platforms=ios .` cuando se decida |
 
 ---

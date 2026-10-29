@@ -31,6 +31,28 @@ void main() {
     });
   });
 
+  group('AppLanguage.helperFor (HU-021 R1)', () {
+    test('uses the first phone language that is supported and differs from the app', () {
+      expect(AppLanguage.helperFor('de', ['es-CO']), 'es');
+      expect(AppLanguage.helperFor('es', ['es-CO', 'en-US']), 'en');
+      expect(AppLanguage.helperFor('es', ['ru-RU', 'fr-FR', 'en-US']), 'fr');
+      expect(AppLanguage.helperFor('ar', ['pt_PT']), 'pt');
+      expect(AppLanguage.helperFor('en', ['ja-JP']), 'ja');
+    });
+
+    test('falls back to English when the phone offers nothing else', () {
+      expect(AppLanguage.helperFor('de', ['de-DE']), 'en');
+      expect(AppLanguage.helperFor('ko', ['ru-RU', 'zh-CN']), 'en');
+      expect(AppLanguage.helperFor('ja', const []), 'en');
+    });
+
+    test('gives no helper when the app is in English and nothing better exists', () {
+      expect(AppLanguage.helperFor('en', ['en-US']), isNull);
+      expect(AppLanguage.helperFor('en', ['ru-RU']), isNull);
+      expect(AppLanguage.helperFor('en', const []), isNull);
+    });
+  });
+
   group('AppLanguage.isSupported', () {
     test('accepts exactly the nine supported language codes', () {
       expect(AppLanguage.supported, ['en', 'es', 'pt', 'de', 'ja', 'fr', 'it', 'ko', 'ar']);

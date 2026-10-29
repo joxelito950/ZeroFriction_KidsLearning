@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27) |
+| **Estado** | Hecha (desarrollada el 2026-10-28 y verificada en el moto g55 el 2026-10-29) |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 |
 | **Tamaño** | S (1–2 días) |
@@ -109,5 +109,21 @@ El resto del camino ya se entiende sin leer el idioma de la app: el botón «Zon
 
 - Mostrar en dos idiomas la Zona de Padres o el resto de la app: dentro de la Zona de Padres, la sección «Idioma» ya se encuentra sin leer (primera, con icono y nombres propios).
 - Cambiar el idioma de la app desde el desafío (P6).
-- Leer la pregunta en voz alta (HU-018).
+- Leer la pregunta en voz alta (HU-018, descartada por D-034).
 - Idiomas fuera de los 9 de D-027.
+
+## 10. Desarrollo y verificación
+
+- **Rama:** `feature/hu-021-gate-helper-language`.
+- **Dominio:** `AppLanguage.helperFor` (R1), con la misma normalización de idiomas que el primer arranque.
+- **Presentación:** `HelperLanguageText` lee los idiomas del teléfono al construirse (R2) y dibuja el texto del catálogo del idioma de ayuda con su dirección de escritura y su idioma para el lector de pantalla (R4, R5). Se usa en la pregunta del desafío, en el aviso «Toca otra vez para entrar» (`QuietHint` gana una línea de ayuda opcional) y en el título del mensaje de fallo (R6). Iconos en «Aceptar» (✓), «Reintentar» (↻) y «Volver al menú» (casa) (R7). Ningún texto nuevo en el catálogo (R8).
+- **Tests:**
+  - 12 de la historia: los casos de R1, la lectura al abrir (R2), las direcciones mezcladas, la semántica con su idioma, los avisos con ayuda, los iconos, ninguna cifra en las 49 preguntas × 9 idiomas, y el recorrido completo de rescate (alemán → pregunta en español → Zona de Padres → «Español»).
+  - Los de diseño del desafío y del mensaje se repiten con la ayuda más larga y con la de dirección contraria (380 casos).
+  - El test de la paleta comprueba el contraste de las líneas de ayuda (≥ 4,5:1).
+  - 749 tests en verde; cobertura del 99,7 % y del 100 % en los archivos tocados.
+- **Verificado en el moto g55 (2026-10-29)**, con el teléfono en español (Colombia), en vertical, instalada encima de la versión anterior (se conservan los datos):
+  - Con la app en español, la ayuda sale en inglés: «Tap again to enter», «What is four times six?» y «That's not the answer». La tecla «Aceptar» lleva ✓, y «Volver al menú» y «Reintentar» llevan sus iconos.
+  - Al pasar la app a alemán desde la Zona de Padres, la ayuda sale en español: «Toca otra vez para entrar» y «¿Cuánto es nueve por seis?». Con solo esa línea se resuelve el desafío, se entra en el «Elternbereich» y se vuelve a elegir «Español» (criterio 11).
+  - El mensaje de fallo vuelve solo al menú a los 5 s, como antes.
+  - Sin errores en el registro.

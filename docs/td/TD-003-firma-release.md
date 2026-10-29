@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso: configuración de firma lista y verificada; **falta que el dueño genere su clave** (sección 7) |
+| **Estado** | Hecha (verificada con la clave real del dueño el 2026-10-29) |
 | **Épica** | E6 · Publicación y distribución |
 | **Prioridad** | P1: pendientes técnicos antes de las historias; bloquea HU-014 (primera publicación) |
 | **Tamaño** | S (medio día) |
@@ -63,11 +63,24 @@ Es la primera app del dueño: la sección 7 es una guía completa. El desarrollo
 
 | Criterio | Resultado |
 |---|---|
-| 1 | ✅ Mecanismo verificado con una **clave de prueba desechable** (contraseña aleatoria, borrada después): el AAB quedó firmado con «CN=TD003 Throwaway Test». ⏳ Falta repetirlo con la clave real del dueño |
+| 1 | ✅ Mecanismo verificado con una **clave de prueba desechable** (contraseña aleatoria, borrada después): el AAB quedó firmado con «CN=TD003 Throwaway Test». ✅ Repetido con la clave real el 2026-10-29 (ver abajo) |
 | 2 | ✅ Sin `key.properties`: compila, firma con «CN=Android Debug» y muestra el aviso |
 | 3 | ✅ `git check-ignore` confirma que `android/key.properties` está ignorado; el repositorio no contiene claves |
 | 4 | Se comprueba en el CI del PR |
 | 5 | ✅ Guía de la sección 7 |
+
+### Verificación con la clave real (2026-10-29)
+
+El dueño generó la clave con la guía de la sección 7 y creó `android/key.properties`. `flutter build appbundle --release` produjo `app-release.aab`, y `keytool -printcert -jarfile` muestra:
+
+| Campo | Valor |
+|---|---|
+| Titular | `CN=jose luis baez ruiz, L=itagui, ST=antioquia, C=CO` (cuenta personal, P3) |
+| Clave | RSA de 4096 bits, `SHA384withRSA` |
+| Validez | Del 2026-10-29 al 2054-03-16 (Google Play exige al menos hasta 2033) |
+| Huella SHA-256 | `38:1B:3B:88:04:B1:CB:47:4F:F5:7F:97:CF:D4:BA:91:D1:76:1C:00:6B:8F:4A:B1:87:79:5C:98:46:2F:13:49` |
+
+La huella es pública: en HU-014 se compara con la clave de subida que muestra Play Console (*Integridad de la app*). `git ls-files` no contiene ningún `.jks`, `.keystore` ni `key.properties` (criterio 3).
 
 **Cómo se comprueba la firma:** el AAB usa firma JAR, así que vale `keytool -printcert -jarfile app-release.aab`. El APK, con `minSdk` 26, usa el esquema v2, que `keytool` no lee; para el APK hay que usar `apksigner verify --print-certs` (incluido en el Android SDK).
 

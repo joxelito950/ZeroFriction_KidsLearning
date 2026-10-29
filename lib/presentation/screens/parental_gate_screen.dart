@@ -7,6 +7,7 @@ import '../blocs/parental_gate/parental_gate_cubit.dart';
 import '../blocs/parental_gate/parental_gate_state.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
+import '../widgets/helper_language_text.dart';
 import '../widgets/parental_gate_message.dart';
 import '../widgets/parental_keypad.dart';
 import 'parents_zone_screen.dart';
@@ -165,6 +166,19 @@ class _QuestionPanel extends StatelessWidget {
           ),
           key: const ValueKey<String>('parental-gate-question'),
           style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        // La misma pregunta en un idioma que el adulto entienda (HU-021).
+        SizedBox(
+          width: double.infinity,
+          child: HelperLanguageText(
+            key: const ValueKey<String>('parental-gate-question-helper'),
+            text: (helper) => helper.parentalGateQuestion(
+              numberInWords(helper, challenge.firstFactor),
+              numberInWords(helper, challenge.secondFactor),
+            ),
+            textAlign: TextAlign.start,
+            style: theme.textTheme.titleMedium?.copyWith(color: AppPalette.deepTeal.withValues(alpha: 0.8)),
+          ),
         ),
         const SizedBox(height: 16),
         Semantics(
