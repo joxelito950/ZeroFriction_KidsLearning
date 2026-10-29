@@ -211,6 +211,7 @@ class _MenuActionsState extends State<_MenuActions> {
               overlayChildBuilder: (_) => QuietHint(
                 key: const ValueKey<String>('parents-zone-tap-again-hint'),
                 text: l10n.parentsZoneTapAgainHint,
+                helperText: (helper) => helper.parentsZoneTapAgainHint,
               ),
               child: TextButton.icon(
                 key: const ValueKey<String>('menu-parents-zone'),

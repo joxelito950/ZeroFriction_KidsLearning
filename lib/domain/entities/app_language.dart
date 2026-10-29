@@ -28,9 +28,23 @@ abstract final class AppLanguage {
   /// preferencia del dispositivo, p. ej. `es-CO`, `pt_PT`) o [fallback].
   static String resolve(Iterable<String> preferredLanguageTags) {
     for (final tag in preferredLanguageTags) {
-      final String languageCode = tag.trim().split(RegExp('[-_]')).first.toLowerCase();
+      final String languageCode = _languageCodeOf(tag);
       if (isSupported(languageCode)) return languageCode;
     }
     return fallback;
   }
+
+  /// Idioma en el que se repite el desafío de adultos debajo del de la app
+  /// (HU-021 R1): el primero de [preferredLanguageTags] que esté soportado y no
+  /// sea [appLanguage]; si no hay ninguno, el inglés. `null` cuando la app ya
+  /// está en inglés y el teléfono no ofrece otro idioma: no hay ayuda mejor.
+  static String? helperFor(String appLanguage, Iterable<String> preferredLanguageTags) {
+    for (final tag in preferredLanguageTags) {
+      final String languageCode = _languageCodeOf(tag);
+      if (isSupported(languageCode) && languageCode != appLanguage) return languageCode;
+    }
+    return appLanguage == fallback ? null : fallback;
+  }
+
+  static String _languageCodeOf(String tag) => tag.trim().split(RegExp('[-_]')).first.toLowerCase();
 }

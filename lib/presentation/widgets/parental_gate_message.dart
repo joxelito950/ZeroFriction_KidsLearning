@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import 'helper_language_text.dart';
 
 /// Mensaje tras una respuesta incorrecta (HU-004 R4, R5, S1, S3): los intentos
 /// que quedan, «Reintentar» (si quedan), una «X» y «Volver al menú», y una barra
@@ -61,6 +62,13 @@ class ParentalGateMessage extends StatelessWidget {
                               l10n.parentalGateWrongAnswer,
                               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
+                            // El aviso en un idioma que el adulto entienda (HU-021 R6).
+                            HelperLanguageText(
+                              key: const ValueKey<String>('parental-gate-message-helper'),
+                              text: (helper) => helper.parentalGateWrongAnswer,
+                              textAlign: TextAlign.start,
+                              style: theme.textTheme.titleSmall?.copyWith(color: AppPalette.deepTeal.withValues(alpha: 0.8)),
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               canRetry ? l10n.parentalGateAttemptsLeft(attemptsLeft) : l10n.parentalGateNoAttemptsLeft,
@@ -74,16 +82,19 @@ class ParentalGateMessage extends StatelessWidget {
                               spacing: 8,
                               runSpacing: 8,
                               children: [
-                                TextButton(
+                                // Con icono, para entenderlos sin leer el idioma de la app (HU-021 R7).
+                                TextButton.icon(
                                   key: const ValueKey<String>('parental-gate-back-to-menu'),
                                   onPressed: onBackToMenu,
-                                  child: Text(l10n.parentalGateBackToMenu),
+                                  icon: const Icon(Icons.home_rounded),
+                                  label: Text(l10n.parentalGateBackToMenu),
                                 ),
                                 if (canRetry)
-                                  FilledButton(
+                                  FilledButton.icon(
                                     key: const ValueKey<String>('parental-gate-retry'),
                                     onPressed: onRetry,
-                                    child: Text(l10n.parentalGateRetry),
+                                    icon: const Icon(Icons.refresh_rounded),
+                                    label: Text(l10n.parentalGateRetry),
                                   ),
                               ],
                             ),

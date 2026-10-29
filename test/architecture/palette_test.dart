@@ -135,7 +135,30 @@ void main() {
       expect(outside, isEmpty);
     });
   });
+
+  group('Contraste de los textos con transparencia (WCAG 2.1, 4,5:1)', () {
+    // La línea de ayuda del desafío y del mensaje de fallo (HU-021), sobre el crema y sobre el blanco.
+    final Color helper = AppPalette.deepTeal.withValues(alpha: 0.8);
+    // El aviso pequeño (QuietHint): fondo teal al 90 % sobre el crema del menú, ayuda en blanco al 85 %.
+    final Color hintBackground = blend(AppPalette.deepTeal.withValues(alpha: 0.9), AppPalette.warmCream);
+
+    final pairs = <String, (Color, Color)>{
+      'ayuda del desafío sobre el crema': (blend(helper, AppPalette.warmCream), AppPalette.warmCream),
+      'ayuda del mensaje sobre el blanco': (blend(helper, AppPalette.white), AppPalette.white),
+      'aviso pequeño, texto blanco': (AppPalette.white, hintBackground),
+      'aviso pequeño, ayuda en blanco al 85 %': (blend(AppPalette.white.withValues(alpha: 0.85), hintBackground), hintBackground),
+    };
+
+    for (final MapEntry<String, (Color, Color)> pair in pairs.entries) {
+      test(pair.key, () {
+        expect(contrastRatio(pair.value.$1, pair.value.$2), greaterThanOrEqualTo(4.5));
+      });
+    }
+  });
 }
+
+/// [color] con transparencia pintado sobre el fondo opaco [background].
+Color blend(Color color, Color background) => Color.alphaBlend(color, background);
 
 /// Relación de contraste de WCAG 2.1 entre dos colores opacos.
 double contrastRatio(Color a, Color b) {
