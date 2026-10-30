@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -101,44 +103,76 @@ class _GateContent extends StatelessWidget {
       canAccept: state.canSubmit,
     );
 
+    // La respuesta va pegada al teclado y la pregunta se desplaza aparte: con el
+    // texto ampliado, el adulto siempre ve lo que teclea (TD-007 A2).
+    final question = SingleChildScrollView(child: _QuestionPanel(challenge: challenge));
+    final answer = _AnswerBox(input: state.input);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final bool isLandscape = constraints.maxWidth > constraints.maxHeight;
-        final question = _QuestionPanel(state: state, challenge: challenge);
 
         if (isLandscape) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             child: Row(
               children: [
-                Expanded(child: SingleChildScrollView(child: question)),
+                Expanded(child: question),
                 const SizedBox(width: 32),
-                Expanded(child: Center(child: keypad)),
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, side) {
+                      // El teclado ocupa el alto que deja la respuesta y la
+                      // respuesta mide lo mismo de ancho que el teclado.
+                      final double keypadHeight = side.maxHeight - _AnswerBox.height - _answerGap;
+                      final double width = math.min(side.maxWidth, keypadHeight * ParentalKeypad.aspectRatio);
+                      return Center(
+                        child: SizedBox(
+                          width: width,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [answer, const SizedBox(height: _answerGap), keypad],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           );
         }
-        return SingleChildScrollView(
+        return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              question,
-              const SizedBox(height: 24),
-              Center(child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 360), child: keypad)),
+              Flexible(child: question),
+              const SizedBox(height: 16),
+              Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [answer, const SizedBox(height: _answerGap), keypad],
+                  ),
+                ),
+              ),
             ],
           ),
         );
       },
     );
   }
+
+  static const double _answerGap = 12;
 }
 
-/// Botón «Volver», título, pregunta en palabras y la respuesta escrita.
+/// Botón «Volver», título y pregunta en palabras.
 class _QuestionPanel extends StatelessWidget {
-  const _QuestionPanel({required this.state, required this.challenge});
+  const _QuestionPanel({required this.challenge});
 
-  final ParentalGateState state;
   final ParentalGateChallenge challenge;
 
   @override
@@ -180,25 +214,39 @@ class _QuestionPanel extends StatelessWidget {
             style: theme.textTheme.titleMedium?.copyWith(color: AppPalette.deepTeal.withValues(alpha: 0.8)),
           ),
         ),
-        const SizedBox(height: 16),
-        Semantics(
-          label: state.input.isEmpty
-              ? l10n.parentalGateAnswerEmptySemantics
-              : l10n.parentalGateAnswerSemantics(state.input),
-          excludeSemantics: true,
-          child: Container(
-            key: const ValueKey<String>('parental-gate-answer'),
-            height: 56,
-            width: 140,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(state.input, style: theme.textTheme.headlineMedium),
-          ),
-        ),
       ],
+    );
+  }
+}
+
+/// La respuesta escrita. Mide siempre lo mismo para no robar alto al teclado:
+/// las cifras se encogen si el texto ampliado no cabe (TD-007 A2).
+class _AnswerBox extends StatelessWidget {
+  const _AnswerBox({required this.input});
+
+  final String input;
+
+  static const double height = 56;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return Semantics(
+      label: input.isEmpty ? l10n.parentalGateAnswerEmptySemantics : l10n.parentalGateAnswerSemantics(input),
+      excludeSemantics: true,
+      child: Container(
+        key: const ValueKey<String>('parental-gate-answer'),
+        height: height,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: FittedBox(fit: BoxFit.scaleDown, child: Text(input, style: theme.textTheme.headlineMedium)),
+      ),
     );
   }
 }

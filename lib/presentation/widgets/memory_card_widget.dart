@@ -87,16 +87,27 @@ class _FrontFace extends StatelessWidget {
           ),
         ],
       ),
-      child: Center(
-        child: Text(
-          symbol,
-          key: ValueKey<String>('memory-card-symbol-$symbol'),
-          style: const TextStyle(fontSize: 42, fontWeight: FontWeight.w700),
-          textAlign: TextAlign.center,
+      // El símbolo es un dibujo, no un texto: no sigue el texto ampliado del
+      // sistema y se encoge con la carta para no salirse de ella (TD-007 A4).
+      child: LayoutBuilder(
+        builder: (context, constraints) => Center(
+          child: Text(
+            symbol,
+            key: ValueKey<String>('memory-card-symbol-$symbol'),
+            style: TextStyle(fontSize: _symbolSize(constraints.biggest), fontWeight: FontWeight.w700),
+            textScaler: TextScaler.noScaling,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
   }
+
+  static const double _maxSymbolSize = 42;
+
+  /// Tamaño del símbolo para una carta de [card]: el de siempre, salvo que la
+  /// carta sea tan pequeña que no quepa.
+  static double _symbolSize(Size card) => math.min(_maxSymbolSize, card.shortestSide * 0.5);
 }
 
 class _BackFace extends StatelessWidget {
