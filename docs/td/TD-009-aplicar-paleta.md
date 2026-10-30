@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Hecha (2026-10-27). Revisada en el emulador; queda la revisión en el moto g55 (A5) |
+| **Estado** | Hecha (2026-10-27). Revisada en el emulador y en el moto g55 el 2026-10-30 (A5, sección 6.1) |
 | **Prioridad** | P1: conviene antes de las capturas de la tienda (HU-014) y de cualquier historia con interfaz nueva (HU-005, HU-009, HU-010) |
 | **Tamaño** | M (1–2 días) |
 | **Decisión que aplica** | D-032 (paleta cerrada, [docs/brand/PALETA.md](../brand/PALETA.md)); sustituye a D-005 (semilla `#98FFD9`) |
@@ -47,6 +47,23 @@ Que toda la app use **solo** los 7 colores de la paleta y que el CI **impida** q
 - `test/architecture/palette_test.dart`: un test por archivo de `lib/` (falla con archivo, línea y regla), los valores leídos de la tabla de PALETA.md, los 7 literales como máximo y el contraste ≥ 4,5:1 de 15 parejas de texto del tema. Comprobado que falla al introducir `Colors.red`.
 - Ajustes respecto a la asignación propuesta, ya reflejados en PALETA.md: la **barra de tiempo** y el **contador de movimientos** van en teal profundo (no se tocan, C6); la **medalla** del menú va en dorado sobre un círculo blanco (el dorado sobre azul petróleo da 1,40:1); las **teclas** del desafío son blancas con borde y número en azul petróleo.
 - 669 tests en verde, cobertura 99,6 %.
+
+### 6.1 Revisión en el moto g55 (2026-10-30)
+
+Compilación debug con todo `develop` hasta HU-021. El dueño jugó y recorrió la parte de adultos mientras se tomaban capturas por adb, sin tocar la pantalla desde el ordenador. El teléfono tiene el texto del sistema a 0,86 y el tamaño de visualización reducido (densidad 340).
+
+| Pantalla | Vertical | Horizontal | Resultado |
+|---|---|---|---|
+| Menú | ✅ | — | Fondo crema, título en teal profundo, botón del juego en azul petróleo con texto blanco |
+| Tableros 2×4 y 3×4 | ✅ | ✅ | Cartas en azul petróleo con «?» crema; cartas abiertas blancas con borde ámbar; barra de tiempo y contador en teal profundo; puntos de nivel en dorado |
+| Celebración (3★ y 1★) | ✅ | ✅ | Trofeo y estrellas en dorado; las no conseguidas, en dorado suave |
+| Tiempo agotado | ✅ | — | Tarjeta blanca con reloj de arena en teal profundo |
+| Desafío de adultos y mensaje de fallo | ✅ | — | Teclas blancas con borde y número en azul petróleo; la línea de ayuda de HU-021 se ve; botón «Reintentar» en azul petróleo |
+| Zona de Padres | ✅ | ✅ | Tarjetas blancas sobre crema; idioma elegido en azul petróleo con marca |
+
+Ningún color fuera de la paleta. No salieron en las capturas los tableros 2×2, 2×3 y 4×4: usan los mismos widgets que los revisados, y los tests de layout los cubren.
+
+Observación para TD-010: con el tamaño de visualización reducido, el 2×4 en horizontal se dibuja en una sola fila de 8 cartas y deja una franja vacía bajo el tablero. No es un fallo de la paleta ni un desborde.
 
 ## 7. Fuera de alcance
 
