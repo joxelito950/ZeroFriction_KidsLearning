@@ -24,6 +24,10 @@ class MemoryGameScreen extends StatelessWidget {
   final Random? random;
   final DateTime Function()? now;
 
+  /// Los textos del juego siguen el texto ampliado del sistema solo hasta aquí
+  /// (TD-007 A3, A5): son para el adulto que acompaña y el tablero manda.
+  static const double maxTextScale = 1.3;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MemoryLadderCubit>(
@@ -70,39 +74,42 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
 
   @override
   Widget build(BuildContext context) {
-    return ProtectedExit(
-      onExit: () => Navigator.of(context).pop(),
-      child: Scaffold(
-        body: ColoredBox(
-          color: AppPalette.warmCream,
-          child: SafeArea(
-            child: BlocBuilder<MemoryLadderCubit, MemoryLadderState>(
-              builder: (context, state) => Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _Header(level: state.level, moves: state.moves),
-                        if (state.remainingFraction case final double fraction) ...[
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: MemoryGameScreen.maxTextScale,
+      child: ProtectedExit(
+        onExit: () => Navigator.of(context).pop(),
+        child: Scaffold(
+          body: ColoredBox(
+            color: AppPalette.warmCream,
+            child: SafeArea(
+              child: BlocBuilder<MemoryLadderCubit, MemoryLadderState>(
+                builder: (context, state) => Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _Header(level: state.level, moves: state.moves),
+                          if (state.remainingFraction case final double fraction) ...[
+                            const SizedBox(height: 12),
+                            MemoryTimeBar(fraction: fraction),
+                          ],
+                          const SizedBox(height: 14),
+                          Expanded(child: _Board(state: state)),
                           const SizedBox(height: 12),
-                          MemoryTimeBar(fraction: fraction),
+                          _Footer(isProcessing: state.phase == MemoryRoundPhase.playing && state.isProcessing),
                         ],
-                        const SizedBox(height: 14),
-                        Expanded(child: _Board(state: state)),
-                        const SizedBox(height: 12),
-                        _Footer(isProcessing: state.phase == MemoryRoundPhase.playing && state.isProcessing),
-                      ],
+                      ),
                     ),
-                  ),
-                  Positioned.fill(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: _overlayFor(state),
+                    Positioned.fill(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: _overlayFor(state),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -162,8 +169,9 @@ class _Header extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-        // Los puntos de nivel van en su propia fila: junto al contador no caben
-        // en teléfonos estrechos con textos largos (árabe, portugués).
+        // El contador va en la fila de los puntos de nivel: junto al título le
+        // quitaba el ancho y, con el texto ampliado, el título se partía letra
+        // a letra (TD-007).
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -186,18 +194,32 @@ class _Header extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(color: AppPalette.deepTeal, borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    l10n.memoryGameMovesCounter(moves),
-                    style: const TextStyle(color: AppPalette.white, fontSize: 14, fontWeight: FontWeight.w800),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                MemoryLevelIndicator(level: level, total: MemoryLadder.maxLevel),
+                const SizedBox(width: 12),
+                // Se encoge antes que desbordarse con textos largos (árabe).
+                Expanded(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(color: AppPalette.deepTeal, borderRadius: BorderRadius.circular(20)),
+                        child: Text(
+                          l10n.memoryGameMovesCounter(moves),
+                          style: const TextStyle(color: AppPalette.white, fontSize: 14, fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            MemoryLevelIndicator(level: level, total: MemoryLadder.maxLevel),
           ],
         ),
       ),
