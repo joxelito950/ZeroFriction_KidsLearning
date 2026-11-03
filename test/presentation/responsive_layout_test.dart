@@ -209,6 +209,9 @@ void main() {
             await tester.scrollUntilVisible(find.text(l10n.parentsZonePinNote), 200);
             await tester.pump(); // ensureVisible necesita un fotograma más para verse
             expect(find.text(l10n.parentsZonePinNote).hitTestable(), findsOneWidget);
+            await tester.scrollUntilVisible(find.text(l10n.parentsZonePrivacyIntro), 200);
+            await tester.pump();
+            expect(find.text(l10n.parentsZonePrivacyTitle).hitTestable(), findsOneWidget);
           });
 
           for (final level in MemoryLadder.levels) {

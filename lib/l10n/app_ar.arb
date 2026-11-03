@@ -55,5 +55,7 @@
   "parentsZonePinStep3": "لإلغاء التثبيت، اسحب لأعلى مع الاستمرار، أو المس مع الاستمرار زرّي «رجوع» و«النظرة العامة» معًا.",
   "parentsZonePinNote": "قد تختلف الأسماء والخطوات حسب الشركة المصنّعة للهاتف.",
   "parentsZoneLanguageTitle": "اللغة",
-  "parentsZoneLanguageIntro": "اللغة التي يتحدث بها التطبيق مع طفلك. تتغير فورًا."
+  "parentsZoneLanguageIntro": "اللغة التي يتحدث بها التطبيق مع طفلك. تتغير فورًا.",
+  "parentsZonePrivacyTitle": "الخصوصية",
+  "parentsZonePrivacyIntro": "لا يجمع ToddlerLogic أي بيانات: يبقى كل شيء على هذا الهاتف."
 }

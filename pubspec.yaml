@@ -2,7 +2,7 @@ name: toddler_logic
 description: Local-first cognitive development app for toddlers.
 publish_to: 'none'
 
-version: 0.0.1-beta+1
+version: 1.0.0-rc.1+2
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -32,3 +32,7 @@ flutter:
   # Genera AppLocalizations a partir de lib/l10n/*.arb (HU-011, ver l10n.yaml).
   generate: true
   uses-material-design: true
+  # Política de privacidad (HU-014 R5): los mismos archivos que publica GitHub Pages.
+  assets:
+    - docs/privacy/es.md
+    - docs/privacy/en.md

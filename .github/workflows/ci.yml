@@ -20,11 +20,19 @@ jobs:
   quality:
     name: quality
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # El AAB de release (HU-014) tarda unos 5 minutos más.
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      # Mismo JDK que el entorno local para compilar Android (HU-014).
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
 
       # Misma versión que el entorno local (C2). Se actualiza a la vez que la local.
       - name: Setup Flutter
@@ -52,6 +60,15 @@ jobs:
 
       - name: Coverage thresholds
         run: dart run tool/coverage_check.dart
+
+      # HU-014: el AAB de release compila. Sin android/key.properties se firma con
+      # debug (TD-003), así que este AAB nunca se sube a Google Play.
+      - name: Build release app bundle
+        run: flutter build appbundle --release
+
+      # HU-014 R3: el manifiesto fusionado del release no declara permisos.
+      - name: Release permissions
+        run: dart run tool/check_release_permissions.dart
 
       - name: Upload coverage report
         if: always()

@@ -1,0 +1,10 @@
+# GitHub Pages (HU-014, P4): la web pública solo contiene la política de
+# privacidad. El resto de docs/ es documentación del proyecto y no se publica
+# (además, algunas fichas tienen llaves dobles que Jekyll tomaría por Liquid).
+title: ToddlerLogic
+exclude:
+  - brand
+  - hu
+  - i18n
+  - store
+  - td
