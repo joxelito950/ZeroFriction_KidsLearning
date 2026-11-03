@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-03) |
+| **Estado** | Lista (refinamiento cerrado el 2026-11-03; el desarrollo **no** ha empezado) |
 | **Épica** | E4 · Nuevos juegos |
 | **Prioridad** | P2: va antes de HU-007 (decidido el 2026-10-29, HU-007 P1) |
-| **Tamaño** | M (estimación previa) |
+| **Tamaño** | M (2–3 días) |
 | **Depende de** | Nada. La usan el juego de memoria (desde esta historia) y Sombras (HU-007) |
 
 ## 1. Historia
@@ -45,7 +45,7 @@
 | HU-007 | Sombras la usa desde su primera versión |
 | TD-007 | No tiene texto, así que el texto ampliado no la afecta |
 
-## 5. Criterios de aceptación (borrador)
+## 5. Criterios de aceptación
 
 1. **Dado** un tablero nuevo, **cuando** pasan 4 s sin tocar, **entonces** aparece la mano haciendo el gesto del juego y se repite cada 8 s.
 2. **Dado** que la mano está visible, **cuando** el niño toca cualquier parte, **entonces** la mano desaparece y el toque llega al juego como si no estuviera.
@@ -63,15 +63,15 @@
 | Recursos | La mano: icono de Material (`Icons.touch_app`) o un vector propio (P4) |
 | Tests | Temporizadores (aparece a los 4 s, se repite, desaparece y no vuelve), toques que pasan a través, cronómetro sin arrancar, movimiento reducido, paleta |
 
-## 7. Preguntas abiertas
+## 7. Decisiones (2026-11-03: el dueño acepta todas las recomendaciones)
 
-| # | Pregunta | Recomendación | Bloquea |
-|---|---|---|---|
-| P1 | ¿Cuánto esperar antes de mostrar la mano y cada cuánto repetirla? | 4 s y 8 s; se ajustan viendo jugar al niño en el moto g55 | No |
-| P2 | ¿Vuelve la mano si el niño se queda quieto **después** de empezar a jugar? | **No:** a mitad de tablero suele estar pensando; una mano señalando una carta le daría la respuesta en la memoria | Sí |
-| P3 | ¿Se recuerda que el tutorial ya se vio, para no mostrarlo nunca más? | **No:** solo aparece si el niño no toca nada, así que a quien ya sabe jugar no le molesta, y no hay que añadir datos guardados | Sí |
-| P4 | ¿La mano es el icono de Material o un dibujo propio? | **El icono de Material** por ahora; se sustituye por el de la identidad cuando HU-013 tenga su guía de estilo | No |
-| P5 | ¿Se aplica también al juego de memoria? | **Sí:** el componente se prueba con un juego que ya existe antes de llegar a Sombras | Sí |
+| # | Pregunta | Decisión |
+|---|---|---|
+| P1 | ¿Cuánto esperar antes de mostrar la mano y cada cuánto repetirla? | ✅ **4 s y 8 s**; se ajustan viendo jugar al niño en el moto g55 |
+| P2 | ¿Vuelve la mano si el niño se queda quieto **después** de empezar a jugar? | ✅ **No:** a mitad de tablero suele estar pensando; una mano señalando una carta le daría la respuesta en la memoria |
+| P3 | ¿Se recuerda que el tutorial ya se vio, para no mostrarlo nunca más? | ✅ **No:** solo aparece si el niño no toca nada, así que a quien ya sabe jugar no le molesta, y no hay que añadir datos guardados |
+| P4 | ¿La mano es el icono de Material o un dibujo propio? | ✅ **El icono de Material** (`Icons.touch_app`) por ahora; se sustituye por el de la identidad cuando HU-013 tenga su guía de estilo |
+| P5 | ¿Se aplica también al juego de memoria? | ✅ **Sí:** el componente se prueba con un juego que ya existe antes de llegar a Sombras |
 
 ## 8. Fuera de alcance
 
