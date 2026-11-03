@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../blocs/memory_game/memory_ladder_cubit.dart';
 import '../blocs/memory_game/memory_ladder_state.dart';
 import '../theme/app_palette.dart';
+import '../widgets/gesture_hint.dart';
 import '../widgets/memory_board.dart';
 import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
@@ -49,6 +50,16 @@ class _MemoryGameView extends StatefulWidget {
 }
 
 class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObserver {
+  /// Una clave por tablero para la carta que señala la mano (HU-022): durante la
+  /// transición entre tableros conviven el viejo y el nuevo, y una sola clave
+  /// global estaría repetida.
+  final Map<int, GlobalKey> _hintKeys = {};
+
+  GlobalKey _hintKeyFor(int round) {
+    _hintKeys.removeWhere((key, _) => key < round - 1);
+    return _hintKeys.putIfAbsent(round, GlobalKey.new);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -85,21 +96,27 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
               child: BlocBuilder<MemoryLadderCubit, MemoryLadderState>(
                 builder: (context, state) => Stack(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _Header(level: state.level, moves: state.moves),
-                          if (state.remainingFraction case final double fraction) ...[
+                    // Tutorial visual: si el niño no toca nada, una mano toca una carta (HU-022).
+                    GestureHint(
+                      boardId: state.round,
+                      target: _hintKeyFor(state.round),
+                      enabled: state.phase == MemoryRoundPhase.playing && state.cards.isNotEmpty,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _Header(level: state.level, moves: state.moves),
+                            if (state.remainingFraction case final double fraction) ...[
+                              const SizedBox(height: 12),
+                              MemoryTimeBar(fraction: fraction),
+                            ],
+                            const SizedBox(height: 14),
+                            Expanded(child: _Board(state: state, hintCardKey: _hintKeyFor(state.round))),
                             const SizedBox(height: 12),
-                            MemoryTimeBar(fraction: fraction),
+                            _Footer(isProcessing: state.phase == MemoryRoundPhase.playing && state.isProcessing),
                           ],
-                          const SizedBox(height: 14),
-                          Expanded(child: _Board(state: state)),
-                          const SizedBox(height: 12),
-                          _Footer(isProcessing: state.phase == MemoryRoundPhase.playing && state.isProcessing),
-                        ],
+                        ),
                       ),
                     ),
                     Positioned.fill(
@@ -128,9 +145,10 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
 }
 
 class _Board extends StatelessWidget {
-  const _Board({required this.state});
+  const _Board({required this.state, required this.hintCardKey});
 
   final MemoryLadderState state;
+  final GlobalKey hintCardKey;
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +163,9 @@ class _Board extends StatelessWidget {
         child: MemoryBoard(
           cards: state.cards,
           onCardTap: (index) => context.read<MemoryLadderCubit>().flipCard(index),
+          hintCardKey: hintCardKey,
+          // Una carta distinta en cada tablero, sin depender del azar del reparto.
+          hintCardIndex: state.round % state.cards.length,
         ),
       ),
     );

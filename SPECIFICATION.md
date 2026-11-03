@@ -177,6 +177,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - Dentro de un juego NO DEBE haber botones que saquen al niño de él: las transiciones tras ganar o perder son automáticas (D-022, desde HU-001).
 - Toda pantalla DEBE proteger el «atrás» del sistema pidiendo repetir el gesto, con un aviso pequeño y sin botones (D-025, desde HU-001).
 - El tiempo, si existe, se muestra sin números, sin rojo y sin sonidos (D-021).
+- **Tutorial visual (HU-022):** todo juego DEBE enseñar su gesto con `GestureHint` (una mano sin texto ni sonido que aparece si el niño no toca nada en 4 s y se va al primer toque), sin cambiar el juego ni arrancar su tiempo.
 
 ### 4.3 Privacidad y seguridad
 
