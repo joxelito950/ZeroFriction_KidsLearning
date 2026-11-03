@@ -98,6 +98,17 @@ Las entregas 1 y 2 no dependen de TD-003 ni de HU-013 y pueden empezar ya.
 | Formato | Markdown mínimo (títulos, párrafos, viñetas, negrita y cursiva) pintado por `PolicyDocument`, sin dependencias nuevas; los títulos se anuncian como encabezados al lector de pantalla |
 | Tests | Lector de Markdown, sección de la Zona de Padres (resumen, español, vuelta al inglés), tests de diseño en los 9 idiomas a 1,0 y 2,0, y `test/store/privacy_policy_test.dart`: los dos idiomas existen, son assets, tienen la misma estructura y la web solo publica `privacy/` |
 
+**Revisión en el moto g55 (2026-11-03).** El dueño recorrió la sección mientras se tomaban capturas por adb, sin tocar la pantalla desde el ordenador:
+
+| Comprobación | Resultado |
+|---|---|
+| Resumen al final de la Zona de Padres y política completa en español al desplegarla | ✅ Títulos, viñetas y negritas se ven bien; al final, el marcador del correo pendiente |
+| Cambiar a English con la sección abierta | ✅ El resumen y la política pasan al inglés al instante |
+| Volver a español y girar a horizontal | ✅ |
+| Leer sin que se cierre la sesión | ✅ La Zona de Padres siguió abierta 64 s seguidos con el adulto leyendo y desplazándose (sin actividad se cierra a los 60 s) |
+| Sin tocar, vuelve al menú | ✅ 61 s después del último toque |
+| Francés: resumen en francés y política en inglés | No salió en las capturas; lo cubre el test de la Zona de Padres |
+
 **Pendiente del dueño antes de la entrega 4:**
 
 1. **Correo de contacto.** La política lleva el marcador `[CORREO PENDIENTE]` / `[CONTACT EMAIL PENDING]` hasta que exista el correo dedicado (decidido el 2026-11-03). No se puede subir a Google Play con el marcador.
