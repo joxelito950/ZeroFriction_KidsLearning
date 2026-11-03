@@ -55,5 +55,7 @@
   "parentsZonePinStep3": "Para liberar, deslize para cima e segure, ou toque e segure «Voltar» e «Visão geral» ao mesmo tempo.",
   "parentsZonePinNote": "Os nomes e as etapas podem variar conforme a marca do celular.",
   "parentsZoneLanguageTitle": "Idioma",
-  "parentsZoneLanguageIntro": "O idioma em que o app fala com seu filho. Muda na hora."
+  "parentsZoneLanguageIntro": "O idioma em que o app fala com seu filho. Muda na hora.",
+  "parentsZonePrivacyTitle": "Privacidade",
+  "parentsZonePrivacyIntro": "O ToddlerLogic não coleta nenhum dado: tudo fica neste celular."
 }

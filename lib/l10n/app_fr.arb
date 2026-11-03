@@ -55,5 +55,7 @@
   "parentsZonePinStep3": "Pour désépingler, balayez vers le haut et maintenez, ou maintenez « Retour » et « Aperçu » en même temps.",
   "parentsZonePinNote": "Les noms et les étapes peuvent varier selon la marque du téléphone.",
   "parentsZoneLanguageTitle": "Langue",
-  "parentsZoneLanguageIntro": "La langue dans laquelle l'application parle à votre enfant. Elle change aussitôt."
+  "parentsZoneLanguageIntro": "La langue dans laquelle l'application parle à votre enfant. Elle change aussitôt.",
+  "parentsZonePrivacyTitle": "Confidentialité",
+  "parentsZonePrivacyIntro": "ToddlerLogic ne collecte aucune donnée : tout reste sur ce téléphone."
 }

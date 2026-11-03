@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso: entrega 1 hecha (2026-11-03); la 2 en desarrollo; las 3–5 esperan a HU-013 y a los testers (TD-003 ✅) |
+| **Estado** | En curso: entregas 1 y 2 hechas (2026-11-03); falta el correo de contacto de la política y activar GitHub Pages; las 3–5 esperan a HU-013 y a los testers (TD-003 ✅) |
 | **Épica** | E6 · Publicación y distribución |
 | **Prioridad** | P2 |
 | **Tamaño** | L: unas 3–4 semanas de calendario, de las que **14 días** son la prueba cerrada obligatoria; el trabajo técnico es de unos 4–5 días |
@@ -70,7 +70,7 @@
 | # | Entrega | Incluye |
 |---|---|---|
 | 1 | Preparación técnica ✅ | Versión 1.0.0, `build appbundle` en el CI, comprobación de «sin permisos» (R3) y script de comprobación de la firma antes de subir (R2) |
-| 2 | Política de privacidad | Texto en `docs/store/` y en la Zona de Padres (catálogo, idiomas de la ficha), publicación en una URL pública (P4) |
+| 2 | Política de privacidad ✅ | Texto en `docs/privacy/` y en la Zona de Padres (idiomas de la ficha), publicación en una URL pública (P4) |
 | 3 | Ficha | Textos por idioma revisado, capturas en vertical y horizontal (con la identidad de HU-013), gráfico destacado, respuestas de la sección 5 en `docs/store/` |
 | 4 | Prueba cerrada | Alta en Play Console, subida del AAB firmado, 12+ testers durante 14 días, recogida de fallos |
 | 5 | Producción | Solicitud de acceso a producción, revisión de Google y lanzamiento (P6) |
@@ -87,6 +87,21 @@ Las entregas 1 y 2 no dependen de TD-003 ni de HU-013 y pueden empezar ya.
 | Firma antes de subir (R2) | `tool/check_upload_signature.dart` ejecuta `keytool -printcert -jarfile` y exige la huella SHA-256 de la clave de subida (TD-003): falla con la de debug, con cualquier otra clave o sin firma. Comprobado con el AAB `1.0.0-rc.1+2` firmado en el equipo del dueño |
 | Procedimiento | [docs/store/README.md](../store/README.md): pasos para generar, comprobar y subir un AAB, y registro de versiones subidas |
 | Tests | `test/tool/`: 9 tests de los dos scripts |
+
+### Entrega 2 · Política de privacidad (hecha, 2026-11-03)
+
+| Pieza | Resultado |
+|---|---|
+| Texto | [docs/privacy/es.md](../privacy/es.md) y [docs/privacy/en.md](../privacy/en.md), con una portada bilingüe ([index.md](../privacy/index.md)). Dice lo que guarda la app (nivel, estrellas, medallas, fechas, idioma, sonido y si Premium está desbloqueado), que todo se queda en el teléfono sin copia de seguridad (D-033), que no hay permisos, red, anuncios, analítica ni terceros, y qué cambiará con las compras (R4) |
+| Una sola fuente | GitHub Pages publica `docs/privacy/` y la app incluye **esos mismos archivos** como assets: la web y la app no pueden diferir. `docs/_config.yml` excluye el resto de `docs/` de la web |
+| En la app (R5) | Sección «Privacidad» al final de la Zona de Padres, con un resumen de una línea en los 9 idiomas; al desplegarla muestra la política en español o inglés (P7), y en inglés para el resto de idiomas. Va **dentro** de la Zona de Padres, no en otra pantalla: así desplazarse por el texto cuenta como actividad para `AdultSessionGuard` y la sesión no se cierra mientras el adulto lee. La política se carga al desplegar la sección, no antes |
+| Formato | Markdown mínimo (títulos, párrafos, viñetas, negrita y cursiva) pintado por `PolicyDocument`, sin dependencias nuevas; los títulos se anuncian como encabezados al lector de pantalla |
+| Tests | Lector de Markdown, sección de la Zona de Padres (resumen, español, vuelta al inglés), tests de diseño en los 9 idiomas a 1,0 y 2,0, y `test/store/privacy_policy_test.dart`: los dos idiomas existen, son assets, tienen la misma estructura y la web solo publica `privacy/` |
+
+**Pendiente del dueño antes de la entrega 4:**
+
+1. **Correo de contacto.** La política lleva el marcador `[CORREO PENDIENTE]` / `[CONTACT EMAIL PENDING]` hasta que exista el correo dedicado (decidido el 2026-11-03). No se puede subir a Google Play con el marcador.
+2. **Activar GitHub Pages:** *Settings › Pages › Build and deployment › Deploy from a branch*, rama `main`, carpeta `/docs`. La URL para Play Console será `https://joxelito950.github.io/ZeroFriction_KidsLearning/privacy/`. Como Pages publica desde `main`, la política se ve en la web cuando `develop` pase a `main`.
 
 ## 7. Criterios de aceptación (borrador)
 

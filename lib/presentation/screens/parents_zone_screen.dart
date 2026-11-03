@@ -4,6 +4,7 @@ import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
 import '../widgets/parents_language_section.dart';
+import '../widgets/parents_privacy_section.dart';
 
 /// Zona de Padres (HU-004), a la que solo se llega superando el desafío. Cada
 /// sección llega con su historia (P4); el «atrás» del sistema vuelve al menú (P5).
@@ -38,6 +39,8 @@ class ParentsZoneScreen extends StatelessWidget {
               const ParentsLanguageSection(),
               const SizedBox(height: 16),
               const _ScreenPinningSection(),
+              const SizedBox(height: 16),
+              const ParentsPrivacySection(),
             ],
           ),
         ),
