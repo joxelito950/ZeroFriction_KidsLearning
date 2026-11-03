@@ -172,12 +172,12 @@ Sin colores nuevos.
 | # | Pregunta | Decisión o recomendación | Bloquea |
 |---|---|---|---|
 | P1 | ¿HU-022 (tutorial visual) va antes, como historia propia, o dentro de HU-007? | ✅ Decidido (2026-10-29): **antes, como historia propia** | — |
-| P2 | ¿Cuántos niveles? | ✅ Decidido (2026-10-29): **más que los 5 de la memoria**. Propuesta: los 8 de la tabla 4.2. Falta confirmar la tabla | Sí |
-| P3 | ¿El juego tiene tiempo? | ✅ Decidido (2026-10-29): **solo con Premium, automático como en la memoria** (sección 4.3). Falta calibrar la serie de límites | Sí |
+| P2 | ¿Cuántos niveles? | ✅ Decidido (2026-10-29): **más que los 5 de la memoria**. La tabla 4.2 queda **pendiente de un spike de viabilidad** (decidido el 2026-11-03). ✅ Espacio medido el mismo día ([SPIKE-HU-007](../spikes/SPIKE-HU-007-viabilidad.md)): la tabla cabe en todos los teléfonos y orientaciones, con 81 dp por objeto en el peor caso | No |
+| P3 | ¿El juego tiene tiempo? | ✅ Decidido (2026-10-29): **solo con Premium, automático como en la memoria** (sección 4.3). La serie de la tabla 4.3 queda **pendiente del mismo spike** (2026-11-03): falta jugar el prototipo en el moto g55 (adulto y niño) y medir cuánto se tarda en cada nivel | Sí |
 | P4 | ¿Zona magnética al soltar? | Recomendación: **sí**; el objeto encaja si se suelta a menos de media sombra de distancia. A los 3 años, la precisión del dedo todavía es baja | No |
 | P5 | ¿Cómo se ganan las estrellas? | ✅ Decidido (2026-10-29): **la 3.ª estrella solo con tiempo**. Los umbrales de R9 se calibran por simulación, como en HU-002 | No |
-| P6 | El nivel 1 nunca tiene tiempo: ¿cómo se gana su 3.ª estrella? | Recomendación: **sin fallos, en modo Premium** (R9) | Sí |
-| P7 | ¿Qué cambia en cada nivel de dificultad de HU-030? | Recomendación: **Fácil:** tiempos ×3, zona magnética más grande y sin distractores. **Normal:** las tablas 4.2 y 4.3. **Imposible:** tiempos recortados y un distractor más. Se cierra al refinar HU-030 | No |
+| P6 | El nivel 1 nunca tiene tiempo: ¿cómo se gana su 3.ª estrella? | ✅ Decidido (2026-11-03): **sin fallos, en modo Premium** (R9). Sin Premium, como máximo 2★ | — |
+| P7 | ¿Qué cambia en cada nivel de dificultad de HU-030? | Recomendación: **Fácil:** tiempos ×3, zona magnética más grande y sin distractores. **Normal:** las tablas 4.2 y 4.3. **Imposible:** la mitad de los tiempos de Normal (como en la memoria, HU-030) y un distractor más. Se cierra al refinar HU-030 | No |
 | P8 | ¿Progreso propio (typeId 4) o un modelo común para todos los juegos? | Recomendación: **propio en esta historia**, con el mismo formato que la memoria. Un modelo común se decide antes del tercer juego (HU-023) | No |
 | P9 | Nombre del juego en el menú | Recomendación: «Sombras» en español y «Shadows» en inglés; los 9 idiomas pasan por la revisión de TD-011 | No |
 | P10 | ¿Se desarrolla antes de que exista el pago (HU-006)? | ✅ Decidido (2026-10-29): **sí, con candado**. Lo gratis funciona; lo Premium queda bloqueado hasta HU-006 y se prueba con tests y con el interruptor de depuración | — |

@@ -55,5 +55,7 @@
   "parentsZonePinStep3": "Per sbloccare, scorri verso l'alto e tieni premuto, oppure tieni premuti insieme «Indietro» e «Panoramica».",
   "parentsZonePinNote": "Nomi e passaggi possono variare in base alla marca del telefono.",
   "parentsZoneLanguageTitle": "Lingua",
-  "parentsZoneLanguageIntro": "La lingua con cui l'app parla a tuo figlio. Cambia subito."
+  "parentsZoneLanguageIntro": "La lingua con cui l'app parla a tuo figlio. Cambia subito.",
+  "parentsZonePrivacyTitle": "Privacy",
+  "parentsZonePrivacyIntro": "ToddlerLogic non raccoglie alcun dato: tutto resta su questo telefono."
 }

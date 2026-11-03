@@ -8,6 +8,7 @@ import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
+import 'package:toddler_logic/presentation/widgets/gesture_hint.dart';
 import 'package:toddler_logic/presentation/widgets/memory_board.dart';
 
 import '../l10n_test_support.dart';
@@ -108,6 +109,24 @@ void main() {
 
       final TextScaler scaler = MediaQuery.textScalerOf(tester.element(find.text('Busquemos la pareja correcta.')));
       expect(scaler.scale(10), closeTo(10 * MemoryGameScreen.maxTextScale, 0.001));
+    });
+
+    // HU-022, criterio 4: la mano toca una carta sin darle la vuelta ni arrancar el tiempo.
+    testWidgets('an idle child sees a hand tapping a card, without flipping it or starting the time', (tester) async {
+      final hand = find.byKey(const ValueKey<String>('gesture-hint-hand'));
+      await pumpScreen(tester, level: 3);
+      expect(hand, findsNothing);
+
+      await tester.pump(GestureHint.defaultFirstDelay);
+      await tester.pump(GestureHint.cycle * 0.6);
+
+      expect(hand, findsOneWidget);
+      expect(cardCount(), 8, reason: 'every card stays face down');
+      expect(cubitOf(tester).state.remainingFraction, 1, reason: 'the time bar has not started');
+
+      await tapCard(tester, 0);
+      await tester.pump(const Duration(seconds: 20));
+      expect(hand, findsNothing, reason: 'it does not come back once the child plays');
     });
 
     testWidgets('resumes the saved level with its arrival time limit', (tester) async {

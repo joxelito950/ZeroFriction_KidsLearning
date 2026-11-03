@@ -55,5 +55,7 @@
   "parentsZonePinStep3": "Para dejar de fijarla, desliza hacia arriba y mantén, o mantén pulsados a la vez «Atrás» y «Recientes».",
   "parentsZonePinNote": "Los nombres y los pasos pueden cambiar según la marca del teléfono.",
   "parentsZoneLanguageTitle": "Idioma",
-  "parentsZoneLanguageIntro": "El idioma en que la app le habla a tu hijo. Cambia al instante."
+  "parentsZoneLanguageIntro": "El idioma en que la app le habla a tu hijo. Cambia al instante.",
+  "parentsZonePrivacyTitle": "Privacidad",
+  "parentsZonePrivacyIntro": "ToddlerLogic no recoge ningún dato: todo se queda en este teléfono."
 }

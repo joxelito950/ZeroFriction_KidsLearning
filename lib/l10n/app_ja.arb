@@ -55,5 +55,7 @@
   "parentsZonePinStep3": "解除するには、上にスワイプして長押しするか、「戻る」と「最近」を同時に長押しします。",
   "parentsZonePinNote": "名前や手順は機種によって異なる場合があります。",
   "parentsZoneLanguageTitle": "言語",
-  "parentsZoneLanguageIntro": "アプリがお子さまに話しかける言語です。すぐに切り替わります。"
+  "parentsZoneLanguageIntro": "アプリがお子さまに話しかける言語です。すぐに切り替わります。",
+  "parentsZonePrivacyTitle": "プライバシー",
+  "parentsZonePrivacyIntro": "ToddlerLogic はデータを一切収集しません。すべてこのスマートフォンの中に残ります。"
 }

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Versión de la app** | `0.0.1-beta+1` (línea base) |
+| **Versión de la app** | `1.0.0-rc.1+2` (primera candidata para la prueba cerrada de Google Play, HU-014). La línea base de la sección 1 es la `0.0.1-beta+1` |
 | **Fecha de la línea base** | 2026-10-13 |
 | **Estado** | Beta interna · solo Android · sin publicar |
 | **Documentos relacionados** | [README.md](README.md) (visión de producto y alcance MVP) · [DOCUMENTATION.md](DOCUMENTATION.md) (detalle de persistencia Hive) · [BACKLOG.md](BACKLOG.md) (trabajo pendiente y refinamientos en `docs/hu/`) |
@@ -177,6 +177,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - Dentro de un juego NO DEBE haber botones que saquen al niño de él: las transiciones tras ganar o perder son automáticas (D-022, desde HU-001).
 - Toda pantalla DEBE proteger el «atrás» del sistema pidiendo repetir el gesto, con un aviso pequeño y sin botones (D-025, desde HU-001).
 - El tiempo, si existe, se muestra sin números, sin rojo y sin sonidos (D-021).
+- **Tutorial visual (HU-022):** todo juego DEBE enseñar su gesto con `GestureHint` (una mano sin texto ni sonido que aparece si el niño no toca nada en 4 s y se va al primer toque), sin cambiar el juego ni arrancar su tiempo.
 
 ### 4.3 Privacidad y seguridad
 
@@ -195,7 +196,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 
 - **Ramas:** `main` contiene solo versiones publicables; `develop` es la rama de integración. El trabajo se hace en `feature/*`, `fix/*` o `docs/*` creadas desde `develop`, y se integra por PR hacia `develop`. Las versiones pasan de `develop` a `main` por PR.
 - **Commits:** prefijos de Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`).
-- **Versionado:** SemVer con sufijo de pre-release en `pubspec.yaml` (`MAJOR.MINOR.PATCH-beta+BUILD`). El número `+BUILD` es el `versionCode` de Android y DEBE subir en cada build que se distribuya.
+- **Versionado:** SemVer con sufijo de pre-release en `pubspec.yaml` (`MAJOR.MINOR.PATCH-rc.N+BUILD` para la prueba cerrada y `MAJOR.MINOR.PATCH+BUILD` en producción, HU-014 R1). El número `+BUILD` es el `versionCode` de Android y DEBE subir en cada build que se distribuya.
 - **Corrección de fallos:** primero un test que reproduzca el fallo y falle; después la corrección.
 - **Checklist de calidad.** El CI (`.github/workflows/ci.yml`, D-016) la ejecuta en cada PR hacia `develop` o `main` y en cada push a esas ramas; el check se llama `CI / quality`. Conviene ejecutarla también en local antes de abrir el PR:
 
@@ -205,7 +206,11 @@ dart run build_runner build
 flutter analyze                          # 0 incidencias
 flutter test --coverage                  # todos pasan
 dart run tool/coverage_check.dart        # umbrales de la sección 6.3
+flutter build appbundle --release        # el AAB de release compila (HU-014)
+dart run tool/check_release_permissions.dart   # sin permisos (HU-014 R3)
 ```
+
+Antes de **subir** un AAB a Google Play: `dart run tool/check_upload_signature.dart` (HU-014 R2) y el resto de pasos de [docs/store/README.md](docs/store/README.md).
 
 Un cambio de UI DEBERÍA probarse además en un dispositivo real o en un emulador, en las dos orientaciones.
 
