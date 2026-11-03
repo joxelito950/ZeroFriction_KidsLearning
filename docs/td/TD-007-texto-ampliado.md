@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-28) |
+| **Estado** | Hecha (desarrollada y verificada en el moto g55 el 2026-10-30) |
 | **Prioridad** | P2: antes de las capturas y la prueba cerrada de HU-014 |
 | **Tamaño** | S (1–2 días) |
 | **Depende de** | Nada. Si HU-021 se hace antes, sus líneas de ayuda entran en estos tests; si se hace después, HU-021 las añade |
@@ -52,7 +52,44 @@ Se ejecutaron los tests de diseño actuales (`responsive_layout_test.dart`: 9 id
 | P2 | ¿Las pantallas de adultos respetan el texto hasta 2,0 (el máximo de Android) o también se limitan? | ✅ Decidido (2026-10-28): **hasta 2,0.** Son las que lee el adulto; limitarlas va contra la accesibilidad, y hoy ya cumplen todas salvo el desafío | — |
 | P3 | ¿Cuántas escalas prueba el CI? | ✅ Aceptada la recomendación: **1,0 y 2,0 en adultos, 1,0 y 1,3 en el juego** (A6). Probar también 1,3 en adultos o 1,5 añade casos sin encontrar más fallos en la medición | No |
 
-## 6. Fuera de alcance
+## 6. Resultado (2026-10-30)
+
+### 6.1 Nueva medición antes de empezar
+
+Se repitió la medición de la sección 2 con HU-021 ya fusionada (380 casos por escala; ahora el desafío se prueba con dos idiomas de ayuda por idioma):
+
+| Pantalla | Escala 1,3 | Escala 2,0 |
+|---|---|---|
+| Desafío de adultos | ✅ | ❌ 40 casos (antes 11): la línea de ayuda de HU-021 empuja la respuesta y el teclado fuera de la vista |
+| Tableros del juego | ❌ 15 casos (los mismos) | ❌ 98 casos (los mismos) |
+| Resto de pantallas de adultos | ✅ | ✅ |
+
+**Causa real de los 15 casos a 1,3:** el contador de movimientos («Coups : 0») compartía fila con el título y le dejaba 49 dp de ancho; el título se partía letra a letra y ocupaba 444 dp de alto. Limitar el texto a 1,3 no bastaba.
+
+### 6.2 Cambios
+
+| # | Cambio |
+|---|---|
+| A1, A2 | `parental_gate_screen.dart`: la respuesta (`_AnswerBox`, 56 dp fijos, las cifras se encogen si no caben) va pegada encima del teclado y mide lo mismo de ancho; la pregunta, con su línea de ayuda, se desplaza aparte. En vertical, la pregunta ocupa lo que necesita y la respuesta y el teclado van justo debajo; en horizontal, la respuesta y el teclado ocupan la mitad derecha |
+| A3, A5 | `memory_game_screen.dart`: `MediaQuery.withClampedTextScaling(maxScaleFactor: 1.3)` envuelve toda la pantalla del juego, incluidas la celebración, el aviso de tiempo agotado y el aviso de salida (`MemoryGameScreen.maxTextScale`) |
+| Cabecera del juego | El contador de movimientos pasa a la fila de los puntos de nivel, alineado al final, y se encoge si no cabe (árabe a 1,3 en el teléfono compacto). El título y las instrucciones tienen todo el ancho |
+| A4 | `memory_card_widget.dart`: el símbolo usa `TextScaler.noScaling` y mide 42 o la mitad del lado corto de la carta si es menor |
+| Teclado | Margen horizontal de 8 dp en las teclas: con el texto ampliado, «Aceptar» tocaba el borde (visto en el moto g55) |
+| A6 | `responsive_layout_test.dart` añade la escala como dimensión: **1,0 y 2,0** en todas las pantallas (760 casos). Con 2,0 el juego aplica su límite de 1,3, así que esos casos prueban a la vez el límite y el diseño a 1,3 (ajuste respecto a A6, que proponía 1,3 en el juego: probar 2,0 también detecta si se quita el límite). En el desafío a 2,0, la respuesta y las 12 teclas se exigen visibles sin desplazar; la pregunta, tras desplazar. Tests nuevos: el símbolo no cambia con la escala y se encoge en cartas pequeñas; el juego limita su escala a 1,3 |
+
+### 6.3 Criterios
+
+| Criterio | Resultado |
+|---|---|
+| 1 | ✅ Tests de diseño a 2,0: menú, desafío, mensaje y Zona de Padres en los 9 idiomas, 4 teléfonos y las dos orientaciones |
+| 2 | ✅ Test del desafío a 2,0, y visto en el moto g55 con el texto del sistema a 2,0 |
+| 3 | ✅ Los 5 tableros a 2,0 (con el límite de 1,3) en todos los casos; visto el 3×4 en el moto g55 a 2,0 |
+| 4 | ✅ Test del símbolo a 1,0 y 2,0 |
+| 5 | ✅ Los casos están en `responsive_layout_test.dart`, que ejecuta el CI |
+
+Checklist de la sección 5: `flutter analyze` sin incidencias, 1132 tests en verde y cobertura del 99,7 %. En el moto g55, el texto del sistema se subió a 2,0 solo durante las capturas y se restauró su valor (0,86).
+
+## 7. Fuera de alcance
 
 - Tablets y pantallas grandes (TD-010).
 - Tamaño de visualización del sistema (*Tamaño de pantalla*), que cambia los dp y ya lo cubren en parte los dos teléfonos de referencia.

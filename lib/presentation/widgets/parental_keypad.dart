@@ -24,6 +24,9 @@ class ParentalKeypad extends StatelessWidget {
 
   static const double _gap = 8;
 
+  /// Ancho entre alto del teclado.
+  static const double aspectRatio = 1.15;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -52,7 +55,7 @@ class ParentalKeypad extends StatelessWidget {
     ];
 
     return AspectRatio(
-      aspectRatio: 1.15,
+      aspectRatio: aspectRatio,
       child: Column(
         children: [
           for (var row = 0; row < 4; row++) ...[
@@ -116,7 +119,11 @@ class _KeypadKey extends StatelessWidget {
       child: FilledButton(
         onPressed: onTap,
         style: style,
-        child: FittedBox(fit: BoxFit.scaleDown, child: child),
+        // Margen para que «Aceptar» no toque el borde con el texto ampliado.
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: FittedBox(fit: BoxFit.scaleDown, child: child),
+        ),
       ),
     );
   }

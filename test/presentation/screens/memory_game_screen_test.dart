@@ -100,6 +100,16 @@ void main() {
       expect(find.bySemanticsLabel('Nivel 1 de 5'), findsOneWidget);
     });
 
+    // TD-007 A3, A5: con el texto del sistema a 2,0, el juego lo limita a 1,3.
+    testWidgets('caps the system text scale for the game texts', (tester) async {
+      tester.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      await pumpScreen(tester);
+
+      final TextScaler scaler = MediaQuery.textScalerOf(tester.element(find.text('Busquemos la pareja correcta.')));
+      expect(scaler.scale(10), closeTo(10 * MemoryGameScreen.maxTextScale, 0.001));
+    });
+
     testWidgets('resumes the saved level with its arrival time limit', (tester) async {
       await pumpScreen(tester, level: 3);
 
