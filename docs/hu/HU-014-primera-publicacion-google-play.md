@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27; las entregas 1 y 2 pueden empezar ya, las 3–5 esperan a TD-003, HU-013 y los testers) |
+| **Estado** | En curso: entrega 1 hecha (2026-11-03); la 2 en desarrollo; las 3–5 esperan a HU-013 y a los testers (TD-003 ✅) |
 | **Épica** | E6 · Publicación y distribución |
 | **Prioridad** | P2 |
 | **Tamaño** | L: unas 3–4 semanas de calendario, de las que **14 días** son la prueba cerrada obligatoria; el trabajo técnico es de unos 4–5 días |
@@ -22,8 +22,8 @@
 | Nivel de API | `targetSdk` 36 (heredado de Flutter, comprobado en el APK el 2026-10-27). Cumple el requisito de Google Play para apps nuevas desde el 31 de agosto de 2026 (Android 16, API 36). `minSdk` 26 (D-026) |
 | Permisos del release | **Ninguno.** `INTERNET` solo aparece en los manifiestos `debug` y `profile` (lo añade Flutter para la depuración) |
 | Datos | No se recogen datos personales ni hay red, analítica, anuncios ni crash reporting (SPECIFICATION 4.3). Todo se guarda en el teléfono (Hive) |
-| Firma | TD-003 deja lista la configuración; falta que el dueño genere la clave de subida. Cuenta **personal** (decisión de TD-003) |
-| Versión | `0.0.1-beta+1` en `pubspec.yaml` |
+| Firma | ✅ TD-003 hecha (2026-10-29): el release se firma con la clave de subida del dueño. Cuenta **personal** |
+| Versión | `1.0.0-rc.1+2` en `pubspec.yaml` desde la entrega 1 (antes `0.0.1-beta+1`) |
 | Contenido | Juego de memoria completo y **100 % gratuito** (D-028), Zona de Padres con desafío (HU-004). Sin compras (HU-006) |
 | Traducciones | Los 9 idiomas están en **borrador** hasta su revisión externa |
 
@@ -69,13 +69,24 @@
 
 | # | Entrega | Incluye |
 |---|---|---|
-| 1 | Preparación técnica | Versión 1.0.0, `build appbundle` en el CI, comprobación de «sin permisos» (R3) y script de comprobación de la firma antes de subir (R2) |
+| 1 | Preparación técnica ✅ | Versión 1.0.0, `build appbundle` en el CI, comprobación de «sin permisos» (R3) y script de comprobación de la firma antes de subir (R2) |
 | 2 | Política de privacidad | Texto en `docs/store/` y en la Zona de Padres (catálogo, idiomas de la ficha), publicación en una URL pública (P4) |
 | 3 | Ficha | Textos por idioma revisado, capturas en vertical y horizontal (con la identidad de HU-013), gráfico destacado, respuestas de la sección 5 en `docs/store/` |
 | 4 | Prueba cerrada | Alta en Play Console, subida del AAB firmado, 12+ testers durante 14 días, recogida de fallos |
 | 5 | Producción | Solicitud de acceso a producción, revisión de Google y lanzamiento (P6) |
 
 Las entregas 1 y 2 no dependen de TD-003 ni de HU-013 y pueden empezar ya.
+
+### Entrega 1 · Preparación técnica (hecha, 2026-11-03)
+
+| Pieza | Resultado |
+|---|---|
+| Versión (R1) | `1.0.0-rc.1+2` |
+| CI | Instala JDK 21, compila `flutter build appbundle --release` (firmado con debug, porque el CI no tiene `key.properties`) y ejecuta `tool/check_release_permissions.dart`. Tiempo máximo del job: 30 min |
+| Sin permisos (R3) | `tool/check_release_permissions.dart` lee el manifiesto fusionado definitivo (`build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml`) y falla con cualquier permiso salvo `com.zerofriction.toddler_logic.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`, el permiso interno de firma que añade AndroidX. Comprobado: pasa con el release y falla con el manifiesto de debug (`INTERNET`) |
+| Firma antes de subir (R2) | `tool/check_upload_signature.dart` ejecuta `keytool -printcert -jarfile` y exige la huella SHA-256 de la clave de subida (TD-003): falla con la de debug, con cualquier otra clave o sin firma. Comprobado con el AAB `1.0.0-rc.1+2` firmado en el equipo del dueño |
+| Procedimiento | [docs/store/README.md](../store/README.md): pasos para generar, comprobar y subir un AAB, y registro de versiones subidas |
+| Tests | `test/tool/`: 9 tests de los dos scripts |
 
 ## 7. Criterios de aceptación (borrador)
 
