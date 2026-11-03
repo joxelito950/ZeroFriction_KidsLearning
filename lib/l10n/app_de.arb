@@ -55,5 +55,7 @@
   "parentsZonePinStep3": "Zum Loslösen nach oben wischen und halten oder „Zurück“ und „Übersicht“ gleichzeitig gedrückt halten.",
   "parentsZonePinNote": "Bezeichnungen und Schritte können je nach Hersteller abweichen.",
   "parentsZoneLanguageTitle": "Sprache",
-  "parentsZoneLanguageIntro": "Die Sprache, in der die App mit deinem Kind spricht. Sie ändert sich sofort."
+  "parentsZoneLanguageIntro": "Die Sprache, in der die App mit deinem Kind spricht. Sie ändert sich sofort.",
+  "parentsZonePrivacyTitle": "Datenschutz",
+  "parentsZonePrivacyIntro": "ToddlerLogic erfasst keine Daten: Alles bleibt auf diesem Handy."
 }

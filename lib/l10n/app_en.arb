@@ -277,5 +277,13 @@
   "parentsZoneLanguageIntro": "The language the app uses to talk to your child. It changes right away.",
   "@parentsZoneLanguageIntro": {
     "description": "Line under the language section title. Each language below is written in its own language and is not translated."
+  },
+  "parentsZonePrivacyTitle": "Privacy",
+  "@parentsZonePrivacyTitle": {
+    "description": "Title of the Parents' Zone section with the privacy policy (HU-014). Read by parents. Max ~25 characters."
+  },
+  "parentsZonePrivacyIntro": "ToddlerLogic collects no data: everything stays on this phone.",
+  "@parentsZonePrivacyIntro": {
+    "description": "One-line summary under the privacy section title; tapping the section shows the full policy (only in English and Spanish for now). Read by parents."
   }
 }
