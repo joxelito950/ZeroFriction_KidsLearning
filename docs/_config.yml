@@ -6,5 +6,6 @@ exclude:
   - brand
   - hu
   - i18n
+  - spikes
   - store
   - td
