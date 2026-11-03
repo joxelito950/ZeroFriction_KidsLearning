@@ -172,8 +172,8 @@ Sin colores nuevos.
 | # | Pregunta | Decisión o recomendación | Bloquea |
 |---|---|---|---|
 | P1 | ¿HU-022 (tutorial visual) va antes, como historia propia, o dentro de HU-007? | ✅ Decidido (2026-10-29): **antes, como historia propia** | — |
-| P2 | ¿Cuántos niveles? | ✅ Decidido (2026-10-29): **más que los 5 de la memoria**. La tabla 4.2 queda **pendiente de un spike de viabilidad** (decidido el 2026-11-03): cuántos objetos y sombras caben en pantalla con un tamaño cómodo para un niño de 3 años, en los dos teléfonos de referencia y en las dos orientaciones | Sí |
-| P3 | ¿El juego tiene tiempo? | ✅ Decidido (2026-10-29): **solo con Premium, automático como en la memoria** (sección 4.3). La serie de la tabla 4.3 queda **pendiente del mismo spike** (2026-11-03): cuánto se tarda en completar cada nivel | Sí |
+| P2 | ¿Cuántos niveles? | ✅ Decidido (2026-10-29): **más que los 5 de la memoria**. La tabla 4.2 queda **pendiente de un spike de viabilidad** (decidido el 2026-11-03). ✅ Espacio medido el mismo día ([SPIKE-HU-007](../spikes/SPIKE-HU-007-viabilidad.md)): la tabla cabe en todos los teléfonos y orientaciones, con 81 dp por objeto en el peor caso | No |
+| P3 | ¿El juego tiene tiempo? | ✅ Decidido (2026-10-29): **solo con Premium, automático como en la memoria** (sección 4.3). La serie de la tabla 4.3 queda **pendiente del mismo spike** (2026-11-03): falta jugar el prototipo en el moto g55 (adulto y niño) y medir cuánto se tarda en cada nivel | Sí |
 | P4 | ¿Zona magnética al soltar? | Recomendación: **sí**; el objeto encaja si se suelta a menos de media sombra de distancia. A los 3 años, la precisión del dedo todavía es baja | No |
 | P5 | ¿Cómo se ganan las estrellas? | ✅ Decidido (2026-10-29): **la 3.ª estrella solo con tiempo**. Los umbrales de R9 se calibran por simulación, como en HU-002 | No |
 | P6 | El nivel 1 nunca tiene tiempo: ¿cómo se gana su 3.ª estrella? | ✅ Decidido (2026-11-03): **sin fallos, en modo Premium** (R9). Sin Premium, como máximo 2★ | — |
