@@ -8,10 +8,20 @@ import 'memory_card_widget.dart';
 /// Tablero de cartas que siempre cabe en pantalla, sin scroll (D-011): elige el
 /// número de columnas que da las cartas más grandes, solo con filas completas.
 class MemoryBoard extends StatelessWidget {
-  const MemoryBoard({super.key, required this.cards, required this.onCardTap});
+  const MemoryBoard({
+    super.key,
+    required this.cards,
+    required this.onCardTap,
+    this.hintCardKey,
+    this.hintCardIndex = 0,
+  });
 
   final List<MemoryCard> cards;
   final ValueChanged<int> onCardTap;
+
+  /// Clave de la carta que señala la mano del tutorial (HU-022).
+  final GlobalKey? hintCardKey;
+  final int hintCardIndex;
 
   static const double _spacing = 14;
   static const double _preferredAspectRatio = 0.84;
@@ -63,11 +73,15 @@ class MemoryBoard extends StatelessWidget {
             childAspectRatio: _fittingAspectRatio(constraints, crossAxisCount, cards.length),
           ),
           itemCount: cards.length,
-          itemBuilder: (context, index) => MemoryCardWidget(
-            key: ValueKey<String>('memory-card-$index'),
-            card: cards[index],
-            onTap: () => onCardTap(index),
-          ),
+          itemBuilder: (context, index) {
+            final card = MemoryCardWidget(
+              key: ValueKey<String>('memory-card-$index'),
+              card: cards[index],
+              onTap: () => onCardTap(index),
+            );
+            final GlobalKey? hintKey = hintCardKey;
+            return hintKey != null && index == hintCardIndex ? KeyedSubtree(key: hintKey, child: card) : card;
+          },
         );
       },
     );
