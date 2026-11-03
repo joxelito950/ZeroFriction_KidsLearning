@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso: espacio en pantalla ✅ medido (2026-11-03); tiempo ⏳ pendiente de jugar en el moto g55 |
+| **Estado** | En curso: espacio en pantalla ✅ medido (2026-11-03); tamaño de los emojis ✅ corregido en el moto g55; tiempo y disposición ⏳ pendientes de jugar en el moto g55 |
 | **Decidido** | 2026-11-03, en lugar de aprobar las tablas 4.2 y 4.3 de [HU-007](../hu/HU-007-sombras.md) sin medir |
 | **Código** | Rama `spike/hu-007-shadows` (**no se fusiona**): prototipo jugable `lib/spike/shadow_spike.dart`, con su propio punto de entrada `lib/spike/main_spike.dart`, y la medición `test/spike/shadow_spike_layout_test.dart` |
 
@@ -34,9 +34,23 @@ Tests de diseño con los 4 teléfonos de referencia (los de `responsive_layout_t
 | 7 | 6 / 7 | 133 / 133 | 104 / 104 | 125 / 125 | 81 / 81 |
 | 8 | 6 / 8 | 133 / 133 | 104 / 104 | 125 / 125 | 81 / 81 |
 
+**Objetos sin sombra (P12 de HU-007).** Con 1 o 2 objetos sin sombra en la bandeja, los niveles 5 a 8 bajan como mucho a **73 dp** por objeto (teléfono compacto en horizontal) y a 80 dp en vertical. Siguen por encima de 64 dp.
+
 **Conclusión:** la escalera cabe en todos los casos sin salirse de su zona. El peor caso (teléfono compacto en horizontal, niveles 3 a 8) da **81 dp**, por encima del mínimo de 48 dp de Material y del objetivo de 64 dp que proponemos para dedos de 3 años. Hay margen para la escalera tal como está; no hace falta quitar objetos al nivel 8.
 
-## 4. Resultado: tiempo ⏳
+## 4. Hallazgo en el teléfono: emojis demasiado grandes ✅
+
+Al instalar el prototipo en el moto g55, el nivel 1 no mostraba **ninguna** sombra y uno de los dos objetos salía en blanco. En el nivel 8 todo se veía bien. La causa es el tamaño: en el nivel 1 los emojis se pedían a unos 150 dp de fuente (más de 300 px físicos), y el motor gráfico del teléfono no los pinta, ni en color ni como silueta. A unos 80 dp (170 px) se ven perfectos.
+
+**Corrección:** el emoji se pinta como mucho a **220 px físicos**, aunque la celda sea mayor. Comprobado en el teléfono: el nivel 1 muestra los dos objetos y sus siluetas. Pasa a ser una regla de HU-007 (R13). Los tests de diseño no lo detectan porque no pintan emojis reales.
+
+## 5. Disposición: sombras primero u objetos primero ⏳
+
+El prototipo permite, desde su menú ⋮, poner los objetos primero (arriba en vertical, a la izquierda en horizontal) y añadir 0, 1 o 2 objetos sin sombra. Cada resultado del registro indica la configuración (`extras=… layout=…`).
+
+Protocolo: el niño juega los niveles 2 a 4 con cada disposición, alternando el orden. Se compara el tiempo, los fallos y, sobre todo, **si tapa el destino con la mano** o duda al buscar la sombra.
+
+## 6. Resultado: tiempo ⏳
 
 Pendiente. Protocolo:
 

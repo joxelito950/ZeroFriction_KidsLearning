@@ -45,7 +45,7 @@ El ajuste de dificultad de HU-030 aplica en los dos modos (P7).
 
 - **Zona de sombras:** las siluetas, repartidas con espacio entre ellas.
 - **Bandeja:** los objetos en color, en orden aleatorio.
-- En vertical, las sombras van arriba y la bandeja abajo; en horizontal, una al lado de la otra. Como en la memoria, sin scroll ni recortes desde 914 × 411 dp (D-011, D-013).
+- En vertical, las sombras van arriba y la bandeja abajo; en horizontal, una al lado de la otra. Como en la memoria, sin scroll ni recortes desde 914 × 411 dp (D-011, D-013). El orden de las dos zonas está en estudio (P13).
 - Encabezado: indicador de nivel con **8 puntos**, como el de la memoria (HU-001 S4). Sin Premium, el octavo lleva un **candado sutil** y no se puede tocar. Con Premium, la barra de tiempo aparece debajo, como en la memoria (D-021).
 
 ### 4.2 Escalera de 8 niveles (propuesta, P2)
@@ -89,7 +89,7 @@ Para un adulto, encajar un objeto cuesta alrededor de 1 s, así que el nivel 8 (
 | R10 | **Medalla** al superar el nivel 8 (solo con Premium), permanente como la de la memoria. Después se vuelve a empezar en el nivel 1. |
 | R11 | **Candado sutil:** sin Premium, el nivel 8 se ve en el indicador con un candado. Ni el candado ni nada del juego invita al niño a comprar ni abre la tienda: la compra solo existe en la Zona de Padres, tras el control para adultos (HU-006, D-029, política de familias de Google Play). |
 | R12 | **Comprar Premium a mitad de partida** activa el tiempo y el nivel 8 en el **siguiente** tablero. Las estrellas ganadas sin tiempo se conservan y se pueden mejorar. |
-| R13 | **Contenido:** emojis elegidos **por su silueta**, no por su cara (sección 4.5). Las sombras se dibujan con el mismo emoji pintado de un solo color de la paleta, así que **siempre** coinciden con el objeto, sea cual sea el fabricante del teléfono. |
+| R13 | **Contenido:** emojis elegidos **por su silueta**, no por su cara (sección 4.5). Las sombras se dibujan con el mismo emoji pintado de un solo color de la paleta, así que **siempre** coinciden con el objeto, sea cual sea el fabricante del teléfono. **Tamaño máximo:** el emoji se pinta como mucho a 220 px físicos (unos 100 dp en el moto g55), aunque la celda sea mayor: en el moto g55, los emojis de más de unos 300 px no se pintan, ni en color ni como silueta (spike, 2026-11-03). Los tests no lo detectan porque no pintan emojis reales: hay que comprobarlo en el teléfono. |
 | R14 | **Persistencia:** como la memoria: nivel actual, medalla, mejor resultado en estrellas por nivel con su fecha y fecha de la última partida (para HU-002 y D-031). Con Premium no se guarda el tiempo: se deduce del nivel (como HU-001 R12). |
 | R15 | **Tutorial:** la primera vez, y tras unos segundos sin tocar nada, la mano animada de HU-022 arrastra un objeto hasta su sombra. |
 | R16 | **Lector de pantalla:** cada objeto y cada sombra se anuncian con su emoji (como las cartas de la memoria) y se pueden emparejar sin arrastrar: se elige el objeto y después la sombra. |
@@ -182,6 +182,9 @@ Sin colores nuevos.
 | P9 | Nombre del juego en el menú | Recomendación: «Sombras» en español y «Shadows» en inglés; los 9 idiomas pasan por la revisión de TD-011 | No |
 | P10 | ¿Se desarrolla antes de que exista el pago (HU-006)? | ✅ Decidido (2026-10-29): **sí, con candado**. Lo gratis funciona; lo Premium queda bloqueado hasta HU-006 y se prueba con tests y con el interruptor de depuración | — |
 | P11 | Sin Premium, ¿qué pasa al superar el nivel 7? | ✅ Decidido (2026-10-29): **vuelve al nivel 1** (R6) | — |
+| P12 | ¿Se añaden **objetos sin sombra** en la bandeja, como reto? (propuesto por el dueño el 2026-11-03) | **Viable en espacio:** con 1 o 2 objetos sin sombra, el peor caso (teléfono compacto en horizontal) da 73 dp por objeto, por encima del objetivo de 64 dp. Recomendación: **solo en los niveles altos o en «Imposible» (HU-030)**, no en los niveles de iniciación. Reglas propuestas: el tablero termina cuando todas las sombras están ocupadas, aunque queden objetos en la bandeja; soltar un objeto sin sombra sobre una sombra cuenta como fallo; la mano del tutorial (HU-022) nunca usa un objeto sin sombra. Falta ver con el niño si los objetos sobrantes le hacen pensar que no ha terminado | Sí |
+| P13 | ¿Se invierte la disposición: **objetos arriba (vertical) o a la izquierda (horizontal)** y sombras abajo o a la derecha? (propuesto por el dueño el 2026-11-03: para un diestro es más natural arrastrar de arriba abajo y de izquierda a derecha) | **Se decide jugando** (prototipo con las dos disposiciones). A favor: el gesto natural de un diestro. En contra: **la mano tapa lo que hay debajo y a la derecha del dedo**; con las sombras abajo o a la derecha, la palma cubre justo el destino, mientras que con la disposición actual el niño arrastra hacia una zona que ve. El tamaño no cambia: solo se intercambian las zonas | Sí |
+| P14 | ¿La disposición cambia con la **mano dominante** o de un nivel a otro? | Recomendación: la mano dominante como ajuste de la Zona de Padres (idea nueva HU-031); cambiar la disposición en cada nivel, solo como reto de «Imposible» (HU-030): a los 3 años, que todo esté siempre en el mismo sitio ayuda mucho | No |
 
 ## 9. Fuera de alcance
 
