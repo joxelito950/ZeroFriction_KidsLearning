@@ -64,15 +64,15 @@ Pendiente. Protocolo:
 4. Leer los resultados del log: `adb logcat -s flutter | findstr SPIKE`.
 5. Volver a instalar la app normal.
 
-Criterio para la serie de Premium (Normal): el límite de cada nivel debería ser al menos **2 veces el tiempo típico del niño** en los niveles que ya domina y, en el nivel 8, un reto real para un adulto (como el 4×4 de la memoria con 30 s). Fácil (×3) e Imposible (÷2) salen de esa serie (HU-030).
+**Series decididas por el dueño el 2026-11-04** (HU-007, tabla 4.3): Fácil 90 → 30 s, Normal 60 → 25 s e Imposible 50 → 20 s. La medición sirve ahora para **validarlas**: Normal debería dejar al menos el doble del tiempo típico del niño en los niveles que ya domina, e Imposible ser un reto real para un adulto en el nivel 8.
 
-| Nivel | Adulto (mejor de 3) | Niño (mediana) | Límite propuesto | Límite tras medir |
-|---|---|---|---|---|
-| 1 | | | Sin tiempo | Sin tiempo |
-| 2 | | | 90 s | |
-| 3 | | | 75 s | |
-| 4 | | | 60 s | |
-| 5 | | | 50 s | |
-| 6 | | | 40 s | |
-| 7 | | | 35 s | |
-| 8 | | | 30 s | |
+| Nivel | Adulto (mejor de 3) | Niño (mediana) | Fácil | Normal | Imposible | ¿Alcanzable? |
+|---|---|---|---|---|---|---|
+| 1 | | | Sin tiempo | Sin tiempo | Sin tiempo | — |
+| 2 | | | 90 s | 60 s | 50 s | |
+| 3 | | | 80 s | 50 s | 45 s | |
+| 4 | | | 70 s | 45 s | 40 s | |
+| 5 | | | 60 s | 40 s | 35 s | |
+| 6 | | | 50 s | 35 s | 30 s | |
+| 7 | | | 40 s | 30 s | 25 s | |
+| 8 | | | 30 s | 25 s | 20 s | |
