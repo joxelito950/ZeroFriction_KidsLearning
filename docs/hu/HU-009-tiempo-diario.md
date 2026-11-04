@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollo iniciado el 2026-11-04; refinamiento cerrado el 2026-10-27) |
 | **Épica** | E2 · Zona de Padres |
-| **Prioridad** | P3 |
+| **Prioridad** | P2 (sube el 2026-11-04: crea `ParentalSettings`, que necesitan HU-030, HU-016 y HU-031) |
 | **Tamaño** | M (3 días) |
 | **Depende de** | HU-004 (Zona de Padres, hecha; ya incluye las instrucciones de «Fijar pantalla») |
 
@@ -63,7 +63,7 @@
 | Área | Cambio |
 |---|---|
 | Dominio | `DailyPlayTime` (Dart puro, reloj inyectado): suma minutos por día, decide si se alcanzó el límite, aplica el tiempo extra |
-| Persistencia | Ajustes de padres y tiempo de hoy. Propuesta: una entidad nueva `ParentalSettings` con su caja y **typeId 3** (límite diario en minutos o ninguno, tiempo extra de hoy, minutos de hoy y fecha), en lugar de seguir ampliando `UserProfile`. Actualizar la sección 3.4 de la especificación |
+| Persistencia | Ajustes de padres y tiempo de hoy. Propuesta: una entidad nueva `ParentalSettings` con su caja y **typeId 3** (límite diario en minutos o ninguno, tiempo extra de hoy, minutos de hoy y fecha), en lugar de seguir ampliando `UserProfile`. Actualizar la sección 3.4 de la especificación. Más adelante guardará también la dificultad y «Jugar sin tiempo» (HU-030), «Mantener las estrellas» (HU-016) y la mano dominante (HU-031), como campos nuevos con valor por defecto |
 | Presentación | Medidor de tiempo en primer plano (observador del ciclo de vida, como `AdultSessionGuard`), pantalla de descanso, sección en la Zona de Padres; el juego consulta el límite al terminar cada tablero |
 | Catálogo | 10–12 claves nuevas en los 9 idiomas (incluidas la recomendación de los controles del sistema y la leyenda de la OMS) |
 | Tests | Dominio con `fake_async` y reloj inyectado (cambio de día, tiempo extra), widget de la pantalla de descanso, layout |
