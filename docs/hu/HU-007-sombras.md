@@ -6,7 +6,7 @@
 | **Épica** | E4 · Nuevos juegos (y E3 · Premium) |
 | **Prioridad** | P2: es el próximo juego |
 | **Tamaño** | L (estimación previa; se confirma al cerrar el refinamiento) |
-| **Depende de** | HU-022 (tutorial visual, hecha). Lee `isPremium`; la compra llega con HU-006 (P10). Lee la dificultad y «Jugar sin tiempo» de HU-030 (P7, R18), que se guardan en `ParentalSettings` (HU-009) |
+| **Depende de** | HU-022 (tutorial visual, hecha) y HU-030 (dificultad y «Jugar sin tiempo», lista; P7, R18), cuyos ajustes se guardan en `ParentalSettings` (HU-009). Lee `isPremium`; la compra llega con HU-006 (P10) |
 
 ## 1. Historia
 
@@ -47,7 +47,7 @@ El ajuste de dificultad de HU-030 aplica en los dos modos (P7).
 - **Bandeja:** los objetos en color, en orden aleatorio.
 - **Disposición (P13, decidido el 2026-11-04):** en vertical, las sombras van **arriba** y la bandeja abajo; en horizontal, las sombras a la **izquierda** y la bandeja a la derecha. Así el niño (diestro) ve hacia dónde lleva la imagen: la mano tapa lo que queda debajo y a la derecha del dedo, no el destino. Es la izquierda **física** en todos los idiomas, también en árabe, porque depende de la mano y no del sentido de lectura. Con la dificultad «Imposible» (HU-030), la disposición cambia al azar en cada tablero (P14); la mano dominante la refleja (HU-031).
 - Como en la memoria, sin scroll ni recortes desde 914 × 411 dp (D-011, D-013).
-- **Inicio de cada tablero (R19):** los objetos aparecen encima de sus sombras, del mismo color que ellas, y se alejan hasta su sitio en la bandeja mientras recuperan el color: la sombra «suelta» su calcomanía.
+- **Inicio de cada tablero (R19, en Fácil y Normal):** los objetos aparecen encima de sus sombras, del mismo color que ellas, y se alejan hasta su sitio en la bandeja mientras recuperan el color: la sombra «suelta» su calcomanía.
 - Encabezado: indicador de nivel con **8 puntos**, como el de la memoria (HU-001 S4). Sin Premium, el octavo lleva un **candado sutil** y no se puede tocar. Con Premium, la barra de tiempo aparece debajo, como en la memoria (D-021).
 
 ### 4.2 Escalera de 8 niveles (propuesta, P2)
@@ -101,7 +101,7 @@ Para un adulto, encajar un objeto cuesta alrededor de 1 s, así que el nivel 8 (
 | R16 | **Lector de pantalla:** cada objeto y cada sombra se anuncian con su emoji (como las cartas de la memoria) y se pueden emparejar sin arrastrar: se elige el objeto y después la sombra. |
 | R17 | Un objeto ya encajado no se puede volver a mover. Mientras se arrastra uno, los demás no responden (un solo dedo). |
 | R18 | **Jugar sin tiempo:** el ajuste **general** «Jugar sin tiempo» de la Zona de Padres (HU-030) vale para todos los juegos, no solo para Sombras (decidido el 2026-11-04). Por defecto está desactivado: hay tiempo. En Sombras solo cambia algo con Premium, porque el modo gratuito nunca tiene tiempo. Con Premium y sin tiempo, el ritmo es el del modo gratuito (no se pierde ni se baja de nivel), pero se conserva lo de Premium: el nivel 8, la 3.ª estrella, el dorado hasta el 100 % y la medalla. |
-| R19 | **Animación de inicio** (propuesta por el dueño el 2026-11-04): al empezar cada tablero, cada objeto sale de **encima de su sombra**, pintado como ella, y se desplaza hasta su sitio en la bandeja mientras pasa a color, como una calcomanía que se despega (unos 1,2 s en total, con los objetos escalonados). Enseña la relación objeto-sombra sin palabras (D-034). Durante la animación no se puede arrastrar y la mano de HU-022 empieza a contar sus 4 s al terminar. El cronómetro de Premium ya arranca con el primer toque (R7), así que la animación no quita tiempo. Las sombras libres (distractores) no sueltan nada. Con «reducir movimiento» del sistema, los objetos aparecen directamente en la bandeja (como HU-022). |
+| R19 | **Animación de inicio** (propuesta por el dueño el 2026-11-04; **solo en Fácil y Normal**, P16): al empezar cada tablero, cada objeto sale de **encima de su sombra**, pintado como ella, y se desplaza hasta su sitio en la bandeja mientras pasa a color, como una calcomanía que se despega (unos 1,2 s en total, con los objetos escalonados). Enseña la relación objeto-sombra sin palabras (D-034). Durante la animación no se puede arrastrar y la mano de HU-022 empieza a contar sus 4 s al terminar. El cronómetro de Premium ya arranca con el primer toque (R7), así que la animación no quita tiempo. Las sombras libres (distractores) no sueltan nada. Con «reducir movimiento» del sistema, los objetos aparecen directamente en la bandeja (como HU-022). |
 
 ### 4.5 Contenido
 
@@ -163,7 +163,7 @@ Sin colores nuevos.
 14. **Dado** el catálogo de contenido, **entonces** todos los emojis son de Emoji 5.0 o anterior (test, como en la memoria).
 15. **Dado** el código, **entonces** solo usa colores de la paleta (`palette_test.dart`).
 16. **Dado** la dificultad Fácil o Normal, **entonces** en vertical las sombras están arriba y en horizontal a la izquierda, en todos los idiomas; **dado** Imposible, **entonces** la disposición puede cambiar de un tablero a otro.
-17. **Dado** el inicio de un tablero, **entonces** cada objeto sale de encima de su sombra y llega a la bandeja en color; mientras dura, arrastrar no hace nada; con «reducir movimiento», los objetos aparecen ya en la bandeja.
+17. **Dado** el inicio de un tablero en Fácil o Normal, **entonces** cada objeto sale de encima de su sombra y llega a la bandeja en color; mientras dura, arrastrar no hace nada; con «reducir movimiento», o en Imposible, los objetos aparecen ya en la bandeja.
 
 ## 7. Impacto técnico previsto
 
@@ -184,7 +184,7 @@ Sin colores nuevos.
 |---|---|---|---|
 | P1 | ¿HU-022 (tutorial visual) va antes, como historia propia, o dentro de HU-007? | ✅ Decidido (2026-10-29): **antes, como historia propia** | — |
 | P2 | ¿Cuántos niveles? | ✅ Decidido (2026-10-29): **más que los 5 de la memoria**. La tabla 4.2 queda **pendiente de un spike de viabilidad** (decidido el 2026-11-03). ✅ Espacio medido el mismo día ([SPIKE-HU-007](../spikes/SPIKE-HU-007-viabilidad.md)): la tabla cabe en todos los teléfonos y orientaciones, con 81 dp por objeto en el peor caso | No |
-| P3 | ¿El juego tiene tiempo? | ✅ Decidido (2026-10-29): **solo con Premium, automático como en la memoria**. ✅ Series decididas por el dueño el 2026-11-04, una por dificultad (tabla 4.3). El spike comprueba jugando que Normal es alcanzable para el niño | — |
+| P3 | ¿El juego tiene tiempo? | ✅ Decidido (2026-10-29): **solo con Premium, automático como en la memoria**. ✅ Series decididas por el dueño el 2026-11-04, una por dificultad (tabla 4.3). ✅ El spike se cierra con estas series, sin medir (2026-11-04); se ajustan jugando si hiciera falta | — |
 | P4 | ¿Zona magnética al soltar? | Recomendación: **sí**; el objeto encaja si se suelta a menos de media sombra de distancia. A los 3 años, la precisión del dedo todavía es baja | No |
 | P5 | ¿Cómo se ganan las estrellas? | ✅ Decidido (2026-10-29): la 3.ª estrella solo con tiempo. **Cambiado el 2026-11-04:** la 3.ª estrella exige Premium y pocos fallos, **con o sin tiempo**, porque el adulto puede desactivar el tiempo (R18). Los umbrales de R9 se calibran por simulación, como en HU-002 | No |
 | P6 | El nivel 1 nunca tiene tiempo: ¿cómo se gana su 3.ª estrella? | ✅ Decidido (2026-11-03): sin fallos, en modo Premium. **Sustituida el 2026-11-04 por P5:** como la 3.ª estrella ya no depende del tiempo, el nivel 1 sigue la misma regla que los demás | — |
@@ -197,7 +197,7 @@ Sin colores nuevos.
 | P13 | ¿Se invierte la disposición: **objetos arriba (vertical) o a la izquierda (horizontal)** y sombras abajo o a la derecha? (propuesto por el dueño el 2026-11-03) | ✅ Decidido (2026-11-04): **no se invierte.** Se mantiene la disposición en la que el niño ve hacia dónde lleva la imagen: sombras arriba en vertical y a la izquierda en horizontal (sección 4.1). La mano tapa lo que queda debajo y a la derecha del dedo, así que el destino queda a la vista | — |
 | P14 | ¿La disposición cambia con la **mano dominante** o de un nivel a otro? | ✅ Decidido (2026-11-04): **en «Imposible», al azar en cada tablero** (sombras arriba, abajo, a la izquierda o a la derecha). En Fácil y Normal, siempre igual: a los 3 años, que todo esté en el mismo sitio ayuda mucho. La mano dominante queda como ajuste aparte (HU-031) | — |
 | P15 | ¿Dónde se desactiva el tiempo de Premium (R18)? | ✅ Decidido (2026-11-04): con un ajuste **general** «Jugar sin tiempo» en la Zona de Padres, para todos los juegos (HU-030) | — |
-| P16 | ¿La animación de inicio (R19) también va en «Imposible»? Enseña qué objeto va en cada sombra | Recomendación: **sí, en todas las dificultades.** Dura 1,2 s y ayuda a entender el juego; en Imposible, la disposición al azar y el tiempo ya ponen el reto. Si resultara demasiado fácil, en Imposible podría acelerarse | No |
+| P16 | ¿La animación de inicio (R19) también va en «Imposible»? Enseña qué objeto va en cada sombra | ✅ Decidido (2026-11-04): **no**. Las animaciones son ayudas y solo van en Fácil y Normal (HU-030 R10) | — |
 
 ## 9. Fuera de alcance
 

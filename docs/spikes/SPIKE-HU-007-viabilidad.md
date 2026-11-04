@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso: espacio en pantalla ✅ medido (2026-11-03); tamaño de los emojis ✅ corregido en el moto g55; disposición ✅ decidida por el dueño (2026-11-04); tiempo ⏳ pendiente de jugar en el moto g55 |
+| **Estado** | ✅ Cerrado el 2026-11-04: espacio en pantalla medido, tamaño de los emojis corregido en el moto g55, disposición decidida por el dueño y tiempos fijados por el dueño sin medir (sección 6) |
 | **Decidido** | 2026-11-03, en lugar de aprobar las tablas 4.2 y 4.3 de [HU-007](../hu/HU-007-sombras.md) sin medir |
 | **Código** | Rama `spike/hu-007-shadows` (**no se fusiona**): prototipo jugable `lib/spike/shadow_spike.dart`, con su propio punto de entrada `lib/spike/main_spike.dart`, y la medición `test/spike/shadow_spike_layout_test.dart` |
 
@@ -54,9 +54,11 @@ El prototipo permite, desde su menú ⋮, poner los objetos primero (arriba en v
 
 Protocolo: el niño juega los niveles 2 a 4 con cada disposición, alternando el orden. Se compara el tiempo, los fallos y, sobre todo, **si tapa el destino con la mano** o duda al buscar la sombra.
 
-## 6. Resultado: tiempo ⏳
+## 6. Resultado: tiempo ✅ (sin medir)
 
-Pendiente. Protocolo:
+**Cerrado el 2026-11-04 por decisión del dueño:** se usan las series de la tabla 4.3 de HU-007 sin jugar el prototipo. Si al jugar la versión real alguna resulta inalcanzable o demasiado fácil, se ajusta en la tabla (es una constante del dominio). El prototipo y la rama `spike/hu-007-shadows` ya no hacen falta.
+
+Protocolo que estaba previsto, por si se quiere medir más adelante:
 
 1. Instalar el prototipo en el moto g55 (sustituye a la app hasta reinstalarla; el progreso se conserva porque la firma es la misma):
    ```powershell
@@ -68,7 +70,7 @@ Pendiente. Protocolo:
 4. Leer los resultados del log: `adb logcat -s flutter | findstr SPIKE`.
 5. Volver a instalar la app normal.
 
-**Series decididas por el dueño el 2026-11-04** (HU-007, tabla 4.3): Fácil 90 → 30 s, Normal 60 → 25 s e Imposible 50 → 20 s. La medición sirve ahora para **validarlas**: Normal debería dejar al menos el doble del tiempo típico del niño en los niveles que ya domina, e Imposible ser un reto real para un adulto en el nivel 8.
+**Series decididas por el dueño el 2026-11-04** (HU-007, tabla 4.3): Fácil 90 → 30 s, Normal 60 → 25 s e Imposible 50 → 20 s. Una medición futura serviría para **validarlas**: Normal debería dejar al menos el doble del tiempo típico del niño en los niveles que ya domina, e Imposible ser un reto real para un adulto en el nivel 8.
 
 | Nivel | Adulto (mejor de 3) | Niño (mediana) | Fácil | Normal | Imposible | ¿Alcanzable? |
 |---|---|---|---|---|---|---|
