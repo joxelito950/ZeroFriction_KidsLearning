@@ -4,7 +4,7 @@
 |---|---|
 | **Estado** | ✅ Cerrado el 2026-11-04: espacio en pantalla medido, tamaño de los emojis corregido en el moto g55, disposición decidida por el dueño y tiempos fijados por el dueño sin medir (sección 6) |
 | **Decidido** | 2026-11-03, en lugar de aprobar las tablas 4.2 y 4.3 de [HU-007](../hu/HU-007-sombras.md) sin medir |
-| **Código** | Rama `spike/hu-007-shadows` (**no se fusiona**): prototipo jugable `lib/spike/shadow_spike.dart`, con su propio punto de entrada `lib/spike/main_spike.dart`, y la medición `test/spike/shadow_spike_layout_test.dart` |
+| **Código** | Rama `spike/hu-007-shadows` (no se fusionó; **eliminada el 2026-11-04**, último commit `1b0228f`): prototipo jugable `lib/spike/shadow_spike.dart`, con su propio punto de entrada `lib/spike/main_spike.dart`, y la medición `test/spike/shadow_spike_layout_test.dart` |
 
 ## 1. Preguntas
 
@@ -56,7 +56,7 @@ Protocolo: el niño juega los niveles 2 a 4 con cada disposición, alternando el
 
 ## 6. Resultado: tiempo ✅ (sin medir)
 
-**Cerrado el 2026-11-04 por decisión del dueño:** se usan las series de la tabla 4.3 de HU-007 sin jugar el prototipo. Si al jugar la versión real alguna resulta inalcanzable o demasiado fácil, se ajusta en la tabla (es una constante del dominio). El prototipo y la rama `spike/hu-007-shadows` ya no hacen falta.
+**Cerrado el 2026-11-04 por decisión del dueño:** se usan las series de la tabla 4.3 de HU-007 sin jugar el prototipo. Si al jugar la versión real alguna resulta inalcanzable o demasiado fácil, se ajusta en la tabla (es una constante del dominio). El prototipo ya no hace falta y su rama se eliminó el mismo día.
 
 Protocolo que estaba previsto, por si se quiere medir más adelante:
 

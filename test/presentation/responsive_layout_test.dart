@@ -208,6 +208,11 @@ void main() {
             }
             await tester.ensureVisible(find.byKey(const ValueKey<String>('rest-parents-zone')));
             expect(find.byKey(const ValueKey<String>('rest-parents-zone')).hitTestable(), findsOneWidget);
+            // Centrada como el resto de la app, también en árabe (RTL).
+            final Rect body = tester.getRect(find.byType(SingleChildScrollView));
+            for (final finder in [find.text(l10n.restTitle), find.byKey(const ValueKey<String>('rest-parents-zone'))]) {
+              expect(tester.getCenter(finder).dx, moreOrLessEquals(body.center.dx, epsilon: 1));
+            }
           });
 
           testWidgets('parents zone fits', (tester) async {

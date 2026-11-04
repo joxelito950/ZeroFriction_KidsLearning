@@ -6,7 +6,7 @@
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2: Sombras (HU-007) nace con sus tres niveles |
 | **Tamaño** | M (3 entregas, unos 3 días) |
-| **Depende de** | HU-009, que crea `ParentalSettings` (typeId 3), donde se guardan estos dos ajustes. HU-004 (Zona de Padres, hecha) |
+| **Depende de** | HU-009, que crea `ParentalSettings` (typeId 3), donde se guardan estos dos ajustes. HU-004 (Zona de Padres, hecha). Lee `isPremium` para «Jugar sin tiempo» (R4); hasta que exista el pago (HU-006), en las versiones publicadas el interruptor está siempre desactivado y se prueba con el interruptor de depuración de HU-007 (P10) |
 
 ## 1. Historia
 
@@ -30,7 +30,7 @@ Una sección nueva, **«Juegos»**, con dos ajustes que valen para **todos los j
 | Ajuste | Opciones | Por defecto |
 |---|---|---|
 | **Dificultad** | Fácil · Normal · Imposible, cada una con una frase que explica qué cambia | **Normal** (el comportamiento actual) |
-| **Jugar sin tiempo** | Interruptor | **Desactivado** (hay tiempo) |
+| **Jugar sin tiempo** | Interruptor, **solo con Premium** (R4) | **Desactivado** (hay tiempo) |
 
 ### 3.2 Qué cambia en cada juego
 
@@ -67,7 +67,7 @@ La lógica de la escalera no cambia (HU-001 R4–R6): al ganar se sube y el lím
 | R1 | La sección «Juegos» está en la Zona de Padres, tras el control para adultos (D-029): el niño no puede cambiar estos ajustes. |
 | R2 | **Dificultad:** tres opciones (Fácil, Normal, Imposible) que se eligen con un toque. Cada una lleva una frase corta y **general** que explica qué cambia (P6). Normal es el valor por defecto. |
 | R3 | **Jugar sin tiempo:** con el interruptor activado, ningún juego muestra barra de tiempo ni hace perder por tiempo. La escalera solo sube: al ganar se pasa al siguiente nivel y nunca se baja. |
-| R4 | **Sin tiempo se puede conseguir todo** (P2): quitar el tiempo no penaliza los logros del niño. Las estrellas, el dorado y la insignia o medalla de cada juego se ganan igual que con tiempo. En la memoria, las estrellas ya dependen de los movimientos, no del tiempo (D-030), así que no cambian. **En Sombras, el tiempo y su ajuste son Premium:** sin Premium no hay tiempo, así que poner o quitar el tiempo de Sombras solo es posible con Premium; lo Premium sigue exigiendo Premium (HU-007 R18). En la memoria, que es 100 % gratuita (D-028), el ajuste es gratuito. |
+| R4 | **«Jugar sin tiempo» es Premium y no penaliza** (P2, decidido el 2026-11-04): el interruptor es **general** (vale para todos los juegos), pero **solo lo puede cambiar un adulto con Premium**. Sin Premium se ve desactivado, con la nota «Disponible con Premium», y los juegos tienen su tiempo normal; no hay enlace de compra en la sección (la compra es de HU-006). Con Premium y sin tiempo, quitar el tiempo **no penaliza los logros del niño**: las estrellas, el dorado y la insignia o medalla se ganan igual que con tiempo (en la memoria, las estrellas ya dependen de los movimientos, D-030). Además, **cada juego tiene sus propias restricciones de Premium**, que no dependen de este interruptor: en Sombras, el tiempo solo existe con Premium (HU-007 sección 3); los juegos nuevos tendrán las suyas al refinarse. |
 | R5 | **La dificultad no cambia los premios** (P4): las estrellas, el dorado y la insignia valen lo mismo en Fácil, Normal o Imposible. No hay comparación entre niños; el adulto ajusta el reto a su hijo. |
 | R6 | **Cambiar un ajuste** se aplica en el **siguiente tablero**, nunca en el que está en curso (como HU-007 R12). El progreso se conserva: el niño sigue en su nivel y el límite pasa al de ese nivel en la serie nueva (el límite de llegada, como al abrir el juego, HU-001 R12). |
 | R7 | Con «Jugar sin tiempo» activado, la dificultad **sigue aplicando** a lo que no es tiempo (en Sombras: sombras libres, zona magnética y disposición). En la memoria, como solo cambia el tiempo, la frase de la dificultad lo indica (P6). |
@@ -99,7 +99,7 @@ HU-010 (punto de partida de la memoria) elige **en qué tablero y con qué tiemp
 |---|---|
 | HU-001 (D-020, D-021) | La escalera y la barra de tiempo no cambian; solo la serie de límites. Normal es la serie actual. **Cambio en Normal:** la vista previa de 1 s (3.4) es nueva también en Normal, que hasta ahora repartía boca abajo (decidido por el dueño el 2026-11-04) |
 | D-030 (estrellas) | Sin cambios: se cuentan por movimientos (memoria) o por fallos de forma (Sombras, HU-007 R9) |
-| D-028 (modelo de acceso) | «Jugar sin tiempo» y la dificultad son gratuitos. En Sombras, el tiempo sigue siendo Premium: sin Premium nunca hay tiempo, así que «Jugar sin tiempo» no cambia nada |
+| D-028 (modelo de acceso) | La dificultad es gratuita. **«Jugar sin tiempo» es una función Premium de la Zona de Padres** que también afecta a la memoria: la memoria sigue siendo 100 % gratuita en su contenido y sus niveles, pero quitarle el tiempo es un ajuste de padres de pago. D-035 lo deja escrito como matiz de D-028. En Sombras, el tiempo sigue siendo Premium: sin Premium nunca hay tiempo, así que «Jugar sin tiempo» no cambia nada |
 | D-029 | Los ajustes quedan tras el control para adultos |
 | HU-005 P1 | Revierte la retirada de la «dificultad»: nueva decisión **D-035** (sección 5) |
 | HU-007 P7, P14, P15, R18 | Esta historia las resuelve para todos los juegos |
@@ -108,14 +108,15 @@ HU-010 (punto de partida de la memoria) elige **en qué tablero y con qué tiemp
 
 | ID | Decisión | Motivo |
 |---|---|---|
-| D-035 | **Dificultad y «Jugar sin tiempo»:** dos ajustes generales de la Zona de Padres, para todos los juegos. La dificultad tiene tres niveles (Fácil, Normal por defecto, Imposible) y cada juego define qué cambia en cada uno; la memoria multiplica sus límites por 3 en Fácil y los divide entre 2 en Imposible. Las ayudas que enseñan la solución (vista previa de la memoria, animación de inicio de Sombras) solo van en Fácil y Normal. «Jugar sin tiempo» quita la barra y la derrota por tiempo en todos los juegos, sin quitar ningún premio; en los juegos con tiempo Premium (Sombras), el ajuste solo actúa con Premium. Los premios valen igual en las tres dificultades. Los cambios se aplican en el siguiente tablero | Un mismo juego tiene que servir a niños de 2 a 5 años; el adulto ajusta el reto. Recupera la «dificultad» retirada en HU-005 P1 |
+| D-035 | **Dificultad y «Jugar sin tiempo»:** dos ajustes generales de la Zona de Padres, para todos los juegos. La dificultad tiene tres niveles (Fácil, Normal por defecto, Imposible) y cada juego define qué cambia en cada uno; la memoria multiplica sus límites por 3 en Fácil y los divide entre 2 en Imposible. Las ayudas que enseñan la solución (vista previa de la memoria, animación de inicio de Sombras) solo van en Fácil y Normal. «Jugar sin tiempo» quita la barra y la derrota por tiempo en todos los juegos, sin quitar ningún premio; es una **función Premium**: solo la cambia un adulto con Premium (matiz de D-028: la memoria sigue gratis en su contenido, pero este ajuste de padres es de pago). Las restricciones de Premium propias de cada juego (Sombras: el tiempo solo con Premium) no dependen de este ajuste. Los premios valen igual en las tres dificultades. Los cambios se aplican en el siguiente tablero | Un mismo juego tiene que servir a niños de 2 a 5 años; el adulto ajusta el reto. Recupera la «dificultad» retirada en HU-005 P1 |
 
 ## 6. Criterios de aceptación (borrador)
 
 1. **Dado** la Zona de Padres, **entonces** veo la sección «Juegos» con la dificultad en Normal y «Jugar sin tiempo» desactivado.
 2. **Dado** la dificultad Fácil, **cuando** juego a la memoria, **entonces** el 2×3 tiene 270 s y el 4×4 llega con 90 s.
 3. **Dado** la dificultad Imposible, **cuando** juego a la memoria, **entonces** el 2×3 tiene 45 s y el 4×4 llega con 15 s.
-4. **Dado** «Jugar sin tiempo», **cuando** juego a la memoria, **entonces** no hay barra de tiempo en ningún nivel, nunca bajo de nivel y, al completar el 4×4, consigo la insignia.
+4. **Dado** Premium y «Jugar sin tiempo» activado, **cuando** juego a la memoria, **entonces** no hay barra de tiempo en ningún nivel, nunca bajo de nivel y, al completar el 4×4, consigo la insignia.
+4b. **Dado** que no tengo Premium, **entonces** el interruptor «Jugar sin tiempo» se ve desactivado con la nota «Disponible con Premium», no se puede cambiar y todos los juegos tienen su tiempo normal.
 5. **Dado** un tablero en curso, **cuando** un adulto cambia la dificultad o «Jugar sin tiempo», **entonces** el tablero en curso sigue igual y el cambio se ve en el siguiente, en el mismo nivel.
 6. **Dado** que gano un nivel con los mismos movimientos en Fácil y en Imposible, **entonces** consigo las mismas estrellas.
 7. **Dado** que cierro y vuelvo a abrir la app, **entonces** los dos ajustes se conservan.
@@ -152,12 +153,13 @@ Sombras aplica su columna de la tabla 3.2 cuando se desarrolle HU-007.
 | # | Pregunta | Decisión o recomendación | Bloquea |
 |---|---|---|---|
 | P1 | ¿«Sin tiempo» es solo de Sombras o de todos los juegos? | ✅ Decidido (2026-11-04): **de todos los juegos**, como ajuste general | — |
-| P2 | Sin tiempo, ¿se pueden ganar la insignia de la memoria y todos los premios? | ✅ Decidido (2026-11-04): **sí**, quitar el tiempo no penaliza los logros del niño. En Sombras, el tiempo y el ajuste para ponerlo o quitarlo son exclusivos de Premium (R4) | — |
+| P2 | Sin tiempo, ¿se pueden ganar la insignia de la memoria y todos los premios? ¿Quién puede cambiar el ajuste? | ✅ Decidido (2026-11-04): **sí**, quitar el tiempo no penaliza los logros. El interruptor es general para todos los juegos, pero **solo lo manipula un adulto con Premium**. Las restricciones de Premium de cada juego (Sombras: el tiempo solo con Premium) son propias de ese juego (R4) | — |
 | P3 | En Sombras, ¿qué más cambia en Fácil? | ✅ Decidido (2026-11-04): **sin sombras libres** y **zona magnética 1,5 veces** mayor | — |
 | P4 | ¿La dificultad cambia los premios (estrellas, dorado, insignia)? | ✅ Decidido (2026-11-04): **no**, valen igual en las tres | — |
 | P5 | ¿Un ajuste general o uno por juego? | ✅ Asumida la recomendación: **general** en esta historia. Si un juego necesitara el suyo, se añade al refinarlo | — |
 | P6 | ¿Cómo se explica cada dificultad? | ✅ Asumida la recomendación, ajustada a R10: una frase general por opción, sin números: «Fácil: más tiempo y ayudas», «Normal: el juego tal como es, con ayudas», «Imposible: menos tiempo y sin ayudas». Los textos finales pasan por TD-011 | — |
 | P7 | En Imposible, ¿Sombras añade también una sombra libre más? | ✅ Decidido (2026-11-04): **no**; la disposición al azar, el tiempo más corto y la falta de ayudas ya ponen el reto | — |
+| P9 | Si se activa «Jugar sin tiempo» con Premium y después Premium deja de estar activo (reembolso, otro teléfono), ¿qué pasa? | Recomendación: **el ajuste se conserva guardado pero no se aplica** mientras no haya Premium: los juegos vuelven a tener tiempo y el interruptor se ve desactivado. Si Premium vuelve, se aplica de nuevo | No |
 | P8 | ¿Cuánto dura la vista previa de la memoria? | ✅ Decidido por el dueño (2026-11-04): **1 segundo**, igual en Fácil y Normal y en todos los tableros. Si en el 4×4 se quedara corto, se revisa jugando | — |
 
 ## 9. Fuera de alcance
