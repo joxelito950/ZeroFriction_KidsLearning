@@ -113,4 +113,4 @@ Decisiones de detalle tomadas al desarrollar:
 - **El campo «Personalizado» va en columna** (campo, rango y botón «Aplicar» debajo): con el texto a 2,0, el botón al lado dejaba sin sitio al campo (lo detectó el test de diseño en alemán).
 - La sección muestra «Hoy: X de Y min jugados» y el botón «Dar 15 minutos más» solo cuando hay un límite.
 
-Pendiente: probarlo en el moto g55 (vertical y horizontal) con un límite corto.
+✅ Probado por el dueño en el moto g55 el 2026-11-04: todo correcto salvo que la pantalla de descanso salía pegada a la izquierda (la columna tomaba solo el ancho del título). Corregido ocupando todo el ancho y comprobado con una captura en el teléfono. Los tests no lo reproducían (con su fuente, el contenido llenaba el ancho); quedan dos tests de centrado como guarda.
