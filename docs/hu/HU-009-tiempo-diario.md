@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollo iniciado el 2026-11-04; refinamiento cerrado el 2026-10-27) |
 | **Épica** | E2 · Zona de Padres |
-| **Prioridad** | P3 |
+| **Prioridad** | P2 (sube el 2026-11-04: crea `ParentalSettings`, que necesitan HU-030, HU-016 y HU-031) |
 | **Tamaño** | M (3 días) |
 | **Depende de** | HU-004 (Zona de Padres, hecha; ya incluye las instrucciones de «Fijar pantalla») |
 
@@ -63,7 +63,7 @@
 | Área | Cambio |
 |---|---|
 | Dominio | `DailyPlayTime` (Dart puro, reloj inyectado): suma minutos por día, decide si se alcanzó el límite, aplica el tiempo extra |
-| Persistencia | Ajustes de padres y tiempo de hoy. Propuesta: una entidad nueva `ParentalSettings` con su caja y **typeId 3** (límite diario en minutos o ninguno, tiempo extra de hoy, minutos de hoy y fecha), en lugar de seguir ampliando `UserProfile`. Actualizar la sección 3.4 de la especificación |
+| Persistencia | Ajustes de padres y tiempo de hoy. Propuesta: una entidad nueva `ParentalSettings` con su caja y **typeId 3** (límite diario en minutos o ninguno, tiempo extra de hoy, minutos de hoy y fecha), en lugar de seguir ampliando `UserProfile`. Actualizar la sección 3.4 de la especificación. Más adelante guardará también la dificultad y «Jugar sin tiempo» (HU-030), «Mantener las estrellas» (HU-016) y la mano dominante (HU-031), como campos nuevos con valor por defecto |
 | Presentación | Medidor de tiempo en primer plano (observador del ciclo de vida, como `AdultSessionGuard`), pantalla de descanso, sección en la Zona de Padres; el juego consulta el límite al terminar cada tablero |
 | Catálogo | 10–12 claves nuevas en los 9 idiomas (incluidas la recomendación de los controles del sistema y la leyenda de la OMS) |
 | Tests | Dominio con `fake_async` y reloj inyectado (cambio de día, tiempo extra), widget de la pantalla de descanso, layout |
@@ -90,3 +90,27 @@ Límite de 30 min. A los 29 min el niño empieza un 3×4; lo termina a los 31 mi
 - Límite por juego.
 - Botón de «Fijar pantalla» (HU-020).
 - Enlaces que abran los ajustes del sistema o Family Link (solo texto, R1a).
+
+## 10. Desarrollo
+
+Rama `feature/hu-009-daily-play-time`, iniciada el 2026-11-04. Una sola entrega.
+
+| Área | Qué se hizo |
+|---|---|
+| Dominio | `DailyPlayTime` (`domain/parental/`): lo jugado hoy y el tiempo extra, cambio de día a las 00:00 locales, «15 minutos más». `ParentalSettings` (`domain/entities/`): límite (5–720 min o ninguno), opciones del selector |
+| Persistencia | `ParentalSettingsHiveModel`, caja `parental_settings`, **typeId 3**, campos 0–3 (SPECIFICATION 3.4). El día se relee como medianoche local aunque Hive lo devuelva en UTC |
+| Estado | `PlayTimeCubit`, en la raíz de la app: suma 1 s por segundo con la app en primer plano y fuera de las pantallas de adultos; guarda cada 30 s, al pasar a segundo plano y al cerrar |
+| Presentación | `PlayTimeScope` (en `MaterialApp.builder`) abre la pantalla de descanso dejando solo el menú debajo, y la cierra en cuanto vuelve a haber tiempo. `RestScreen`. `ParentsZoneButton` (el doble toque, sacado del menú para reutilizarlo). `ParentsPlayTimeSection` en la Zona de Padres, después de «Idioma». `AdultSessionGuard` detiene el contador. El juego de memoria avisa de si hay un tablero empezado |
+| Catálogo | 14 claves nuevas en los 9 idiomas |
+| Tests | Dominio, modelo y caja real de Hive, cubit con `fake_async`, la app completa (descanso al terminar el tablero, 15 minutos más, el desafío cerrado en segundo plano, segundo plano), la sección, el juego, el guardián y los diseños de la pantalla de descanso y la sección en los 9 idiomas, 4 tamaños y 2 escalas de texto |
+
+Decisiones de detalle tomadas al desarrollar:
+
+- **Qué es «un tablero a medias» (R4):** uno en el que el niño ya ha tocado alguna carta, o su celebración o su aviso de tiempo. Un tablero recién repartido sin tocar no lo es: la pantalla de descanso aparece después de la celebración, no a mitad de ella.
+- **Frente a la pantalla de descanso no se suma tiempo:** así los «15 minutos más» son 15 minutos de juego, aunque el adulto tarde en darlos. Si ya se jugó más que el límite, los 15 minutos cuentan desde lo jugado (criterio 5).
+- **El desafío y la Zona de Padres no cuentan**, ni siquiera durante la transición del uno a la otra.
+- **Si un adulto entra en la Zona de Padres desde la pantalla de descanso y sale sin dar tiempo**, la pantalla de descanso vuelve, también si la Zona de Padres se cierra sola (segundo plano o 1 minuto sin tocarla).
+- **El campo «Personalizado» va en columna** (campo, rango y botón «Aplicar» debajo): con el texto a 2,0, el botón al lado dejaba sin sitio al campo (lo detectó el test de diseño en alemán).
+- La sección muestra «Hoy: X de Y min jugados» y el botón «Dar 15 minutos más» solo cuando hay un límite.
+
+Pendiente: probarlo en el moto g55 (vertical y horizontal) con un límite corto.

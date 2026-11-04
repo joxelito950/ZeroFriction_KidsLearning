@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:toddler_logic/presentation/blocs/play_time/play_time_cubit.dart';
 import 'package:toddler_logic/presentation/widgets/adult_session_guard.dart';
+
+import '../memory_game_test_support.dart';
 
 const _menuKey = ValueKey<String>('menu');
 const _openKey = ValueKey<String>('open');
@@ -85,6 +89,27 @@ void main() {
 
       expect(_isOnMenu(tester), isTrue);
       expect(find.byKey(_menuKey), findsOneWidget);
+    });
+
+    testWidgets('the daily play time does not count while it is open (HU-009 R2)', (tester) async {
+      registerMemoryGameFallbacks();
+      final repository = MockPersistenceRepository();
+      stubPersistenceRepository(repository);
+      final playTime = PlayTimeCubit(repository: repository);
+      addTearDown(playTime.close);
+
+      await tester.pumpWidget(
+        BlocProvider<PlayTimeCubit>.value(
+          value: playTime,
+          child: const MaterialApp(home: AdultSessionGuard(child: SizedBox.expand())),
+        ),
+      );
+      expect(playTime.state.inAdultArea, isTrue);
+
+      await tester.pumpWidget(
+        BlocProvider<PlayTimeCubit>.value(value: playTime, child: const MaterialApp(home: SizedBox.expand())),
+      );
+      expect(playTime.state.inAdultArea, isFalse);
     });
 
     testWidgets('stays open while only inactive (for example, the notification shade)', (tester) async {

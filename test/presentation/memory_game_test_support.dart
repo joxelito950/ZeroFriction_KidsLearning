@@ -1,6 +1,7 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 
@@ -14,6 +15,7 @@ void registerMemoryGameFallbacks() {
   registerFallbackValue(FakeLevelState());
   registerFallbackValue(FakeUserProfile());
   registerFallbackValue(MemoryProgress.initial);
+  registerFallbackValue(ParentalSettings.initial);
 }
 
 void stubPersistenceRepository(MockPersistenceRepository repository) {
@@ -27,4 +29,6 @@ void stubPersistenceRepository(MockPersistenceRepository repository) {
   when(() => repository.saveLevelStates(any())).thenAnswer((_) async {});
   when(() => repository.readMemoryProgress()).thenAnswer((_) async => MemoryProgress.initial);
   when(() => repository.saveMemoryProgress(any())).thenAnswer((_) async {});
+  when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings.initial);
+  when(() => repository.saveParentalSettings(any())).thenAnswer((_) async {});
 }

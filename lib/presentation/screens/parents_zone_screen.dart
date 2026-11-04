@@ -4,6 +4,7 @@ import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
 import '../widgets/parents_language_section.dart';
+import '../widgets/parents_play_time_section.dart';
 import '../widgets/parents_privacy_section.dart';
 
 /// Zona de Padres (HU-004), a la que solo se llega superando el desafío. Cada
@@ -38,6 +39,8 @@ class ParentsZoneScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const ParentsLanguageSection(),
               const SizedBox(height: 16),
+              const ParentsPlayTimeSection(),
+              const SizedBox(height: 16),
               const _ScreenPinningSection(),
               const SizedBox(height: 16),
               const ParentsPrivacySection(),
@@ -49,7 +52,7 @@ class ParentsZoneScreen extends StatelessWidget {
   }
 }
 
-/// «Fijar pantalla» de Android (parte informativa de HU-009): mantiene el
+/// «Fijar pantalla» de Android (parte informativa de HU-009; el botón es HU-020): mantiene el
 /// teléfono en la app, porque inicio y recientes no se pueden bloquear (HU-001 T5).
 class _ScreenPinningSection extends StatelessWidget {
   const _ScreenPinningSection();

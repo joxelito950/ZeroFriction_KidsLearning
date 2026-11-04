@@ -6,9 +6,12 @@ import 'package:hive_ce/hive.dart';
 import 'package:toddler_logic/data/local/hive_persistence_config.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
+import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/entities/parental_settings.dart';
+import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
 /// Ejecuta [body] en una zona aislada y devuelve los errores no capturados.
@@ -97,6 +100,8 @@ void main() {
       expect(Hive.isAdapterRegistered(2), isTrue);
       expect(Hive.isAdapterRegistered(0), isTrue);
       expect(Hive.isAdapterRegistered(1), isTrue);
+      expect(HivePersistenceConfig.parentalSettingsBox, isA<Box<ParentalSettingsHiveModel>>());
+      expect(Hive.isAdapterRegistered(3), isTrue);
     });
 
     test('initializing again after success is a no-op that keeps the same boxes', () async {
@@ -144,6 +149,21 @@ void main() {
       expect(read.hasBadge, isTrue);
       expect(read.levelRecords, progress.levelRecords);
       expect(read.lastPlayedAt!.isAtSameMomentAs(progress.lastPlayedAt!), isTrue);
+    });
+
+    test('parental settings survive a real write and reopen of the box, on the same local day', () async {
+      final settings = ParentalSettings(
+        dailyLimitMinutes: 45,
+        playTime: DailyPlayTime(day: DateTime(2026, 11, 4, 23, 50), played: const Duration(minutes: 12)),
+      );
+
+      await HivePersistenceConfig.parentalSettingsBox
+          .put('current_parental_settings', ParentalSettingsHiveModel.fromEntity(settings));
+      await HivePersistenceConfig.parentalSettingsBox.close();
+      final reopened =
+          await Hive.openBox<ParentalSettingsHiveModel>(HivePersistenceConfig.parentalSettingsBoxName);
+
+      expect(reopened.get('current_parental_settings')!.toEntity(), settings);
     });
   });
 }

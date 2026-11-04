@@ -4,9 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/data/local/hive_persistence_repository.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
+import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/entities/parental_settings.dart';
+import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
 class _MockLevelStateBox extends Mock implements Box<LevelStateHiveModel> {}
@@ -16,6 +19,10 @@ class _MockUserProfileBox extends Mock implements Box<UserProfileHiveModel> {}
 class _MockMemoryProgressBox extends Mock implements Box<MemoryProgressHiveModel> {}
 
 class _FakeMemoryProgressHiveModel extends Fake implements MemoryProgressHiveModel {}
+
+class _MockParentalSettingsBox extends Mock implements Box<ParentalSettingsHiveModel> {}
+
+class _FakeParentalSettingsHiveModel extends Fake implements ParentalSettingsHiveModel {}
 
 class _FakeLevelStateHiveModel extends Fake implements LevelStateHiveModel {}
 
@@ -33,22 +40,26 @@ void main() {
     registerFallbackValue(_FakeLevelStateHiveModel());
     registerFallbackValue(_FakeUserProfileHiveModel());
     registerFallbackValue(_FakeMemoryProgressHiveModel());
+    registerFallbackValue(_FakeParentalSettingsHiveModel());
   });
 
   group('HivePersistenceRepository', () {
     late _MockLevelStateBox levelStateBox;
     late _MockUserProfileBox userProfileBox;
     late _MockMemoryProgressBox memoryProgressBox;
+    late _MockParentalSettingsBox parentalSettingsBox;
     late HivePersistenceRepository repository;
 
     setUp(() {
       levelStateBox = _MockLevelStateBox();
       userProfileBox = _MockUserProfileBox();
       memoryProgressBox = _MockMemoryProgressBox();
+      parentalSettingsBox = _MockParentalSettingsBox();
       repository = HivePersistenceRepository(
         levelStateBox: levelStateBox,
         userProfileBox: userProfileBox,
         memoryProgressBox: memoryProgressBox,
+        parentalSettingsBox: parentalSettingsBox,
       );
     });
 
@@ -197,6 +208,29 @@ void main() {
           .captured
           .single as MemoryProgressHiveModel;
       expect(saved.toEntity(), progress);
+    });
+
+    test('readParentalSettings returns the defaults when nothing is stored', () async {
+      when(() => parentalSettingsBox.get('current_parental_settings')).thenReturn(null);
+
+      expect(await repository.readParentalSettings(), ParentalSettings.initial);
+    });
+
+    test('saveParentalSettings stores the persistence model under a fixed key and reads it back', () async {
+      final settings = ParentalSettings(
+        dailyLimitMinutes: 30,
+        playTime: DailyPlayTime(day: DateTime(2026, 11, 4), played: const Duration(seconds: 754), extraMinutes: 15),
+      );
+      when(() => parentalSettingsBox.put(any(), any())).thenAnswer((_) async {});
+
+      await repository.saveParentalSettings(settings);
+
+      final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny()))
+          .captured
+          .single as ParentalSettingsHiveModel;
+      expect(saved.playedSeconds, 754);
+      when(() => parentalSettingsBox.get('current_parental_settings')).thenReturn(saved);
+      expect(await repository.readParentalSettings(), settings);
     });
   });
 }

@@ -1,5 +1,6 @@
 import '../entities/level_state.dart';
 import '../entities/memory_progress.dart';
+import '../entities/parental_settings.dart';
 import '../entities/user_profile.dart';
 
 abstract interface class IPersistenceRepository {
@@ -19,4 +20,9 @@ abstract interface class IPersistenceRepository {
   Future<MemoryProgress> readMemoryProgress();
 
   Future<void> saveMemoryProgress(MemoryProgress progress);
+
+  /// Ajustes de padres y tiempo de hoy (HU-009); [ParentalSettings.initial] si no hay.
+  Future<ParentalSettings> readParentalSettings();
+
+  Future<void> saveParentalSettings(ParentalSettings settings);
 }

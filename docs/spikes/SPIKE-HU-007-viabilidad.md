@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Estado** | En curso: espacio en pantalla ✅ medido (2026-11-03); tamaño de los emojis ✅ corregido en el moto g55; tiempo y disposición ⏳ pendientes de jugar en el moto g55 |
+| **Estado** | ✅ Cerrado el 2026-11-04: espacio en pantalla medido, tamaño de los emojis corregido en el moto g55, disposición decidida por el dueño y tiempos fijados por el dueño sin medir (sección 6) |
 | **Decidido** | 2026-11-03, en lugar de aprobar las tablas 4.2 y 4.3 de [HU-007](../hu/HU-007-sombras.md) sin medir |
-| **Código** | Rama `spike/hu-007-shadows` (**no se fusiona**): prototipo jugable `lib/spike/shadow_spike.dart`, con su propio punto de entrada `lib/spike/main_spike.dart`, y la medición `test/spike/shadow_spike_layout_test.dart` |
+| **Código** | Rama `spike/hu-007-shadows` (no se fusionó; **eliminada el 2026-11-04**, último commit `1b0228f`): prototipo jugable `lib/spike/shadow_spike.dart`, con su propio punto de entrada `lib/spike/main_spike.dart`, y la medición `test/spike/shadow_spike_layout_test.dart` |
 
 ## 1. Preguntas
 
@@ -44,15 +44,21 @@ Al instalar el prototipo en el moto g55, el nivel 1 no mostraba **ninguna** somb
 
 **Corrección:** el emoji se pinta como mucho a **220 px físicos**, aunque la celda sea mayor. Comprobado en el teléfono: el nivel 1 muestra los dos objetos y sus siluetas. Pasa a ser una regla de HU-007 (R13). Los tests de diseño no lo detectan porque no pintan emojis reales.
 
-## 5. Disposición: sombras primero u objetos primero ⏳
+## 5. Disposición: sombras primero u objetos primero ✅
+
+**Decidido por el dueño el 2026-11-04, sin esperar a la prueba:** se mantienen las sombras arriba (vertical) y a la izquierda (horizontal), para que el niño vea el destino; en «Imposible», la disposición cambia al azar (HU-007, P13 y P14). Los objetos sin sombra se descartan (P12). Las opciones del menú ⋮ del prototipo quedan solo como referencia; para medir tiempos se juega con la disposición normal y sin objetos sobrantes.
+
+Protocolo original, ya no necesario:
 
 El prototipo permite, desde su menú ⋮, poner los objetos primero (arriba en vertical, a la izquierda en horizontal) y añadir 0, 1 o 2 objetos sin sombra. Cada resultado del registro indica la configuración (`extras=… layout=…`).
 
 Protocolo: el niño juega los niveles 2 a 4 con cada disposición, alternando el orden. Se compara el tiempo, los fallos y, sobre todo, **si tapa el destino con la mano** o duda al buscar la sombra.
 
-## 6. Resultado: tiempo ⏳
+## 6. Resultado: tiempo ✅ (sin medir)
 
-Pendiente. Protocolo:
+**Cerrado el 2026-11-04 por decisión del dueño:** se usan las series de la tabla 4.3 de HU-007 sin jugar el prototipo. Si al jugar la versión real alguna resulta inalcanzable o demasiado fácil, se ajusta en la tabla (es una constante del dominio). El prototipo ya no hace falta y su rama se eliminó el mismo día.
+
+Protocolo que estaba previsto, por si se quiere medir más adelante:
 
 1. Instalar el prototipo en el moto g55 (sustituye a la app hasta reinstalarla; el progreso se conserva porque la firma es la misma):
    ```powershell
@@ -64,7 +70,7 @@ Pendiente. Protocolo:
 4. Leer los resultados del log: `adb logcat -s flutter | findstr SPIKE`.
 5. Volver a instalar la app normal.
 
-**Series decididas por el dueño el 2026-11-04** (HU-007, tabla 4.3): Fácil 90 → 30 s, Normal 60 → 25 s e Imposible 50 → 20 s. La medición sirve ahora para **validarlas**: Normal debería dejar al menos el doble del tiempo típico del niño en los niveles que ya domina, e Imposible ser un reto real para un adulto en el nivel 8.
+**Series decididas por el dueño el 2026-11-04** (HU-007, tabla 4.3): Fácil 90 → 30 s, Normal 60 → 25 s e Imposible 50 → 20 s. Una medición futura serviría para **validarlas**: Normal debería dejar al menos el doble del tiempo típico del niño en los niveles que ya domina, e Imposible ser un reto real para un adulto en el nivel 8.
 
 | Nivel | Adulto (mejor de 3) | Niño (mediana) | Fácil | Normal | Imposible | ¿Alcanzable? |
 |---|---|---|---|---|---|---|
