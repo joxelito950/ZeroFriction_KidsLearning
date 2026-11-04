@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,17 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
-import '../widgets/quiet_hint.dart';
 import 'memory_game_screen.dart';
-import 'parental_gate_screen.dart';
 
 /// Menú principal súper visual y simplificado para niños de 3 años.
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
 
   /// Tiempo para el segundo toque en «Zona de Padres» (HU-004 R1, S5).
-  static const Duration parentsZoneTapWindow = Duration(seconds: 2);
+  static const Duration parentsZoneTapWindow = ParentsZoneButton.tapWindow;
 
   static const EdgeInsets _padding = EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0);
 
@@ -111,8 +108,6 @@ class _MenuActions extends StatefulWidget {
 
 class _MenuActionsState extends State<_MenuActions> {
   bool _hasBadge = false;
-  final OverlayPortalController _tapAgainHint = OverlayPortalController();
-  Timer? _parentsZoneWindow;
 
   @override
   void initState() {
@@ -138,29 +133,6 @@ class _MenuActionsState extends State<_MenuActions> {
     );
     // Al volver, la insignia puede haberse conseguido.
     await _loadBadge();
-  }
-
-  /// El primer toque solo muestra un aviso pequeño, sin botones; el segundo,
-  /// dentro de [MainMenuScreen.parentsZoneTapWindow], abre el desafío.
-  void _onParentsZoneTap() {
-    if (_parentsZoneWindow?.isActive ?? false) {
-      _parentsZoneWindow?.cancel();
-      _tapAgainHint.hide();
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => const ParentalGateScreen()),
-      );
-      return;
-    }
-    _tapAgainHint.show();
-    _parentsZoneWindow = Timer(MainMenuScreen.parentsZoneTapWindow, () {
-      if (mounted) _tapAgainHint.hide();
-    });
-  }
-
-  @override
-  void dispose() {
-    _parentsZoneWindow?.cancel();
-    super.dispose();
   }
 
   @override
@@ -204,23 +176,8 @@ class _MenuActionsState extends State<_MenuActions> {
           alignment: WrapAlignment.center,
           spacing: 16,
           children: [
-            // Doble toque y desafío para adultos (HU-004 R1). El aviso va en la
-            // capa superior para quedar al pie de la pantalla, como el de salida.
-            OverlayPortal(
-              controller: _tapAgainHint,
-              overlayChildBuilder: (_) => QuietHint(
-                key: const ValueKey<String>('parents-zone-tap-again-hint'),
-                text: l10n.parentsZoneTapAgainHint,
-                helperText: (helper) => helper.parentsZoneTapAgainHint,
-              ),
-              child: TextButton.icon(
-                key: const ValueKey<String>('menu-parents-zone'),
-                onPressed: _onParentsZoneTap,
-                icon: const Icon(Icons.security, size: 18),
-                label: Text(l10n.menuParentsZone),
-                style: smallButtonStyle,
-              ),
-            ),
+            // Doble toque y desafío para adultos (HU-004 R1).
+            const ParentsZoneButton(),
             // La única salida sin confirmación (HU-001 R21).
             TextButton.icon(
               onPressed: MainMenuScreen._closeApp,

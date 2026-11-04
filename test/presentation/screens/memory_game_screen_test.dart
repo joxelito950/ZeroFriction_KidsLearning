@@ -7,6 +7,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
+import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_state.dart';
+import 'package:toddler_logic/presentation/blocs/play_time/play_time_cubit.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import 'package:toddler_logic/presentation/widgets/gesture_hint.dart';
 import 'package:toddler_logic/presentation/widgets/memory_board.dart';
@@ -99,6 +101,42 @@ void main() {
       expect(find.byKey(const ValueKey<String>('memory-level-dot-2-pending')), findsOneWidget);
       expect(find.text('Busquemos la pareja correcta.'), findsOneWidget);
       expect(find.bySemanticsLabel('Nivel 1 de 5'), findsOneWidget);
+    });
+
+    // HU-009 R4: un tablero tocado, o su celebración, no se corta al llegar al límite diario.
+    testWidgets('tells the daily play time when a board is in progress', (tester) async {
+      await pumpScreen(tester);
+      final PlayTimeCubit playTime = tester.element(find.byType(MemoryBoard)).read<PlayTimeCubit>();
+      expect(playTime.state.boardInProgress, isFalse);
+
+      final List<List<int>> pairs = pairsOf(tester);
+      await tapCard(tester, pairs[0][0]);
+      expect(playTime.state.boardInProgress, isTrue);
+
+      await tapCard(tester, pairs[0][1]);
+      await tapCard(tester, pairs[1][0]);
+      await tapCard(tester, pairs[1][1]);
+      expect(cubitOf(tester).state.phase, MemoryRoundPhase.celebrating);
+      expect(playTime.state.boardInProgress, isTrue);
+
+      await tester.pump(MemoryLadderCubit.celebrationDuration);
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(cubitOf(tester).state.phase, MemoryRoundPhase.playing);
+      expect(playTime.state.boardInProgress, isFalse);
+
+      await tapCard(tester, pairsOf(tester)[0][0]);
+      expect(playTime.state.boardInProgress, isTrue);
+      await tester.binding.handlePopRoute();
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(MemoryBoard), findsNothing);
+      expect(playTime.state.boardInProgress, isFalse);
+    });
+
+    test('a time-up notice counts as a board in progress; loading does not', () {
+      expect(MemoryGameScreen.boardInProgress(const MemoryLadderState(phase: MemoryRoundPhase.timeUp)), isTrue);
+      expect(MemoryGameScreen.boardInProgress(const MemoryLadderState()), isFalse);
     });
 
     // TD-007 A3, A5: con el texto del sistema a 2,0, el juego lo limita a 1,3.

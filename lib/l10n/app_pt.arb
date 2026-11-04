@@ -57,5 +57,19 @@
   "parentsZoneLanguageTitle": "Idioma",
   "parentsZoneLanguageIntro": "O idioma em que o app fala com seu filho. Muda na hora.",
   "parentsZonePrivacyTitle": "Privacidade",
-  "parentsZonePrivacyIntro": "O ToddlerLogic não coleta nenhum dado: tudo fica neste celular."
+  "parentsZonePrivacyIntro": "O ToddlerLogic não coleta nenhum dado: tudo fica neste celular.",
+  "parentsZonePlayTimeTitle": "Tempo de jogo",
+  "parentsZonePlayTimeSystemFirst": "Para limitar o tempo de tela, o mais completo são os controles parentais do celular: «Bem-estar digital e controles parentais» do Android e o Google Family Link. O app não consegue burlá-los.",
+  "parentsZonePlayTimeWho": "A OMS recomenda (2019): antes dos 2 anos, nada de tela sedentária; de 2 a 4 anos, no máximo 1 hora por dia, e quanto menos, melhor.",
+  "parentsZonePlayTimeLimitLabel": "Limite diário neste app",
+  "parentsZonePlayTimeNoLimit": "Sem limite",
+  "parentsZonePlayTimeMinutes": "{minutes} min",
+  "parentsZonePlayTimeCustom": "Personalizado",
+  "parentsZonePlayTimeCustomField": "Minutos",
+  "parentsZonePlayTimeCustomApply": "Aplicar",
+  "parentsZonePlayTimeCustomRange": "Digite entre 5 minutos e 12 horas (720 minutos).",
+  "parentsZonePlayTimeToday": "Hoje: {played} de {allowed} min jogados",
+  "parentsZonePlayTimeExtra": "Dar mais 15 minutos",
+  "restTitle": "Hora de descansar!",
+  "restSubtitle": "Voltamos amanhã"
 }

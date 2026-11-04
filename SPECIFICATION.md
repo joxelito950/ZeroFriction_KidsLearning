@@ -105,7 +105,7 @@ lib/
 ├── domain/
 │   ├── entities/                      # LevelState, UserProfile, AppLanguage (Dart puro)
 │   ├── memory/                        # Reglas del juego de memoria: escalera, estrellas, temáticas (Dart puro)
-│   ├── parental/                      # Control para adultos de la Zona de Padres: ParentalGate (Dart puro, HU-004)
+│   ├── parental/                      # Control para adultos de la Zona de Padres: ParentalGate (Dart puro, HU-004) y DailyPlayTime (tiempo de juego diario, HU-009)
 │   └── repositories/                  # IPersistenceRepository
 └── presentation/
     ├── blocs/<feature>/               # <feature>_cubit, _state, modelos de UI
@@ -125,7 +125,8 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 2. `getApplicationDocumentsDirectory()` da la ruta de Hive.
 3. `HivePersistenceConfig.initialize()` registra los adapters y abre las cajas. Es idempotente y segura ante llamadas concurrentes (detalle en DOCUMENTATION.md).
 4. Se crea `HivePersistenceRepository` y se inyecta con `RepositoryProvider<IPersistenceRepository>` en la raíz de `ToddlerLogicApp`.
-5. Cada pantalla crea su Cubit con `BlocProvider` leyendo el repositorio del contexto.
+5. Cada pantalla crea su Cubit con `BlocProvider` leyendo el repositorio del contexto. Los Cubits de toda la app se crean en la raíz: `AppLocaleCubit` (idioma, HU-012) y `PlayTimeCubit` (tiempo de juego diario, HU-009).
+6. `PlayTimeScope` va en `MaterialApp.builder`, por encima del navegador: avisa a `PlayTimeCubit` de si la app está en primer plano y, con el límite alcanzado, abre la pantalla de descanso con la `navigatorKey` de la app (HU-009).
 
 ### 3.4 Persistencia
 
@@ -134,13 +135,15 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 | `level_states` | `LevelStateHiveModel` → `LevelState` | `levelId` | 0 |
 | `user_profile` | `UserProfileHiveModel` → `UserProfile` | `current_user_profile` | 1 |
 | `memory_progress` | `MemoryProgressHiveModel` → `MemoryProgress` | `current_memory_progress` | 2 |
+| `parental_settings` | `ParentalSettingsHiveModel` → `ParentalSettings` | `current_parental_settings` | 3 |
 
 - Las cajas guardan **modelos de guardado** (`data/local/models/`), nunca entidades de dominio. El repositorio convierte con `fromEntity`/`toEntity`; las reglas de negocio (por ejemplo, estrellas entre 0 y 3) las valida la entidad al convertir.
 - `test/data/local/hive_v2_compatibility_test.dart` y los fixtures de `test/fixtures/hive_v2/` garantizan que el formato en disco no cambia. Si cambia, el test falla.
 
 - Campos de `UserProfileHiveModel`: 0 `isPremium`, 1 `isSoundEnabled`, 2 `languageCode` (opcional, HU-011; los perfiles anteriores lo leen como `null`). El próximo índice libre es 3.
 - Campos de `MemoryProgressHiveModel` (HU-001): 0 `currentLevel`, 1 `hasBadge`, 2 `bestStarsByLevel` (nivel → estrellas), 3 `achievedAtByLevel` (nivel → fecha), 4 `lastPlayedAt`. El próximo índice libre es 5.
-- Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **3**. `LevelState` (typeId 0) dejará de usarse cuando el juego pase a `MemoryProgress` (HU-001, entrega 3); su typeId queda reservado.
+- Campos de `ParentalSettingsHiveModel` (HU-009): 0 `dailyLimitMinutes` (`null` es «sin límite»), 1 `playDay` (medianoche local del último día jugado), 2 `playedSeconds`, 3 `extraMinutes` (los «15 minutos más» de ese día). El próximo índice libre es 4; ahí irán los ajustes de HU-030, HU-016 y HU-031, con valor por defecto para los datos ya guardados.
+- Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **4** (reservado para el progreso de Sombras, HU-007). `LevelState` (typeId 0) dejará de usarse cuando el juego pase a `MemoryProgress` (HU-001, entrega 3); su typeId queda reservado.
 - Identificadores de nivel en uso: `farm_easy`, `wild_medium`. Un `levelId` ya publicado NO DEBE renombrarse.
 
 ### 3.5 Estado (Cubit)
@@ -177,6 +180,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - Dentro de un juego NO DEBE haber botones que saquen al niño de él: las transiciones tras ganar o perder son automáticas (D-022, desde HU-001).
 - Toda pantalla DEBE proteger el «atrás» del sistema pidiendo repetir el gesto, con un aviso pequeño y sin botones (D-025, desde HU-001).
 - El tiempo, si existe, se muestra sin números, sin rojo y sin sonidos (D-021).
+- **Tiempo de juego diario (HU-009):** toda pantalla de juego DEBE avisar a `PlayTimeCubit.setBoardInProgress` de si hay un tablero empezado (o su celebración), para que el límite diario no lo corte a medias; un tablero recién repartido no cuenta. El Cubit del juego no sabe nada del límite: lo avisa su pantalla. Toda pantalla de adultos, al envolverse en `AdultSessionGuard`, detiene el contador.
 - **Tutorial visual (HU-022):** todo juego DEBE enseñar su gesto con `GestureHint` (una mano sin texto ni sonido que aparece si el niño no toca nada en 4 s y se va al primer toque), sin cambiar el juego ni arrancar su tiempo.
 
 ### 4.3 Privacidad y seguridad

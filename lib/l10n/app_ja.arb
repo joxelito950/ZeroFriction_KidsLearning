@@ -57,5 +57,19 @@
   "parentsZoneLanguageTitle": "言語",
   "parentsZoneLanguageIntro": "アプリがお子さまに話しかける言語です。すぐに切り替わります。",
   "parentsZonePrivacyTitle": "プライバシー",
-  "parentsZonePrivacyIntro": "ToddlerLogic はデータを一切収集しません。すべてこのスマートフォンの中に残ります。"
+  "parentsZonePrivacyIntro": "ToddlerLogic はデータを一切収集しません。すべてこのスマートフォンの中に残ります。",
+  "parentsZonePlayTimeTitle": "遊ぶ時間",
+  "parentsZonePlayTimeSystemFirst": "画面を見る時間を制限するには、スマートフォン本体のペアレンタル コントロールがもっとも確実です。Android の「Digital Wellbeing と保護者による使用制限」や Google ファミリー リンクをお使いください。アプリからは回避できません。",
+  "parentsZonePlayTimeWho": "WHO の推奨（2019 年）：2 歳未満は座ったままの画面視聴はなし。2〜4 歳は 1 日 1 時間まで、少ないほどよいとされています。",
+  "parentsZonePlayTimeLimitLabel": "このアプリの 1 日の上限",
+  "parentsZonePlayTimeNoLimit": "上限なし",
+  "parentsZonePlayTimeMinutes": "{minutes} 分",
+  "parentsZonePlayTimeCustom": "カスタム",
+  "parentsZonePlayTimeCustomField": "分",
+  "parentsZonePlayTimeCustomApply": "適用",
+  "parentsZonePlayTimeCustomRange": "5 分から 12 時間（720 分）までの値を入力してください。",
+  "parentsZonePlayTimeToday": "今日：{allowed} 分中 {played} 分",
+  "parentsZonePlayTimeExtra": "15 分追加する",
+  "restTitle": "ひと休みしよう！",
+  "restSubtitle": "また明日あそぼうね"
 }

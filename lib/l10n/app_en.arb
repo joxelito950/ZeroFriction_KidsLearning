@@ -285,5 +285,77 @@
   "parentsZonePrivacyIntro": "ToddlerLogic collects no data: everything stays on this phone.",
   "@parentsZonePrivacyIntro": {
     "description": "One-line summary under the privacy section title; tapping the section shows the full policy (only in English and Spanish for now). Read by parents."
+  },
+  "parentsZonePlayTimeTitle": "Play time",
+  "@parentsZonePlayTimeTitle": {
+    "description": "Title of the Parents' Zone section to limit daily play time (HU-009). Read by parents. Max ~25 characters."
+  },
+  "parentsZonePlayTimeSystemFirst": "The most complete way to limit screen time is the phone's own parental controls: Android's Digital Wellbeing & parental controls, and Google Family Link. The app can't get around them.",
+  "@parentsZonePlayTimeSystemFirst": {
+    "description": "First recommendation of the play time section: use the phone's own parental controls. Use the official names of Android's 'Digital Wellbeing & parental controls' and 'Google Family Link' in each language. Text only, no links. Read by parents."
+  },
+  "parentsZonePlayTimeWho": "The WHO recommends (2019): no sedentary screen time before age 2; from 2 to 4, no more than 1 hour a day, and less is better.",
+  "@parentsZonePlayTimeWho": {
+    "description": "World Health Organization guideline (2019) on sedentary screen time for young children. Read by parents."
+  },
+  "parentsZonePlayTimeLimitLabel": "Daily limit in this app",
+  "@parentsZonePlayTimeLimitLabel": {
+    "description": "Label above the daily limit options of this app. Read by parents."
+  },
+  "parentsZonePlayTimeNoLimit": "No limit",
+  "@parentsZonePlayTimeNoLimit": {
+    "description": "Daily limit option: no limit (the default). Short chip label."
+  },
+  "parentsZonePlayTimeMinutes": "{minutes} min",
+  "@parentsZonePlayTimeMinutes": {
+    "description": "Daily limit option with a number of minutes, e.g. 15 min. Short chip label; abbreviate 'minutes' as usual in the language.",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "parentsZonePlayTimeCustom": "Custom",
+  "@parentsZonePlayTimeCustom": {
+    "description": "Daily limit option that lets the adult type the number of minutes. Short chip label."
+  },
+  "parentsZonePlayTimeCustomField": "Minutes",
+  "@parentsZonePlayTimeCustomField": {
+    "description": "Label of the text field where the adult types the custom daily limit in minutes."
+  },
+  "parentsZonePlayTimeCustomApply": "Apply",
+  "@parentsZonePlayTimeCustomApply": {
+    "description": "Button that applies the custom daily limit typed by the adult. Short."
+  },
+  "parentsZonePlayTimeCustomRange": "Enter between 5 minutes and 12 hours (720 minutes).",
+  "@parentsZonePlayTimeCustomRange": {
+    "description": "Shown under the custom field, and again when the typed value is out of range. Calm tone, not an error. Read by parents."
+  },
+  "parentsZonePlayTimeToday": "Today: {played} of {allowed} min played",
+  "@parentsZonePlayTimeToday": {
+    "description": "How much the child has played today against the allowed minutes. {played} and {allowed} are whole minutes. Read by parents.",
+    "placeholders": {
+      "played": {
+        "type": "int",
+        "example": "12"
+      },
+      "allowed": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
+  "parentsZonePlayTimeExtra": "Give 15 more minutes",
+  "@parentsZonePlayTimeExtra": {
+    "description": "Button that gives the child 15 more minutes of play today. Read by parents."
+  },
+  "restTitle": "Time for a rest!",
+  "@restTitle": {
+    "description": "Rest screen shown when the daily play time is over (HU-009). Calm and friendly, never a punishment; the child cannot read yet, a parent reads it aloud. Max ~30 characters."
+  },
+  "restSubtitle": "Let's play again tomorrow",
+  "@restSubtitle": {
+    "description": "Line under the rest screen title: we will play again tomorrow. Calm and friendly. Max ~35 characters."
   }
 }
