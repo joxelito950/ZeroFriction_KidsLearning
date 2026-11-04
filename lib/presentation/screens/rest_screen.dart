@@ -29,7 +29,9 @@ class RestScreen extends StatelessWidget {
             builder: (context, constraints) => SingleChildScrollView(
               padding: const EdgeInsets.all(24),
               child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+                // Todo el ancho: en el moto g55 la columna tomaba solo el ancho del
+                // título y quedaba pegada al inicio en vez de centrada.
+                constraints: BoxConstraints(minWidth: constraints.maxWidth - 48, minHeight: constraints.maxHeight - 48),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
