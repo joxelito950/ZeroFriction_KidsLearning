@@ -76,7 +76,7 @@ Solo se permiten transparencias de estos colores; los emojis de las cartas y el 
 | R5 | **El icono del juego admite el dorado** con el llenado de abajo arriba (P5, opción A de HU-002): se entrega con una **silueta cerrada** sobre la que la app aplica un `ShaderMask`. La silueta debe reconocerse con cualquier porcentaje, del 0 % al 100 %. |
 | R6 | El menú muestra el logo encima del título y el icono en el botón «Memoria»; la cabecera del juego sustituye `child_care_rounded` por el icono del juego. Ningún diseño nuevo desborda los tests de layout (9 idiomas × 4 teléfonos × orientaciones). |
 | R7 | El icono de la app se ve bien en las máscaras habituales (círculo, ardilla, cuadrado redondeado) y en tema claro y oscuro del launcher. |
-| R8 | **Sin mascota** en esta historia (P2). Las celebraciones siguen con las estrellas y el trofeo actuales. |
+| R8 | **Personaje de identidad** (cambiado el 2026-11-05, P2): el niño de la imagen base es el personaje de la app y aparece en el icono y en el logo. Las celebraciones siguen con las estrellas y el trofeo actuales; usarlo en otras pantallas (descanso, celebraciones) queda para HU-017. |
 
 ## 5. Encaje con lo ya decidido
 
@@ -115,8 +115,9 @@ Solo se permiten transparencias de estos colores; los emojis de las cartas y el 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
 | P1 | ¿Quién hace el diseño? | ✅ Decidido (2026-10-26): **el dueño del producto** prepara los vectores siguiendo las especificaciones de las secciones 3 y 4; la integración la hace el desarrollo | — |
-| P2 | ¿Hay mascota? | ✅ Decidido (2026-10-26): **no en esta historia.** No es un requisito del producto (venía del 🧸 de la versión 0.0.1-beta) y es la pieza que más diseño exige. Su hueco en el menú lo ocupa el logo. Queda como idea en **HU-017** | — |
-| P3 | ¿Qué símbolo tiene el icono de la app? | Lo decide el diseño. Mismo símbolo que el logo, sobre un fondo de color liso | No |
+| P2 | ¿Hay mascota? | ✅ Decidido (2026-10-26): no en esta historia. **Cambiado el 2026-11-05:** el dueño aporta una imagen base con un niño, que **se queda como personaje de identidad** de la app (icono y logo). Sus usos dentro de la app siguen en **HU-017** | — |
+| P3 | ¿Qué símbolo tiene el icono de la app? | ✅ Decidido (2026-11-05): **el niño detrás de una mesa curva con varios juegos de la app** (carta de memoria, pieza de puzle, forma con su sombra), no solo un rompecabezas. Imagen base del dueño, generada con IA; las capas definitivas se piden con los textos de [PROMPTS-identidad.md](../brand/PROMPTS-identidad.md) | — |
+| P9 | La base es una ilustración 3D en imagen (PNG), no un vector, y usa degradados y tonos fuera de la paleta (piel, pelo). ¿Se aceptan en el icono, el logo y el icono del juego? | Recomendación: **sí para el icono de la app, el de la tienda y el logo**, cambiando R1 y R4: ilustración PNG con los tonos de la paleta y sus sombras, más piel y pelo naturales. El test de colores de los SVG (criterio 8) no aplica a los PNG. El dorado de HU-002 funciona igual sobre un PNG con transparencia | Sí |
 | P5 | ¿Cómo se ve el dorado del icono del juego (P3 de HU-002)? | ✅ Decidido (2026-10-26): **A, llenado de abajo arriba**. El porcentaje se entiende a simple vista y es un `ShaderMask` sobre la silueta, válido para cualquier icono futuro | — |
 | P6 | ¿`flutter_svg` o convertir los vectores a código? | ✅ Asumida la recomendación: **`flutter_svg`**, la opción estándar, que deja cambiar el diseño sin tocar código | — |
 | P8 | ¿Qué paleta usa la identidad? | ✅ Decidido (2026-10-27): la de [PALETA.md](../brand/PALETA.md) (D-032), aportada por el dueño del producto. Es obligatoria para toda la app, no solo para esta historia | — |
