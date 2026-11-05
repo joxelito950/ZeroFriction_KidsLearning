@@ -71,7 +71,7 @@
 |---|---|---|
 | 1 | Preparación técnica ✅ | Versión 1.0.0, `build appbundle` en el CI, comprobación de «sin permisos» (R3) y script de comprobación de la firma antes de subir (R2) |
 | 2 | Política de privacidad ✅ | Texto en `docs/privacy/` y en la Zona de Padres (idiomas de la ficha), publicación en una URL pública (P4) |
-| 3 | Ficha | Textos por idioma revisado, capturas en vertical y horizontal (con la identidad de HU-013), gráfico destacado, respuestas de la sección 5 en `docs/store/` |
+| 3 | Ficha 🟡 | Textos por idioma revisado, capturas en vertical y horizontal (con la identidad de HU-013), gráfico destacado, respuestas de la sección 5 en `docs/store/`. **2026-11-05:** icono de 512 px y gráfico destacado hechos; textos en borrador en [docs/store/ficha.md](../store/ficha.md); faltan las capturas, la revisión de TD-011 y el correo de contacto |
 | 4 | Prueba cerrada | Alta en Play Console, subida del AAB firmado, 12+ testers durante 14 días, recogida de fallos |
 | 5 | Producción | Solicitud de acceso a producción, revisión de Google y lanzamiento (P6) |
 

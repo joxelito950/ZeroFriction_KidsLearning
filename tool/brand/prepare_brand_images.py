@@ -8,6 +8,7 @@ Genera:
 - docs/brand/generados/launcher_monochrome.png  icono monocromo (Android 13+)
 - docs/brand/generados/launcher_full.png        icono cuadrado completo (Android < 8 y base del de la tienda)
 - docs/store/icon-512.png                       icono de Google Play (512 x 512, sin transparencia)
+- docs/store/feature-graphic.png                gráfico destacado de la ficha (1024 x 500, sin texto)
 - assets/brand/logo.png                         logo del menú
 - assets/brand/memory_icon.png                  icono del juego de memoria
 Después: dart run flutter_launcher_icons
@@ -68,6 +69,25 @@ def fit_box(im: Image.Image, longest: int) -> Image.Image:
     return im.resize((round(im.width * k), round(im.height * k)), Image.LANCZOS)
 
 
+def feature_graphic() -> Image.Image:
+    """Gráfico destacado de Google Play: 1024 x 500, sin transparencia y sin texto
+    (vale para todos los idiomas). El niño a la derecha del centro y el icono de
+    memoria a la izquierda, sobre un degradado de teal profundo a azul petróleo."""
+    w, h = 1024, 500
+    out = Image.new('RGBA', (w, h))
+    top, bottom = DEEP_TEAL[:3], (0x17, 0x6B, 0x78)
+    for y in range(h):
+        t = y / (h - 1)
+        row = tuple(round(a + (b - a) * t) for a, b in zip(top, bottom)) + (255,)
+        out.paste(row, (0, y, w, y + 1))
+    # Google recorta los bordes en algunos usos: lo importante, en el centro.
+    child = fit_box(Image.open(SRC / 'icono-nino-rompecabezas.png'), 450)
+    out.alpha_composite(child, (w // 2 - 40, (h - child.height) // 2))
+    cards = fit_box(Image.open(SRC / 'icono-memoria-cartas.png'), 250)
+    out.alpha_composite(cards, (w // 2 - 40 - cards.width - 40, (h - cards.height) // 2 + 20))
+    return out.convert('RGB')
+
+
 def main() -> None:
     GEN.mkdir(parents=True, exist_ok=True)
     (ROOT / 'assets/brand').mkdir(parents=True, exist_ok=True)
@@ -85,6 +105,8 @@ def main() -> None:
     full.save(GEN / 'launcher_full.png', optimize=True)
     # Google Play: PNG de 32 bits, 512 x 512, sin transparencia.
     full.resize((512, 512), Image.LANCZOS).save(ROOT / 'docs/store/icon-512.png', optimize=True)
+
+    feature_graphic().save(ROOT / 'docs/store/feature-graphic.png', optimize=True)
 
     fit_box(Image.open(SRC / 'logo-nino-piezas.png'), 480).save(ROOT / 'assets/brand/logo.png', optimize=True)
     fit_box(Image.open(SRC / 'icono-memoria-cartas.png'), 256).save(
