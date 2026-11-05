@@ -1,10 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../brand/brand_assets.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import '../widgets/game_icon.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
 import 'memory_game_screen.dart';
@@ -67,7 +71,7 @@ class MainMenuScreen extends StatelessWidget {
   }
 }
 
-/// Encabezado con el nombre de la app. La mascota llegará con la identidad visual (HU-013).
+/// Encabezado con el logo (el personaje de identidad, HU-013) y el nombre de la app.
 class _MenuHeader extends StatelessWidget {
   const _MenuHeader();
 
@@ -76,9 +80,23 @@ class _MenuHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
+    // El logo crece con la pantalla, sin pasar de 160 dp ni dejar sin sitio a
+    // los botones en un teléfono pequeño en horizontal.
+    final double logoSize = math.min(160, MediaQuery.sizeOf(context).shortestSide * 0.32);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // Decorativo: el título ya dice el nombre (HU-013, criterio 5).
+        Image.asset(
+          BrandAssets.logo,
+          key: const ValueKey<String>('menu-logo'),
+          width: logoSize,
+          height: logoSize,
+          excludeFromSemantics: true,
+          errorBuilder: (context, error, stackTrace) => SizedBox.square(dimension: logoSize),
+        ),
+        const SizedBox(height: 8),
         Text(
           l10n.appTitle,
           style: theme.textTheme.headlineLarge?.copyWith(
@@ -151,6 +169,7 @@ class _MenuActionsState extends State<_MenuActions> {
           // Azul petróleo: lo que se toca (PALETA.md, C6).
           backgroundColor: AppPalette.petrolBlue,
           textColor: AppPalette.white,
+          icon: const GameIcon.memory(key: ValueKey<String>('menu-memory-icon'), size: 52),
           badge: _hasBadge
               ? Semantics(
                   label: l10n.menuBadgeSemantics,
@@ -200,6 +219,9 @@ class _MenuButton extends StatelessWidget {
   final Color textColor;
   final VoidCallback onTap;
 
+  /// Icono del juego, delante del título (HU-013).
+  final Widget? icon;
+
   /// Distintivo opcional junto a la flecha (la medalla de la insignia).
   final Widget? badge;
 
@@ -209,6 +231,7 @@ class _MenuButton extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     required this.onTap,
+    this.icon,
     this.badge,
   });
 
@@ -232,6 +255,7 @@ class _MenuButton extends StatelessWidget {
         ),
         child: Row(
           children: [
+            if (icon case final Widget icon) ...[icon, const SizedBox(width: 14)],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

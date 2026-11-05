@@ -1,0 +1,12 @@
+# Icono de la app (HU-013). Las imágenes salen de tool/brand/prepare_brand_images.py.
+# Regenerar: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: false
+  min_sdk_android: 26
+  image_path: docs/brand/generados/launcher_full.png
+  # Fondo liso en teal profundo (#00454D, D-032); el niño va en el primer plano,
+  # dentro de la zona segura de 66 dp.
+  adaptive_icon_background: "#00454D"
+  adaptive_icon_foreground: docs/brand/generados/launcher_foreground.png
+  adaptive_icon_monochrome: docs/brand/generados/launcher_monochrome.png

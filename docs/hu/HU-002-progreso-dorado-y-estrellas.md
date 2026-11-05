@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-21; aspecto del dorado decidido el 2026-10-26: llenado de abajo arriba; el desarrollo **no** ha empezado) |
+| **Estado** | En refinamiento (revisión del 2026-11-05 antes de desarrollar: preguntas P8 a P12). Refinamiento cerrado el 2026-10-21; aspecto del dorado decidido el 2026-10-26 |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3–4 días), por confirmar |
-| **Depende de** | HU-001 (niveles del juego de memoria) y HU-013 (icono de cada juego). Se desarrolla junto con HU-013 o después |
+| **Depende de** | HU-001 (hecha) y HU-013 (icono del juego, en curso). Se desarrolla junto con HU-016 (P12) |
 
 ## 1. Historia
 
@@ -18,11 +18,13 @@
 
 > El icono del juego va tomando tono dorado en un porcentaje según los niveles alcanzados; el 100 % de los niveles sería el dorado completo y el 50 % de los niveles, un 50 % de dorado. Puede ir en degradado o en parches o pecas doradas que lo van cubriendo. Las 3 estrellas, que hoy siempre salen llenas, se pueden calcular según cada juego. En el juego de memoria: 3 estrellas si lo logra en el mínimo de movimientos + 2; 2 estrellas entre el mínimo + 2 y el doble del mínimo; 1 estrella entre el doble y el triple del mínimo; sin estrellas si supera el triple. Para llegar al 100 % dorado hay que tener el 100 % de los niveles con 3 estrellas.
 
-## 3. Situación actual
+## 3. Situación actual (revisada el 2026-11-05)
 
-- El diálogo de victoria muestra **siempre 3 estrellas** (D-009: «a los 3 años se celebra el logro, no la eficiencia»).
-- HU-001 (lista, sin implementar) define 5 niveles (2×2 → 4×4) y que el botón del juego quede **dorado de golpe** al superar el 4×4 (D-023).
-- Los iconos de los juegos se retiraron (TD-006) hasta definir la identidad visual (HU-013).
+- **Ya hecho en HU-001:** las estrellas se calculan con D-030 y se ven en la celebración; `MemoryProgress` guarda el mejor resultado y su fecha por nivel y la fecha de la última partida (P4, P5). La insignia del 4×4 y su medalla en el menú también están.
+- **Ya hecho en HU-013** (rama `feature/hu-013-identity`): el icono del juego de memoria (dos cartas) está en el botón del menú y en la cabecera, con el widget `GameIcon`, que **ya acepta el porcentaje dorado** (`goldFraction`, llenado de abajo arriba con `ShaderMask`).
+- **Ya hecho en HU-009:** `ParentalSettings` (typeId 3), donde HU-016 guardará «Mantener las estrellas».
+- **Falta en esta historia:** el cálculo del dorado y de la pérdida (dominio con reloj inyectado), guardar las estrellas perdidas, pasar el porcentaje al icono, la etiqueta del lector de pantalla (R6, 9 idiomas) y el aspecto final del dorado sobre la ilustración (P10).
+- **HU-030** (lista) añade una vista previa de 1 s en Fácil y Normal: hace más fáciles las 3★ que la simulación de la sección 4, que no la tenía. Se acepta: la dificultad no cambia los premios (HU-030 P4).
 
 ## 4. Análisis de las estrellas (simulación)
 
@@ -157,6 +159,11 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 | P5 | Hasta que llegue HU-002, ¿qué muestra el diálogo de victoria de HU-001? | ✅ Asumida la recomendación: las estrellas calculadas desde HU-001. HU-002 queda con el icono dorado y la pérdida de logros | — |
 | P6 | ¿Cuenta el nivel 1 (2×2 sin tiempo) para el dorado? | ✅ Decidido: sí, son 5 niveles × 3 estrellas | — |
 | P7 | ¿Se pierden los logros si no se juega? | ✅ Decidido: **sí, pérdida real (D1)**, como control de progreso y refuerzo de las habilidades (D-031). Parámetros asumidos en la sección 6 | — |
+| P8 | ¿La pérdida se calcula al vuelo o se guarda? Si solo se calculara a partir de la última partida, al volver a jugar las estrellas perdidas **volverían solas**, y R9 dice que se recuperan ganando | Recomendación: **se guarda.** Al abrir el menú o el juego, se calcula la pérdida acumulada con el reloj y se guardan las estrellas que quedan (sin cambiar sus fechas); después, la partida actualiza la fecha de la última partida, que detiene la pérdida (R9) | Sí |
+| P9 | ¿Qué nivel pierde primero? | Recomendación: siempre el nivel con el **logro más antiguo** que aún tenga estrellas; como su fecha no cambia al perder, se vacía entero antes de pasar al siguiente. Es la lectura literal de R8 y la más sencilla de explicar | Sí |
+| P10 | ¿Cómo se ve el dorado sobre la ilustración 3D de las cartas (D-036)? Un dorado plano encima la deja **marrón y sin volumen** (prueba del 2026-11-05) | Recomendación: un **tinte dorado que conserve el volumen** (dorado `#A86B12` hacia ámbar `#ECA463` en las luces) y una **línea ámbar** en el borde del llenado, como decía P3. Se elige viéndolo en el moto g55 con 0, 40, 87 y 100 % | Sí |
+| P11 | ¿Dónde se ve el dorado? | Recomendación: en el **botón del menú** (donde se compara de un día a otro) y también en la **cabecera del juego**, con el mismo valor | No |
+| P12 | ¿Se desarrolla junto con HU-016 («Mantener las estrellas»)? ¿Ese interruptor es Premium? | Recomendación: **juntas**, como ya decía HU-016, y **gratuito**: protege al niño y no es contenido de pago. No es un ajuste Premium, así que no le afecta HU-030 R11 | No |
 
 ## 9. Criterios de aceptación (borrador)
 
