@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/app_language.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
 import 'package:toddler_logic/domain/parental/parental_gate.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
@@ -16,6 +17,7 @@ import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import 'package:toddler_logic/presentation/screens/parental_gate_screen.dart';
 import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
+import 'package:toddler_logic/presentation/screens/rest_screen.dart';
 import 'package:toddler_logic/presentation/widgets/parental_keypad.dart';
 
 import 'l10n_test_support.dart';
@@ -196,20 +198,50 @@ void main() {
             });
           }
 
+          testWidgets('rest screen fits and keeps the parents zone reachable', (tester) async {
+            _usePhone(tester, phone, textScale);
+            await tester.pumpWidget(localizedApp(locale: locale, home: const RestScreen()));
+
+            for (final text in [l10n.restTitle, l10n.restSubtitle]) {
+              await tester.ensureVisible(find.text(text));
+              expect(find.text(text).hitTestable(), findsOneWidget);
+            }
+            await tester.ensureVisible(find.byKey(const ValueKey<String>('rest-parents-zone')));
+            expect(find.byKey(const ValueKey<String>('rest-parents-zone')).hitTestable(), findsOneWidget);
+            // Centrada como el resto de la app, también en árabe (RTL).
+            final Rect body = tester.getRect(find.byType(SingleChildScrollView));
+            for (final finder in [find.text(l10n.restTitle), find.byKey(const ValueKey<String>('rest-parents-zone'))]) {
+              expect(tester.getCenter(finder).dx, moreOrLessEquals(body.center.dx, epsilon: 1));
+            }
+          });
+
           testWidgets('parents zone fits', (tester) async {
             _usePhone(tester, phone, textScale);
-            await tester.pumpWidget(localizedApp(locale: locale, home: const ParentsZoneScreen()));
+            when(() => repository.readParentalSettings())
+                .thenAnswer((_) async => ParentalSettings(dailyLimitMinutes: 25));
+            await tester.pumpWidget(
+              localizedApp(locale: locale, repository: repository, home: const ParentsZoneScreen()),
+            );
+            await tester.pump();
+            // El campo de minutos tiene su propio Scrollable: se desplaza la lista.
+            final Finder list = find.byType(Scrollable).first;
 
             expect(find.text(l10n.parentsZoneTitle).hitTestable(), findsOneWidget);
             expect(find.byKey(const ValueKey<String>('parents-zone-back-to-menu')).hitTestable(), findsOneWidget);
             // La lista solo construye lo que se ve: se desplaza hasta el final.
             for (final code in AppLanguage.supported) {
-              await tester.scrollUntilVisible(find.byKey(ValueKey<String>('language-$code')), 100);
+              await tester.scrollUntilVisible(find.byKey(ValueKey<String>('language-$code')), 100, scrollable: list);
             }
-            await tester.scrollUntilVisible(find.text(l10n.parentsZonePinNote), 200);
+            // Tiempo de juego (HU-009) con un límite propio: campo y tiempo extra a la vista.
+            for (final key in ['play-time-limit-custom', 'play-time-custom-apply', 'play-time-extra']) {
+              await tester.scrollUntilVisible(find.byKey(ValueKey<String>(key)), 100, scrollable: list);
+              await tester.pump();
+              expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget);
+            }
+            await tester.scrollUntilVisible(find.text(l10n.parentsZonePinNote), 200, scrollable: list);
             await tester.pump(); // ensureVisible necesita un fotograma más para verse
             expect(find.text(l10n.parentsZonePinNote).hitTestable(), findsOneWidget);
-            await tester.scrollUntilVisible(find.text(l10n.parentsZonePrivacyIntro), 200);
+            await tester.scrollUntilVisible(find.text(l10n.parentsZonePrivacyIntro), 200, scrollable: list);
             await tester.pump();
             expect(find.text(l10n.parentsZonePrivacyTitle).hitTestable(), findsOneWidget);
           });

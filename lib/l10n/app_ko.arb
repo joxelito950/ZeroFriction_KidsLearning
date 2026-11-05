@@ -57,5 +57,19 @@
   "parentsZoneLanguageTitle": "언어",
   "parentsZoneLanguageIntro": "앱이 아이에게 말하는 언어예요. 바로 바뀌어요.",
   "parentsZonePrivacyTitle": "개인정보 보호",
-  "parentsZonePrivacyIntro": "ToddlerLogic은 어떤 데이터도 수집하지 않습니다. 모든 정보는 이 휴대폰에만 남습니다."
+  "parentsZonePrivacyIntro": "ToddlerLogic은 어떤 데이터도 수집하지 않습니다. 모든 정보는 이 휴대폰에만 남습니다.",
+  "parentsZonePlayTimeTitle": "놀이 시간",
+  "parentsZonePlayTimeSystemFirst": "화면 사용 시간을 제한하려면 휴대전화 자체의 자녀 보호 기능이 가장 확실해요. Android의 '디지털 웰빙 및 자녀 보호 기능'과 Google Family Link를 사용하세요. 앱에서는 이를 우회할 수 없어요.",
+  "parentsZonePlayTimeWho": "WHO 권고(2019): 2세 미만은 앉아서 보는 화면 시간이 없어야 하고, 2~4세는 하루 최대 1시간, 적을수록 좋아요.",
+  "parentsZonePlayTimeLimitLabel": "이 앱의 하루 제한",
+  "parentsZonePlayTimeNoLimit": "제한 없음",
+  "parentsZonePlayTimeMinutes": "{minutes}분",
+  "parentsZonePlayTimeCustom": "직접 입력",
+  "parentsZonePlayTimeCustomField": "분",
+  "parentsZonePlayTimeCustomApply": "적용",
+  "parentsZonePlayTimeCustomRange": "5분에서 12시간(720분) 사이로 입력하세요.",
+  "parentsZonePlayTimeToday": "오늘: {allowed}분 중 {played}분",
+  "parentsZonePlayTimeExtra": "15분 더 주기",
+  "restTitle": "쉬는 시간이에요!",
+  "restSubtitle": "내일 또 놀아요"
 }

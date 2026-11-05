@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../blocs/play_time/play_time_cubit.dart';
 
 /// Mínima exposición de las pantallas de adultos (HU-004 R7, S4): vuelve al menú
 /// principal tras [inactivity] sin ningún toque, o al pasar la app a segundo
 /// plano o apagar la pantalla. Cada nueva entrada exige un desafío nuevo.
+/// Mientras está abierta, el tiempo de juego diario no cuenta (HU-009 R2).
 class AdultSessionGuard extends StatefulWidget {
   const AdultSessionGuard({
     super.key,
@@ -24,16 +28,19 @@ class AdultSessionGuard extends StatefulWidget {
 class _AdultSessionGuardState extends State<AdultSessionGuard> with WidgetsBindingObserver {
   Timer? _idle;
   bool _closed = false;
+  PlayTimeCubit? _playTime;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _playTime = context.read<PlayTimeCubit?>()?..enterAdultArea();
     _restartIdle();
   }
 
   @override
   void dispose() {
+    _playTime?.leaveAdultArea();
     _idle?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();

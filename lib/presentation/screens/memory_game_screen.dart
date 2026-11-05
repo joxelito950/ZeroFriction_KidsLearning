@@ -8,7 +8,9 @@ import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/memory_game/memory_ladder_cubit.dart';
 import '../blocs/memory_game/memory_ladder_state.dart';
+import '../blocs/play_time/play_time_cubit.dart';
 import '../theme/app_palette.dart';
+import '../widgets/game_icon.dart';
 import '../widgets/gesture_hint.dart';
 import '../widgets/memory_board.dart';
 import '../widgets/memory_level_indicator.dart';
@@ -28,6 +30,16 @@ class MemoryGameScreen extends StatelessWidget {
   /// Los textos del juego siguen el texto ampliado del sistema solo hasta aquí
   /// (TD-007 A3, A5): son para el adulto que acompaña y el tablero manda.
   static const double maxTextScale = 1.3;
+
+  /// Un tablero ya tocado, o su celebración o su aviso de tiempo, no se corta
+  /// al llegar al límite diario (HU-009 R4). Uno recién repartido, sí.
+  static bool boardInProgress(MemoryLadderState state) {
+    return switch (state.phase) {
+      MemoryRoundPhase.playing => state.moves > 0 || state.firstSelectedCardIndex != null,
+      MemoryRoundPhase.celebrating || MemoryRoundPhase.timeUp => true,
+      _ => false,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,17 +72,23 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
     return _hintKeys.putIfAbsent(round, GlobalKey.new);
   }
 
+  /// Tiempo de juego diario (HU-009); no está en algunos tests.
+  PlayTimeCubit? _playTime;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _playTime = context.read<PlayTimeCubit?>();
   }
 
   @override
   void dispose() {
+    _playTime?.setBoardInProgress(false);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
 
   /// El cronómetro se pausa con la app en segundo plano o la pantalla apagada (R11).
   @override
@@ -93,7 +111,8 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
           body: ColoredBox(
             color: AppPalette.warmCream,
             child: SafeArea(
-              child: BlocBuilder<MemoryLadderCubit, MemoryLadderState>(
+              child: BlocConsumer<MemoryLadderCubit, MemoryLadderState>(
+                listener: (_, state) => _playTime?.setBoardInProgress(MemoryGameScreen.boardInProgress(state)),
                 builder: (context, state) => Stack(
                   children: [
                     // Tutorial visual: si el niño no toca nada, una mano toca una carta (HU-022).
@@ -198,11 +217,8 @@ class _Header extends StatelessWidget {
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 22,
-                  backgroundColor: AppPalette.amber,
-                  child: Icon(Icons.child_care_rounded, color: AppPalette.deepTeal, size: 26),
-                ),
+                // Icono del juego (HU-013); el título ya dice el nombre.
+                const GameIcon.memory(key: ValueKey<String>('memory-game-icon'), size: 48),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(

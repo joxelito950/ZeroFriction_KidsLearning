@@ -1,23 +1,24 @@
-import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../brand/brand_assets.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import '../widgets/game_icon.dart';
+import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
-import '../widgets/quiet_hint.dart';
 import 'memory_game_screen.dart';
-import 'parental_gate_screen.dart';
 
 /// Menú principal súper visual y simplificado para niños de 3 años.
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
 
   /// Tiempo para el segundo toque en «Zona de Padres» (HU-004 R1, S5).
-  static const Duration parentsZoneTapWindow = Duration(seconds: 2);
+  static const Duration parentsZoneTapWindow = ParentsZoneButton.tapWindow;
 
   static const EdgeInsets _padding = EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0);
 
@@ -70,7 +71,7 @@ class MainMenuScreen extends StatelessWidget {
   }
 }
 
-/// Encabezado con el nombre de la app. La mascota llegará con la identidad visual (HU-013).
+/// Encabezado con el logo (el personaje de identidad, HU-013) y el nombre de la app.
 class _MenuHeader extends StatelessWidget {
   const _MenuHeader();
 
@@ -79,9 +80,23 @@ class _MenuHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
+    // El logo crece con la pantalla, sin pasar de 160 dp ni dejar sin sitio a
+    // los botones en un teléfono pequeño en horizontal.
+    final double logoSize = math.min(160, MediaQuery.sizeOf(context).shortestSide * 0.32);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // Decorativo: el título ya dice el nombre (HU-013, criterio 5).
+        Image.asset(
+          BrandAssets.logo,
+          key: const ValueKey<String>('menu-logo'),
+          width: logoSize,
+          height: logoSize,
+          excludeFromSemantics: true,
+          errorBuilder: (context, error, stackTrace) => SizedBox.square(dimension: logoSize),
+        ),
+        const SizedBox(height: 8),
         Text(
           l10n.appTitle,
           style: theme.textTheme.headlineLarge?.copyWith(
@@ -111,8 +126,6 @@ class _MenuActions extends StatefulWidget {
 
 class _MenuActionsState extends State<_MenuActions> {
   bool _hasBadge = false;
-  final OverlayPortalController _tapAgainHint = OverlayPortalController();
-  Timer? _parentsZoneWindow;
 
   @override
   void initState() {
@@ -140,29 +153,6 @@ class _MenuActionsState extends State<_MenuActions> {
     await _loadBadge();
   }
 
-  /// El primer toque solo muestra un aviso pequeño, sin botones; el segundo,
-  /// dentro de [MainMenuScreen.parentsZoneTapWindow], abre el desafío.
-  void _onParentsZoneTap() {
-    if (_parentsZoneWindow?.isActive ?? false) {
-      _parentsZoneWindow?.cancel();
-      _tapAgainHint.hide();
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => const ParentalGateScreen()),
-      );
-      return;
-    }
-    _tapAgainHint.show();
-    _parentsZoneWindow = Timer(MainMenuScreen.parentsZoneTapWindow, () {
-      if (mounted) _tapAgainHint.hide();
-    });
-  }
-
-  @override
-  void dispose() {
-    _parentsZoneWindow?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -179,6 +169,7 @@ class _MenuActionsState extends State<_MenuActions> {
           // Azul petróleo: lo que se toca (PALETA.md, C6).
           backgroundColor: AppPalette.petrolBlue,
           textColor: AppPalette.white,
+          icon: const GameIcon.memory(key: ValueKey<String>('menu-memory-icon'), size: 52),
           badge: _hasBadge
               ? Semantics(
                   label: l10n.menuBadgeSemantics,
@@ -204,23 +195,8 @@ class _MenuActionsState extends State<_MenuActions> {
           alignment: WrapAlignment.center,
           spacing: 16,
           children: [
-            // Doble toque y desafío para adultos (HU-004 R1). El aviso va en la
-            // capa superior para quedar al pie de la pantalla, como el de salida.
-            OverlayPortal(
-              controller: _tapAgainHint,
-              overlayChildBuilder: (_) => QuietHint(
-                key: const ValueKey<String>('parents-zone-tap-again-hint'),
-                text: l10n.parentsZoneTapAgainHint,
-                helperText: (helper) => helper.parentsZoneTapAgainHint,
-              ),
-              child: TextButton.icon(
-                key: const ValueKey<String>('menu-parents-zone'),
-                onPressed: _onParentsZoneTap,
-                icon: const Icon(Icons.security, size: 18),
-                label: Text(l10n.menuParentsZone),
-                style: smallButtonStyle,
-              ),
-            ),
+            // Doble toque y desafío para adultos (HU-004 R1).
+            const ParentsZoneButton(),
             // La única salida sin confirmación (HU-001 R21).
             TextButton.icon(
               onPressed: MainMenuScreen._closeApp,
@@ -243,6 +219,9 @@ class _MenuButton extends StatelessWidget {
   final Color textColor;
   final VoidCallback onTap;
 
+  /// Icono del juego, delante del título (HU-013).
+  final Widget? icon;
+
   /// Distintivo opcional junto a la flecha (la medalla de la insignia).
   final Widget? badge;
 
@@ -252,6 +231,7 @@ class _MenuButton extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     required this.onTap,
+    this.icon,
     this.badge,
   });
 
@@ -275,6 +255,7 @@ class _MenuButton extends StatelessWidget {
         ),
         child: Row(
           children: [
+            if (icon case final Widget icon) ...[icon, const SizedBox(width: 14)],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
