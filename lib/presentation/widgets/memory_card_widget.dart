@@ -16,6 +16,9 @@ class MemoryCardWidget extends StatelessWidget {
   final MemoryCard card;
   final VoidCallback onTap;
 
+  /// Duración del volteo de una carta.
+  static const Duration flipDuration = Duration(milliseconds: 420);
+
   @override
   Widget build(BuildContext context) {
     final bool isRevealed = card.isFaceUp || card.isMatched;
@@ -38,7 +41,8 @@ class MemoryCardWidget extends StatelessWidget {
             aspectRatio: 0.82,
             child: TweenAnimationBuilder<double>(
               tween: Tween<double>(end: card.isFaceUp ? 1 : 0),
-              duration: const Duration(milliseconds: 420),
+              // Con «reducir movimiento», sin volteo animado (HU-030 V5).
+              duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : flipDuration,
               curve: Curves.easeInOutCubic,
               builder: (context, value, child) {
                 final double angle = value * math.pi;

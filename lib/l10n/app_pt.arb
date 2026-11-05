@@ -71,5 +71,17 @@
   "parentsZonePlayTimeToday": "Hoje: {played} de {allowed} min jogados",
   "parentsZonePlayTimeExtra": "Dar mais 15 minutos",
   "restTitle": "Hora de descansar!",
-  "restSubtitle": "Voltamos amanhã"
+  "restSubtitle": "Voltamos amanhã",
+  "parentsZoneGamesTitle": "Jogos",
+  "parentsZoneGamesIntro": "Estes ajustes valem para todos os jogos. As mudanças aparecem no próximo tabuleiro.",
+  "parentsZoneDifficultyLabel": "Dificuldade",
+  "difficultyEasy": "Fácil",
+  "difficultyNormal": "Normal",
+  "difficultyImpossible": "Impossível",
+  "difficultyEasyHint": "Mais tempo e ajudas.",
+  "difficultyNormalHint": "O jogo como ele é, com ajudas.",
+  "difficultyImpossibleHint": "Menos tempo e sem ajudas.",
+  "parentsZoneNoTimeTitle": "Jogar sem tempo",
+  "parentsZoneNoTimeHint": "Sem barra de tempo e sem descer de nível. Dá para ganhar as mesmas estrelas.",
+  "parentsZonePremiumOnly": "Disponível com Premium."
 }

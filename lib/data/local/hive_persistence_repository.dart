@@ -101,4 +101,15 @@ class HivePersistenceRepository implements IPersistenceRepository {
   Future<void> saveParentalSettings(ParentalSettings settings) async {
     await _parentalSettingsBox.put(_parentalSettingsKey, ParentalSettingsHiveModel.fromEntity(settings));
   }
+
+  /// La lectura y la escritura en memoria de Hive ocurren sin ningún `await` en
+  /// medio: ninguna otra actualización se puede colar entre las dos.
+  @override
+  Future<ParentalSettings> updateParentalSettings(ParentalSettings Function(ParentalSettings current) update) async {
+    final ParentalSettings current =
+        _parentalSettingsBox.get(_parentalSettingsKey)?.toEntity() ?? ParentalSettings.initial;
+    final ParentalSettings next = update(current);
+    await _parentalSettingsBox.put(_parentalSettingsKey, ParentalSettingsHiveModel.fromEntity(next));
+    return next;
+  }
 }

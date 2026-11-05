@@ -10,6 +10,7 @@ import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
 class _MockLevelStateBox extends Mock implements Box<LevelStateHiveModel> {}
@@ -231,6 +232,31 @@ void main() {
       expect(saved.playedSeconds, 754);
       when(() => parentalSettingsBox.get('current_parental_settings')).thenReturn(saved);
       expect(await repository.readParentalSettings(), settings);
+    });
+
+    test('updateParentalSettings changes only what the update touches and saves it', () async {
+      when(() => parentalSettingsBox.get('current_parental_settings'))
+          .thenReturn(ParentalSettingsHiveModel.fromEntity(ParentalSettings(dailyLimitMinutes: 30)));
+      when(() => parentalSettingsBox.put(any(), any())).thenAnswer((_) async {});
+
+      final ParentalSettings next =
+          await repository.updateParentalSettings((current) => current.withDifficulty(GameDifficulty.easy));
+
+      expect(next, ParentalSettings(dailyLimitMinutes: 30, difficulty: GameDifficulty.easy));
+      final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny()))
+          .captured
+          .single as ParentalSettingsHiveModel;
+      expect(saved.toEntity(), next);
+    });
+
+    test('updateParentalSettings starts from the defaults when nothing is stored', () async {
+      when(() => parentalSettingsBox.get('current_parental_settings')).thenReturn(null);
+      when(() => parentalSettingsBox.put(any(), any())).thenAnswer((_) async {});
+
+      expect(
+        await repository.updateParentalSettings((current) => current.withTimerDisabled(true)),
+        ParentalSettings(timerDisabled: true),
+      );
     });
   });
 }

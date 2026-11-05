@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/blocs/app_locale/app_locale_cubit.dart';
 import 'package:toddler_logic/presentation/blocs/play_time/play_time_cubit.dart';
@@ -18,7 +19,7 @@ Widget localizedApp({required Widget home, Locale locale = testLocale, MockPersi
   registerMemoryGameFallbacks();
   final MockPersistenceRepository repo = repository ?? _stubbedRepository();
 
-  return MultiBlocProvider(
+  final Widget app = MultiBlocProvider(
     providers: [
       BlocProvider<AppLocaleCubit>(create: (_) => AppLocaleCubit(repository: repo, initial: locale)),
       BlocProvider<PlayTimeCubit>(create: (_) => PlayTimeCubit(repository: repo)..start()),
@@ -30,6 +31,11 @@ Widget localizedApp({required Widget home, Locale locale = testLocale, MockPersi
       home: home,
     ),
   );
+  // Con un repositorio propio, también se ofrece a las pantallas que lo leen
+  // (la sección «Juegos», HU-030). Sin él, manda el que ponga el test por fuera.
+  return repository == null
+      ? app
+      : RepositoryProvider<IPersistenceRepository>.value(value: repository, child: app);
 }
 
 MockPersistenceRepository _stubbedRepository() {
