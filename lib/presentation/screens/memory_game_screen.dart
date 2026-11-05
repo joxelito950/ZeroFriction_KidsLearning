@@ -10,6 +10,7 @@ import '../blocs/memory_game/memory_ladder_cubit.dart';
 import '../blocs/memory_game/memory_ladder_state.dart';
 import '../blocs/play_time/play_time_cubit.dart';
 import '../theme/app_palette.dart';
+import '../widgets/game_icon.dart';
 import '../widgets/gesture_hint.dart';
 import '../widgets/memory_board.dart';
 import '../widgets/memory_level_indicator.dart';
@@ -216,11 +217,8 @@ class _Header extends StatelessWidget {
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 22,
-                  backgroundColor: AppPalette.amber,
-                  child: Icon(Icons.child_care_rounded, color: AppPalette.deepTeal, size: 26),
-                ),
+                // Icono del juego (HU-013); el título ya dice el nombre.
+                const GameIcon.memory(key: ValueKey<String>('memory-game-icon'), size: 48),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(
