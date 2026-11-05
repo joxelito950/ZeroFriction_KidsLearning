@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (revisión del 2026-11-05 antes de desarrollar: preguntas P8 a P12). Refinamiento cerrado el 2026-10-21; aspecto del dorado decidido el 2026-10-26 |
+| **Estado** | Lista (refinamiento cerrado el 2026-10-21 y revisado el 2026-11-05, P8–P12; el desarrollo **no** ha empezado) |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
-| **Tamaño** | M (3–4 días), por confirmar |
+| **Tamaño** | M, al límite (unos 4 días): dominio de la pérdida, el dorado líquido animado y la etiqueta en 9 idiomas. HU-016 (S) va en el mismo PR |
 | **Depende de** | HU-001 (hecha) y HU-013 (icono del juego, en curso). Se desarrolla junto con HU-016 (P12) |
 
 ## 1. Historia
@@ -132,6 +132,11 @@ El product owner elige **D1**, como control de progreso y refuerzo de las habili
 | R10 | **La insignia de superar el 4×4 no se pierde nunca** (HU-001, R8) |
 | R11 | **Sin mensajes negativos:** la pérdida es silenciosa; el icono simplemente tiene menos dorado. No hay avisos de «vas a perder» ni contadores de días |
 | R12 | Se calcula con el **reloj del teléfono**, inyectado en la lógica de dominio para poder probarlo. Si alguien adelanta o atrasa el reloj, solo afecta a ese teléfono; se acepta |
+| R13 | **La pérdida se aplica al empezar el juego, nunca en el menú** (P8, decidido el 2026-11-05): al abrir el juego se calcula la pérdida acumulada con el reloj, se guardan las estrellas que quedan (sin cambiar sus fechas) y después la partida actualiza la fecha de la última partida, lo que detiene la pérdida (R9). El menú solo **lee** lo guardado, sin cálculos: así no se ralentiza en teléfonos de gama baja cuando haya muchos juegos. Consecuencia aceptada: tras muchos días sin jugar, el menú muestra el dorado guardado hasta que se abre el juego; al volver al menú ya se ve el nuevo. Es la regla para **todos los juegos** (D-037) |
+| R14 | **Qué nivel pierde primero** (P9): el del logro más antiguo que aún tenga estrellas. Su fecha no cambia al perder, así que se vacía entero antes de pasar al siguiente |
+| R15 | **Dorado líquido** (P10, decidido el 2026-11-05): el dorado sube como un **líquido**, no como una imagen dorada con transparencia fija que se llena en línea recta. La superficie es una **ola suave** que se mece despacio; el líquido tiene volumen (dorado `#A86B12` en el fondo y ámbar `#ECA463` en las luces y en la superficie) y deja ver la forma del icono debajo; **burbujas doradas pequeñas** suben lentamente dentro del líquido. Al 0 % no hay líquido; al 100 % el icono está lleno y la ola sigue meciéndose. Movimiento lento y tranquilo: nada parpadea ni llama la atención de golpe |
+| R16 | **Dónde** (P11): en el menú, el líquido llena **todo el botón del juego** de abajo arriba (para un niño, el botón es «el juego»); el icono del juego va dentro. En la cabecera del juego, solo el icono, con el mismo porcentaje. El texto del botón sigue siendo legible con cualquier nivel: blanco sobre azul petróleo (6,16:1) o sobre dorado (4,40:1, por debajo de 4,5:1), así que **lleva una sombra suave en teal profundo** cuando el líquido lo alcanza (P13) |
+| R17 | **Rendimiento y accesibilidad:** una sola animación por botón, que se detiene cuando la pantalla no está a la vista (otra pantalla encima, app en segundo plano). Con «reducir movimiento» del sistema, el líquido se queda quieto, sin ola ni burbujas. El dorado es decorativo para el lector de pantalla: el porcentaje lo anuncia el botón (R6) |
 
 Riesgo aceptado: va contra la idea de «sin penalizaciones» del README y se parece a las «rachas» que el borrador del código infantil del ICO desaconsejaba. Los padres podrán activarla o desactivarla desde la Zona de Padres en **HU-016** (opción D3).
 
@@ -159,11 +164,12 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 | P5 | Hasta que llegue HU-002, ¿qué muestra el diálogo de victoria de HU-001? | ✅ Asumida la recomendación: las estrellas calculadas desde HU-001. HU-002 queda con el icono dorado y la pérdida de logros | — |
 | P6 | ¿Cuenta el nivel 1 (2×2 sin tiempo) para el dorado? | ✅ Decidido: sí, son 5 niveles × 3 estrellas | — |
 | P7 | ¿Se pierden los logros si no se juega? | ✅ Decidido: **sí, pérdida real (D1)**, como control de progreso y refuerzo de las habilidades (D-031). Parámetros asumidos en la sección 6 | — |
-| P8 | ¿La pérdida se calcula al vuelo o se guarda? Si solo se calculara a partir de la última partida, al volver a jugar las estrellas perdidas **volverían solas**, y R9 dice que se recuperan ganando | Recomendación: **se guarda.** Al abrir el menú o el juego, se calcula la pérdida acumulada con el reloj y se guardan las estrellas que quedan (sin cambiar sus fechas); después, la partida actualiza la fecha de la última partida, que detiene la pérdida (R9) | Sí |
-| P9 | ¿Qué nivel pierde primero? | Recomendación: siempre el nivel con el **logro más antiguo** que aún tenga estrellas; como su fecha no cambia al perder, se vacía entero antes de pasar al siguiente. Es la lectura literal de R8 y la más sencilla de explicar | Sí |
-| P10 | ¿Cómo se ve el dorado sobre la ilustración 3D de las cartas (D-036)? Un dorado plano encima la deja **marrón y sin volumen** (prueba del 2026-11-05) | Recomendación: un **tinte dorado que conserve el volumen** (dorado `#A86B12` hacia ámbar `#ECA463` en las luces) y una **línea ámbar** en el borde del llenado, como decía P3. Se elige viéndolo en el moto g55 con 0, 40, 87 y 100 % | Sí |
-| P11 | ¿Dónde se ve el dorado? | Recomendación: en el **botón del menú** (donde se compara de un día a otro) y también en la **cabecera del juego**, con el mismo valor | No |
-| P12 | ¿Se desarrolla junto con HU-016 («Mantener las estrellas»)? ¿Ese interruptor es Premium? | Recomendación: **juntas**, como ya decía HU-016, y **gratuito**: protege al niño y no es contenido de pago. No es un ajuste Premium, así que no le afecta HU-030 R11 | No |
+| P8 | ¿La pérdida se calcula al vuelo o se guarda? | ✅ Decidido (2026-11-05): **se calcula al empezar el juego y se guarda**; nunca en el menú, para no gastar procesamiento ni ralentizar teléfonos de gama baja cuando haya muchos juegos. Regla para todos los juegos futuros (R13, D-037) | — |
+| P9 | ¿Qué nivel pierde primero? | ✅ Decidido (2026-11-05): **el logro más antiguo** (R14) | — |
+| P10 | ¿Cómo se ve el dorado sobre la ilustración 3D de las cartas? | ✅ Decidido (2026-11-05): **dorado líquido** con ola suave y **burbujas doradas** que suben despacio, no una capa dorada fija que se llena en línea recta (R15). Se ajusta viéndolo en el moto g55 | — |
+| P11 | ¿Dónde se ve el dorado? | ✅ Decidido (2026-11-05): principalmente el icono del juego; en el menú puede llenar **todo el botón del juego** (R16). En la cabecera del juego, solo el icono | — |
+| P12 | ¿Se desarrolla junto con HU-016? ¿Es Premium? | ✅ Decidido (2026-11-05): **juntas**, y «Mantener las estrellas» es **gratuito**: protege al niño y no es contenido de pago | — |
+| P13 | El texto blanco del botón sobre el dorado queda en 4,40:1, justo por debajo del 4,5:1 de la paleta para texto pequeño (el subtítulo) | Recomendación: **sombra suave en teal profundo** bajo el texto del botón, solo donde lo cubre el líquido; se comprueba en el moto g55 a 60 % y 100 % | No |
 
 ## 9. Criterios de aceptación (borrador)
 
@@ -178,8 +184,25 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 9. **Dado** que no juego durante más de 7 días, **entonces** pierdo una estrella cada 3 días, empezando por la más antigua, y el icono pierde dorado en proporción, sin mensajes negativos.
 10. **Dado** que vuelvo a jugar, **entonces** la pérdida se detiene; **cuando** gano de nuevo un nivel, **entonces** recupero sus estrellas según el resultado.
 11. **Dado** que tenía la insignia del 4×4, **entonces** la conservo aunque pierda estrellas.
+12. **Dado** que llevo 20 días sin jugar, **cuando** abro el menú, **entonces** veo el dorado guardado; **cuando** abro el juego, **entonces** se aplican y se guardan las estrellas perdidas y, al volver al menú, el botón muestra el dorado nuevo.
+13. **Dado** que pierdo estrellas, **entonces** las pierde primero el nivel con el logro más antiguo, hasta quedarse sin ninguna.
+14. **Dado** un porcentaje dorado entre 1 y 99 %, **entonces** el botón del juego en el menú se llena hasta esa altura con un líquido dorado cuya superficie se mece y con burbujas que suben despacio; al 0 %, sin líquido.
+15. **Dado** «reducir movimiento», **entonces** el líquido se ve a su altura, sin ola ni burbujas.
+16. **Dado** otra pantalla encima del menú, o la app en segundo plano, **entonces** la animación del líquido se detiene.
+17. **Dado** el botón con el líquido a cualquier altura, **entonces** su título y su subtítulo se leen bien (sombra suave, P13), en los 9 idiomas y en vertical y horizontal.
 
-## 10. Fuera de alcance
+## 10. Impacto técnico previsto
+
+| Área | Cambio |
+|---|---|
+| Dominio | `GoldProgress` (Dart puro, reloj inyectado): porcentaje dorado a partir de los mejores resultados (R2) y `applyDecay(progress, now)` que devuelve el progreso con las estrellas perdidas (R7, R8, R13, R14). Sirve para los juegos futuros |
+| Estado | `MemoryLadderCubit.start()` aplica la pérdida y la guarda antes de repartir el primer tablero (R13). Respeta «Mantener las estrellas» de HU-016 |
+| Presentación | `LiquidGoldFill` (`CustomPainter` con un solo `AnimationController`): ola, tonos de volumen y burbujas; `TickerMode` y `MediaQuery.disableAnimations` para R17. El botón «Memoria» del menú lo lleva de fondo; `GameIcon` lo usa en la cabecera |
+| Persistencia | Ninguna nueva: ya se guardan los mejores resultados, sus fechas y la última partida (HU-001) |
+| Catálogo | Etiqueta del botón para el lector de pantalla (R6) en los 9 idiomas |
+| Tests | Dominio con reloj (gracia de 7 días, una estrella cada 3, orden por antigüedad, insignia intacta, días de más), cubit (pérdida al empezar, no en el menú), widget del líquido (altura, sin animación con «reducir movimiento», se detiene con otra pantalla encima), layout del menú con el líquido en 9 idiomas |
+
+## 11. Fuera de alcance
 
 - El diseño del icono de cada juego (HU-013).
 - Las estrellas de los juegos 2 y 3: cada uno define su regla al refinarse (HU-007, HU-008).
