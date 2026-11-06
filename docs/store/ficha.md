@@ -30,7 +30,7 @@ Hecho para niños de 2 a 5 años
 Tranquilidad para la familia
 • Sin anuncios.
 • Sin recoger datos: todo se queda en el teléfono y funciona sin internet.
-• Zona de Padres protegida con un desafío para adultos.
+• Zona de padres protegida con un desafío para adultos.
 • Tiempo de juego diario: elige un límite y, al llegar, una pantalla de descanso tranquila.
 • Recomendaciones para usar los controles parentales del teléfono.
 

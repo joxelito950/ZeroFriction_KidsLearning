@@ -50,7 +50,7 @@ void main() {
       expect(find.text('ToddlerLogic'), findsOneWidget);
       expect(find.text('Memoria'), findsOneWidget);
       expect(find.text('Encuentra las parejas'), findsOneWidget);
-      expect(find.text('Zona de Padres'), findsOneWidget);
+      expect(find.text('Zona de padres'), findsOneWidget);
     });
 
     // TD-006: sin mascota ni iconos de juegos hasta definir la identidad visual (HU-013).
@@ -70,10 +70,10 @@ void main() {
       testWidgets('a single tap only shows a small notice that goes away by itself', (tester) async {
         await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
-        await tester.tap(find.text('Zona de Padres'));
+        await tester.tap(find.text('Zona de padres'));
         await tester.pump();
 
-        expect(find.text('Toca otra vez para entrar'), findsOneWidget);
+        expect(find.text('Toca otra vez para entrar.'), findsOneWidget);
         expect(find.descendant(of: hint, matching: find.byType(ButtonStyleButton)), findsNothing);
         expect(question, findsNothing);
         expect(find.text('Memoria'), findsOneWidget);
@@ -85,9 +85,9 @@ void main() {
       testWidgets('a second tap within 2 seconds opens the challenge', (tester) async {
         await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
-        await tester.tap(find.text('Zona de Padres'));
+        await tester.tap(find.text('Zona de padres'));
         await tester.pump(const Duration(milliseconds: 1500));
-        await tester.tap(find.text('Zona de Padres'));
+        await tester.tap(find.text('Zona de padres'));
         await tester.pumpAndSettle();
 
         expect(question, findsOneWidget);
@@ -97,9 +97,9 @@ void main() {
       testWidgets('a second tap after the window starts over with the notice', (tester) async {
         await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
 
-        await tester.tap(find.text('Zona de Padres'));
+        await tester.tap(find.text('Zona de padres'));
         await tester.pump(MainMenuScreen.parentsZoneTapWindow);
-        await tester.tap(find.text('Zona de Padres'));
+        await tester.tap(find.text('Zona de padres'));
         await tester.pump();
 
         expect(hint, findsOneWidget);
@@ -138,7 +138,7 @@ void main() {
 
       expect(badgeFinder, findsOneWidget);
       expect(
-        find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.label == 'Insignia dorada conseguida'),
+        find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.label == 'Insignia dorada obtenida'),
         findsOneWidget,
       );
     });
@@ -184,7 +184,7 @@ void main() {
 
       await tester.binding.handlePopRoute();
       await tester.pump();
-      expect(find.text('Repite el gesto para salir'), findsOneWidget);
+      expect(find.text('Repite el gesto para salir.'), findsOneWidget);
       expect(closeRequests, 0);
 
       await tester.binding.handlePopRoute();
@@ -216,7 +216,7 @@ void main() {
 
       testWidgets('switches the whole app right away and stays in the zone (criterio 2)', (tester) async {
         await openParentsZone(tester);
-        expect(find.text('Zona de Padres'), findsOneWidget);
+        expect(find.text('Zona de padres'), findsOneWidget);
 
         await chooseLanguage(tester, 'de');
 
