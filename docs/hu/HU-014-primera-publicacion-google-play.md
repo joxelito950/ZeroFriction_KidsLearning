@@ -111,8 +111,9 @@ Las entregas 1 y 2 no dependen de TD-003 ni de HU-013 y pueden empezar ya.
 
 **Pendiente del dueño antes de la entrega 4:**
 
-1. **Correo de contacto.** La política lleva el marcador `[CORREO PENDIENTE]` / `[CONTACT EMAIL PENDING]` hasta que exista el correo dedicado (decidido el 2026-11-03). No se puede subir a Google Play con el marcador.
-2. **Activar GitHub Pages:** *Settings › Pages › Build and deployment › Deploy from a branch*, rama `main`, carpeta `/docs`. La URL para Play Console será `https://joxelito950.github.io/ZeroFriction_KidsLearning/privacy/`. Como Pages publica desde `main`, la política se ve en la web cuando `develop` pase a `main`.
+1. ✅ **Correo de contacto** (2026-11-06): `toddler.logic.app@outlook.com`, en la política (español e inglés) y en la ficha.
+2. ✅ **GitHub Pages activado** (comprobado el 2026-11-06): `https://joxelito950.github.io/ZeroFriction_KidsLearning/privacy/` responde. La política con el correo se verá en la web cuando este cambio llegue a `main`.
+3. ✅ **Cuenta de Play Console** creada por el dueño (2026-11-06), personal. Los pasos para configurarla y abrir la prueba cerrada están en [docs/store/README.md](../store/README.md).
 
 ## 7. Criterios de aceptación (borrador)
 

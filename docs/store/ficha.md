@@ -67,7 +67,7 @@ In 9 languages: English, Spanish, Portuguese, German, French, Italian, Japanese,
 ## Pendiente antes de subir
 
 - Revisión de los textos (TD-011, español e inglés).
-- Correo de contacto de la ficha (el mismo que el de la política de privacidad).
-- URL de la política en GitHub Pages activada.
+- ✅ Correo de contacto de la ficha: `toddler.logic.app@outlook.com` (el mismo que el de la política).
+- ✅ URL de la política: `https://joxelito950.github.io/ZeroFriction_KidsLearning/privacy/` (activa; se actualiza al pasar a `main`).
 - Capturas.
 - Cuando llegue Sombras (HU-007) y el pago (HU-006), actualizar la descripción: hoy no se mencionan porque no están en la app.
