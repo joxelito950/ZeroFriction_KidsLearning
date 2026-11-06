@@ -1,6 +1,6 @@
 # Política de privacidad de ToddlerLogic
 
-Última actualización: 3 de noviembre de 2026
+Última actualización: 6 de noviembre de 2026
 
 ToddlerLogic es una app de juegos para niños pequeños. Está pensada para que la use un niño acompañado de un adulto, sin cuentas, sin anuncios y sin conexión a internet.
 
@@ -47,4 +47,4 @@ Si la política cambia, se publicará aquí la nueva versión con su fecha y se 
 
 ## Contacto
 
-Para cualquier pregunta sobre esta política: [CORREO PENDIENTE].
+Para cualquier pregunta sobre esta política: toddler.logic.app@outlook.com.

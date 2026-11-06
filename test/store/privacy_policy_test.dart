@@ -30,6 +30,17 @@ void main() {
     }
   });
 
+  test('no policy has a pending placeholder, and all give the same contact email', () {
+    final Set<String> emails = {};
+    for (final language in privacyPolicyLanguages) {
+      final String text = File(privacyPolicyAsset(language)).readAsStringSync();
+      expect(text, isNot(contains('PENDIENTE')), reason: language);
+      expect(text, isNot(contains('PENDING')), reason: language);
+      emails.addAll(RegExp(r'[\w.+-]+@[\w-]+(?:\.[\w-]+)+').allMatches(text).map((match) => match.group(0)!));
+    }
+    expect(emails, {'toddler.logic.app@outlook.com'});
+  });
+
   test('a language without its own policy falls back to English', () {
     expect(privacyPolicyAsset('fr'), privacyPolicyAsset('en'));
   });
