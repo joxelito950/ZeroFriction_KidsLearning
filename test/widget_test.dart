@@ -6,6 +6,7 @@ import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
+import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
 
@@ -115,6 +116,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
 
       expect(find.byType(MemoryGameScreen), findsOneWidget);
+      // Vista previa de 1 s (HU-030): las cartas se ven y después se voltean.
+      await tester.pump(MemoryLadderCubit.previewDuration);
+      await tester.pump(const Duration(milliseconds: 500));
       expect(find.byIcon(Icons.question_mark_rounded), findsNWidgets(4));
     });
 

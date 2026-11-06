@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
+import '../widgets/parents_games_section.dart';
 import '../widgets/parents_language_section.dart';
 import '../widgets/parents_play_time_section.dart';
 import '../widgets/parents_privacy_section.dart';
@@ -38,6 +39,8 @@ class ParentsZoneScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const ParentsLanguageSection(),
+              const SizedBox(height: 16),
+              const ParentsGamesSection(),
               const SizedBox(height: 16),
               const ParentsPlayTimeSection(),
               const SizedBox(height: 16),

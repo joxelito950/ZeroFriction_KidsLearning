@@ -75,6 +75,7 @@ void main() {
     await tester.tap(menuGame());
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(MemoryLadderCubit.previewDuration); // vista previa de las cartas (HU-030)
 
     final MemoryLadderCubit game = tester.element(find.byType(MemoryBoard)).read<MemoryLadderCubit>();
     final cards = game.state.cards;

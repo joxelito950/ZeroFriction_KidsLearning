@@ -14,7 +14,7 @@ import '../../memory_game_test_support.dart';
 final _now = DateTime.utc(2026, 10, 22, 9);
 
 class _ErrorRecordingCubit extends MemoryLadderCubit {
-  _ErrorRecordingCubit({required super.repository, super.random, super.now});
+  _ErrorRecordingCubit({required super.repository, super.random, super.now}) : super(preview: Duration.zero);
 
   final errors = <Object>[];
 
@@ -65,7 +65,7 @@ void main() {
     if (saved != null) {
       when(() => repository.readMemoryProgress()).thenAnswer((_) async => saved);
     }
-    final cubit = MemoryLadderCubit(repository: repository, random: Random(seed), now: () => _now);
+    final cubit = MemoryLadderCubit(repository: repository, random: Random(seed), now: () => _now, preview: Duration.zero);
     cubit.start();
     async.flushMicrotasks();
     return cubit;

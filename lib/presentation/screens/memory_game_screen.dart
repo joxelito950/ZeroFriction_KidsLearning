@@ -21,11 +21,14 @@ import '../widgets/protected_exit.dart';
 /// Juego de memoria progresivo (HU-001): sin botones dentro del juego (R13); se
 /// sale con «atrás» repetido (R19).
 class MemoryGameScreen extends StatelessWidget {
-  const MemoryGameScreen({super.key, this.random, this.now});
+  const MemoryGameScreen({super.key, this.random, this.now, this.preview});
 
   /// Inyectables para tests: azar del reparto y reloj del guardado.
   final Random? random;
   final DateTime Function()? now;
+
+  /// Duración de la vista previa de las cartas (HU-030); inyectable para tests.
+  final Duration? preview;
 
   /// Los textos del juego siguen el texto ampliado del sistema solo hasta aquí
   /// (TD-007 A3, A5): son para el adulto que acompaña y el tablero manda.
@@ -48,6 +51,7 @@ class MemoryGameScreen extends StatelessWidget {
         repository: context.read<IPersistenceRepository>(),
         random: random,
         now: now,
+        preview: preview,
       )..start(),
       child: const _MemoryGameView(),
     );

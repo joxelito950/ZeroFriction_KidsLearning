@@ -8,6 +8,10 @@ enum MemoryRoundPhase {
   /// Leyendo el progreso guardado.
   loading,
 
+  /// Vista previa (HU-030 3.4): las cartas boca arriba durante un momento, antes
+  /// de voltearse todas. Tocar no hace nada.
+  previewing,
+
   /// Tablero en juego.
   playing,
 

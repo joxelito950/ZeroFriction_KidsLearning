@@ -187,9 +187,14 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
   /// Un fallo al guardar no interrumpe el juego; se reporta (D-010).
   Future<void> _save() async {
     _unsaved = Duration.zero;
-    _settings = ParentalSettings(dailyLimitMinutes: state.limitMinutes, playTime: state.today);
+    final int? limit = state.limitMinutes;
+    final DailyPlayTime today = state.today;
     try {
-      await _repository.saveParentalSettings(_settings);
+      // Solo sus dos campos: la dificultad y «Jugar sin tiempo» los guarda la
+      // sección «Juegos» (HU-030) y no se deben pisar.
+      _settings = await _repository.updateParentalSettings(
+        (current) => current.withLimit(limit).withPlayTime(today),
+      );
     } catch (error, stackTrace) {
       if (!isClosed) addError(error, stackTrace);
     }
