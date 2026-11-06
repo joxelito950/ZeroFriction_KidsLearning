@@ -2,6 +2,10 @@
 
 Todo lo que se rellena en Play Console se guarda también aquí, para que no dependa de la memoria ni de una sola persona (HU-014 R7). La historia completa está en [HU-014](../hu/HU-014-primera-publicacion-google-play.md).
 
+## Ficha de la tienda
+
+Textos, imágenes y notas para el revisor: [ficha.md](ficha.md).
+
 ## Generar un AAB para subir
 
 Requisitos: la clave de subida y `android/key.properties` en tu equipo ([TD-003](../td/TD-003-firma-release.md), sección 7).
