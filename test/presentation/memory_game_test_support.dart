@@ -16,6 +16,7 @@ void registerMemoryGameFallbacks() {
   registerFallbackValue(FakeUserProfile());
   registerFallbackValue(MemoryProgress.initial);
   registerFallbackValue(ParentalSettings.initial);
+  registerFallbackValue((ParentalSettings current) => current);
 }
 
 void stubPersistenceRepository(MockPersistenceRepository repository) {
@@ -31,4 +32,11 @@ void stubPersistenceRepository(MockPersistenceRepository repository) {
   when(() => repository.saveMemoryProgress(any())).thenAnswer((_) async {});
   when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings.initial);
   when(() => repository.saveParentalSettings(any())).thenAnswer((_) async {});
+  // Como el repositorio real: lee lo guardado, aplica el cambio y lo guarda.
+  when(() => repository.updateParentalSettings(any())).thenAnswer((invocation) async {
+    final update = invocation.positionalArguments.single as ParentalSettings Function(ParentalSettings);
+    final ParentalSettings next = update(await repository.readParentalSettings());
+    await repository.saveParentalSettings(next);
+    return next;
+  });
 }

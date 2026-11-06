@@ -2,6 +2,7 @@ import 'package:hive_ce/hive.dart';
 
 import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/parental/daily_play_time.dart';
+import '../../../domain/settings/game_difficulty.dart';
 
 part 'parental_settings_hive_model.g.dart';
 
@@ -15,6 +16,8 @@ class ParentalSettingsHiveModel {
     this.playDay,
     this.playedSeconds = 0,
     this.extraMinutes = 0,
+    this.difficulty,
+    this.timerDisabled = false,
   });
 
   factory ParentalSettingsHiveModel.fromEntity(ParentalSettings entity) {
@@ -24,6 +27,8 @@ class ParentalSettingsHiveModel {
       playDay: time?.day,
       playedSeconds: time?.played.inSeconds ?? 0,
       extraMinutes: time?.extraMinutes ?? 0,
+      difficulty: entity.difficulty.name,
+      timerDisabled: entity.timerDisabled,
     );
   }
 
@@ -36,6 +41,12 @@ class ParentalSettingsHiveModel {
   @HiveField(3, defaultValue: 0)
   final int extraMinutes;
 
+  /// Nombre de [GameDifficulty] (HU-030). Los datos anteriores no lo tienen: Normal.
+  @HiveField(4)
+  final String? difficulty;
+  @HiveField(5, defaultValue: false)
+  final bool timerDisabled;
+
   /// Las reglas (límite entre 5 y 720 minutos) las valida la entidad.
   ParentalSettings toEntity() {
     return ParentalSettings(
@@ -46,6 +57,8 @@ class ParentalSettingsHiveModel {
           DailyPlayTime(day: day.toLocal(), played: Duration(seconds: playedSeconds), extraMinutes: extraMinutes),
         null => null,
       },
+      difficulty: GameDifficulty.fromName(difficulty),
+      timerDisabled: timerDisabled,
     );
   }
 }

@@ -71,5 +71,17 @@
   "parentsZonePlayTimeToday": "اليوم: {played} من {allowed} دقيقة",
   "parentsZonePlayTimeExtra": "إضافة 15 دقيقة",
   "restTitle": "حان وقت الراحة!",
-  "restSubtitle": "نلعب مجددًا غدًا"
+  "restSubtitle": "نلعب مجددًا غدًا",
+  "parentsZoneGamesTitle": "الألعاب",
+  "parentsZoneGamesIntro": "تنطبق هذه الإعدادات على كل الألعاب. تظهر التغييرات في اللوحة التالية.",
+  "parentsZoneDifficultyLabel": "الصعوبة",
+  "difficultyEasy": "سهل",
+  "difficultyNormal": "عادي",
+  "difficultyImpossible": "مستحيل",
+  "difficultyEasyHint": "وقت أطول ومساعدات.",
+  "difficultyNormalHint": "اللعبة كما هي، مع المساعدات.",
+  "difficultyImpossibleHint": "وقت أقل وبلا مساعدات.",
+  "parentsZoneNoTimeTitle": "اللعب بلا وقت",
+  "parentsZoneNoTimeHint": "بلا شريط وقت وبلا نزول في المستوى. تُكسب النجوم نفسها.",
+  "parentsZonePremiumOnly": "متاح مع Premium."
 }

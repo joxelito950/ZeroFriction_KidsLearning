@@ -26,7 +26,7 @@ class _Launcher extends StatelessWidget {
       body: Center(
         child: TextButton(
           onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (_) => MemoryGameScreen(random: Random(7))),
+            MaterialPageRoute<void>(builder: (_) => MemoryGameScreen(random: Random(7), preview: Duration.zero)),
           ),
           child: const Text('launcher'),
         ),

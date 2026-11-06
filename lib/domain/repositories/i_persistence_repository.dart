@@ -25,4 +25,9 @@ abstract interface class IPersistenceRepository {
   Future<ParentalSettings> readParentalSettings();
 
   Future<void> saveParentalSettings(ParentalSettings settings);
+
+  /// Lee, cambia y guarda los ajustes de padres de una vez, para que quien
+  /// cambia un ajuste no pise los que cambia otro (el tiempo de hoy, HU-009, y
+  /// la dificultad, HU-030, se guardan desde sitios distintos).
+  Future<ParentalSettings> updateParentalSettings(ParentalSettings Function(ParentalSettings current) update);
 }

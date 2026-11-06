@@ -71,5 +71,17 @@
   "parentsZonePlayTimeToday": "今日：{allowed} 分中 {played} 分",
   "parentsZonePlayTimeExtra": "15 分追加する",
   "restTitle": "ひと休みしよう！",
-  "restSubtitle": "また明日あそぼうね"
+  "restSubtitle": "また明日あそぼうね",
+  "parentsZoneGamesTitle": "ゲーム",
+  "parentsZoneGamesIntro": "この設定はすべてのゲームに適用されます。変更は次の盤面から反映されます。",
+  "parentsZoneDifficultyLabel": "難易度",
+  "difficultyEasy": "かんたん",
+  "difficultyNormal": "ふつう",
+  "difficultyImpossible": "むずかしい",
+  "difficultyEasyHint": "時間が長く、ヒントあり。",
+  "difficultyNormalHint": "そのままのゲーム、ヒントあり。",
+  "difficultyImpossibleHint": "時間が短く、ヒントなし。",
+  "parentsZoneNoTimeTitle": "時間なしで遊ぶ",
+  "parentsZoneNoTimeHint": "タイムバーなし、レベルも下がりません。もらえる星は同じです。",
+  "parentsZonePremiumOnly": "Premium で利用できます。"
 }

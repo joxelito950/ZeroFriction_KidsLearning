@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-11-04; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollada el 2026-11-05 en `feature/hu-030-difficulty`, las 3 entregas en un PR; falta verla en el moto g55). Refinamiento cerrado el 2026-11-04 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2: Sombras (HU-007) nace con sus tres niveles |
 | **Tamaño** | M (3 entregas, unos 3 días) |
@@ -169,3 +169,20 @@ Sombras aplica su columna de la tabla 3.2 cuando se desarrolle HU-007.
 - Una dificultad distinta para cada juego (P5).
 - Cambiar el tamaño de los tableros de la memoria según la dificultad: la escalera de HU-001 se queda como está.
 - El punto de partida de la memoria (HU-010).
+
+## 10. Desarrollo
+
+Rama `feature/hu-030-difficulty`, 2026-11-05. Las tres entregas en un solo PR.
+
+| Entrega | Qué se hizo |
+|---|---|
+| 1 · Dominio y guardado | `GameDifficulty` (`domain/settings/`, con `showsHelps`). `MemoryLadderRules` (dificultad y si hay tiempo) con las tres series de la memoria; `arrivalPosition` y `afterWin` las reciben. `ParentalSettings` gana `difficulty` y `timerDisabled` (índices 4 y 5); los datos anteriores se leen como Normal con tiempo. `updateParentalSettings` en el repositorio, que también usa ahora el tiempo de juego (HU-009) para no pisar estos ajustes |
+| 2 · Zona de Padres | Sección «Juegos» (después de «Idioma»): tres chips de dificultad con su frase (P6) y el interruptor «Jugar sin tiempo», bloqueado sin Premium con la nota «Disponible con Premium» (R4). `GameSettingsCubit`. 12 claves en los 9 idiomas |
+| 3 · Memoria | `MemoryLadderCubit` lee los ajustes al empezar y antes de cada tablero; si cambiaron, sigue en el mismo nivel con el límite de llegada de las reglas nuevas (R6). Sin Premium, «Jugar sin tiempo» vuelve a su valor por defecto y se guarda así (R11). **Vista previa:** fase `previewing` de 1 s con las cartas boca arriba; tocar no hace nada y el tiempo no arranca; en Imposible no hay (R10). Con «reducir movimiento», las cartas se voltean sin animación (V5) |
+
+Tests: dominio (series, sin tiempo, insignia sin tiempo, ajustes y su compatibilidad), repositorio (`update`), cubit (vista previa, Imposible sin vista previa, Fácil, cambio en el siguiente tablero, sin tiempo con y sin Premium, ajustes ilegibles), sección (chips, frase, interruptor con y sin Premium, reinicio sin Premium), carta con «reducir movimiento» y diseño de la Zona de Padres en los 9 idiomas con la sección nueva.
+
+Pendiente:
+- Verla en el moto g55: la vista previa en Normal y en Fácil, Imposible sin vista previa, la sección «Juegos» en vertical y en horizontal.
+- «Jugar sin tiempo» no se puede probar en el teléfono hasta que haya Premium (HU-006) o el interruptor de depuración previsto en HU-007 (P10); está cubierto por los tests.
+- La mano del tutorial (HU-022) cuenta sus 4 s desde que empieza el juego tras la vista previa (V4): `GestureHint` solo se activa en la fase `playing`.

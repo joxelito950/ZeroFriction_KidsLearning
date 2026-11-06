@@ -6,6 +6,26 @@ import 'package:toddler_logic/presentation/widgets/memory_card_widget.dart';
 import '../l10n_test_support.dart';
 
 void main() {
+  testWidgets('flips without animation when the system reduces motion (HU-030 V5)', (tester) async {
+    Future<void> pump({required bool reduce}) => tester.pumpWidget(
+          localizedApp(
+            home: MediaQuery(
+              data: MediaQueryData(disableAnimations: reduce),
+              child: Scaffold(
+                body: MemoryCardWidget(card: const MemoryCard(id: 0, assetPath: 'dog'), onTap: () {}),
+              ),
+            ),
+          ),
+        );
+
+    await pump(reduce: true);
+    expect(tester.widget<TweenAnimationBuilder<double>>(find.byType(TweenAnimationBuilder<double>)).duration,
+        Duration.zero);
+    await pump(reduce: false);
+    expect(tester.widget<TweenAnimationBuilder<double>>(find.byType(TweenAnimationBuilder<double>)).duration,
+        MemoryCardWidget.flipDuration);
+  });
+
   testWidgets('shows the back face when the card is hidden', (tester) async {
     const card = MemoryCard(id: 7, assetPath: '🐻');
 
