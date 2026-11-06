@@ -150,7 +150,7 @@ void main() {
     expect(_message, findsOneWidget);
     expect(find.text('Esa no es la respuesta'), findsOneWidget);
     expect(find.text('Quedan 2 intentos'), findsOneWidget);
-    expect(find.text('Reintentar'), findsOneWidget);
+    expect(find.text('Intentar de nuevo'), findsOneWidget);
     expect(find.text('Volver al menú'), findsOneWidget);
     expect(find.byTooltip('Cerrar'), findsOneWidget);
 

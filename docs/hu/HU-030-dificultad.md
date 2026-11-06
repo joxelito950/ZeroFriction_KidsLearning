@@ -54,7 +54,7 @@ La lógica de la escalera no cambia (HU-001 R4–R6): al ganar se sube y el lím
 |---|---|---|---|
 | Tiempo con Premium (tabla 4.3) | 90 → 30 s | 60 → 25 s | 50 → 20 s |
 | Sombras libres (distractores) | **Ninguna**: tantas sombras como objetos (P3) | Las de la tabla 4.2 | Las de la tabla 4.2 |
-| Zona magnética | **1,5 veces** la de Normal (P3) | Media sombra (HU-007 P4) | Media sombra |
+| Sombra cubierta para colocarse (HU-007 P4, R4) | **40 %** | **60 %** | **90 %** |
 | Disposición | Fija | Fija | **Al azar en cada tablero** (HU-007 P14) |
 | Animación de inicio (HU-007 R19) | Sí | Sí | **No** |
 
@@ -70,7 +70,7 @@ La lógica de la escalera no cambia (HU-001 R4–R6): al ganar se sube y el lím
 | R4 | **«Jugar sin tiempo» es Premium y no penaliza** (P2, decidido el 2026-11-04): el interruptor es **general** (vale para todos los juegos), pero **solo lo puede cambiar un adulto con Premium**. Sin Premium se ve desactivado, con la nota «Disponible con Premium», y los juegos tienen su tiempo normal; no hay enlace de compra en la sección (la compra es de HU-006). Con Premium y sin tiempo, quitar el tiempo **no penaliza los logros del niño**: las estrellas, el dorado y la insignia o medalla se ganan igual que con tiempo (en la memoria, las estrellas ya dependen de los movimientos, D-030). Además, **cada juego tiene sus propias restricciones de Premium**, que no dependen de este interruptor: en Sombras, el tiempo solo existe con Premium (HU-007 sección 3); los juegos nuevos tendrán las suyas al refinarse. |
 | R5 | **La dificultad no cambia los premios** (P4): las estrellas, el dorado y la insignia valen lo mismo en Fácil, Normal o Imposible. No hay comparación entre niños; el adulto ajusta el reto a su hijo. |
 | R6 | **Cambiar un ajuste** se aplica en el **siguiente tablero**, nunca en el que está en curso (como HU-007 R12). El progreso se conserva: el niño sigue en su nivel y el límite pasa al de ese nivel en la serie nueva (el límite de llegada, como al abrir el juego, HU-001 R12). |
-| R7 | Con «Jugar sin tiempo» activado, la dificultad **sigue aplicando** a lo que no es tiempo (en Sombras: sombras libres, zona magnética y disposición). En la memoria, como solo cambia el tiempo, la frase de la dificultad lo indica (P6). |
+| R7 | Con «Jugar sin tiempo» activado, la dificultad **sigue aplicando** a lo que no es tiempo (en Sombras: sombras libres, cobertura para colocarse y disposición). En la memoria, como solo cambia el tiempo, la frase de la dificultad lo indica (P6). |
 | R8 | El tutorial visual (HU-022) no cambia con la dificultad. |
 | R9 | Los ajustes se guardan en el teléfono con el resto de ajustes de padres (`ParentalSettings`, HU-009) y no se envían a ningún sitio. |
 | R11 | **Al perder Premium** (P9), cada ajuste que depende de Premium vuelve a su valor por defecto y se guarda así: «Jugar sin tiempo» queda desactivado (con tiempo). Al recuperar Premium no se restaura el valor anterior; el adulto lo cambia si quiere. Vale para todos los ajustes Premium de la Zona de Padres, también los futuros. |
@@ -156,7 +156,7 @@ Sombras aplica su columna de la tabla 3.2 cuando se desarrolle HU-007.
 |---|---|---|---|
 | P1 | ¿«Sin tiempo» es solo de Sombras o de todos los juegos? | ✅ Decidido (2026-11-04): **de todos los juegos**, como ajuste general | — |
 | P2 | Sin tiempo, ¿se pueden ganar la insignia de la memoria y todos los premios? ¿Quién puede cambiar el ajuste? | ✅ Decidido (2026-11-04): **sí**, quitar el tiempo no penaliza los logros. El interruptor es general para todos los juegos, pero **solo lo manipula un adulto con Premium**. Las restricciones de Premium de cada juego (Sombras: el tiempo solo con Premium) son propias de ese juego (R4) | — |
-| P3 | En Sombras, ¿qué más cambia en Fácil? | ✅ Decidido (2026-11-04): **sin sombras libres** y **zona magnética 1,5 veces** mayor | — |
+| P3 | En Sombras, ¿qué más cambia en Fácil? | ✅ Decidido (2026-11-04): **sin sombras libres**. **Cambiado el 2026-11-06:** en lugar de una zona magnética 1,5 veces mayor, cada dificultad pide cubrir una parte de la sombra para colocarse: Fácil 40 %, Normal 60 %, Imposible 90 % (HU-007 P4) | — |
 | P4 | ¿La dificultad cambia los premios (estrellas, dorado, insignia)? | ✅ Decidido (2026-11-04): **no**, valen igual en las tres | — |
 | P5 | ¿Un ajuste general o uno por juego? | ✅ Asumida la recomendación: **general** en esta historia. Si un juego necesitara el suyo, se añade al refinarlo | — |
 | P6 | ¿Cómo se explica cada dificultad? | ✅ Asumida la recomendación, ajustada a R10: una frase general por opción, sin números: «Fácil: más tiempo y ayudas», «Normal: el juego tal como es, con ayudas», «Imposible: menos tiempo y sin ayudas». Los textos finales pasan por TD-011 | — |

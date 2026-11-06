@@ -6,8 +6,8 @@ Estado de revisión de cada idioma del catálogo (`lib/l10n/`, HU-011). Las trad
 
 | Idioma | Archivo | Estado | Revisor | Fecha | Notas |
 |---|---|---|---|---|---|
-| Inglés (EE. UU.) | `app_en.arb` | borrador | — | — | Plantilla: cada clave tiene `description` con el contexto |
-| Español neutro | `app_es.arb` | borrador | — | — | Textos originales de la app; revisar el tono neutro para Latinoamérica y España |
+| Inglés (EE. UU.) | `app_en.arb` | en revisión | Desarrollo (revisión de coherencia) | 2026-11-06 | Plantilla: cada clave tiene `description`. Corregidos: «Memory game», pistas del juego en plural, cartas «face-up/face-down», «hints» en lugar de «helps», textos de «Juegos» y del descanso. **Falta un hablante nativo** antes de la ficha de la tienda |
+| Español neutro | `app_es.arb` | en revisión | Desarrollo (revisión de coherencia) | 2026-11-06 | Corregidos: «Jugadas» en lugar de «Movs.», pistas del juego, cartas «boca arriba / boca abajo», «Intentar de nuevo», textos de «Juegos» y del descanso. **Falta la validación del dueño** (nativo) |
 | Portugués (Brasil) | `app_pt.arb` | borrador | — | — | Archivo base `pt`; también lo ven los teléfonos en portugués de Portugal |
 | Alemán | `app_de.arb` | borrador | — | — | Textos más largos: revisar que sigan siendo breves |
 | Japonés | `app_ja.arb` | borrador | — | — | Escrito con muchos hiragana para lectura infantil; confirmar el término del juego (神経衰弱) |
