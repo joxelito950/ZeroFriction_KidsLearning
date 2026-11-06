@@ -71,6 +71,51 @@ final class MemoryProgress {
     );
   }
 
+  /// Estrellas posibles en el juego de memoria: 5 niveles × 3 (HU-002 R2).
+  static int get maxStars => MemoryLadder.maxLevel * MemoryStars.max;
+
+  /// Estrellas acumuladas: la mejor de cada nivel (R2).
+  int get stars => levelRecords.values.fold(0, (sum, record) => sum + record.bestStars);
+
+  /// Porcentaje dorado del juego, de 0 a 1 (R2, R3).
+  double get goldFraction => stars / maxStars;
+
+  /// Quita [count] estrellas empezando por el logro más antiguo que aún tenga
+  /// alguna; su fecha no cambia, así que se vacía entero antes de pasar al
+  /// siguiente (R8, R14). La insignia no se pierde nunca (R10).
+  MemoryProgress loseStars(int count) {
+    RangeError.checkNotNegative(count, 'count');
+    final records = Map<int, MemoryLevelRecord>.of(levelRecords);
+    var left = count;
+    while (left > 0) {
+      final List<MapEntry<int, MemoryLevelRecord>> withStars =
+          records.entries.where((entry) => entry.value.bestStars > 0).toList();
+      if (withStars.isEmpty) break;
+      final MapEntry<int, MemoryLevelRecord> oldest = withStars.reduce(
+        (a, b) => b.value.achievedAt.isBefore(a.value.achievedAt) ? b : a,
+      );
+      final int taken = left < oldest.value.bestStars ? left : oldest.value.bestStars;
+      records[oldest.key] =
+          MemoryLevelRecord(bestStars: oldest.value.bestStars - taken, achievedAt: oldest.value.achievedAt);
+      left -= taken;
+    }
+    return MemoryProgress(
+      currentLevel: currentLevel,
+      hasBadge: hasBadge,
+      levelRecords: records,
+      lastPlayedAt: lastPlayedAt,
+    );
+  }
+
+  /// Abrir el juego cuenta como jugar: detiene la pérdida desde ese momento
+  /// (R9, R13).
+  MemoryProgress playedAt(DateTime at) => MemoryProgress(
+        currentLevel: currentLevel,
+        hasBadge: hasBadge,
+        levelRecords: levelRecords,
+        lastPlayedAt: at,
+      );
+
   /// Registra una derrota por tiempo: solo cambia el nivel y la fecha de juego.
   MemoryProgress recordLoss({required MemoryLadderStep step, required DateTime at}) {
     return MemoryProgress(

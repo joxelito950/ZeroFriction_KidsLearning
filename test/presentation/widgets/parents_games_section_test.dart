@@ -102,6 +102,24 @@ void main() {
     expect(stored.timerDisabled, isFalse);
   });
 
+  testWidgets('keep the stars is free, and turning it off restarts the grace (HU-016 R2, R3, R6)', (tester) async {
+    await pumpSection(tester);
+
+    final Finder keep = find.byKey(const ValueKey<String>('games-keep-stars'));
+    expect(tester.widget<SwitchListTile>(keep).onChanged, isNotNull);
+    expect(find.text(l10n.parentsZoneKeepStarsHint), findsOneWidget);
+
+    await tester.tap(keep);
+    await tester.pump();
+    expect(stored.keepStars, isTrue);
+    expect(stored.starDecayResumedAt, isNull);
+
+    await tester.tap(keep);
+    await tester.pump();
+    expect(stored.keepStars, isFalse);
+    expect(stored.starDecayResumedAt, isNotNull);
+  });
+
   testWidgets('shows nothing without a repository', (tester) async {
     await tester.pumpWidget(localizedApp(home: const Scaffold(body: ParentsGamesSection())));
     expect(find.byKey(const ValueKey<String>('parents-zone-games')), findsNothing);

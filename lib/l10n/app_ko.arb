@@ -83,5 +83,8 @@
   "difficultyImpossibleHint": "시간이 적고 도움이 없어요.",
   "parentsZoneNoTimeTitle": "시간 없이 놀기",
   "parentsZoneNoTimeHint": "시간 막대가 없고 레벨도 내려가지 않아요. 같은 별을 받을 수 있어요.",
-  "parentsZonePremiumOnly": "Premium에서 사용할 수 있어요."
+  "parentsZonePremiumOnly": "Premium에서 사용할 수 있어요.",
+  "menuGameGoldSemantics": "{percent}% 금색, 별 {total}개 중 {stars}개",
+  "parentsZoneKeepStarsTitle": "별 지키기",
+  "parentsZoneKeepStarsHint": "며칠 동안 놀지 않아도 별이 그대로 남아요."
 }

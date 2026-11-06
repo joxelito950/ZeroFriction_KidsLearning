@@ -129,7 +129,7 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            _Header(level: state.level, moves: state.moves),
+                            _Header(level: state.level, moves: state.moves, gold: state.goldFraction),
                             if (state.remainingFraction case final double fraction) ...[
                               const SizedBox(height: 12),
                               MemoryTimeBar(fraction: fraction),
@@ -196,10 +196,13 @@ class _Board extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.level, required this.moves});
+  const _Header({required this.level, required this.moves, required this.gold});
 
   final int level;
   final int moves;
+
+  /// Dorado del juego (HU-002 R16): en la cabecera, quieto.
+  final double gold;
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +225,7 @@ class _Header extends StatelessWidget {
             Row(
               children: [
                 // Icono del juego (HU-013); el título ya dice el nombre.
-                const GameIcon.memory(key: ValueKey<String>('memory-game-icon'), size: 48),
+                GameIcon.memory(key: const ValueKey<String>('memory-game-icon'), size: 48, goldFraction: gold),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(

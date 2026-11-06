@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-21 y revisado el 2026-11-05, P8–P12; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollada el 2026-11-06 en `feature/hu-002-016-gold-stars`, con HU-016; falta verla en el moto g55). Refinamiento cerrado el 2026-10-21 y revisado el 2026-11-05 |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
 | **Tamaño** | M, al límite (unos 4 días): dominio de la pérdida, el dorado líquido animado y la etiqueta en 9 idiomas. HU-016 (S) va en el mismo PR |
@@ -207,3 +207,18 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 - El diseño del icono de cada juego (HU-013).
 - Las estrellas de los juegos 2 y 3: cada uno define su regla al refinarse (HU-007, HU-008).
 - Mostrar las estrellas de cada nivel en el menú (posible mejora futura).
+
+## 12. Desarrollo
+
+Rama `feature/hu-002-016-gold-stars`, 2026-11-06, junto con HU-016.
+
+| Área | Qué se hizo |
+|---|---|
+| Dominio | `StarDecay` (`domain/progress/`, para todos los juegos): 7 días de gracia y una estrella cada 3 días; la fecha de partida es la más reciente entre la última partida y la reactivación de HU-016. `MemoryProgress`: estrellas, `goldFraction` (sobre 15), `loseStars` (vacía primero el logro más antiguo, sin tocar fechas ni insignia) y `playedAt` |
+| Estado | `MemoryLadderCubit.start` aplica la pérdida y la guarda al abrir el juego (D-037), salvo con «Mantener las estrellas»; si el progreso no se pudo leer, no guarda nada. El estado lleva el dorado para la cabecera |
+| Presentación | `LiquidGold`: ola suave, tonos de volumen (ámbar arriba, dorado abajo), brillo en la superficie y 6 burbujas que suben despacio; una sola animación de 6 s que no corre al 0 %, con «reducir movimiento» ni con la pantalla tapada. En el menú llena todo el botón «Memoria», con sombra en el texto; en la cabecera del juego, solo el icono y quieto. El botón anuncia «60 % dorado, 9 de 15 estrellas» (R6) |
+| Catálogo | 3 claves en los 9 idiomas (la etiqueta del botón y el interruptor de HU-016) |
+
+**Decisión de desarrollo:** abrir el juego cuenta como jugar (R13): al empezar se aplica la pérdida y se guarda la fecha de la partida. Así la pérdida no se cuenta dos veces si el niño abre el juego y sale sin terminar un tablero.
+
+Pendiente: ver el líquido en el moto g55 (0, 40, 87 y 100 %) y ajustar tonos o velocidad si hace falta (P10).

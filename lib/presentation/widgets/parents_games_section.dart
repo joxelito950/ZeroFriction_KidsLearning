@@ -93,6 +93,15 @@ class _GamesCard extends StatelessWidget {
                   style: theme.textTheme.bodySmall?.copyWith(color: AppPalette.deepTeal),
                 ),
                 const SizedBox(height: 8),
+                // Gratuito: protege al niño (HU-016 R6).
+                SwitchListTile(
+                  key: const ValueKey<String>('games-keep-stars'),
+                  contentPadding: EdgeInsets.zero,
+                  value: state.keepStars,
+                  onChanged: state.loaded ? cubit.setKeepStars : null,
+                  title: Text(l10n.parentsZoneKeepStarsTitle),
+                  subtitle: Text(l10n.parentsZoneKeepStarsHint),
+                ),
                 SwitchListTile(
                   key: const ValueKey<String>('games-no-time'),
                   contentPadding: EdgeInsets.zero,

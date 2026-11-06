@@ -325,7 +325,8 @@ void main() {
       _winPerfectly(async, cubit);
       async.elapse(MemoryLadderCubit.celebrationDuration);
 
-      expect(cubit.errors, [isA<StateError>()]);
+      // Falla al abrir el juego (HU-002 R13) y al ganar; el juego sigue igual.
+      expect(cubit.errors, [isA<StateError>(), isA<StateError>()]);
       expect(cubit.state.position, MemoryLadder.arrivalPosition(2));
     });
   });

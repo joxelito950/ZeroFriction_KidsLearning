@@ -18,6 +18,8 @@ class ParentalSettingsHiveModel {
     this.extraMinutes = 0,
     this.difficulty,
     this.timerDisabled = false,
+    this.keepStars = false,
+    this.starDecayResumedAt,
   });
 
   factory ParentalSettingsHiveModel.fromEntity(ParentalSettings entity) {
@@ -29,6 +31,8 @@ class ParentalSettingsHiveModel {
       extraMinutes: time?.extraMinutes ?? 0,
       difficulty: entity.difficulty.name,
       timerDisabled: entity.timerDisabled,
+      keepStars: entity.keepStars,
+      starDecayResumedAt: entity.starDecayResumedAt,
     );
   }
 
@@ -47,6 +51,12 @@ class ParentalSettingsHiveModel {
   @HiveField(5, defaultValue: false)
   final bool timerDisabled;
 
+  /// «Mantener las estrellas» (HU-016).
+  @HiveField(6, defaultValue: false)
+  final bool keepStars;
+  @HiveField(7)
+  final DateTime? starDecayResumedAt;
+
   /// Las reglas (límite entre 5 y 720 minutos) las valida la entidad.
   ParentalSettings toEntity() {
     return ParentalSettings(
@@ -59,6 +69,8 @@ class ParentalSettingsHiveModel {
       },
       difficulty: GameDifficulty.fromName(difficulty),
       timerDisabled: timerDisabled,
+      keepStars: keepStars,
+      starDecayResumedAt: starDecayResumedAt?.toLocal(),
     );
   }
 }

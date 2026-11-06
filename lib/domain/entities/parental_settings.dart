@@ -2,14 +2,16 @@ import '../parental/daily_play_time.dart';
 import '../settings/game_difficulty.dart';
 
 /// Ajustes de la Zona de Padres y el tiempo jugado hoy (HU-009), la dificultad
-/// y «Jugar sin tiempo» (HU-030). Más adelante guardará también «Mantener las
-/// estrellas» (HU-016) y la mano dominante (HU-031).
+/// y «Jugar sin tiempo» (HU-030) y «Mantener las estrellas» (HU-016). Más
+/// adelante, la mano dominante (HU-031).
 final class ParentalSettings {
   ParentalSettings({
     this.dailyLimitMinutes,
     this.playTime,
     this.difficulty = GameDifficulty.normal,
     this.timerDisabled = false,
+    this.keepStars = false,
+    this.starDecayResumedAt,
   }) {
     if (dailyLimitMinutes case final int minutes) {
       RangeError.checkValueInInterval(minutes, minLimitMinutes, maxLimitMinutes, 'dailyLimitMinutes');
@@ -20,7 +22,9 @@ final class ParentalSettings {
       : dailyLimitMinutes = null,
         playTime = null,
         difficulty = GameDifficulty.normal,
-        timerDisabled = false;
+        timerDisabled = false,
+        keepStars = false,
+        starDecayResumedAt = null;
 
   /// Sin límite y sin nada jugado: el valor por defecto (R1c).
   static const ParentalSettings initial = ParentalSettings._initial();
@@ -47,6 +51,13 @@ final class ParentalSettings {
   /// Se guarda aquí; solo se aplica con Premium (HU-030 R4).
   final bool timerDisabled;
 
+  /// «Mantener las estrellas» (HU-016): con él, no se pierde ninguna. Gratuito.
+  final bool keepStars;
+
+  /// Cuándo se volvió a activar la pérdida (HU-016 R3): la gracia de 7 días
+  /// empieza de nuevo desde ese momento.
+  final DateTime? starDecayResumedAt;
+
   ParentalSettings withLimit(int? minutes) => _copy(dailyLimitMinutes: () => minutes);
 
   ParentalSettings withPlayTime(DailyPlayTime time) => _copy(playTime: time);
@@ -55,17 +66,26 @@ final class ParentalSettings {
 
   ParentalSettings withTimerDisabled(bool value) => _copy(timerDisabled: value);
 
+  /// Activar «Mantener las estrellas» las congela; desactivarlo reinicia la
+  /// gracia desde [at] (HU-016 R2, R3).
+  ParentalSettings withKeepStars(bool value, {required DateTime at}) =>
+      value == keepStars ? this : _copy(keepStars: value, starDecayResumedAt: value ? null : at);
+
   ParentalSettings _copy({
     int? Function()? dailyLimitMinutes,
     DailyPlayTime? playTime,
     GameDifficulty? difficulty,
     bool? timerDisabled,
+    bool? keepStars,
+    DateTime? starDecayResumedAt,
   }) {
     return ParentalSettings(
       dailyLimitMinutes: dailyLimitMinutes == null ? this.dailyLimitMinutes : dailyLimitMinutes(),
       playTime: playTime ?? this.playTime,
       difficulty: difficulty ?? this.difficulty,
       timerDisabled: timerDisabled ?? this.timerDisabled,
+      keepStars: keepStars ?? this.keepStars,
+      starDecayResumedAt: starDecayResumedAt ?? this.starDecayResumedAt,
     );
   }
 
@@ -75,8 +95,11 @@ final class ParentalSettings {
       other.dailyLimitMinutes == dailyLimitMinutes &&
       other.playTime == playTime &&
       other.difficulty == difficulty &&
-      other.timerDisabled == timerDisabled;
+      other.timerDisabled == timerDisabled &&
+      other.keepStars == keepStars &&
+      other.starDecayResumedAt == starDecayResumedAt;
 
   @override
-  int get hashCode => Object.hash(dailyLimitMinutes, playTime, difficulty, timerDisabled);
+  int get hashCode =>
+      Object.hash(dailyLimitMinutes, playTime, difficulty, timerDisabled, keepStars, starDecayResumedAt);
 }

@@ -11,6 +11,7 @@ final class GameSettingsState {
     this.difficulty = GameDifficulty.normal,
     this.timerDisabled = false,
     this.isPremium = false,
+    this.keepStars = false,
   });
 
   final bool loaded;
@@ -20,11 +21,16 @@ final class GameSettingsState {
   /// «Jugar sin tiempo» solo lo cambia un adulto con Premium (R4).
   final bool isPremium;
 
-  GameSettingsState copyWith({GameDifficulty? difficulty, bool? timerDisabled}) => GameSettingsState(
+  /// «Mantener las estrellas» (HU-016): gratuito.
+  final bool keepStars;
+
+  GameSettingsState copyWith({GameDifficulty? difficulty, bool? timerDisabled, bool? keepStars}) =>
+      GameSettingsState(
         loaded: loaded,
         difficulty: difficulty ?? this.difficulty,
         timerDisabled: timerDisabled ?? this.timerDisabled,
         isPremium: isPremium,
+        keepStars: keepStars ?? this.keepStars,
       );
 
   @override
@@ -33,20 +39,23 @@ final class GameSettingsState {
       other.loaded == loaded &&
       other.difficulty == difficulty &&
       other.timerDisabled == timerDisabled &&
-      other.isPremium == isPremium;
+      other.isPremium == isPremium &&
+      other.keepStars == keepStars;
 
   @override
-  int get hashCode => Object.hash(loaded, difficulty, timerDisabled, isPremium);
+  int get hashCode => Object.hash(loaded, difficulty, timerDisabled, isPremium, keepStars);
 }
 
 /// Lee y cambia la dificultad y «Jugar sin tiempo». Los cambios se guardan al
 /// instante; los juegos los aplican en el siguiente tablero (R6).
 class GameSettingsCubit extends Cubit<GameSettingsState> {
-  GameSettingsCubit({required IPersistenceRepository repository})
+  GameSettingsCubit({required IPersistenceRepository repository, DateTime Function()? now})
       : _repository = repository,
+        _now = now ?? DateTime.now,
         super(const GameSettingsState());
 
   final IPersistenceRepository _repository;
+  final DateTime Function() _now;
 
   Future<void> load() async {
     try {
@@ -62,6 +71,7 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
         difficulty: settings.difficulty,
         timerDisabled: settings.timerDisabled,
         isPremium: premium,
+        keepStars: settings.keepStars,
       ));
     } catch (error, stackTrace) {
       if (isClosed) return;
@@ -81,6 +91,15 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     if (!state.isPremium || disabled == state.timerDisabled) return;
     emit(state.copyWith(timerDisabled: disabled));
     await _save((current) => current.withTimerDisabled(disabled));
+  }
+
+  /// Activarlo congela las estrellas; desactivarlo reinicia la gracia de 7 días
+  /// desde ahora (HU-016 R2, R3). Gratuito (R6).
+  Future<void> setKeepStars(bool keep) async {
+    if (keep == state.keepStars) return;
+    emit(state.copyWith(keepStars: keep));
+    final DateTime now = _now();
+    await _save((current) => current.withKeepStars(keep, at: now));
   }
 
   /// Un fallo al guardar no rompe la pantalla; se reporta (D-010).

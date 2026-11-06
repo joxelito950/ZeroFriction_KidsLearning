@@ -83,5 +83,8 @@
   "difficultyImpossibleHint": "Menos tempo e sem ajudas.",
   "parentsZoneNoTimeTitle": "Jogar sem tempo",
   "parentsZoneNoTimeHint": "Sem barra de tempo e sem descer de nível. Dá para ganhar as mesmas estrelas.",
-  "parentsZonePremiumOnly": "Disponível com Premium."
+  "parentsZonePremiumOnly": "Disponível com Premium.",
+  "menuGameGoldSemantics": "{percent}% dourado, {stars} de {total} estrelas",
+  "parentsZoneKeepStarsTitle": "Manter as estrelas",
+  "parentsZoneKeepStarsHint": "As estrelas são mantidas mesmo que passem dias sem jogar."
 }

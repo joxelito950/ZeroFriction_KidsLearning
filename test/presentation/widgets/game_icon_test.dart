@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/brand/brand_assets.dart';
 import 'package:toddler_logic/presentation/widgets/game_icon.dart';
+import 'package:toddler_logic/presentation/widgets/liquid_gold.dart';
 
 void main() {
   Future<void> pump(WidgetTester tester, Widget icon) =>
@@ -19,14 +20,15 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('fills the silhouette with gold from the bottom up (HU-002 preparation)', (tester) async {
+  testWidgets('fills the silhouette with liquid gold, painted only over the icon (HU-002 R15, R16)', (tester) async {
     await pump(tester, const GameIcon.memory(size: 48, goldFraction: 0.4));
 
-    final ShaderMask mask = tester.widget<ShaderMask>(find.byKey(const ValueKey<String>('game-icon-gold')));
-    expect(mask.blendMode, BlendMode.srcATop);
-    final Shader shader = mask.shaderCallback(const Rect.fromLTWH(0, 0, 48, 48));
-    expect(shader, isA<Shader>());
-    expect(find.byType(Image), findsNWidgets(2));
+    final LiquidGold gold = tester.widget<LiquidGold>(find.byKey(const ValueKey<String>('game-icon-gold')));
+    expect(gold.fraction, 0.4);
+    expect(gold.animate, isFalse);
+    expect(gold.child, isA<Image>());
+    final CustomPaint paint = tester.widget<CustomPaint>(find.byKey(const ValueKey<String>('liquid-gold')));
+    expect((paint.foregroundPainter! as LiquidGoldPainter).onlyOverChild, isTrue);
   });
 
   test('rejects a gold fraction outside 0 to 1', () {
