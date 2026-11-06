@@ -99,7 +99,7 @@ void main() {
       expect(find.byKey(const ValueKey<String>('memory-time-bar')), findsNothing);
       expect(find.byKey(const ValueKey<String>('memory-level-dot-1-reached')), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('memory-level-dot-2-pending')), findsOneWidget);
-      expect(find.text('Busquemos la pareja correcta.'), findsOneWidget);
+      expect(find.text('Busquemos las parejas iguales.'), findsOneWidget);
       expect(find.bySemanticsLabel('Nivel 1 de 5'), findsOneWidget);
     });
 
@@ -145,7 +145,7 @@ void main() {
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       await pumpScreen(tester);
 
-      final TextScaler scaler = MediaQuery.textScalerOf(tester.element(find.text('Busquemos la pareja correcta.')));
+      final TextScaler scaler = MediaQuery.textScalerOf(tester.element(find.text('Busquemos las parejas iguales.')));
       expect(scaler.scale(10), closeTo(10 * MemoryGameScreen.maxTextScale, 0.001));
     });
 
@@ -182,11 +182,11 @@ void main() {
 
       await tapCard(tester, pairs[0][0]);
       await tapCard(tester, pairs[1][0]);
-      expect(find.text('Observa bien... la carta se está volteando.'), findsOneWidget);
+      expect(find.text('Mira bien… las cartas se dan la vuelta.'), findsOneWidget);
 
       await tester.pump(MemoryLadderCubit.mismatchDelay);
       await tester.pump(const Duration(milliseconds: 450));
-      expect(find.text('Busquemos la pareja correcta.'), findsOneWidget);
+      expect(find.text('Busquemos las parejas iguales.'), findsOneWidget);
       expect(cardCount(), 4);
     });
 
@@ -198,7 +198,7 @@ void main() {
 
       expect(find.byKey(const ValueKey<String>('memory-celebration')), findsOneWidget);
       expect(find.text('¡Lo lograste!'), findsOneWidget);
-      expect(find.text('Busquemos la pareja correcta.'), findsOneWidget);
+      expect(find.text('Busquemos las parejas iguales.'), findsOneWidget);
       for (var star = 0; star < 3; star++) {
         expect(find.byKey(ValueKey<String>('memory-star-$star-earned')), findsOneWidget);
       }

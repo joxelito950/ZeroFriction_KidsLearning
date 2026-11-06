@@ -86,8 +86,8 @@ Para un adulto, encajar un objeto cuesta alrededor de 1 s, así que el nivel 8 (
 | R1 | El menú muestra un segundo botón, **«Sombras»** (nombre en los 9 idiomas, P9), debajo de «Memoria». |
 | R2 | Cada tablero muestra los objetos de su nivel (tabla 4.2) en la bandeja y sus sombras en la zona de sombras, en posiciones al azar. |
 | R3 | **Arrastrar:** el objeto sigue al dedo y se ve un poco más grande mientras se arrastra. |
-| R4 | **Acierto:** si se suelta sobre su sombra, o cerca de ella (zona **magnética**, P4), el objeto encaja con una animación suave y queda fijo en color sobre la sombra. |
-| R5 | **Fallo:** si se suelta sobre otra sombra o fuera de cualquier sombra, el objeto **vuelve a la bandeja** con una animación suave. Sin sonido de error, sin vibración, sin rojo (README; sección 4.2 de la especificación). |
+| R4 | **Acierto por cobertura** (P4, decidido el 2026-11-06): al soltar, se mide qué parte de **su sombra** queda cubierta por el objeto. Si llega al umbral de la dificultad, el objeto **se coloca solo** en su sombra con una animación suave y queda fijo en color: **Fácil, 40 %** (basta con tocar bien la sombra); **Normal, 60 %**; **Imposible, 90 %**. Por debajo del umbral, vuelve a la bandeja (R5). |
+| R5 | **Fallo:** si al soltar cubre una **sombra equivocada** por encima del umbral, cuenta como fallo de forma (R9); si no cubre ninguna sombra lo bastante, es imprecisión del dedo y no cuenta. En los dos casos el objeto **vuelve a la bandeja** con una animación suave. Sin sonido de error, sin vibración, sin rojo (README; sección 4.2 de la especificación). |
 | R6 | **Gratis:** sin tiempo y sin derrota; no se puede bajar de nivel. Al superar el nivel 7 se vuelve al nivel 1, sin medalla. |
 | R7 | **Premium:** tiempo y escalera según la sección 4.3, salvo que el adulto haya desactivado el tiempo (R18). El cronómetro arranca al tocar el primer objeto y se pausa en segundo plano y durante las transiciones (como HU-001 R10 y R11). |
 | R8 | **Al completar el tablero:** la misma celebración breve que la memoria (unos 2 s, sin botón, con las estrellas) y paso automático al siguiente nivel (D-022). |
@@ -148,7 +148,7 @@ Sin colores nuevos.
 ## 6. Criterios de aceptación (borrador)
 
 1. **Dado** el menú, **entonces** veo el botón «Sombras» debajo de «Memoria» y al tocarlo empieza el nivel en el que me quedé (el 1 la primera vez).
-2. **Dado** un tablero, **cuando** suelto un objeto sobre su sombra o dentro de su zona magnética, **entonces** encaja y queda fijo.
+2. **Dado** un tablero, **cuando** suelto un objeto cubriendo su sombra al menos un 40 % (Fácil), 60 % (Normal) o 90 % (Imposible), **entonces** se coloca solo en la sombra y queda fijo; con menos, vuelve a la bandeja.
 3. **Dado** un tablero, **cuando** suelto un objeto sobre otra sombra o en el vacío, **entonces** vuelve a la bandeja con una animación suave, sin sonido ni color de error.
 4. **Dado** que encajo el último objeto, **entonces** veo la celebración con las estrellas y paso solo al siguiente nivel.
 5. **Dado** que no tengo Premium, **entonces** no hay barra de tiempo, el indicador muestra el nivel 8 con candado, ningún nivel da más de 2★ y, al superar el nivel 7, vuelvo al nivel 1 sin medalla.
@@ -176,7 +176,7 @@ Sin colores nuevos.
 | Presentación | `ShadowGameScreen`, widgets de objeto y sombra (`Draggable`/`DragTarget`; silueta con `ColorFiltered` y `BlendMode.srcIn`), indicador de 8 puntos con candado y segundo botón en `MainMenuScreen`. Animación de inicio (R19): un solo `AnimationController` por tablero que interpola, para cada objeto, la posición (de su sombra a la bandeja) y el filtro (de silueta a color); las posiciones se leen tras el primer *layout*. Disposición: un valor `ShadowLayout` (sombras arriba o a la izquierda; en «Imposible», elegido al azar por tablero) |
 | Reutilización | Celebración, indicador de nivel, barra de tiempo, mensaje de derrota, salida protegida y medalla de la memoria. Lo que esté atado a la memoria se generaliza en la primera entrega |
 | Catálogo | Nombre del juego, mensaje de derrota, etiquetas del lector de pantalla (incluido «nivel bloqueado») en los 9 idiomas |
-| Tests | Dominio (escalera gratis y Premium, estrellas, contenido de Emoji 5.0), cubit (activar Premium a mitad), widgets (arrastrar y soltar, zona magnética, vuelta a la bandeja, candado), layout en los 9 idiomas y las dos orientaciones, compatibilidad de datos y ausencia del interruptor de depuración en *release* |
+| Tests | Dominio (escalera gratis y Premium, estrellas, contenido de Emoji 5.0), cubit (activar Premium a mitad), widgets (arrastrar y soltar, colocación por cobertura en cada dificultad, vuelta a la bandeja, candado), layout en los 9 idiomas y las dos orientaciones, compatibilidad de datos y ausencia del interruptor de depuración en *release* |
 
 ## 8. Preguntas y decisiones
 
@@ -185,7 +185,7 @@ Sin colores nuevos.
 | P1 | ¿HU-022 (tutorial visual) va antes, como historia propia, o dentro de HU-007? | ✅ Decidido (2026-10-29): **antes, como historia propia** | — |
 | P2 | ¿Cuántos niveles? | ✅ Decidido (2026-10-29): **más que los 5 de la memoria**. La tabla 4.2 queda **pendiente de un spike de viabilidad** (decidido el 2026-11-03). ✅ Espacio medido el mismo día ([SPIKE-HU-007](../spikes/SPIKE-HU-007-viabilidad.md)): la tabla cabe en todos los teléfonos y orientaciones, con 81 dp por objeto en el peor caso | No |
 | P3 | ¿El juego tiene tiempo? | ✅ Decidido (2026-10-29): **solo con Premium, automático como en la memoria**. ✅ Series decididas por el dueño el 2026-11-04, una por dificultad (tabla 4.3). ✅ El spike se cierra con estas series, sin medir (2026-11-04); se ajustan jugando si hiciera falta | — |
-| P4 | ¿Zona magnética al soltar? | Recomendación: **sí**; el objeto encaja si se suelta a menos de media sombra de distancia. A los 3 años, la precisión del dedo todavía es baja | No |
+| P4 | ¿Cuándo encaja el objeto al soltarlo? | ✅ Decidido (2026-11-06): **según la parte de la sombra que cubre**, distinta en cada dificultad: Fácil 40 %, Normal 60 %, Imposible 90 % (R4). Cubrir una sombra equivocada por encima del umbral es un fallo; no cubrir ninguna, no (R5). El porcentaje se mide con las cajas del objeto y de la sombra en pantalla (área de su intersección ÷ área de la sombra) | — |
 | P5 | ¿Cómo se ganan las estrellas? | ✅ Decidido (2026-10-29): la 3.ª estrella solo con tiempo. **Cambiado el 2026-11-04:** la 3.ª estrella exige Premium y pocos fallos, **con o sin tiempo**, porque el adulto puede desactivar el tiempo (R18). Los umbrales de R9 se calibran por simulación, como en HU-002 | No |
 | P6 | El nivel 1 nunca tiene tiempo: ¿cómo se gana su 3.ª estrella? | ✅ Decidido (2026-11-03): sin fallos, en modo Premium. **Sustituida el 2026-11-04 por P5:** como la 3.ª estrella ya no depende del tiempo, el nivel 1 sigue la misma regla que los demás | — |
 | P7 | ¿Qué cambia en cada nivel de dificultad de HU-030? | ✅ Tiempos decididos el 2026-11-04: las tres series de la tabla 4.3. ✅ Imposible: **la disposición cambia al azar en cada tablero** (P14, 2026-11-04). Recomendación para el resto, que se cierra en [HU-030](HU-030-dificultad.md): **Fácil:** zona magnética más grande y sin sombras libres; **Normal:** la tabla 4.2 | No |

@@ -20,7 +20,7 @@
   "@menuBadgeSemantics": {
     "description": "Screen reader label for the medal shown next to the Memory button once every level has been beaten."
   },
-  "memoryGameTitle": "Memory Game",
+  "memoryGameTitle": "Memory game",
   "@memoryGameTitle": {
     "description": "Title at the top of the memory game screen. Max ~20 characters."
   },
@@ -38,15 +38,15 @@
       }
     }
   },
-  "memoryGameHintPlaying": "Let's find the matching pair.",
+  "memoryGameHintPlaying": "Let's find the matching pairs.",
   "@memoryGameHintPlaying": {
     "description": "Encouraging message at the bottom of the game while the child plays. Warm and positive tone."
   },
-  "memoryGameHintProcessing": "Look closely... the card is turning.",
+  "memoryGameHintProcessing": "Look closely… the cards are turning over.",
   "@memoryGameHintProcessing": {
     "description": "Message at the bottom while two different cards are shown before turning back. Calm tone, never negative."
   },
-  "memoryCardOpenSemantics": "Open card showing {symbol}",
+  "memoryCardOpenSemantics": "Face-up card: {symbol}",
   "@memoryCardOpenSemantics": {
     "description": "Screen-reader label (not visible) for a face-up card. {symbol} is an emoji such as 🐶.",
     "placeholders": {
@@ -56,7 +56,7 @@
       }
     }
   },
-  "memoryCardClosedSemantics": "Closed card",
+  "memoryCardClosedSemantics": "Face-down card",
   "@memoryCardClosedSemantics": {
     "description": "Screen-reader label (not visible) for a face-down card."
   },
@@ -354,7 +354,7 @@
   "@restTitle": {
     "description": "Rest screen shown when the daily play time is over (HU-009). Calm and friendly, never a punishment; the child cannot read yet, a parent reads it aloud. Max ~30 characters."
   },
-  "restSubtitle": "Let's play again tomorrow",
+  "restSubtitle": "We'll play again tomorrow",
   "@restSubtitle": {
     "description": "Line under the rest screen title: we will play again tomorrow. Calm and friendly. Max ~35 characters."
   },
@@ -362,7 +362,7 @@
   "@parentsZoneGamesTitle": {
     "description": "Title of the Parents' Zone section with the settings that apply to every game (HU-030). Read by parents. Max ~25 characters."
   },
-  "parentsZoneGamesIntro": "These settings apply to every game. Changes show up on the next board.",
+  "parentsZoneGamesIntro": "These settings apply to every game. Changes take effect on the next board.",
   "@parentsZoneGamesIntro": {
     "description": "One line under the Games section title: the settings apply to all games and take effect on the next board. Read by parents."
   },
@@ -382,15 +382,15 @@
   "@difficultyImpossible": {
     "description": "Difficulty option: impossible, a real challenge for those who already master the game. Short chip label."
   },
-  "difficultyEasyHint": "More time and helps.",
+  "difficultyEasyHint": "More time and visual hints.",
   "@difficultyEasyHint": {
     "description": "Shown under the options when Easy is selected: more time and helps (such as a quick look at the cards). Read by parents."
   },
-  "difficultyNormalHint": "The game as it is, with helps.",
+  "difficultyNormalHint": "The game as designed, with hints.",
   "@difficultyNormalHint": {
     "description": "Shown under the options when Normal is selected: the game as designed, with helps. Read by parents."
   },
-  "difficultyImpossibleHint": "Less time and no helps.",
+  "difficultyImpossibleHint": "Less time and no hints.",
   "@difficultyImpossibleHint": {
     "description": "Shown under the options when Impossible is selected: less time and no helps. Read by parents."
   },
@@ -398,7 +398,7 @@
   "@parentsZoneNoTimeTitle": {
     "description": "Switch title: play every game without a time limit. Read by parents."
   },
-  "parentsZoneNoTimeHint": "No time bar and no going down a level. The same stars can be earned.",
+  "parentsZoneNoTimeHint": "No time bar and no moving down a level. Stars are earned the same way.",
   "@parentsZoneNoTimeHint": {
     "description": "Explanation under the switch: no time bar, the child never goes down a level, and the same stars can be earned. Read by parents."
   },
