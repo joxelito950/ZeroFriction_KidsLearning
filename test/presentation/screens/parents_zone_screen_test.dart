@@ -10,18 +10,18 @@ void main() {
   testWidgets('shows the title, the way back and the screen pinning instructions (HU-004 P4)', (tester) async {
     await tester.pumpWidget(localizedApp(home: const ParentsZoneScreen()));
 
-    expect(find.text('Zona de Padres'), findsOneWidget);
+    expect(find.text('Zona de padres'), findsOneWidget);
     expect(find.text('Volver al menú'), findsOneWidget);
 
     final section = find.byKey(const ValueKey<String>('parents-zone-screen-pinning'));
     // La lista solo construye lo que se ve: se desplaza hasta la sección.
     await tester.scrollUntilVisible(section, 200);
-    expect(find.descendant(of: section, matching: find.text('Mantener la app en pantalla')), findsOneWidget);
+    expect(find.descendant(of: section, matching: find.text('Mantener la app abierta')), findsOneWidget);
     for (final step in ['1', '2', '3']) {
       expect(find.descendant(of: section, matching: find.text(step)), findsOneWidget);
     }
     expect(find.textContaining('«Fijar aplicaciones»'), findsWidgets);
-    expect(find.text('Los nombres y los pasos pueden cambiar según la marca del teléfono.'), findsOneWidget);
+    expect(find.text('Los nombres de las opciones y los pasos pueden variar según la marca del teléfono.'), findsOneWidget);
   });
 
   testWidgets('has no coming-soon sections or purchases (P4, D-028)', (tester) async {
@@ -72,7 +72,7 @@ void main() {
       await tester.scrollUntilVisible(find.byKey(const ValueKey<String>('parents-zone-privacy')), 200);
 
       expect(find.text('Privacidad'), findsOneWidget);
-      expect(find.text('ToddlerLogic no recoge ningún dato: todo se queda en este teléfono.'), findsOneWidget);
+      expect(find.text('ToddlerLogic no recopila datos: todo permanece en este teléfono.'), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('parents-zone-privacy-policy')), findsNothing);
     });
 
