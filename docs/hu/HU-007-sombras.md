@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-10-29; decisiones principales tomadas, quedan las preguntas de la sección 8) |
+| **Estado** | Lista (refinamiento cerrado el 2026-11-06; P8 y P9 con la recomendación asumida; el desarrollo **no** ha empezado) |
 | **Épica** | E4 · Nuevos juegos (y E3 · Premium) |
 | **Prioridad** | P2: es el próximo juego |
 | **Tamaño** | L (estimación previa; se confirma al cerrar el refinamiento) |
@@ -189,8 +189,8 @@ Sin colores nuevos.
 | P5 | ¿Cómo se ganan las estrellas? | ✅ Decidido (2026-10-29): la 3.ª estrella solo con tiempo. **Cambiado el 2026-11-04:** la 3.ª estrella exige Premium y pocos fallos, **con o sin tiempo**, porque el adulto puede desactivar el tiempo (R18). Los umbrales de R9 se calibran por simulación, como en HU-002 | No |
 | P6 | El nivel 1 nunca tiene tiempo: ¿cómo se gana su 3.ª estrella? | ✅ Decidido (2026-11-03): sin fallos, en modo Premium. **Sustituida el 2026-11-04 por P5:** como la 3.ª estrella ya no depende del tiempo, el nivel 1 sigue la misma regla que los demás | — |
 | P7 | ¿Qué cambia en cada nivel de dificultad de HU-030? | ✅ Tiempos decididos el 2026-11-04: las tres series de la tabla 4.3. ✅ Imposible: **la disposición cambia al azar en cada tablero** (P14, 2026-11-04). Recomendación para el resto, que se cierra en [HU-030](HU-030-dificultad.md): **Fácil:** zona magnética más grande y sin sombras libres; **Normal:** la tabla 4.2 | No |
-| P8 | ¿Progreso propio (typeId 4) o un modelo común para todos los juegos? | Recomendación: **propio en esta historia**, con el mismo formato que la memoria. Un modelo común se decide antes del tercer juego (HU-023) | No |
-| P9 | Nombre del juego en el menú | Recomendación: «Sombras» en español y «Shadows» en inglés; los 9 idiomas pasan por la revisión de TD-011 | No |
+| P8 | ¿Progreso propio (typeId 4) o un modelo común para todos los juegos? | ✅ Asumida la recomendación (2026-11-06): **propio**, con el mismo formato que la memoria (typeId 4). Un modelo común se decide antes del tercer juego (HU-023) | — |
+| P9 | Nombre del juego en el menú | ✅ Asumida la recomendación (2026-11-06): «Sombras» en español y «Shadows» en inglés; los otros idiomas pasan por TD-011 | — |
 | P10 | ¿Se desarrolla antes de que exista el pago (HU-006)? | ✅ Decidido (2026-10-29): **sí, con candado**. Lo gratis funciona; lo Premium queda bloqueado hasta HU-006 y se prueba con tests y con el interruptor de depuración | — |
 | P11 | Sin Premium, ¿qué pasa al superar el nivel 7? | ✅ Decidido (2026-10-29): **vuelve al nivel 1** (R6) | — |
 | P12 | ¿Se añaden **objetos sin sombra** en la bandeja, como reto? (propuesto por el dueño el 2026-11-03) | ✅ Decidido (2026-11-04): **no**. Se vuelve a la propuesta inicial: el reto de los niveles altos son las **sombras libres** (distractores) de la tabla 4.2. Era viable en espacio (73 dp en el peor caso), pero las sombras libres ya cubren el reto sin que el niño piense que no ha terminado | — |
