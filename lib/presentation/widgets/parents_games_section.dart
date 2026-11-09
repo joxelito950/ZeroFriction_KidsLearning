@@ -102,19 +102,18 @@ class _GamesCard extends StatelessWidget {
                   title: Text(l10n.parentsZoneKeepStarsTitle),
                   subtitle: Text(l10n.parentsZoneKeepStarsHint),
                 ),
-                SwitchListTile(
-                  key: const ValueKey<String>('games-no-time'),
-                  contentPadding: EdgeInsets.zero,
-                  value: state.timerDisabled,
-                  // Solo un adulto con Premium puede cambiarlo (R4).
-                  onChanged: state.loaded && state.isPremium ? cubit.setTimerDisabled : null,
-                  title: Text(l10n.parentsZoneNoTimeTitle),
-                  subtitle: Text(
-                    state.isPremium
-                        ? l10n.parentsZoneNoTimeHint
-                        : '${l10n.parentsZoneNoTimeHint} ${l10n.parentsZonePremiumOnly}',
+                // Solo con Premium (R4). Mientras no se pueda comprar (HU-006), sin
+                // Premium ni se muestra: no se enseña algo que no se puede conseguir
+                // (decidido el 2026-11-09 para la primera publicación).
+                if (state.isPremium)
+                  SwitchListTile(
+                    key: const ValueKey<String>('games-no-time'),
+                    contentPadding: EdgeInsets.zero,
+                    value: state.timerDisabled,
+                    onChanged: state.loaded ? cubit.setTimerDisabled : null,
+                    title: Text(l10n.parentsZoneNoTimeTitle),
+                    subtitle: Text(l10n.parentsZoneNoTimeHint),
                   ),
-                ),
               ],
             ),
           ),
