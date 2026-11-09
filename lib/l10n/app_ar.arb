@@ -83,5 +83,8 @@
   "difficultyImpossibleHint": "وقت أقل وبلا مساعدات.",
   "parentsZoneNoTimeTitle": "اللعب بلا وقت",
   "parentsZoneNoTimeHint": "بلا شريط وقت وبلا نزول في المستوى. تُكسب النجوم نفسها.",
-  "parentsZonePremiumOnly": "متاح مع Premium."
+  "parentsZonePremiumOnly": "متاح مع Premium.",
+  "menuGameGoldSemantics": "ذهبي بنسبة {percent}٪، {stars} من {total} نجوم",
+  "parentsZoneKeepStarsTitle": "الاحتفاظ بالنجوم",
+  "parentsZoneKeepStarsHint": "تبقى النجوم حتى لو مرت أيام دون لعب."
 }

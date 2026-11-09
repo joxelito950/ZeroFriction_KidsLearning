@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-21 y revisado el 2026-11-05, P8–P12; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollada el 2026-11-06 en `feature/hu-002-016-gold-stars`, con HU-016; falta verla en el moto g55). Refinamiento cerrado el 2026-10-21 y revisado el 2026-11-05 |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
 | **Tamaño** | M, al límite (unos 4 días): dominio de la pérdida, el dorado líquido animado y la etiqueta en 9 idiomas. HU-016 (S) va en el mismo PR |
@@ -135,7 +135,7 @@ El product owner elige **D1**, como control de progreso y refuerzo de las habili
 | R13 | **La pérdida se aplica al empezar el juego, nunca en el menú** (P8, decidido el 2026-11-05): al abrir el juego se calcula la pérdida acumulada con el reloj, se guardan las estrellas que quedan (sin cambiar sus fechas) y después la partida actualiza la fecha de la última partida, lo que detiene la pérdida (R9). El menú solo **lee** lo guardado, sin cálculos: así no se ralentiza en teléfonos de gama baja cuando haya muchos juegos. Consecuencia aceptada: tras muchos días sin jugar, el menú muestra el dorado guardado hasta que se abre el juego; al volver al menú ya se ve el nuevo. Es la regla para **todos los juegos** (D-037) |
 | R14 | **Qué nivel pierde primero** (P9): el del logro más antiguo que aún tenga estrellas. Su fecha no cambia al perder, así que se vacía entero antes de pasar al siguiente |
 | R15 | **Dorado líquido** (P10, decidido el 2026-11-05): el dorado sube como un **líquido**, no como una imagen dorada con transparencia fija que se llena en línea recta. La superficie es una **ola suave** que se mece despacio; el líquido tiene volumen (dorado `#A86B12` en el fondo y ámbar `#ECA463` en las luces y en la superficie) y deja ver la forma del icono debajo; **burbujas doradas pequeñas** suben lentamente dentro del líquido. Al 0 % no hay líquido; al 100 % el icono está lleno y la ola sigue meciéndose. Movimiento lento y tranquilo: nada parpadea ni llama la atención de golpe |
-| R16 | **Dónde** (P11): en el menú, el líquido llena **todo el botón del juego** de abajo arriba (para un niño, el botón es «el juego»); el icono del juego va dentro. En la cabecera del juego, solo el icono, con el mismo porcentaje. El texto del botón sigue siendo legible con cualquier nivel: blanco sobre azul petróleo (6,16:1) o sobre dorado (4,40:1, por debajo de 4,5:1), así que **lleva una sombra suave en teal profundo** cuando el líquido lo alcanza (P13) |
+| R16 | **Dónde** (P11): en el menú, el líquido llena **todo el botón del juego** de abajo arriba (para un niño, el botón es «el juego»); el icono del juego va dentro. En la cabecera del juego, solo el icono, con el mismo porcentaje. El texto del botón sigue siendo legible con cualquier nivel: blanco sobre azul petróleo (6,16:1) o sobre dorado (4,40:1, por debajo de 4,5:1), así que **lleva una sombra suave en teal profundo** cuando el líquido lo alcanza (P13) **Cambio del 2026-11-09:** el dorado va **solo en el botón del menú**; el icono de la cabecera se queda sin dorado (sobre la carta azul petróleo daba un tono verde oliva). `GameIcon` conserva la opción por si un juego futuro la usa. |
 | R17 | **Rendimiento y accesibilidad:** una sola animación por botón, que se detiene cuando la pantalla no está a la vista (otra pantalla encima, app en segundo plano). Con «reducir movimiento» del sistema, el líquido se queda quieto, sin ola ni burbujas. El dorado es decorativo para el lector de pantalla: el porcentaje lo anuncia el botón (R6) |
 
 Riesgo aceptado: va contra la idea de «sin penalizaciones» del README y se parece a las «rachas» que el borrador del código infantil del ICO desaconsejaba. Los padres podrán activarla o desactivarla desde la Zona de Padres en **HU-016** (opción D3).
@@ -207,3 +207,20 @@ Para cualquiera de las tres opciones, cada nivel guarda, además de su mejor res
 - El diseño del icono de cada juego (HU-013).
 - Las estrellas de los juegos 2 y 3: cada uno define su regla al refinarse (HU-007, HU-008).
 - Mostrar las estrellas de cada nivel en el menú (posible mejora futura).
+
+## 12. Desarrollo
+
+Rama `feature/hu-002-016-gold-stars`, 2026-11-06, junto con HU-016.
+
+| Área | Qué se hizo |
+|---|---|
+| Dominio | `StarDecay` (`domain/progress/`, para todos los juegos): 7 días de gracia y una estrella cada 3 días; la fecha de partida es la más reciente entre la última partida y la reactivación de HU-016. `MemoryProgress`: estrellas, `goldFraction` (sobre 15), `loseStars` (vacía primero el logro más antiguo, sin tocar fechas ni insignia) y `playedAt` |
+| Estado | `MemoryLadderCubit.start` aplica la pérdida y la guarda al abrir el juego (D-037), salvo con «Mantener las estrellas»; si el progreso no se pudo leer, no guarda nada. El estado lleva el dorado para la cabecera |
+| Presentación | `LiquidGold`: ola suave, tonos de volumen (ámbar arriba, dorado abajo), brillo en la superficie y 6 burbujas que suben despacio; una sola animación de 6 s que no corre al 0 %, con «reducir movimiento» ni con la pantalla tapada. En el menú llena todo el botón «Memoria», con sombra en el texto; en la cabecera del juego, solo el icono y quieto. El botón anuncia «60 % dorado, 9 de 15 estrellas» (R6) |
+| Catálogo | 3 claves en los 9 idiomas (la etiqueta del botón y el interruptor de HU-016) |
+
+**Decisión de desarrollo:** abrir el juego cuenta como jugar (R13): al empezar se aplica la pérdida y se guarda la fecha de la partida. Así la pérdida no se cuenta dos veces si el niño abre el juego y sale sin terminar un tablero.
+
+**Visto en el moto g55 (2026-11-06):** el botón «Memoria» se llena con el líquido, la ola y las burbujas se mueven (entre dos capturas solo cambia el botón) y el texto se lee bien con la sombra. En la cabecera, el dorado salía como un rectángulo sobre todo el icono: el motor gráfico del teléfono (Impeller) no respeta `srcATop`. Corregido: el líquido ocupa el cuadro y la transparencia del propio icono lo recorta (`ShaderMask` con `dstIn`), más translúcido para que se vea la ilustración.
+
+Decidido el 2026-11-09: el dorado va solo en el botón del menú (R16). Pendiente: ver el interruptor «Mantener las estrellas» en el teléfono.

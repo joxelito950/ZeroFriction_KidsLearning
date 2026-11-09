@@ -8,6 +8,7 @@ import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/memory/memory_ladder.dart';
 import '../../../domain/memory/memory_stars.dart';
 import '../../../domain/memory/memory_themes.dart';
+import '../../../domain/progress/star_decay.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
 import 'memory_card_model.dart';
 import 'memory_ladder_state.dart';
@@ -63,6 +64,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   Future<void> start() async {
     try {
       _progress = await _repository.readMemoryProgress();
+      await _settleStars();
     } catch (error, stackTrace) {
       addError(error, stackTrace);
     }
@@ -70,6 +72,30 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
     if (isClosed) return;
     _rules = rules;
     _deal(MemoryLadder.arrivalPosition(_progress.currentLevel, rules));
+  }
+
+  /// Al empezar el juego se aplica la pérdida de estrellas acumulada y se guarda
+  /// (D-037), salvo con «Mantener las estrellas» (HU-016). Abrir el juego cuenta
+  /// como jugar: la pérdida se detiene desde ahora (HU-002 R9, R13). Si no se
+  /// pudo leer el progreso, no se llega aquí y no se pisa nada.
+  Future<void> _settleStars() async {
+    ParentalSettings settings = ParentalSettings.initial;
+    try {
+      settings = await _repository.readParentalSettings();
+    } catch (error, stackTrace) {
+      if (!isClosed) addError(error, stackTrace);
+    }
+    final DateTime now = _now();
+    MemoryProgress progress = _progress;
+    final DateTime? since = StarDecay.since(
+      lastPlayedAt: progress.lastPlayedAt,
+      resumedAt: settings.starDecayResumedAt,
+    );
+    if (!settings.keepStars && since != null) {
+      progress = progress.loseStars(StarDecay.starsLost(since: since, now: now));
+    }
+    _progress = progress.playedAt(now);
+    await _saveProgress();
   }
 
   /// La dificultad y «Jugar sin tiempo» de la Zona de Padres. Sin tiempo solo
@@ -150,6 +176,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
       position: position,
       cards: preview ? [for (final card in cards) card.copyWith(isFaceUp: true)] : cards,
       hasBadge: _progress.hasBadge,
+      goldFraction: _progress.goldFraction,
     ));
     if (!preview) return;
     // Pasado el momento, se voltean todas a la vez y empieza el juego (V2).
@@ -191,6 +218,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
       stars: stars,
       badgeEarned: step.badgeEarned,
       hasBadge: _progress.hasBadge,
+      goldFraction: _progress.goldFraction,
       isProcessing: true,
     ));
     _scheduleNextRound(celebrationDuration, step.next);

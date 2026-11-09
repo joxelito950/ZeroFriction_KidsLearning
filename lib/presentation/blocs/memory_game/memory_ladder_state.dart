@@ -39,6 +39,7 @@ class MemoryLadderState {
     this.badgeEarned = false,
     this.loss,
     this.hasBadge = false,
+    this.goldFraction = 0,
   });
 
   final MemoryRoundPhase phase;
@@ -68,6 +69,9 @@ class MemoryLadderState {
 
   /// El niño ya tiene la insignia (permanente).
   final bool hasBadge;
+
+  /// Dorado del juego, de 0 a 1 (HU-002 R2): el icono de la cabecera.
+  final double goldFraction;
 
   int get level => position.level;
 
@@ -100,6 +104,7 @@ class MemoryLadderState {
     bool? badgeEarned,
     MemoryLoss? loss,
     bool? hasBadge,
+    double? goldFraction,
   }) {
     return MemoryLadderState(
       phase: phase ?? this.phase,
@@ -116,6 +121,7 @@ class MemoryLadderState {
       badgeEarned: badgeEarned ?? this.badgeEarned,
       loss: loss ?? this.loss,
       hasBadge: hasBadge ?? this.hasBadge,
+      goldFraction: goldFraction ?? this.goldFraction,
     );
   }
 }

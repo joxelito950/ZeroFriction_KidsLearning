@@ -201,6 +201,7 @@ class _Header extends StatelessWidget {
   final int level;
   final int moves;
 
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -222,6 +223,7 @@ class _Header extends StatelessWidget {
             Row(
               children: [
                 // Icono del juego (HU-013); el título ya dice el nombre.
+                // Sin dorado: el dorado se ve en el botón del menú (HU-002 R16, 2026-11-09).
                 const GameIcon.memory(key: ValueKey<String>('memory-game-icon'), size: 48),
                 const SizedBox(width: 14),
                 Expanded(

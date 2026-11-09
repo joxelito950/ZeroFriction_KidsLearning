@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27 y revisado el 2026-11-05; se desarrolla junto con HU-002 en el mismo PR) |
+| **Estado** | En curso (desarrollada el 2026-11-06 con HU-002, en `feature/hu-002-016-gold-stars`): interruptor «Mantener las estrellas» en la sección «Juegos», campos 6 y 7 de `ParentalSettings`. Falta verla en el moto g55 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | S (1 día) |

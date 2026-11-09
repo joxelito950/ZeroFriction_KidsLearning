@@ -83,5 +83,8 @@
   "difficultyImpossibleHint": "Menos tiempo y sin pistas.",
   "parentsZoneNoTimeTitle": "Jugar sin límite de tiempo",
   "parentsZoneNoTimeHint": "Sin barra de tiempo y sin bajar de nivel. Se pueden conseguir las mismas estrellas.",
-  "parentsZonePremiumOnly": "Disponible con Premium."
+  "parentsZonePremiumOnly": "Disponible con Premium.",
+  "menuGameGoldSemantics": "{percent} % dorado, {stars} de {total} estrellas",
+  "parentsZoneKeepStarsTitle": "Mantener las estrellas",
+  "parentsZoneKeepStarsHint": "Las estrellas se conservan aunque pasen días sin jugar."
 }

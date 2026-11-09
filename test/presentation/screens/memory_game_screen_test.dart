@@ -202,7 +202,8 @@ void main() {
       for (var star = 0; star < 3; star++) {
         expect(find.byKey(ValueKey<String>('memory-star-$star-earned')), findsOneWidget);
       }
-      verify(() => repository.saveMemoryProgress(any())).called(1);
+      // Una al abrir el juego (cuenta como jugar, HU-002 R13) y otra al ganar.
+      verify(() => repository.saveMemoryProgress(any())).called(2);
 
       await tester.pump(MemoryLadderCubit.celebrationDuration);
       await tester.pump(const Duration(milliseconds: 500));

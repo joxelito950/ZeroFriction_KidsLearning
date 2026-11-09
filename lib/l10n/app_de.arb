@@ -83,5 +83,8 @@
   "difficultyImpossibleHint": "Weniger Zeit und keine Hilfen.",
   "parentsZoneNoTimeTitle": "Ohne Zeit spielen",
   "parentsZoneNoTimeHint": "Keine Zeitleiste und kein Abstieg. Es gibt dieselben Sterne.",
-  "parentsZonePremiumOnly": "Mit Premium verfügbar."
+  "parentsZonePremiumOnly": "Mit Premium verfügbar.",
+  "menuGameGoldSemantics": "{percent} % golden, {stars} von {total} Sternen",
+  "parentsZoneKeepStarsTitle": "Sterne behalten",
+  "parentsZoneKeepStarsHint": "Die Sterne bleiben erhalten, auch wenn tagelang nicht gespielt wird."
 }

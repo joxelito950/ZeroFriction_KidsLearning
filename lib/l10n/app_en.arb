@@ -405,5 +405,31 @@
   "parentsZonePremiumOnly": "Available with Premium.",
   "@parentsZonePremiumOnly": {
     "description": "Added after the explanation when the switch is locked: only Premium users can change it. Calm, not a sales pitch; keep the word Premium."
+  },
+  "menuGameGoldSemantics": "{percent}% golden, {stars} of {total} stars",
+  "@menuGameGoldSemantics": {
+    "description": "Screen reader value of a game button in the menu (HU-002 R6): how golden the game icon is and the stars collected. Read after the game name.",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "60"
+      },
+      "stars": {
+        "type": "int",
+        "example": "9"
+      },
+      "total": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "parentsZoneKeepStarsTitle": "Keep the stars",
+  "@parentsZoneKeepStarsTitle": {
+    "description": "Switch in the Parents' Zone Games section (HU-016): when on, the child never loses stars for not playing. Read by parents."
+  },
+  "parentsZoneKeepStarsHint": "Stars are kept even if days go by without playing.",
+  "@parentsZoneKeepStarsHint": {
+    "description": "One line under the Keep the stars switch, without a negative tone. Read by parents."
   }
 }

@@ -106,6 +106,7 @@ lib/
 ├── domain/
 │   ├── entities/                      # LevelState, UserProfile, AppLanguage (Dart puro)
 │   ├── memory/                        # Reglas del juego de memoria: escalera, estrellas, temáticas (Dart puro)
+│   ├── progress/                      # StarDecay: pérdida gradual de estrellas para todos los juegos (D-031, D-037, HU-002)
 │   ├── parental/                      # Control para adultos de la Zona de Padres: ParentalGate (Dart puro, HU-004) y DailyPlayTime (tiempo de juego diario, HU-009)
 │   ├── settings/                      # GameDifficulty: dificultad de todos los juegos (HU-030)
 │   └── repositories/                  # IPersistenceRepository
@@ -144,7 +145,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 
 - Campos de `UserProfileHiveModel`: 0 `isPremium`, 1 `isSoundEnabled`, 2 `languageCode` (opcional, HU-011; los perfiles anteriores lo leen como `null`). El próximo índice libre es 3.
 - Campos de `MemoryProgressHiveModel` (HU-001): 0 `currentLevel`, 1 `hasBadge`, 2 `bestStarsByLevel` (nivel → estrellas), 3 `achievedAtByLevel` (nivel → fecha), 4 `lastPlayedAt`. El próximo índice libre es 5.
-- Campos de `ParentalSettingsHiveModel` (HU-009): 0 `dailyLimitMinutes` (`null` es «sin límite»), 1 `playDay` (medianoche local del último día jugado), 2 `playedSeconds`, 3 `extraMinutes` (los «15 minutos más» de ese día). Desde HU-030: 4 `difficulty` (nombre de `GameDifficulty`; `null` es Normal) y 5 `timerDisabled`. Reservados: 6 `keepStars` y 7 `starDecayResumedAt` (HU-016). El próximo índice libre es 8 (HU-031). Los cambios se guardan con `updateParentalSettings`, que lee y escribe sin `await` en medio para que el tiempo de hoy (HU-009) y los ajustes de los juegos no se pisen.
+- Campos de `ParentalSettingsHiveModel` (HU-009): 0 `dailyLimitMinutes` (`null` es «sin límite»), 1 `playDay` (medianoche local del último día jugado), 2 `playedSeconds`, 3 `extraMinutes` (los «15 minutos más» de ese día). Desde HU-030: 4 `difficulty` (nombre de `GameDifficulty`; `null` es Normal) y 5 `timerDisabled`. Desde HU-016: 6 `keepStars` y 7 `starDecayResumedAt` (cuándo se volvió a activar la pérdida). El próximo índice libre es 8 (HU-031). Los cambios se guardan con `updateParentalSettings`, que lee y escribe sin `await` en medio para que el tiempo de hoy (HU-009) y los ajustes de los juegos no se pisen.
 - Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **4** (reservado para el progreso de Sombras, HU-007). `LevelState` (typeId 0) dejará de usarse cuando el juego pase a `MemoryProgress` (HU-001, entrega 3); su typeId queda reservado.
 - Identificadores de nivel en uso: `farm_easy`, `wild_medium`. Un `levelId` ya publicado NO DEBE renombrarse.
 
