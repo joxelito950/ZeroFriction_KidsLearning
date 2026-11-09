@@ -221,4 +221,6 @@ Rama `feature/hu-002-016-gold-stars`, 2026-11-06, junto con HU-016.
 
 **Decisión de desarrollo:** abrir el juego cuenta como jugar (R13): al empezar se aplica la pérdida y se guarda la fecha de la partida. Así la pérdida no se cuenta dos veces si el niño abre el juego y sale sin terminar un tablero.
 
-Pendiente: ver el líquido en el moto g55 (0, 40, 87 y 100 %) y ajustar tonos o velocidad si hace falta (P10).
+**Visto en el moto g55 (2026-11-06):** el botón «Memoria» se llena con el líquido, la ola y las burbujas se mueven (entre dos capturas solo cambia el botón) y el texto se lee bien con la sombra. En la cabecera, el dorado salía como un rectángulo sobre todo el icono: el motor gráfico del teléfono (Impeller) no respeta `srcATop`. Corregido: el líquido ocupa el cuadro y la transparencia del propio icono lo recorta (`ShaderMask` con `dstIn`), más translúcido para que se vea la ilustración.
+
+Pendiente: sobre la carta azul petróleo, el dorado translúcido da un tono verde oliva; el dueño decide si se deja, si se hace más opaco o si el dorado va solo en el botón del menú. Y ver el interruptor «Mantener las estrellas» en el teléfono.
