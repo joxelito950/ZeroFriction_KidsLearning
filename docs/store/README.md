@@ -61,4 +61,4 @@ Requisitos: la clave de subida y `android/key.properties` en tu equipo ([TD-003]
 
 | Fecha | Versión | `versionCode` | Pista | Notas |
 |---|---|---|---|---|
-| — | — | — | — | Aún no se ha subido ninguna |
+| 2026-11-09 | `1.0.0-rc.2` | 3 | Prueba cerrada | Primera subida. Juego de memoria con dificultad y vista previa (HU-030), tiempo diario y descanso (HU-009), identidad visual (HU-013), dorado líquido y pérdida de estrellas (HU-002, HU-016), textos revisados en español e inglés (TD-011). AAB de 49,6 MB, sin permisos y firmado con la clave de subida (comprobado con los dos scripts) |

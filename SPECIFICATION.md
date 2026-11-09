@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Versión de la app** | `1.0.0-rc.1+2` (primera candidata para la prueba cerrada de Google Play, HU-014). La línea base de la sección 1 es la `0.0.1-beta+1` |
+| **Versión de la app** | `1.0.0-rc.2+3` (primera versión que se sube a la prueba cerrada de Google Play, HU-014, el 2026-11-09; la `rc.1+2` no llegó a subirse). La línea base de la sección 1 es la `0.0.1-beta+1` |
 | **Fecha de la línea base** | 2026-10-13 |
 | **Estado** | Beta interna · solo Android · sin publicar |
 | **Documentos relacionados** | [README.md](README.md) (visión de producto y alcance MVP) · [DOCUMENTATION.md](DOCUMENTATION.md) (detalle de persistencia Hive) · [BACKLOG.md](BACKLOG.md) (trabajo pendiente y refinamientos en `docs/hu/`) |
