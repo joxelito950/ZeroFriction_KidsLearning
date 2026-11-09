@@ -85,16 +85,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
     } catch (error, stackTrace) {
       if (!isClosed) addError(error, stackTrace);
     }
-    final DateTime now = _now();
-    MemoryProgress progress = _progress;
-    final DateTime? since = StarDecay.since(
-      lastPlayedAt: progress.lastPlayedAt,
-      resumedAt: settings.starDecayResumedAt,
-    );
-    if (!settings.keepStars && since != null) {
-      progress = progress.loseStars(StarDecay.starsLost(since: since, now: now));
-    }
-    _progress = progress.playedAt(now);
+    _progress = StarDecay.settle(_progress, settings: settings, now: _now());
     await _saveProgress();
   }
 

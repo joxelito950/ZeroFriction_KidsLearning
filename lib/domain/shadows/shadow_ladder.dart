@@ -3,6 +3,8 @@
 /// medalla (sección 3, D-028).
 library;
 
+import 'dart:math';
+
 import '../settings/game_difficulty.dart';
 
 /// Un nivel: cuántos objetos hay en la bandeja, cuántas sombras y si todos son
@@ -19,6 +21,19 @@ final class ShadowLevel {
 
   /// Sombras sin objeto (distractores) en Normal e Imposible.
   int get freeShadows => shadows - objects;
+}
+
+/// Dónde van las sombras respecto a la bandeja (4.1, P13, P14). El eje lo
+/// decide la orientación: en vertical, arriba o abajo; en horizontal, a la
+/// izquierda o a la derecha **físicas**, también en árabe (depende de la mano,
+/// no del sentido de lectura).
+enum ShadowLayout {
+  /// Sombras arriba (vertical) o a la izquierda (horizontal): el destino queda
+  /// a la vista de un diestro. Siempre en Fácil y Normal.
+  shadowsFirst,
+
+  /// Sombras abajo o a la derecha: solo puede tocar en Imposible.
+  shadowsLast,
 }
 
 /// Cómo se juega la escalera: dificultad, Premium y si hay tiempo (HU-030).
@@ -45,6 +60,11 @@ final class ShadowRules {
 
   /// En Imposible, la disposición cambia al azar en cada tablero (P14).
   bool get randomLayout => difficulty == GameDifficulty.impossible;
+
+  /// Disposición de un tablero nuevo: en Imposible, al azar (P14).
+  ShadowLayout layoutFor(Random random) => randomLayout
+      ? ShadowLayout.values[random.nextInt(ShadowLayout.values.length)]
+      : ShadowLayout.shadowsFirst;
 
   /// Parte de su sombra que el objeto tiene que cubrir para colocarse (P4).
   double get coverageToSnap => switch (difficulty) {

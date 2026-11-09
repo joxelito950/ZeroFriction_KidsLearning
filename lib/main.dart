@@ -21,6 +21,7 @@ Future<HivePersistenceRepository> createRepository({required String hivePath}) a
     userProfileBox: HivePersistenceConfig.userProfileBox,
     memoryProgressBox: HivePersistenceConfig.memoryProgressBox,
     parentalSettingsBox: HivePersistenceConfig.parentalSettingsBox,
+    shadowProgressBox: HivePersistenceConfig.shadowProgressBox,
   );
 }
 
