@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-11-06; P8 y P9 con la recomendación asumida; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollo iniciado el 2026-11-09; entrega 1 de 4 hecha). Refinamiento cerrado el 2026-11-06 |
 | **Épica** | E4 · Nuevos juegos (y E3 · Premium) |
 | **Prioridad** | P2: es el próximo juego |
 | **Tamaño** | L (estimación previa; se confirma al cerrar el refinamiento) |
@@ -207,3 +207,12 @@ Sin colores nuevos.
 - Objetos sin sombra en la bandeja (descartado el 2026-11-04, P12).
 - Rediseño del menú para varios juegos (HU-023).
 - Sonidos (HU-005).
+
+## 10. Desarrollo
+
+| # | Entrega | Estado | Contenido |
+|---|---|---|---|
+| 1 | Dominio | ✅ 2026-11-09, rama `feature/hu-007-1-domain` | `domain/shadows/`: `ShadowLadder` (tabla 4.2, acceso gratis/Premium, series de tiempo por dificultad, ganar y perder), `ShadowRules` (dificultad, Premium, «Jugar sin tiempo», cobertura para colocarse 40/60/90 %, sombras libres, disposición al azar y animación de inicio por dificultad), `ShadowStars` (R9), `ShadowDrop` (colocación por cobertura, P4, R4, R5) y `ShadowThemes` (4.5, con el nivel 1 de temáticas distintas y los niveles 6–8 de una sola). La comprobación de Emoji 5.0 pasa a un ayudante de tests compartido |
+| 2 | Estado y progreso | Pendiente | `ShadowProgress` (typeId 4, P8), `ShadowGameCubit`: tablero, colocación, fallos, tiempo, victoria y derrota, pérdida de estrellas al empezar (D-037) y cambio de Premium en el siguiente tablero (R12) |
+| 3 | Pantalla | Pendiente | Arrastre con colocación por cobertura, disposición (P13, P14), animación de inicio (R19), siluetas con el tope de 220 px (R13), tutorial (R15), lector de pantalla (R16) |
+| 4 | Menú y cierre | Pendiente | Botón «Sombras» con su icono y su dorado, candado sutil del nivel 8 (R11), interruptor de Premium de depuración (con HU-006), diseño en 9 idiomas y verificación en el moto g55 |
