@@ -55,7 +55,8 @@ void main() {
     expect(find.text(l10n.parentsZoneGamesTitle), findsOneWidget);
     expect(chip(tester, GameDifficulty.normal).selected, isTrue);
     expect(find.text(l10n.difficultyNormalHint), findsOneWidget);
-    expect(noTime(tester).value, isFalse);
+    // Sin Premium, «Jugar sin tiempo» no se muestra (R4, 2026-11-09).
+    expect(find.byKey(const ValueKey<String>('games-no-time')), findsNothing);
   });
 
   testWidgets('choosing a difficulty saves it and explains it', (tester) async {
@@ -74,11 +75,11 @@ void main() {
     expect(stored.difficulty, GameDifficulty.easy);
   });
 
-  testWidgets('without Premium the switch is locked and says why (R4, criterion 4b)', (tester) async {
+  testWidgets('without Premium the switch is not shown until it can be bought (R4, 2026-11-09)', (tester) async {
     await pumpSection(tester);
 
-    expect(noTime(tester).onChanged, isNull);
-    expect(find.textContaining(l10n.parentsZonePremiumOnly), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('games-no-time')), findsNothing);
+    expect(find.textContaining(l10n.parentsZonePremiumOnly), findsNothing);
   });
 
   testWidgets('with Premium the switch turns the time off and saves it', (tester) async {
@@ -98,8 +99,26 @@ void main() {
     premium(false);
     await pumpSection(tester);
 
-    expect(noTime(tester).value, isFalse);
+    expect(find.byKey(const ValueKey<String>('games-no-time')), findsNothing);
     expect(stored.timerDisabled, isFalse);
+  });
+
+  testWidgets('keep the stars is free, and turning it off restarts the grace (HU-016 R2, R3, R6)', (tester) async {
+    await pumpSection(tester);
+
+    final Finder keep = find.byKey(const ValueKey<String>('games-keep-stars'));
+    expect(tester.widget<SwitchListTile>(keep).onChanged, isNotNull);
+    expect(find.text(l10n.parentsZoneKeepStarsHint), findsOneWidget);
+
+    await tester.tap(keep);
+    await tester.pump();
+    expect(stored.keepStars, isTrue);
+    expect(stored.starDecayResumedAt, isNull);
+
+    await tester.tap(keep);
+    await tester.pump();
+    expect(stored.keepStars, isFalse);
+    expect(stored.starDecayResumedAt, isNotNull);
   });
 
   testWidgets('shows nothing without a repository', (tester) async {

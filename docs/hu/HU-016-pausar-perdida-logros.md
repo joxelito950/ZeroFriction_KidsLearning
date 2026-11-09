@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27 y revisado el 2026-11-05; se desarrolla junto con HU-002 en el mismo PR) |
+| **Estado** | En curso (desarrollada el 2026-11-06 con HU-002, en `feature/hu-002-016-gold-stars`): interruptor «Mantener las estrellas» en la sección «Juegos», campos 6 y 7 de `ParentalSettings`. Falta verla en el moto g55 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | S (1 día) |
@@ -69,8 +69,8 @@
 | P1 | ¿Ajuste por juego o general? | ✅ Decidido (2026-10-27): **general** (R4) | — |
 | P2 | ¿Por defecto la pérdida activada? | ✅ Asumida la recomendación: **sí**, como dice D-031 | — |
 | P3 | ¿Se desarrolla junto con HU-002? | ✅ Asumida la recomendación: **sí, en el mismo bloque**: así el cálculo de HU-002 nace con el ajuste y no hay que tocarlo dos veces | — |
-| P4 | Con D-037, al activarlo puede haber pérdida acumulada sin aplicar. ¿Se aplica antes de congelar o se perdona? | Recomendación: **se perdona** (R7): se conserva lo que el adulto ve, que es lo guardado, y no hay que calcular nada en la Zona de Padres | No |
-| P5 | ¿Dónde va el interruptor? | Recomendación: en la sección «Juegos» de HU-030 (R8): todos los ajustes de los juegos juntos | No |
+| P4 | Con D-037, al activarlo puede haber pérdida acumulada sin aplicar. ¿Se aplica antes de congelar o se perdona? | ✅ Asumida la recomendación (2026-11-06): **se perdona** (R7) | — |
+| P5 | ¿Dónde va el interruptor? | ✅ Asumida la recomendación (2026-11-06): en la sección «Juegos» de HU-030 (R8) | — |
 | P6 | ¿Es Premium? | ✅ Decidido (2026-11-05): **no, gratuito** (R6) | — |
 
 ## 8. Fuera de alcance

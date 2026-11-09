@@ -99,7 +99,7 @@ void main() {
       expect(find.byKey(const ValueKey<String>('memory-time-bar')), findsNothing);
       expect(find.byKey(const ValueKey<String>('memory-level-dot-1-reached')), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('memory-level-dot-2-pending')), findsOneWidget);
-      expect(find.text('Busquemos las parejas iguales.'), findsOneWidget);
+      expect(find.text('¡Busquemos una pareja!'), findsOneWidget);
       expect(find.bySemanticsLabel('Nivel 1 de 5'), findsOneWidget);
     });
 
@@ -145,7 +145,7 @@ void main() {
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       await pumpScreen(tester);
 
-      final TextScaler scaler = MediaQuery.textScalerOf(tester.element(find.text('Busquemos las parejas iguales.')));
+      final TextScaler scaler = MediaQuery.textScalerOf(tester.element(find.text('¡Busquemos una pareja!')));
       expect(scaler.scale(10), closeTo(10 * MemoryGameScreen.maxTextScale, 0.001));
     });
 
@@ -182,11 +182,11 @@ void main() {
 
       await tapCard(tester, pairs[0][0]);
       await tapCard(tester, pairs[1][0]);
-      expect(find.text('Mira bien… las cartas se dan la vuelta.'), findsOneWidget);
+      expect(find.text('Observa con atención… Las cartas se están volteando.'), findsOneWidget);
 
       await tester.pump(MemoryLadderCubit.mismatchDelay);
       await tester.pump(const Duration(milliseconds: 450));
-      expect(find.text('Busquemos las parejas iguales.'), findsOneWidget);
+      expect(find.text('¡Busquemos una pareja!'), findsOneWidget);
       expect(cardCount(), 4);
     });
 
@@ -198,11 +198,12 @@ void main() {
 
       expect(find.byKey(const ValueKey<String>('memory-celebration')), findsOneWidget);
       expect(find.text('¡Lo lograste!'), findsOneWidget);
-      expect(find.text('Busquemos las parejas iguales.'), findsOneWidget);
+      expect(find.text('¡Busquemos una pareja!'), findsOneWidget);
       for (var star = 0; star < 3; star++) {
         expect(find.byKey(ValueKey<String>('memory-star-$star-earned')), findsOneWidget);
       }
-      verify(() => repository.saveMemoryProgress(any())).called(1);
+      // Una al abrir el juego (cuenta como jugar, HU-002 R13) y otra al ganar.
+      verify(() => repository.saveMemoryProgress(any())).called(2);
 
       await tester.pump(MemoryLadderCubit.celebrationDuration);
       await tester.pump(const Duration(milliseconds: 500));
@@ -257,7 +258,7 @@ void main() {
       await tester.pump(const Duration(seconds: 46));
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.byKey(const ValueKey<String>('memory-time-up')), findsOneWidget);
-      expect(find.text('¡Se acabó el tiempo! Probemos con menos cartas'), findsOneWidget);
+      expect(find.text('¡Se acabó el tiempo! Probemos de nuevo con menos cartas.'), findsOneWidget);
 
       await tester.pump(MemoryLadderCubit.timeUpDuration);
       await tester.pump(const Duration(milliseconds: 500));
@@ -300,7 +301,7 @@ void main() {
       await tester.binding.handlePopRoute();
       await tester.pump();
       expect(find.byKey(const ValueKey<String>('exit-repeat-hint')), findsOneWidget);
-      expect(find.text('Repite el gesto para salir'), findsOneWidget);
+      expect(find.text('Repite el gesto para salir.'), findsOneWidget);
       final TextStyle hintStyle = tester.widget<RichText>(
         find.descendant(of: find.byKey(const ValueKey<String>('exit-repeat-hint')), matching: find.byType(RichText)),
       ).text.style!;

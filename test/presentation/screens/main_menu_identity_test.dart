@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/brand/brand_assets.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/widgets/game_icon.dart';
+import 'package:toddler_logic/presentation/widgets/liquid_gold.dart';
 
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
@@ -35,6 +38,30 @@ void main() {
     expect(tester.getCenter(icon).dx, lessThan(tester.getCenter(find.text(l10n.menuMemoryTitle)).dx));
     // El botón se sigue anunciando solo con su texto.
     expect(find.bySemanticsLabel(RegExp(l10n.menuMemoryTitle)), findsWidgets);
+    semantics.dispose();
+  });
+
+  testWidgets('the Memory button fills with liquid gold and announces it (HU-002 R6, R16)', (tester) async {
+    final SemanticsHandle semantics = tester.ensureSemantics();
+    final repository = MockPersistenceRepository();
+    stubPersistenceRepository(repository);
+    when(() => repository.readMemoryProgress()).thenAnswer(
+      (_) async => MemoryProgress(
+        currentLevel: 1,
+        levelRecords: {
+          for (var level = 1; level <= 3; level++) level: MemoryLevelRecord(bestStars: 3, achievedAt: DateTime(2026)),
+        },
+      ),
+    );
+    await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+    await tester.pump();
+
+    final LiquidGold gold = tester.widget<LiquidGold>(find.byType(LiquidGold).first);
+    expect(gold.fraction, closeTo(0.6, 1e-9));
+    expect(find.bySemanticsLabel(RegExp(l10n.menuMemoryTitle)), findsWidgets);
+    final String expected = l10n.menuGameGoldSemantics(60, 9, 15);
+    expect(find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.value == expected),
+        findsOneWidget);
     semantics.dispose();
   });
 

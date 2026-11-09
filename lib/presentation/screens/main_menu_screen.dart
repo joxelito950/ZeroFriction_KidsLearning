@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../brand/brand_assets.dart';
+import '../../domain/entities/memory_progress.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
 import '../widgets/game_icon.dart';
+import '../widgets/liquid_gold.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
 import 'memory_game_screen.dart';
@@ -125,32 +127,33 @@ class _MenuActions extends StatefulWidget {
 }
 
 class _MenuActionsState extends State<_MenuActions> {
-  bool _hasBadge = false;
+  /// Progreso del juego de memoria: medalla (HU-001 R9) y dorado (HU-002).
+  /// El menú solo lee lo guardado, sin calcular la pérdida (D-037).
+  MemoryProgress _memory = MemoryProgress.initial;
 
   @override
   void initState() {
     super.initState();
-    _loadBadge();
+    _loadProgress();
   }
 
-  /// La medalla aparece con la insignia del juego de memoria (HU-001 R9). Si no
-  /// se puede leer el progreso, el menú se muestra sin ella.
-  Future<void> _loadBadge() async {
-    bool hasBadge;
+  /// Si no se puede leer el progreso, el menú se muestra sin medalla ni dorado.
+  Future<void> _loadProgress() async {
+    MemoryProgress progress;
     try {
-      hasBadge = (await context.read<IPersistenceRepository>().readMemoryProgress()).hasBadge;
+      progress = await context.read<IPersistenceRepository>().readMemoryProgress();
     } catch (_) {
-      hasBadge = false;
+      progress = MemoryProgress.initial;
     }
-    if (mounted && hasBadge != _hasBadge) setState(() => _hasBadge = hasBadge);
+    if (mounted && progress != _memory) setState(() => _memory = progress);
   }
 
   Future<void> _openMemoryGame() async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => const MemoryGameScreen()),
     );
-    // Al volver, la insignia puede haberse conseguido.
-    await _loadBadge();
+    // Al volver, la insignia o el dorado pueden haber cambiado.
+    await _loadProgress();
   }
 
   @override
@@ -170,7 +173,14 @@ class _MenuActionsState extends State<_MenuActions> {
           backgroundColor: AppPalette.petrolBlue,
           textColor: AppPalette.white,
           icon: const GameIcon.memory(key: ValueKey<String>('menu-memory-icon'), size: 52),
-          badge: _hasBadge
+          // Dorado líquido en todo el botón (HU-002 R16) y anunciado (R6).
+          goldFraction: _memory.goldFraction,
+          goldLabel: l10n.menuGameGoldSemantics(
+            (_memory.goldFraction * 100).round(),
+            _memory.stars,
+            MemoryProgress.maxStars,
+          ),
+          badge: _memory.hasBadge
               ? Semantics(
                   label: l10n.menuBadgeSemantics,
                   excludeSemantics: true,
@@ -225,6 +235,10 @@ class _MenuButton extends StatelessWidget {
   /// Distintivo opcional junto a la flecha (la medalla de la insignia).
   final Widget? badge;
 
+  /// Dorado del juego, de 0 a 1, y cómo lo anuncia el lector de pantalla.
+  final double goldFraction;
+  final String? goldLabel;
+
   const _MenuButton({
     required this.title,
     required this.subtitle,
@@ -233,59 +247,80 @@ class _MenuButton extends StatelessWidget {
     required this.onTap,
     this.icon,
     this.badge,
+    this.goldFraction = 0,
+    this.goldLabel,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: AppPalette.deepTeal.withValues(alpha: 0.12),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            if (icon case final Widget icon) ...[icon, const SizedBox(width: 14)],
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: textColor,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: textColor.withValues(alpha: 0.8),
-                    ),
-                  ),
-                ],
+    // Sobre el dorado, el blanco queda en 4,40:1: una sombra suave en teal
+    // profundo lo mantiene legible a cualquier altura del líquido (P13).
+    final List<Shadow>? shadows =
+        goldFraction > 0 ? [Shadow(color: AppPalette.deepTeal.withValues(alpha: 0.6), blurRadius: 4)] : null;
+
+    return Semantics(
+      value: goldLabel,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppPalette.deepTeal.withValues(alpha: 0.12),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
-            ),
-            if (badge case final Widget badge) ...[badge, const SizedBox(width: 8)],
-            Icon(
-              Icons.chevron_right_rounded,
-              color: textColor,
-              size: 28,
-            )
-          ],
+            ],
+          ),
+          child: Stack(
+            children: [
+              Positioned.fill(child: LiquidGold(fraction: goldFraction)),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    if (icon case final Widget icon) ...[icon, const SizedBox(width: 14)],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                              shadows: shadows,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: textColor.withValues(alpha: goldFraction > 0 ? 1 : 0.8),
+                              shadows: shadows,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (badge case final Widget badge) ...[badge, const SizedBox(width: 8)],
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: textColor,
+                      size: 28,
+                      shadows: shadows,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

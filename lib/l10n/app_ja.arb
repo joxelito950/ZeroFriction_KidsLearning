@@ -83,5 +83,8 @@
   "difficultyImpossibleHint": "時間が短く、ヒントなし。",
   "parentsZoneNoTimeTitle": "時間なしで遊ぶ",
   "parentsZoneNoTimeHint": "タイムバーなし、レベルも下がりません。もらえる星は同じです。",
-  "parentsZonePremiumOnly": "Premium で利用できます。"
+  "parentsZonePremiumOnly": "Premium で利用できます。",
+  "menuGameGoldSemantics": "{percent}% 金色、星 {stars}/{total}",
+  "parentsZoneKeepStarsTitle": "星をのこす",
+  "parentsZoneKeepStarsHint": "何日か遊ばなくても、星はなくなりません。"
 }

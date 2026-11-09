@@ -94,7 +94,16 @@ class _ScreenPinningSection extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(radius: 12, child: Text('${index + 1}', style: theme.textTheme.labelMedium)),
+                    // Número blanco sobre azul petróleo (6,16:1): sobre el color por
+                    // defecto del tema apenas se leía (visto en el moto g55).
+                    CircleAvatar(
+                      radius: 12,
+                      backgroundColor: AppPalette.petrolBlue,
+                      child: Text(
+                        '${index + 1}',
+                        style: theme.textTheme.labelMedium?.copyWith(color: AppPalette.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     const SizedBox(width: 12),
                     Expanded(child: Text(step, style: theme.textTheme.bodyMedium)),
                   ],

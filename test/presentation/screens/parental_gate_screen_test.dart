@@ -110,7 +110,7 @@ void main() {
     final SemanticsHandle semantics = tester.ensureSemantics();
     await _openGate(tester);
     final answer = find.byKey(const ValueKey<String>('parental-gate-answer'));
-    expect(find.bySemanticsLabel('Sin respuesta todavía'), findsOneWidget);
+    expect(find.bySemanticsLabel('Aún no hay respuesta'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey<String>('parental-key-4')));
     await tester.tap(find.byKey(const ValueKey<String>('parental-key-2')));
@@ -132,7 +132,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(ParentsZoneScreen), findsOneWidget);
-    expect(find.text('Zona de Padres'), findsOneWidget);
+    expect(find.text('Zona de padres'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey<String>('parents-zone-back-to-menu')));
     await tester.pumpAndSettle();
@@ -148,7 +148,7 @@ void main() {
     await _answerWrong(tester);
 
     expect(_message, findsOneWidget);
-    expect(find.text('Esa no es la respuesta'), findsOneWidget);
+    expect(find.text('Esa no es la respuesta.'), findsOneWidget);
     expect(find.text('Quedan 2 intentos'), findsOneWidget);
     expect(find.text('Intentar de nuevo'), findsOneWidget);
     expect(find.text('Volver al menú'), findsOneWidget);
@@ -215,7 +215,7 @@ void main() {
     }
     await _answerWrong(tester);
 
-    expect(find.text('No quedan intentos. Volvemos al menú.'), findsOneWidget);
+    expect(find.text('No quedan más intentos. Volveremos al menú.'), findsOneWidget);
     expect(_retry, findsNothing);
     await tester.pump(ParentalGateCubit.messageTimeout);
     await tester.pumpAndSettle();

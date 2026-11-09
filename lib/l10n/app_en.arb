@@ -20,7 +20,7 @@
   "@menuBadgeSemantics": {
     "description": "Screen reader label for the medal shown next to the Memory button once every level has been beaten."
   },
-  "memoryGameTitle": "Memory game",
+  "memoryGameTitle": "Memory Game",
   "@memoryGameTitle": {
     "description": "Title at the top of the memory game screen. Max ~20 characters."
   },
@@ -38,15 +38,15 @@
       }
     }
   },
-  "memoryGameHintPlaying": "Let's find the matching pairs.",
+  "memoryGameHintPlaying": "Let's find a matching pair.",
   "@memoryGameHintPlaying": {
     "description": "Encouraging message at the bottom of the game while the child plays. Warm and positive tone."
   },
-  "memoryGameHintProcessing": "Look closely… the cards are turning over.",
+  "memoryGameHintProcessing": "Look closely… the cards are flipping back.",
   "@memoryGameHintProcessing": {
     "description": "Message at the bottom while two different cards are shown before turning back. Calm tone, never negative."
   },
-  "memoryCardOpenSemantics": "Face-up card: {symbol}",
+  "memoryCardOpenSemantics": "Open card showing {symbol}",
   "@memoryCardOpenSemantics": {
     "description": "Screen-reader label (not visible) for a face-up card. {symbol} is an emoji such as 🐶.",
     "placeholders": {
@@ -56,7 +56,7 @@
       }
     }
   },
-  "memoryCardClosedSemantics": "Face-down card",
+  "memoryCardClosedSemantics": "Closed card",
   "@memoryCardClosedSemantics": {
     "description": "Screen-reader label (not visible) for a face-down card."
   },
@@ -116,11 +116,11 @@
   "@memoryBadgeMessage": {
     "description": "Line under the golden celebration title."
   },
-  "memoryTimeUpFewerCards": "Time's up! Let's try with fewer cards",
+  "memoryTimeUpFewerCards": "Time's up! Let's try again with fewer cards.",
   "@memoryTimeUpFewerCards": {
     "description": "Calm message when time runs out and the next board has fewer cards. Never negative: it is presented as help."
   },
-  "memoryTimeUpRestart": "Time's up! Let's start again, no rush",
+  "memoryTimeUpRestart": "Time's up! Let's start again—there's no rush.",
   "@memoryTimeUpRestart": {
     "description": "Calm message when time runs out on the smallest board and the game starts again without time. Never negative."
   },
@@ -258,11 +258,11 @@
   "@parentsZonePinStep1": {
     "description": "Step 1 of screen pinning: turn the feature on in the system settings, and the PIN request to unpin."
   },
-  "parentsZonePinStep2": "Open ToddlerLogic, go to recent apps, tap the app icon at the top of its window and choose “Pin”.",
+  "parentsZonePinStep2": "Open ToddlerLogic, go to Recent apps, tap the app icon above its window, and choose “Pin”.",
   "@parentsZonePinStep2": {
     "description": "Step 2 of screen pinning: pin ToddlerLogic from the recent apps screen. ToddlerLogic is the brand: do not translate it."
   },
-  "parentsZonePinStep3": "To unpin, swipe up and hold, or touch and hold Back and Overview at the same time.",
+  "parentsZonePinStep3": "To unpin the app, swipe up and hold, or touch and hold Back and Overview at the same time.",
   "@parentsZonePinStep3": {
     "description": "Step 3 of screen pinning: how an adult unpins the app, with gesture or button navigation."
   },
@@ -294,7 +294,7 @@
   "@parentsZonePlayTimeSystemFirst": {
     "description": "First recommendation of the play time section: use the phone's own parental controls. Use the official names of Android's 'Digital Wellbeing & parental controls' and 'Google Family Link' in each language. Text only, no links. Read by parents."
   },
-  "parentsZonePlayTimeWho": "The WHO recommends (2019): no sedentary screen time before age 2; from 2 to 4, no more than 1 hour a day, and less is better.",
+  "parentsZonePlayTimeWho": "The WHO recommends (2019): no sedentary screen time for children under 2; for children aged 2 to 4, no more than 1 hour a day, and less is better.",
   "@parentsZonePlayTimeWho": {
     "description": "World Health Organization guideline (2019) on sedentary screen time for young children. Read by parents."
   },
@@ -354,7 +354,7 @@
   "@restTitle": {
     "description": "Rest screen shown when the daily play time is over (HU-009). Calm and friendly, never a punishment; the child cannot read yet, a parent reads it aloud. Max ~30 characters."
   },
-  "restSubtitle": "We'll play again tomorrow",
+  "restSubtitle": "Let's play again tomorrow",
   "@restSubtitle": {
     "description": "Line under the rest screen title: we will play again tomorrow. Calm and friendly. Max ~35 characters."
   },
@@ -362,7 +362,7 @@
   "@parentsZoneGamesTitle": {
     "description": "Title of the Parents' Zone section with the settings that apply to every game (HU-030). Read by parents. Max ~25 characters."
   },
-  "parentsZoneGamesIntro": "These settings apply to every game. Changes take effect on the next board.",
+  "parentsZoneGamesIntro": "These settings apply to every game. Changes show up on the next board.",
   "@parentsZoneGamesIntro": {
     "description": "One line under the Games section title: the settings apply to all games and take effect on the next board. Read by parents."
   },
@@ -382,11 +382,11 @@
   "@difficultyImpossible": {
     "description": "Difficulty option: impossible, a real challenge for those who already master the game. Short chip label."
   },
-  "difficultyEasyHint": "More time and visual hints.",
+  "difficultyEasyHint": "More time and hints.",
   "@difficultyEasyHint": {
     "description": "Shown under the options when Easy is selected: more time and helps (such as a quick look at the cards). Read by parents."
   },
-  "difficultyNormalHint": "The game as designed, with hints.",
+  "difficultyNormalHint": "The standard game, with hints.",
   "@difficultyNormalHint": {
     "description": "Shown under the options when Normal is selected: the game as designed, with helps. Read by parents."
   },
@@ -398,12 +398,38 @@
   "@parentsZoneNoTimeTitle": {
     "description": "Switch title: play every game without a time limit. Read by parents."
   },
-  "parentsZoneNoTimeHint": "No time bar and no moving down a level. Stars are earned the same way.",
+  "parentsZoneNoTimeHint": "No timer and no dropping down a level. The same stars are still available.",
   "@parentsZoneNoTimeHint": {
     "description": "Explanation under the switch: no time bar, the child never goes down a level, and the same stars can be earned. Read by parents."
   },
   "parentsZonePremiumOnly": "Available with Premium.",
   "@parentsZonePremiumOnly": {
     "description": "Added after the explanation when the switch is locked: only Premium users can change it. Calm, not a sales pitch; keep the word Premium."
+  },
+  "menuGameGoldSemantics": "{percent}% golden, {stars} of {total} stars",
+  "@menuGameGoldSemantics": {
+    "description": "Screen reader value of a game button in the menu (HU-002 R6): how golden the game icon is and the stars collected. Read after the game name.",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "60"
+      },
+      "stars": {
+        "type": "int",
+        "example": "9"
+      },
+      "total": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "parentsZoneKeepStarsTitle": "Keep the stars",
+  "@parentsZoneKeepStarsTitle": {
+    "description": "Switch in the Parents' Zone Games section (HU-016): when on, the child never loses stars for not playing. Read by parents."
+  },
+  "parentsZoneKeepStarsHint": "Stars are kept even if days go by without playing.",
+  "@parentsZoneKeepStarsHint": {
+    "description": "One line under the Keep the stars switch, without a negative tone. Read by parents."
   }
 }

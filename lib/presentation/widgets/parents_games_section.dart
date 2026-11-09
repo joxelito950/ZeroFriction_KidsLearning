@@ -93,19 +93,27 @@ class _GamesCard extends StatelessWidget {
                   style: theme.textTheme.bodySmall?.copyWith(color: AppPalette.deepTeal),
                 ),
                 const SizedBox(height: 8),
+                // Gratuito: protege al niño (HU-016 R6).
                 SwitchListTile(
-                  key: const ValueKey<String>('games-no-time'),
+                  key: const ValueKey<String>('games-keep-stars'),
                   contentPadding: EdgeInsets.zero,
-                  value: state.timerDisabled,
-                  // Solo un adulto con Premium puede cambiarlo (R4).
-                  onChanged: state.loaded && state.isPremium ? cubit.setTimerDisabled : null,
-                  title: Text(l10n.parentsZoneNoTimeTitle),
-                  subtitle: Text(
-                    state.isPremium
-                        ? l10n.parentsZoneNoTimeHint
-                        : '${l10n.parentsZoneNoTimeHint} ${l10n.parentsZonePremiumOnly}',
-                  ),
+                  value: state.keepStars,
+                  onChanged: state.loaded ? cubit.setKeepStars : null,
+                  title: Text(l10n.parentsZoneKeepStarsTitle),
+                  subtitle: Text(l10n.parentsZoneKeepStarsHint),
                 ),
+                // Solo con Premium (R4). Mientras no se pueda comprar (HU-006), sin
+                // Premium ni se muestra: no se enseña algo que no se puede conseguir
+                // (decidido el 2026-11-09 para la primera publicación).
+                if (state.isPremium)
+                  SwitchListTile(
+                    key: const ValueKey<String>('games-no-time'),
+                    contentPadding: EdgeInsets.zero,
+                    value: state.timerDisabled,
+                    onChanged: state.loaded ? cubit.setTimerDisabled : null,
+                    title: Text(l10n.parentsZoneNoTimeTitle),
+                    subtitle: Text(l10n.parentsZoneNoTimeHint),
+                  ),
               ],
             ),
           ),
