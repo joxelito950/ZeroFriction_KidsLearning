@@ -8,15 +8,15 @@ import '../theme/app_palette.dart';
 /// arriba hasta [fraction], con una ola suave que se mece y burbujas que suben
 /// despacio. Es decorativo: el porcentaje lo anuncia quien lo usa (R6).
 ///
-/// Sin [child], pinta el líquido en todo su espacio (el fondo del botón del
-/// juego en el menú). Con [child], lo pinta **solo sobre la silueta** del hijo
-/// (el icono del juego), como un líquido dentro de un recipiente.
+/// Pinta el líquido en todo su espacio: el fondo del botón del juego en el menú.
+/// Sobre un icono, quien lo usa lo recorta con la silueta (`GameIcon`) y pide
+/// [translucent] para que se siga viendo la ilustración.
 ///
 /// Una sola animación lenta, que no corre con «reducir movimiento», al 0 % ni
 /// cuando la pantalla no está a la vista (`TickerMode`): con muchos juegos en
 /// el menú no debe pesar en un teléfono de gama baja (R17).
 class LiquidGold extends StatefulWidget {
-  const LiquidGold({super.key, required this.fraction, this.animate = true, this.child})
+  const LiquidGold({super.key, required this.fraction, this.animate = true, this.translucent = false})
       : assert(fraction >= 0 && fraction <= 1);
 
   /// Una vuelta completa de la ola y de las burbujas.
@@ -24,7 +24,7 @@ class LiquidGold extends StatefulWidget {
 
   final double fraction;
   final bool animate;
-  final Widget? child;
+  final bool translucent;
 
   @override
   State<LiquidGold> createState() => _LiquidGoldState();
@@ -63,19 +63,15 @@ class _LiquidGoldState extends State<LiquidGold> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final painter = LiquidGoldPainter(
-      fraction: widget.fraction,
-      animation: _controller,
-      moving: _moving,
-      onlyOverChild: widget.child != null,
-    );
-    final Widget? child = widget.child;
-    if (child == null) {
-      return CustomPaint(key: const ValueKey<String>('liquid-gold'), painter: painter, size: Size.infinite);
-    }
-    // Capa propia: así el líquido solo se pinta donde ya hay icono (srcATop).
-    return RepaintBoundary(
-      child: CustomPaint(key: const ValueKey<String>('liquid-gold'), foregroundPainter: painter, child: child),
+    return CustomPaint(
+      key: const ValueKey<String>('liquid-gold'),
+      painter: LiquidGoldPainter(
+        fraction: widget.fraction,
+        animation: _controller,
+        moving: _moving,
+        translucent: widget.translucent,
+      ),
+      size: Size.infinite,
     );
   }
 }
@@ -86,13 +82,13 @@ class LiquidGoldPainter extends CustomPainter {
     required this.fraction,
     required this.animation,
     required this.moving,
-    this.onlyOverChild = false,
+    this.translucent = false,
   }) : super(repaint: animation);
 
   final double fraction;
   final Animation<double> animation;
   final bool moving;
-  final bool onlyOverChild;
+  final bool translucent;
 
   /// Burbujas: posición horizontal (fracción del ancho), radio y desfase.
   static const List<(double, double, double)> bubbles = [
@@ -126,24 +122,24 @@ class LiquidGoldPainter extends CustomPainter {
       ..lineTo(0, size.height)
       ..close();
 
-    final BlendMode blend = onlyOverChild ? BlendMode.srcATop : BlendMode.srcOver;
     final Rect liquid = Rect.fromLTRB(0, level - amplitude, size.width, size.height);
     canvas.drawPath(
       body,
       Paint()
-        ..blendMode = blend
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           // Ámbar en la superficie y dorado en el fondo: volumen, no un color plano.
-          colors: [AppPalette.amber.withValues(alpha: 0.9), AppPalette.gold.withValues(alpha: 0.92)],
+          // Sobre un icono, más translúcido: se sigue viendo la ilustración.
+          colors: translucent
+              ? [AppPalette.amber.withValues(alpha: 0.55), AppPalette.gold.withValues(alpha: 0.6)]
+              : [AppPalette.amber.withValues(alpha: 0.9), AppPalette.gold.withValues(alpha: 0.92)],
         ).createShader(liquid),
     );
     // Brillo de la superficie.
     canvas.drawPath(
       surface,
       Paint()
-        ..blendMode = blend
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2
         ..color = AppPalette.amber,
@@ -157,13 +153,12 @@ class LiquidGoldPainter extends CustomPainter {
         Offset(x * size.width, y),
         radius,
         Paint()
-          ..blendMode = blend
-          ..color = AppPalette.white.withValues(alpha: 0.45 * (1 - progress)),
+            ..color = AppPalette.white.withValues(alpha: 0.45 * (1 - progress)),
       );
     }
   }
 
   @override
   bool shouldRepaint(LiquidGoldPainter oldDelegate) =>
-      oldDelegate.fraction != fraction || oldDelegate.moving != moving || oldDelegate.onlyOverChild != onlyOverChild;
+      oldDelegate.fraction != fraction || oldDelegate.moving != moving || oldDelegate.translucent != translucent;
 }

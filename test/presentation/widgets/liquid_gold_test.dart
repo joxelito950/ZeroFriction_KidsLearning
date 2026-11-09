@@ -18,7 +18,7 @@ void main() {
 
   LiquidGoldPainter painter(WidgetTester tester) {
     final CustomPaint paint = tester.widget<CustomPaint>(find.byKey(const ValueKey<String>('liquid-gold')));
-    return (paint.painter ?? paint.foregroundPainter)! as LiquidGoldPainter;
+    return paint.painter! as LiquidGoldPainter;
   }
 
   testWidgets('the surface rocks and the bubbles rise while it is on screen (criterion 14)', (tester) async {
@@ -59,11 +59,10 @@ void main() {
     expect(tester.hasRunningAnimations, isFalse);
   });
 
-  testWidgets('over a child it paints only on the child, in its own layer', (tester) async {
-    await pump(tester, const LiquidGold(fraction: 0.3, child: ColoredBox(color: Color(0xFF00454D))));
+  testWidgets('can be translucent, to let an icon show through', (tester) async {
+    await pump(tester, const LiquidGold(fraction: 0.3, translucent: true));
 
-    expect(painter(tester).onlyOverChild, isTrue);
-    expect(find.byType(RepaintBoundary), findsWidgets);
+    expect(painter(tester).translucent, isTrue);
     await tester.pump(const Duration(milliseconds: 500));
   });
 
@@ -76,6 +75,8 @@ void main() {
     final a = LiquidGoldPainter(fraction: 0.5, animation: animation, moving: true);
     expect(a.shouldRepaint(LiquidGoldPainter(fraction: 0.5, animation: animation, moving: true)), isFalse);
     expect(a.shouldRepaint(LiquidGoldPainter(fraction: 0.6, animation: animation, moving: true)), isTrue);
+    expect(a.shouldRepaint(LiquidGoldPainter(fraction: 0.5, animation: animation, moving: true, translucent: true)),
+        isTrue);
   });
 
   test('rejects a fraction outside 0 to 1', () {

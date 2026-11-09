@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/brand/brand_assets.dart';
@@ -20,15 +22,37 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('fills the silhouette with liquid gold, painted only over the icon (HU-002 R15, R16)', (tester) async {
-    await pump(tester, const GameIcon.memory(size: 48, goldFraction: 0.4));
+  testWidgets('fills the silhouette with liquid gold, cut out by the icon itself (HU-002 R15, R16)', (tester) async {
+    // La imagen se decodifica de verdad: hace falta tiempo real.
+    await tester.runAsync(() async {
+      await pump(tester, const GameIcon.memory(size: 48, goldFraction: 0.4));
+      for (var i = 0; i < 50 && find.byKey(const ValueKey<String>('game-icon-gold')).evaluate().isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        await tester.pump();
+      }
+    });
 
-    final LiquidGold gold = tester.widget<LiquidGold>(find.byKey(const ValueKey<String>('game-icon-gold')));
+    final ShaderMask mask = tester.widget<ShaderMask>(find.byKey(const ValueKey<String>('game-icon-gold')));
+    expect(mask.blendMode, BlendMode.dstIn);
+    expect(mask.shaderCallback(const Rect.fromLTWH(0, 0, 48, 48)), isA<ImageShader>());
+    final LiquidGold gold = tester.widget<LiquidGold>(find.byType(LiquidGold));
     expect(gold.fraction, 0.4);
+    expect(gold.translucent, isTrue);
     expect(gold.animate, isFalse);
-    expect(gold.child, isA<Image>());
-    final CustomPaint paint = tester.widget<CustomPaint>(find.byKey(const ValueKey<String>('liquid-gold')));
-    expect((paint.foregroundPainter! as LiquidGoldPainter).onlyOverChild, isTrue);
+  });
+
+  test('the mask sits where BoxFit.contain puts the image', () async {
+    final recorder = ui.PictureRecorder();
+    Canvas(recorder).drawRect(const Rect.fromLTWH(0, 0, 1, 1), Paint());
+    final ui.Image image = await recorder.endRecording().toImage(200, 100);
+
+    final Matrix4 transform = GameIcon.containTransform(const Size(50, 50), image);
+
+    // Escala 0,25: 200 × 100 pasa a 50 × 25, centrado en vertical.
+    expect(transform.storage[0], closeTo(0.25, 1e-9));
+    expect(transform.storage[5], closeTo(0.25, 1e-9));
+    expect(transform.getTranslation().y, closeTo(12.5, 1e-9));
+    expect(transform.getTranslation().x, closeTo(0, 1e-9));
   });
 
   test('rejects a gold fraction outside 0 to 1', () {
