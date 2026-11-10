@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-09; preguntas en la sección 8) |
+| **Estado** | En refinamiento (iniciado el 2026-11-09; P1 decidida el 2026-11-10; falta P2) |
 | **Épica** | E2 · Zona de padres |
 | **Prioridad** | P2: conviene en la primera actualización de la prueba cerrada |
 | **Tamaño** | S (estimación: 1 día) |
@@ -80,7 +80,7 @@
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Correo preparado (`mailto:`) o un formulario dentro de la app? | **Correo preparado.** Un formulario necesitaría red, un servidor y declarar datos en Google Play. Con el correo, la app sigue sin red y el adulto ve lo que manda | Sí |
+| P1 | ¿Correo preparado (`mailto:`) o un formulario dentro de la app? | ✅ Decidido (2026-11-10): **correo preparado, no formulario.** Un formulario necesitaría red, un servidor y declarar datos en Google Play. Con el correo, la app sigue sin red y el adulto ve lo que manda | — |
 | P2 | ¿Qué datos técnicos se añaden? | **Versión de la app, versión de Android, modelo del teléfono e idioma de la app.** Son los que más ayudan a reproducir un fallo y no identifican a nadie. Alternativa mínima, sin `device_info_plus`: solo versión de la app y de Android | Sí |
 | P3 | ¿Dónde va la tarjeta? | **Antes de «Privacidad»**, al final de la Zona de padres: es lo que se usa menos y no estorba a los ajustes | No |
 | P4 | ¿Solo durante la prueba cerrada o para siempre? | **Para siempre.** En producción también sirve, y Google Play ya muestra el mismo correo en la ficha | No |
