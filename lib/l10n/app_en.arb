@@ -431,5 +431,99 @@
   "parentsZoneKeepStarsHint": "Stars are kept even if days go by without playing.",
   "@parentsZoneKeepStarsHint": {
     "description": "One line under the Keep the stars switch, without a negative tone. Read by parents."
+  },
+  "shadowsGameTitle": "Shadows",
+  "@shadowsGameTitle": {
+    "description": "Name of the Shadows game (HU-007 P9), shown in the game header and later on the menu button. Short."
+  },
+  "shadowsGameInstructions": "Drag each picture onto its shadow.",
+  "@shadowsGameInstructions": {
+    "description": "One line under the game title, for the adult next to the child: drag each picture onto the shadow with the same shape."
+  },
+  "shadowsObjectSemantics": "{symbol} to place",
+  "@shadowsObjectSemantics": {
+    "description": "Screen-reader label (not visible) of a picture still in the tray. {symbol} is an emoji. With the screen reader, the picture is chosen first and then its shadow (R16).",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsShadowSemantics": "Shadow of {symbol}",
+  "@shadowsShadowSemantics": {
+    "description": "Screen-reader label (not visible) of an empty shadow (a one-colour silhouette). {symbol} is the emoji whose shape it has.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsPlacedSemantics": "{symbol} on its shadow",
+  "@shadowsPlacedSemantics": {
+    "description": "Screen-reader label (not visible) of a picture already placed on its shadow.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsTimeUpFewerObjects": "Time's up! Let's try again with fewer pictures.",
+  "@shadowsTimeUpFewerObjects": {
+    "description": "Shown when time runs out (Premium only): a helpful message, never a punishment. The next board has fewer pictures."
+  },
+  "levelLockedSemantics": "Level {level} locked",
+  "@levelLockedSemantics": {
+    "description": "Screen-reader label (not visible) for a locked level dot. Neutral: it must not invite the child to buy anything (R11).",
+    "placeholders": {
+      "level": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "parentsFeedbackTitle": "Help and feedback",
+  "@parentsFeedbackTitle": {
+    "description": "Title of the Help and feedback card in the Parents zone (HU-032). Read by parents."
+  },
+  "parentsFeedbackIntro": "Something not working, or have an idea? Write to us: the app sends nothing by itself.",
+  "@parentsFeedbackIntro": {
+    "description": "One line under the title: invite the adult to write about a problem or an idea. The app sends nothing by itself."
+  },
+  "parentsFeedbackSend": "Send feedback",
+  "@parentsFeedbackSend": {
+    "description": "Button that opens the phone's email app with a prepared, unsent email."
+  },
+  "parentsFeedbackNoEmailApp": "We couldn't open an email app. Write to us at:",
+  "@parentsFeedbackNoEmailApp": {
+    "description": "Shown when no email app could be opened, right above the contact address."
+  },
+  "parentsFeedbackCopy": "Copy",
+  "@parentsFeedbackCopy": {
+    "description": "Button that copies the contact email address."
+  },
+  "parentsFeedbackCopied": "Address copied",
+  "@parentsFeedbackCopied": {
+    "description": "Short message after copying the address."
+  },
+  "feedbackEmailSubject": "ToddlerLogic · Feedback ({version})",
+  "@feedbackEmailSubject": {
+    "description": "Subject of the prepared feedback email. Keep the brand name ToddlerLogic as is. {version} is the app version, such as 1.0.0-rc.2+3.",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0-rc.2+3"
+      }
+    }
+  },
+  "feedbackEmailWhatHappened": "What happened?",
+  "@feedbackEmailWhatHappened": {
+    "description": "First guide line in the body of the prepared email, followed by space to write."
+  },
+  "feedbackEmailWhatExpected": "What did you expect?",
+  "@feedbackEmailWhatExpected": {
+    "description": "Second guide line in the body of the prepared email, followed by space to write."
   }
 }

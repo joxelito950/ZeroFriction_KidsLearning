@@ -86,5 +86,21 @@
   "parentsZonePremiumOnly": "Premium で利用できます。",
   "menuGameGoldSemantics": "{percent}% 金色、星 {stars}/{total}",
   "parentsZoneKeepStarsTitle": "星をのこす",
-  "parentsZoneKeepStarsHint": "何日か遊ばなくても、星はなくなりません。"
+  "parentsZoneKeepStarsHint": "何日か遊ばなくても、星はなくなりません。",
+  "shadowsGameTitle": "かげあわせ",
+  "shadowsGameInstructions": "えを おなじ かたちの かげまで うごかそう。",
+  "shadowsObjectSemantics": "おく {symbol}",
+  "shadowsShadowSemantics": "{symbol} の かげ",
+  "shadowsPlacedSemantics": "かげに おいた {symbol}",
+  "shadowsTimeUpFewerObjects": "じかんぎれ！ えを へらして もういちど やってみよう。",
+  "levelLockedSemantics": "レベル {level}（ロック中）",
+  "parentsFeedbackTitle": "ヘルプとご意見",
+  "parentsFeedbackIntro": "うまく動かないところやアイデアはありますか？メールでお知らせください。アプリが自動で送ることはありません。",
+  "parentsFeedbackSend": "ご意見を送る",
+  "parentsFeedbackNoEmailApp": "メールアプリを開けませんでした。こちらにご連絡ください：",
+  "parentsFeedbackCopy": "コピー",
+  "parentsFeedbackCopied": "アドレスをコピーしました",
+  "feedbackEmailSubject": "ToddlerLogic · ご意見（{version}）",
+  "feedbackEmailWhatHappened": "何が起きましたか？",
+  "feedbackEmailWhatExpected": "どうなると思っていましたか？"
 }

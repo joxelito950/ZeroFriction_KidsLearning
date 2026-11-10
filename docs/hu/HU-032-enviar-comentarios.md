@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-09; preguntas en la sección 8) |
+| **Estado** | Hecha (desarrollada y vista en el moto g55 el 2026-11-10, rama `feature/hu-032-feedback`). Refinamiento cerrado el 2026-11-10 |
 | **Épica** | E2 · Zona de padres |
 | **Prioridad** | P2: conviene en la primera actualización de la prueba cerrada |
 | **Tamaño** | S (estimación: 1 día) |
@@ -80,16 +80,22 @@
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Correo preparado (`mailto:`) o un formulario dentro de la app? | **Correo preparado.** Un formulario necesitaría red, un servidor y declarar datos en Google Play. Con el correo, la app sigue sin red y el adulto ve lo que manda | Sí |
-| P2 | ¿Qué datos técnicos se añaden? | **Versión de la app, versión de Android, modelo del teléfono e idioma de la app.** Son los que más ayudan a reproducir un fallo y no identifican a nadie. Alternativa mínima, sin `device_info_plus`: solo versión de la app y de Android | Sí |
-| P3 | ¿Dónde va la tarjeta? | **Antes de «Privacidad»**, al final de la Zona de padres: es lo que se usa menos y no estorba a los ajustes | No |
-| P4 | ¿Solo durante la prueba cerrada o para siempre? | **Para siempre.** En producción también sirve, y Google Play ya muestra el mismo correo en la ficha | No |
-| P5 | ¿Qué pasa sin app de correo? | **Se ve la dirección con un botón «Copiar».** Pasa en teléfonos sin Gmail ni Outlook configurados | No |
-| P6 | ¿Cambia la declaración de «Seguridad de los datos»? | **No debería**: según la guía de Google, recopilar es que *la app* envíe datos fuera del teléfono, y aquí los envía la app de correo cuando el adulto decide. Aun así, la política de privacidad lo explica (R8) para ser transparentes. Se vuelve a revisar el formulario al publicar | No |
-| P7 | ¿Textos guía en el cuerpo del correo? | **Sí, dos líneas** («¿Qué pasó?», «¿Qué esperabas?»): los testers no saben qué contar y así llegan informes útiles | No |
+| P1 | ¿Correo preparado (`mailto:`) o un formulario dentro de la app? | ✅ Decidido (2026-11-10): **correo preparado, no formulario.** Un formulario necesitaría red, un servidor y declarar datos en Google Play. Con el correo, la app sigue sin red y el adulto ve lo que manda | — |
+| P2 | ¿Qué datos técnicos se añaden? | ✅ Decidido (2026-11-10): **versión de la app, versión de Android, modelo del teléfono e idioma de la app.** Son los que más ayudan a reproducir un fallo y no identifican a nadie. Usa `package_info_plus` y `device_info_plus`, sin permisos | — |
+| P3 | ¿Dónde va la tarjeta? | ✅ Asumida (2026-11-10): **Antes de «Privacidad»**, al final de la Zona de padres: es lo que se usa menos y no estorba a los ajustes | — |
+| P4 | ¿Solo durante la prueba cerrada o para siempre? | ✅ Asumida (2026-11-10): **Para siempre.** En producción también sirve, y Google Play ya muestra el mismo correo en la ficha | — |
+| P5 | ¿Qué pasa sin app de correo? | ✅ Asumida (2026-11-10): **Se ve la dirección con un botón «Copiar».** Pasa en teléfonos sin Gmail ni Outlook configurados | — |
+| P6 | ¿Cambia la declaración de «Seguridad de los datos»? | ✅ Asumida (2026-11-10): **No debería**: según la guía de Google, recopilar es que *la app* envíe datos fuera del teléfono, y aquí los envía la app de correo cuando el adulto decide. Aun así, la política de privacidad lo explica (R8) para ser transparentes. Se vuelve a revisar el formulario al publicar | — |
+| P7 | ¿Textos guía en el cuerpo del correo? | ✅ Asumida (2026-11-10): **Sí, dos líneas** («¿Qué pasó?», «¿Qué esperabas?»): los testers no saben qué contar y así llegan informes útiles | — |
 
 ## 9. Fuera de alcance
 
 - Formularios, encuestas o valoraciones dentro de la app.
 - Enviar registros, capturas o el progreso del niño.
 - Pedir valoración en Google Play (sería otra historia, y en apps para niños tiene sus propias reglas).
+
+## 10. Desarrollo
+
+| Entrega | Estado | Contenido |
+|---|---|---|
+| Única | 2026-11-10, rama `feature/hu-032-feedback` | `FeedbackEmail` (dominio): el enlace `mailto:` con los espacios como `%20`, las dos líneas guía y los datos técnicos al final. `IFeedbackChannel` con su implementación `PlatformFeedbackChannel` (`package_info_plus`, `device_info_plus`, `url_launcher`); un dato que no se lee sale como «?» y el correo se abre igual. Tarjeta `ParentsFeedbackSection` antes de «Privacidad», con la dirección y «Copiar» si no hay app de correo. `<queries>` de `SENDTO`/`mailto` en el manifiesto. Textos en los 9 idiomas (los 7 que no son español ni inglés, pendientes de TD-011). Política de privacidad (es, en) con la sección «Comentarios», fechada el 10 de noviembre de 2026. **Moto g55 (2026-11-10, en inglés):** la tarjeta sale antes de «Privacidad»; «Send feedback» abre Gmail directamente con el destinatario, el asunto «ToddlerLogic · Feedback (1.0.0-rc.2+3)», las dos líneas guía y «App: 1.0.0-rc.2+3 / Android: 16 (SDK 36) / Device: motorola moto g55 5G / Language: en», con los espacios bien (sin «+») |

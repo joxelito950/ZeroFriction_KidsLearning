@@ -86,5 +86,21 @@
   "parentsZonePremiumOnly": "Disponibile con Premium.",
   "menuGameGoldSemantics": "{percent}% dorato, {stars} stelle su {total}",
   "parentsZoneKeepStarsTitle": "Mantieni le stelle",
-  "parentsZoneKeepStarsHint": "Le stelle restano anche se passano giorni senza giocare."
+  "parentsZoneKeepStarsHint": "Le stelle restano anche se passano giorni senza giocare.",
+  "shadowsGameTitle": "Ombre",
+  "shadowsGameInstructions": "Trascina ogni disegno sulla sua ombra.",
+  "shadowsObjectSemantics": "{symbol} da posizionare",
+  "shadowsShadowSemantics": "Ombra di {symbol}",
+  "shadowsPlacedSemantics": "{symbol} sulla sua ombra",
+  "shadowsTimeUpFewerObjects": "Tempo scaduto! Riproviamo con meno disegni.",
+  "levelLockedSemantics": "Livello {level} bloccato",
+  "parentsFeedbackTitle": "Aiuto e commenti",
+  "parentsFeedbackIntro": "Qualcosa non funziona o hai un'idea? Scrivici: l'app non invia nulla da sola.",
+  "parentsFeedbackSend": "Invia commenti",
+  "parentsFeedbackNoEmailApp": "Non è stato possibile aprire un'app di posta. Scrivici a:",
+  "parentsFeedbackCopy": "Copia",
+  "parentsFeedbackCopied": "Indirizzo copiato",
+  "feedbackEmailSubject": "ToddlerLogic · Commenti ({version})",
+  "feedbackEmailWhatHappened": "Che cosa è successo?",
+  "feedbackEmailWhatExpected": "Che cosa ti aspettavi?"
 }

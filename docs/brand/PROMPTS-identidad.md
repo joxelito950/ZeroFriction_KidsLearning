@@ -55,11 +55,18 @@ Pegar este bloque al principio de cada petición:
 > [Bloque común]
 > **Dos cartas de memoria** grandes y redondeadas, una boca arriba con una estrella dorada #A86B12 sobre crema y otra boca abajo en azul petróleo #176B78 con un signo de interrogación blanco, ligeramente inclinadas y solapadas. **Sin el niño.** Fondo totalmente transparente. El conjunto debe formar **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes, centrada y ocupando el 80 % del lienzo.
 
+## 8. Icono del juego Sombras (silueta cerrada para el dorado, HU-007)
+
+> [Bloque común]
+> **Un elefante de juguete** de plastilina, de perfil y de cuerpo entero, en coral suave #D9735F con la panza y las orejas en ámbar #ECA463, contento, con la trompa hacia arriba. **Justo detrás, un poco desplazada hacia arriba y a la izquierda**, su **sombra**: exactamente la misma forma del elefante, plana, en un solo color teal profundo #00454D, sin detalles interiores. El elefante tapa casi toda su sombra; solo asoma un borde de la sombra alrededor de la trompa, la espalda y la cabeza, para que se lea a 48 px como «objeto + su sombra». **Sin el niño.** Fondo totalmente transparente. El conjunto (elefante y sombra) forma **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes, centrada y ocupando el 80 % del lienzo.
+
+Si sale una sombra proyectada en el suelo o difuminada, pedir: «La sombra no es una sombra de luz: es una silueta plana y nítida del mismo elefante, del mismo tamaño, detrás de él».
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2, 4, 5, 6 y 7 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2, 4, 5, 6, 7 y 8 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 

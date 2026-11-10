@@ -30,7 +30,13 @@ void main() {
     expect(find.textContaining('Próximamente'), findsNothing);
     expect(find.byKey(const ValueKey<String>('parents-zone-language')), findsOneWidget);
     await tester.scrollUntilVisible(find.byKey(const ValueKey<String>('parents-zone-privacy')), 200);
-    expect(find.byType(Card, skipOffstage: false), findsNWidgets(3), reason: 'language, screen pinning and privacy only');
+    expect(find.byType(Card, skipOffstage: false), findsNWidgets(4),
+        reason: 'language, screen pinning, feedback and privacy only');
+    // Ayuda y comentarios, antes de la privacidad (HU-032 P3).
+    expect(
+      tester.getTopLeft(find.byKey(const ValueKey<String>('parents-zone-feedback'))).dy,
+      lessThan(tester.getTopLeft(find.byKey(const ValueKey<String>('parents-zone-privacy'))).dy),
+    );
   });
 
   testWidgets('lists the 9 languages in their own names, without flags, with the current one marked (HU-012 criterio 1)',

@@ -86,5 +86,21 @@
   "parentsZonePremiumOnly": "متاح مع Premium.",
   "menuGameGoldSemantics": "ذهبي بنسبة {percent}٪، {stars} من {total} نجوم",
   "parentsZoneKeepStarsTitle": "الاحتفاظ بالنجوم",
-  "parentsZoneKeepStarsHint": "تبقى النجوم حتى لو مرت أيام دون لعب."
+  "parentsZoneKeepStarsHint": "تبقى النجوم حتى لو مرت أيام دون لعب.",
+  "shadowsGameTitle": "الظلال",
+  "shadowsGameInstructions": "اسحب كل صورة إلى ظلها.",
+  "shadowsObjectSemantics": "{symbol} للوضع",
+  "shadowsShadowSemantics": "ظل {symbol}",
+  "shadowsPlacedSemantics": "{symbol} في ظله",
+  "shadowsTimeUpFewerObjects": "انتهى الوقت! لنحاول بعدد أقل من الصور.",
+  "levelLockedSemantics": "المستوى {level} مقفل",
+  "parentsFeedbackTitle": "المساعدة والملاحظات",
+  "parentsFeedbackIntro": "هل هناك شيء لا يعمل أو لديك فكرة؟ اكتب لنا: التطبيق لا يرسل أي شيء من تلقاء نفسه.",
+  "parentsFeedbackSend": "إرسال ملاحظات",
+  "parentsFeedbackNoEmailApp": "تعذر فتح تطبيق بريد. اكتب لنا على:",
+  "parentsFeedbackCopy": "نسخ",
+  "parentsFeedbackCopied": "تم نسخ العنوان",
+  "feedbackEmailSubject": "ToddlerLogic · ملاحظات ({version})",
+  "feedbackEmailWhatHappened": "ماذا حدث؟",
+  "feedbackEmailWhatExpected": "ماذا كنت تتوقع؟"
 }

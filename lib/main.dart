@@ -4,6 +4,8 @@ import 'package:path_provider/path_provider.dart';
 
 import 'data/local/hive_persistence_config.dart';
 import 'data/local/hive_persistence_repository.dart';
+import 'data/platform/platform_feedback_channel.dart';
+import 'domain/feedback/feedback_email.dart';
 import 'domain/repositories/i_persistence_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/blocs/app_locale/app_locale_cubit.dart';
@@ -74,8 +76,12 @@ class _ToddlerLogicAppState extends State<ToddlerLogicApp> {
   @override
   Widget build(BuildContext context) {
     final IPersistenceRepository repository = widget.repository;
-    return RepositoryProvider<IPersistenceRepository>.value(
-      value: repository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<IPersistenceRepository>.value(value: repository),
+        // Correo de comentarios (HU-032): datos técnicos y app de correo.
+        RepositoryProvider<IFeedbackChannel>(create: (_) => PlatformFeedbackChannel()),
+      ],
       child: MultiBlocProvider(
         providers: [
           // El idioma cambia en caliente desde la Zona de Padres (HU-012).
