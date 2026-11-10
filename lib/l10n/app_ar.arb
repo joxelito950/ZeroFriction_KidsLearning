@@ -103,5 +103,7 @@
   "feedbackEmailSubject": "ToddlerLogic · ملاحظات ({version})",
   "feedbackEmailWhatHappened": "ماذا حدث؟",
   "feedbackEmailWhatExpected": "ماذا كنت تتوقع؟",
-  "menuShadowsSubtitle": "ابحث عن كل ظل"
+  "menuShadowsSubtitle": "ابحث عن كل ظل",
+  "parentsZoneSoundTitle": "الصوت",
+  "parentsZoneSoundHint": "أصوات هادئة عند قلب بطاقة أو العثور على زوج أو إكمال لوحة. الأخطاء لا تُصدر أي صوت أبدًا."
 }

@@ -8,6 +8,7 @@ import '../widgets/parents_games_section.dart';
 import '../widgets/parents_language_section.dart';
 import '../widgets/parents_play_time_section.dart';
 import '../widgets/parents_privacy_section.dart';
+import '../widgets/parents_sound_section.dart';
 
 /// Zona de Padres (HU-004), a la que solo se llega superando el desafío. Cada
 /// sección llega con su historia (P4); el «atrás» del sistema vuelve al menú (P5).
@@ -40,6 +41,9 @@ class ParentsZoneScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const ParentsLanguageSection(),
+              const SizedBox(height: 16),
+              // Sonido (HU-005): junto al idioma, lo que se oye y lo que se lee.
+              const ParentsSoundSection(),
               const SizedBox(height: 16),
               const ParentsGamesSection(),
               const SizedBox(height: 16),

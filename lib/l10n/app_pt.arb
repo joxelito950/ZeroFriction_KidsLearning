@@ -103,5 +103,7 @@
   "feedbackEmailSubject": "ToddlerLogic · Comentários ({version})",
   "feedbackEmailWhatHappened": "O que aconteceu?",
   "feedbackEmailWhatExpected": "O que você esperava?",
-  "menuShadowsSubtitle": "Encontre cada sombra"
+  "menuShadowsSubtitle": "Encontre cada sombra",
+  "parentsZoneSoundTitle": "Som",
+  "parentsZoneSoundHint": "Sons suaves ao virar uma carta, encontrar um par ou completar um tabuleiro. Os erros nunca fazem som."
 }

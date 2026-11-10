@@ -8,7 +8,10 @@ import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/memory_game/memory_ladder_cubit.dart';
 import '../blocs/memory_game/memory_ladder_state.dart';
+import '../../domain/sound/game_sound.dart';
 import '../blocs/play_time/play_time_cubit.dart';
+import '../blocs/sound/game_sound_events.dart';
+import '../blocs/sound/sound_cubit.dart';
 import '../theme/app_palette.dart';
 import '../widgets/game_icon.dart';
 import '../widgets/gesture_hint.dart';
@@ -79,11 +82,24 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
   /// Tiempo de juego diario (HU-009); no está en algunos tests.
   PlayTimeCubit? _playTime;
 
+  /// Sonidos (HU-005); no está en algunos tests. Se compara cada estado con el
+  /// anterior para saber qué ha pasado.
+  SoundCubit? _sound;
+  MemoryLadderState _previous = const MemoryLadderState();
+
+  void _onState(MemoryLadderState state) {
+    _playTime?.setBoardInProgress(MemoryGameScreen.boardInProgress(state));
+    final GameSound? sound = GameSoundEvents.memory(_previous, state);
+    _previous = state;
+    if (sound != null) _sound?.play(sound);
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _playTime = context.read<PlayTimeCubit?>();
+    _sound = context.read<SoundCubit?>();
   }
 
   @override
@@ -116,7 +132,7 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
             color: AppPalette.warmCream,
             child: SafeArea(
               child: BlocConsumer<MemoryLadderCubit, MemoryLadderState>(
-                listener: (_, state) => _playTime?.setBoardInProgress(MemoryGameScreen.boardInProgress(state)),
+                listener: (_, state) => _onState(state),
                 builder: (context, state) => Stack(
                   children: [
                     // Tutorial visual: si el niño no toca nada, una mano toca una carta (HU-022).

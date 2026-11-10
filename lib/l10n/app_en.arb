@@ -529,5 +529,13 @@
   "menuShadowsSubtitle": "Find each shadow",
   "@menuShadowsSubtitle": {
     "description": "Subtitle of the Shadows button on the main menu, under the game name. Very short, like the memory game's 'Find the pairs'."
+  },
+  "parentsZoneSoundTitle": "Sound",
+  "@parentsZoneSoundTitle": {
+    "description": "Title of the Sound switch in the Parents zone (HU-005). One word."
+  },
+  "parentsZoneSoundHint": "Gentle sounds when a card turns, a pair is found or a board is completed. Mistakes never make a sound.",
+  "@parentsZoneSoundHint": {
+    "description": "One line under the Sound switch: gentle sounds while playing, never on mistakes. Read by parents."
   }
 }
