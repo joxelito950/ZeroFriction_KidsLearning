@@ -9,5 +9,8 @@ abstract final class BrandAssets {
   /// es la que se llenará de dorado (HU-002).
   static const String memoryIcon = 'assets/brand/memory_icon.png';
 
-  static const List<String> all = [logo, memoryIcon];
+  /// Icono del juego Sombras (HU-007): el elefante y su sombra.
+  static const String shadowsIcon = 'assets/brand/shadows_icon.png';
+
+  static const List<String> all = [logo, memoryIcon, shadowsIcon];
 }

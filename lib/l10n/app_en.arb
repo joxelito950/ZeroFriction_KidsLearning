@@ -525,5 +525,9 @@
   "feedbackEmailWhatExpected": "What did you expect?",
   "@feedbackEmailWhatExpected": {
     "description": "Second guide line in the body of the prepared email, followed by space to write."
+  },
+  "menuShadowsSubtitle": "Find each shadow",
+  "@menuShadowsSubtitle": {
+    "description": "Subtitle of the Shadows button on the main menu, under the game name. Very short, like the memory game's 'Find the pairs'."
   }
 }

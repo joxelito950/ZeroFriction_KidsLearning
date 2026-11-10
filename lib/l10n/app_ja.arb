@@ -102,5 +102,6 @@
   "parentsFeedbackCopied": "アドレスをコピーしました",
   "feedbackEmailSubject": "ToddlerLogic · ご意見（{version}）",
   "feedbackEmailWhatHappened": "何が起きましたか？",
-  "feedbackEmailWhatExpected": "どうなると思っていましたか？"
+  "feedbackEmailWhatExpected": "どうなると思っていましたか？",
+  "menuShadowsSubtitle": "かげを みつけよう"
 }

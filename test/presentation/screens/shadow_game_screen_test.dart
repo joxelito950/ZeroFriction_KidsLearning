@@ -15,6 +15,7 @@ import 'package:toddler_logic/presentation/blocs/shadow_game/shadow_game_cubit.d
 import 'package:toddler_logic/presentation/blocs/shadow_game/shadow_game_state.dart';
 import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
 import 'package:toddler_logic/presentation/widgets/gesture_hint.dart';
+import 'package:toddler_logic/presentation/widgets/memory_level_indicator.dart';
 import 'package:toddler_logic/presentation/widgets/shadow_board.dart';
 
 import '../l10n_test_support.dart';
@@ -106,12 +107,16 @@ void main() {
       state.shadows.firstWhere((shadow) => shadow != object && !state.placed.contains(shadow));
 
   group('start (4.1, R19)', () {
-    testWidgets('shows the title, 8 level dots with the 8th locked, and the start animation before playing',
+    testWidgets('shows the title and icon, the 7 free levels, and the start animation before playing',
         (tester) async {
       await pumpScreen(tester, waitIntro: false);
 
       expect(find.text('Sombras'), findsOneWidget);
-      expect(find.byKey(const ValueKey<String>('memory-level-dot-8-locked')), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('shadows-game-icon')), findsOneWidget);
+      // Versión sin pago: 7 puntos y ningún candado hasta HU-006.
+      expect(find.byKey(const ValueKey<String>('memory-level-dot-7-pending')), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('memory-level-dot-8-pending')), findsNothing);
+      expect(find.byKey(const ValueKey<String>('memory-level-dot-8-locked')), findsNothing);
       expect(stateOf(tester).phase, ShadowRoundPhase.introducing);
       final String first = stateOf(tester).objects.first;
       expect(find.byKey(ValueKey<String>('shadow-intro-$first')), findsOneWidget);
@@ -228,7 +233,7 @@ void main() {
     testWidgets('with Premium, the time bar shows and running out shows a helpful notice', (tester) async {
       await pumpScreen(tester, level: 2, premium: true);
       expect(find.byKey(const ValueKey<String>('memory-time-bar')), findsOneWidget);
-      expect(find.byKey(const ValueKey<String>('memory-level-dot-8-locked')), findsNothing);
+      expect(find.byKey(const ValueKey<String>('memory-level-dot-8-pending')), findsOneWidget);
 
       cubitOf(tester).grab(stateOf(tester).objects.first);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
@@ -321,5 +326,13 @@ void main() {
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(find.byType(ShadowGameScreen), findsNothing);
+  });
+
+  testWidgets('the level indicator can show a locked level for when Premium exists (R11, HU-006)', (tester) async {
+    await tester.pumpWidget(localizedApp(
+      home: const Scaffold(body: MemoryLevelIndicator(level: 2, total: 8, lockedLevel: 8)),
+    ));
+    expect(find.byKey(const ValueKey<String>('memory-level-dot-8-locked')), findsOneWidget);
+    expect(find.bySemanticsLabel('Nivel 2 de 8. Nivel 8 bloqueado'), findsOneWidget);
   });
 }
