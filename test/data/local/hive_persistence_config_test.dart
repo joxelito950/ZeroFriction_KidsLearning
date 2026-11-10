@@ -7,10 +7,13 @@ import 'package:toddler_logic/data/local/hive_persistence_config.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
+import 'package:toddler_logic/data/local/models/shadow_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
+import 'package:toddler_logic/domain/entities/shadow_progress.dart';
+import 'package:toddler_logic/domain/progress/level_record.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
@@ -102,6 +105,8 @@ void main() {
       expect(Hive.isAdapterRegistered(1), isTrue);
       expect(HivePersistenceConfig.parentalSettingsBox, isA<Box<ParentalSettingsHiveModel>>());
       expect(Hive.isAdapterRegistered(3), isTrue);
+      expect(HivePersistenceConfig.shadowProgressBox, isA<Box<ShadowProgressHiveModel>>());
+      expect(Hive.isAdapterRegistered(4), isTrue);
     });
 
     test('initializing again after success is a no-op that keeps the same boxes', () async {
@@ -149,6 +154,27 @@ void main() {
       expect(read.hasBadge, isTrue);
       expect(read.levelRecords, progress.levelRecords);
       expect(read.lastPlayedAt!.isAtSameMomentAs(progress.lastPlayedAt!), isTrue);
+    });
+
+    test('shadow progress (typeId 4) survives a real write and reopen of the box', () async {
+      final achieved = DateTime.utc(2026, 11, 9, 8);
+      final progress = ShadowProgress(
+        currentLevel: 8,
+        hasMedal: true,
+        levelRecords: {8: LevelRecord(bestStars: 3, achievedAt: achieved)},
+        lastPlayedAt: achieved,
+      );
+
+      await HivePersistenceConfig.shadowProgressBox
+          .put('current_shadow_progress', ShadowProgressHiveModel.fromEntity(progress));
+      await HivePersistenceConfig.shadowProgressBox.close();
+      final reopened = await Hive.openBox<ShadowProgressHiveModel>(HivePersistenceConfig.shadowProgressBoxName);
+
+      final ShadowProgress read = reopened.get('current_shadow_progress')!.toEntity();
+      expect(read.currentLevel, 8);
+      expect(read.hasMedal, isTrue);
+      expect(read.levelRecords, progress.levelRecords);
+      expect(read.lastPlayedAt!.isAtSameMomentAs(achieved), isTrue);
     });
 
     test('parental settings survive a real write and reopen of the box, on the same local day', () async {

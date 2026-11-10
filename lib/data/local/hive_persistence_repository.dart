@@ -3,11 +3,13 @@ import 'package:hive_ce/hive.dart';
 import '../../domain/entities/level_state.dart';
 import '../../domain/entities/memory_progress.dart';
 import '../../domain/entities/parental_settings.dart';
+import '../../domain/entities/shadow_progress.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import 'models/level_state_hive_model.dart';
 import 'models/memory_progress_hive_model.dart';
 import 'models/parental_settings_hive_model.dart';
+import 'models/shadow_progress_hive_model.dart';
 import 'models/user_profile_hive_model.dart';
 
 /// Implementa el contrato de dominio sobre Hive. Guarda modelos de persistencia
@@ -16,21 +18,25 @@ class HivePersistenceRepository implements IPersistenceRepository {
   static const String _userProfileKey = 'current_user_profile';
   static const String _memoryProgressKey = 'current_memory_progress';
   static const String _parentalSettingsKey = 'current_parental_settings';
+  static const String _shadowProgressKey = 'current_shadow_progress';
 
   const HivePersistenceRepository({
     required Box<LevelStateHiveModel> levelStateBox,
     required Box<UserProfileHiveModel> userProfileBox,
     required Box<MemoryProgressHiveModel> memoryProgressBox,
     required Box<ParentalSettingsHiveModel> parentalSettingsBox,
+    required Box<ShadowProgressHiveModel> shadowProgressBox,
   })  : _levelStateBox = levelStateBox,
         _userProfileBox = userProfileBox,
         _memoryProgressBox = memoryProgressBox,
-        _parentalSettingsBox = parentalSettingsBox;
+        _parentalSettingsBox = parentalSettingsBox,
+        _shadowProgressBox = shadowProgressBox;
 
   final Box<LevelStateHiveModel> _levelStateBox;
   final Box<UserProfileHiveModel> _userProfileBox;
   final Box<MemoryProgressHiveModel> _memoryProgressBox;
   final Box<ParentalSettingsHiveModel> _parentalSettingsBox;
+  final Box<ShadowProgressHiveModel> _shadowProgressBox;
 
   @override
   Future<List<LevelState>> readAllLevelStates() async {
@@ -90,6 +96,16 @@ class HivePersistenceRepository implements IPersistenceRepository {
   @override
   Future<void> saveMemoryProgress(MemoryProgress progress) async {
     await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromEntity(progress));
+  }
+
+  @override
+  Future<ShadowProgress> readShadowProgress() async {
+    return _shadowProgressBox.get(_shadowProgressKey)?.toEntity() ?? ShadowProgress.initial;
+  }
+
+  @override
+  Future<void> saveShadowProgress(ShadowProgress progress) async {
+    await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromEntity(progress));
   }
 
   @override

@@ -5,10 +5,13 @@ import 'package:toddler_logic/data/local/hive_persistence_repository.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
+import 'package:toddler_logic/data/local/models/shadow_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
+import 'package:toddler_logic/domain/entities/shadow_progress.dart';
+import 'package:toddler_logic/domain/progress/level_record.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
@@ -24,6 +27,10 @@ class _FakeMemoryProgressHiveModel extends Fake implements MemoryProgressHiveMod
 class _MockParentalSettingsBox extends Mock implements Box<ParentalSettingsHiveModel> {}
 
 class _FakeParentalSettingsHiveModel extends Fake implements ParentalSettingsHiveModel {}
+
+class _MockShadowProgressBox extends Mock implements Box<ShadowProgressHiveModel> {}
+
+class _FakeShadowProgressHiveModel extends Fake implements ShadowProgressHiveModel {}
 
 class _FakeLevelStateHiveModel extends Fake implements LevelStateHiveModel {}
 
@@ -42,6 +49,7 @@ void main() {
     registerFallbackValue(_FakeUserProfileHiveModel());
     registerFallbackValue(_FakeMemoryProgressHiveModel());
     registerFallbackValue(_FakeParentalSettingsHiveModel());
+    registerFallbackValue(_FakeShadowProgressHiveModel());
   });
 
   group('HivePersistenceRepository', () {
@@ -49,6 +57,7 @@ void main() {
     late _MockUserProfileBox userProfileBox;
     late _MockMemoryProgressBox memoryProgressBox;
     late _MockParentalSettingsBox parentalSettingsBox;
+    late _MockShadowProgressBox shadowProgressBox;
     late HivePersistenceRepository repository;
 
     setUp(() {
@@ -56,11 +65,13 @@ void main() {
       userProfileBox = _MockUserProfileBox();
       memoryProgressBox = _MockMemoryProgressBox();
       parentalSettingsBox = _MockParentalSettingsBox();
+      shadowProgressBox = _MockShadowProgressBox();
       repository = HivePersistenceRepository(
         levelStateBox: levelStateBox,
         userProfileBox: userProfileBox,
         memoryProgressBox: memoryProgressBox,
         parentalSettingsBox: parentalSettingsBox,
+        shadowProgressBox: shadowProgressBox,
       );
     });
 
@@ -209,6 +220,30 @@ void main() {
           .captured
           .single as MemoryProgressHiveModel;
       expect(saved.toEntity(), progress);
+    });
+
+    test('readShadowProgress returns the initial progress when nothing is stored', () async {
+      when(() => shadowProgressBox.get('current_shadow_progress')).thenReturn(null);
+
+      expect(await repository.readShadowProgress(), ShadowProgress.initial);
+    });
+
+    test('saveShadowProgress stores the persistence model under a fixed key and reads it back', () async {
+      final progress = ShadowProgress(
+        currentLevel: 8,
+        hasMedal: true,
+        levelRecords: {7: LevelRecord(bestStars: 3, achievedAt: DateTime.utc(2026, 11, 9))},
+        lastPlayedAt: DateTime.utc(2026, 11, 9, 10),
+      );
+      when(() => shadowProgressBox.put(any(), any())).thenAnswer((_) async {});
+
+      await repository.saveShadowProgress(progress);
+
+      final saved = verify(() => shadowProgressBox.put('current_shadow_progress', captureAny()))
+          .captured
+          .single as ShadowProgressHiveModel;
+      when(() => shadowProgressBox.get('current_shadow_progress')).thenReturn(saved);
+      expect(await repository.readShadowProgress(), progress);
     });
 
     test('readParentalSettings returns the defaults when nothing is stored', () async {

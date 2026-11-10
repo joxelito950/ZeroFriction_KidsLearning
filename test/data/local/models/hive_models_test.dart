@@ -5,6 +5,9 @@ import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/data/local/models/shadow_progress_hive_model.dart';
+import 'package:toddler_logic/domain/entities/shadow_progress.dart';
+import 'package:toddler_logic/domain/progress/level_record.dart';
 
 void main() {
   group('LevelStateHiveModel', () {
@@ -85,6 +88,35 @@ void main() {
       );
 
       expect(model.toEntity, throwsRangeError);
+    });
+  });
+
+  group('ShadowProgressHiveModel', () {
+    test('round-trips entity -> model -> entity without loss', () {
+      final at = DateTime.utc(2026, 11, 9, 7);
+      final entity = ShadowProgress(
+        currentLevel: 5,
+        hasMedal: true,
+        levelRecords: {4: LevelRecord(bestStars: 2, achievedAt: at)},
+        lastPlayedAt: at,
+      );
+
+      final model = ShadowProgressHiveModel.fromEntity(entity);
+
+      expect(model.bestStarsByLevel, {4: 2});
+      expect(model.achievedAtByLevel, {4: at});
+      expect(model.toEntity(), entity);
+      expect(ShadowProgressHiveModel.fromEntity(ShadowProgress.initial).toEntity(), ShadowProgress.initial);
+    });
+
+    test('ignores a star value without its date, and rejects an invalid level', () {
+      const withoutDate =
+          ShadowProgressHiveModel(currentLevel: 1, hasMedal: false, bestStarsByLevel: {1: 2}, achievedAtByLevel: {});
+      const invalid =
+          ShadowProgressHiveModel(currentLevel: 9, hasMedal: false, bestStarsByLevel: {}, achievedAtByLevel: {});
+
+      expect(withoutDate.toEntity().levelRecords, isEmpty);
+      expect(invalid.toEntity, throwsRangeError);
     });
   });
 }
