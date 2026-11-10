@@ -12,6 +12,8 @@ import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
 
 import 'presentation/memory_game_test_support.dart';
 import 'presentation/l10n_test_support.dart';
+import 'package:toddler_logic/domain/entities/shadow_progress.dart';
+import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
 
 void main() {
   setUpAll(() {
@@ -168,6 +170,36 @@ void main() {
 
       expect(find.text('Memoria'), findsOneWidget);
       expect(badgeFinder, findsNothing);
+    });
+
+    testWidgets('shows Sombras under Memoria with its icon, and opens it (HU-007 R1)', (tester) async {
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+      await tester.pump();
+
+      expect(find.text('Sombras'), findsOneWidget);
+      expect(find.text('Encuentra cada sombra'), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('menu-shadows-icon')), findsOneWidget);
+      expect(tester.getTopLeft(find.text('Sombras')).dy, greaterThan(tester.getTopLeft(find.text('Memoria')).dy));
+      expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsNothing);
+
+      await tester.tap(find.text('Sombras'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byType(ShadowGameScreen), findsOneWidget);
+    });
+
+    testWidgets('shows the Sombras medal, and the menu still works if its progress cannot be read', (tester) async {
+      when(() => repository.readShadowProgress())
+          .thenAnswer((_) async => ShadowProgress(currentLevel: 1, hasMedal: true));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+      await tester.pump();
+      expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsOneWidget);
+
+      when(() => repository.readShadowProgress()).thenThrow(Exception('disk error'));
+      await tester.pumpWidget(ToddlerLogicApp(key: UniqueKey(), repository: repository, locale: testLocale));
+      await tester.pump();
+      expect(find.text('Sombras'), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsNothing);
     });
 
     testWidgets('Salir closes the app right away, without confirmation', (tester) async {

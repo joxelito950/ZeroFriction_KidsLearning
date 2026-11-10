@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/app_language.dart';
 import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
+import 'package:toddler_logic/domain/entities/shadow_progress.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
 import 'package:toddler_logic/domain/parental/parental_gate.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
@@ -18,7 +19,9 @@ import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import 'package:toddler_logic/presentation/screens/parental_gate_screen.dart';
 import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
 import 'package:toddler_logic/presentation/screens/rest_screen.dart';
+import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
 import 'package:toddler_logic/presentation/widgets/parental_keypad.dart';
+import 'package:toddler_logic/presentation/widgets/shadow_board.dart';
 
 import 'l10n_test_support.dart';
 import 'memory_game_test_support.dart';
@@ -108,7 +111,7 @@ void main() {
 
             await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: locale));
 
-            for (final label in [l10n.menuMemoryTitle, l10n.menuParentsZone, l10n.menuExit]) {
+            for (final label in [l10n.menuMemoryTitle, l10n.shadowsGameTitle, l10n.menuParentsZone, l10n.menuExit]) {
               await tester.ensureVisible(find.text(label));
               expect(find.text(label).hitTestable(), findsOneWidget, reason: label);
             }
@@ -244,6 +247,44 @@ void main() {
             await tester.scrollUntilVisible(find.text(l10n.parentsZonePrivacyIntro), 200, scrollable: list);
             await tester.pump();
             expect(find.text(l10n.parentsZonePrivacyTitle).hitTestable(), findsOneWidget);
+          });
+
+          // HU-007 criterio 12: el nivel 7 (el más grande sin pago) entra entero
+          // debajo de la cabecera, en todos los idiomas y orientaciones.
+          testWidgets('shadows level 7 fits below the header', (tester) async {
+            _usePhone(tester, phone, textScale);
+            when(() => repository.readShadowProgress()).thenAnswer((_) async => ShadowProgress(currentLevel: 7));
+
+            await tester.pumpWidget(
+              localizedApp(
+                locale: locale,
+                home: RepositoryProvider<IPersistenceRepository>.value(
+                  value: repository,
+                  child: ShadowGameScreen(random: Random(7)),
+                ),
+              ),
+            );
+            await tester.pump();
+            await tester.pump(const Duration(milliseconds: 600));
+            await tester.pump(ShadowBoard.introDuration + const Duration(milliseconds: 50));
+            await tester.pump();
+
+            final double headerBottom = tester.getBottomLeft(find.text(l10n.shadowsGameInstructions)).dy;
+            final Size screen = tester.view.physicalSize / tester.view.devicePixelRatio;
+            final Finder pieces = find.byWidgetPredicate((widget) {
+              final Key? key = widget.key;
+              return key is ValueKey<String> &&
+                  (key.value.startsWith('shadow-target-') || key.value.startsWith('shadow-object-'));
+            });
+            expect(pieces, findsNWidgets(7 + 6));
+            for (final element in pieces.evaluate()) {
+              final Rect rect = tester.getRect(find.byWidget(element.widget));
+              final String name = '${element.widget.key}';
+              expect(rect.top, greaterThan(headerBottom), reason: '$name under the header');
+              expect(rect.bottom, lessThanOrEqualTo(screen.height), reason: '$name clipped');
+              expect(rect.left, greaterThanOrEqualTo(0), reason: name);
+              expect(rect.right, lessThanOrEqualTo(screen.width), reason: name);
+            }
           });
 
           for (final level in MemoryLadder.levels) {

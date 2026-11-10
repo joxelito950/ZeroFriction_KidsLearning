@@ -11,6 +11,7 @@ Genera:
 - docs/store/feature-graphic.png                gráfico destacado de la ficha (1024 x 500, sin texto)
 - assets/brand/logo.png                         logo del menú
 - assets/brand/memory_icon.png                  icono del juego de memoria
+- assets/brand/shadows_icon.png                 icono del juego Sombras (HU-007)
 Después: dart run flutter_launcher_icons
 """
 import math
@@ -111,6 +112,9 @@ def main() -> None:
     fit_box(Image.open(SRC / 'logo-nino-piezas.png'), 480).save(ROOT / 'assets/brand/logo.png', optimize=True)
     fit_box(Image.open(SRC / 'icono-memoria-cartas.png'), 256).save(
         ROOT / 'assets/brand/memory_icon.png', optimize=True
+    )
+    fit_box(Image.open(SRC / 'icono-sombras-elefante.png'), 256).save(
+        ROOT / 'assets/brand/shadows_icon.png', optimize=True
     )
 
 
