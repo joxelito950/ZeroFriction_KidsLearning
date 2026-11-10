@@ -86,5 +86,12 @@
   "parentsZonePremiumOnly": "Disponibile con Premium.",
   "menuGameGoldSemantics": "{percent}% dorato, {stars} stelle su {total}",
   "parentsZoneKeepStarsTitle": "Mantieni le stelle",
-  "parentsZoneKeepStarsHint": "Le stelle restano anche se passano giorni senza giocare."
+  "parentsZoneKeepStarsHint": "Le stelle restano anche se passano giorni senza giocare.",
+  "shadowsGameTitle": "Ombre",
+  "shadowsGameInstructions": "Trascina ogni disegno sulla sua ombra.",
+  "shadowsObjectSemantics": "{symbol} da posizionare",
+  "shadowsShadowSemantics": "Ombra di {symbol}",
+  "shadowsPlacedSemantics": "{symbol} sulla sua ombra",
+  "shadowsTimeUpFewerObjects": "Tempo scaduto! Riproviamo con meno disegni.",
+  "levelLockedSemantics": "Livello {level} bloccato"
 }
