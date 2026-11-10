@@ -1,3 +1,5 @@
+import '../entities/parental_settings.dart';
+
 /// Pérdida gradual de logros (D-031, HU-002 R7–R12), igual para todos los juegos.
 ///
 /// Tras [grace] sin jugar, se pierde una estrella cada [step]. Se calcula y se
@@ -25,4 +27,27 @@ abstract final class StarDecay {
     if (resumedAt == null || resumedAt.isBefore(lastPlayedAt)) return lastPlayedAt;
     return resumedAt;
   }
+
+  /// Aplica la pérdida acumulada al empezar un juego y marca que se jugó ahora
+  /// (D-037, HU-002 R9, R13), salvo con «Mantener las estrellas» (HU-016).
+  static T settle<T extends DecayingProgress<T>>(
+    T progress, {
+    required ParentalSettings settings,
+    required DateTime now,
+  }) {
+    final DateTime? from = since(lastPlayedAt: progress.lastPlayedAt, resumedAt: settings.starDecayResumedAt);
+    final T kept = settings.keepStars || from == null ? progress : progress.loseStars(starsLost(since: from, now: now));
+    return kept.playedAt(now);
+  }
+}
+
+/// El progreso de un juego, visto por la pérdida gradual de logros.
+abstract interface class DecayingProgress<T> {
+  DateTime? get lastPlayedAt;
+
+  /// Quita [count] estrellas, empezando por el logro más antiguo.
+  T loseStars(int count);
+
+  /// El mismo progreso, jugado en [at].
+  T playedAt(DateTime at);
 }

@@ -10,7 +10,7 @@ Límites de Google Play: nombre ≤ 30 caracteres, descripción breve ≤ 80, de
 |---|---|---|
 | Icono (512 × 512) | [icon-512.png](icon-512.png) | ✅ (HU-013) |
 | Gráfico destacado (1024 × 500, sin texto) | [feature-graphic.png](feature-graphic.png) | ✅ Borrador; se regenera con `tool/brand/prepare_brand_images.py` |
-| Capturas de teléfono (mín. 2, recomendadas 4–8) | `capturas/` | ⏳ Se hacen en el moto g55 con la identidad nueva: menú, juego de memoria (2×2 y 3×4), celebración con estrellas, Zona de Padres (tiempo de juego), en vertical y en horizontal |
+| Capturas de teléfono (mín. 2, recomendadas 4–8) | [`capturas/`](capturas/) | ✅ Hechas el 2026-11-09 en el moto g55 con la versión `1.0.0-rc.2` y la barra de estado limpia. **Español (6):** menú en vertical y en horizontal (con el dorado), tablero, vista previa de las cartas, celebración con estrellas, mano del tutorial, Zona de padres (`es-*.png`). **Inglés (5):** menú, tablero, vista previa, mano del tutorial y Zona de padres (`en-*.png`); falta la celebración en inglés, opcional |
 
 ## Español (es-419 / es-ES)
 
