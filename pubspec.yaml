@@ -21,6 +21,7 @@ dependencies:
   url_launcher: ^6.3.3
   package_info_plus: ^10.2.2
   device_info_plus: ^13.3.0
+  audioplayers: ^6.8.1
 
 dev_dependencies:
   flutter_test:
@@ -40,5 +41,7 @@ flutter:
   assets:
     # Identidad visual (HU-013): logo e iconos de los juegos.
     - assets/brand/
+    # Sonidos (HU-005), generados con tool/sounds/generate_sounds.py.
+    - assets/sounds/
     - docs/privacy/es.md
     - docs/privacy/en.md
