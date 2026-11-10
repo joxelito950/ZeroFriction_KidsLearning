@@ -86,5 +86,12 @@
   "parentsZonePremiumOnly": "Premium에서 사용할 수 있어요.",
   "menuGameGoldSemantics": "{percent}% 금색, 별 {total}개 중 {stars}개",
   "parentsZoneKeepStarsTitle": "별 지키기",
-  "parentsZoneKeepStarsHint": "며칠 동안 놀지 않아도 별이 그대로 남아요."
+  "parentsZoneKeepStarsHint": "며칠 동안 놀지 않아도 별이 그대로 남아요.",
+  "shadowsGameTitle": "그림자",
+  "shadowsGameInstructions": "그림을 같은 모양의 그림자로 옮겨요.",
+  "shadowsObjectSemantics": "놓을 {symbol}",
+  "shadowsShadowSemantics": "{symbol} 그림자",
+  "shadowsPlacedSemantics": "그림자에 놓인 {symbol}",
+  "shadowsTimeUpFewerObjects": "시간이 다 됐어요! 그림을 줄여서 다시 해 봐요.",
+  "levelLockedSemantics": "잠긴 레벨 {level}"
 }

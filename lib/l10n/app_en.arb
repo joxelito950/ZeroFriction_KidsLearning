@@ -431,5 +431,57 @@
   "parentsZoneKeepStarsHint": "Stars are kept even if days go by without playing.",
   "@parentsZoneKeepStarsHint": {
     "description": "One line under the Keep the stars switch, without a negative tone. Read by parents."
+  },
+  "shadowsGameTitle": "Shadows",
+  "@shadowsGameTitle": {
+    "description": "Name of the Shadows game (HU-007 P9), shown in the game header and later on the menu button. Short."
+  },
+  "shadowsGameInstructions": "Drag each picture onto its shadow.",
+  "@shadowsGameInstructions": {
+    "description": "One line under the game title, for the adult next to the child: drag each picture onto the shadow with the same shape."
+  },
+  "shadowsObjectSemantics": "{symbol} to place",
+  "@shadowsObjectSemantics": {
+    "description": "Screen-reader label (not visible) of a picture still in the tray. {symbol} is an emoji. With the screen reader, the picture is chosen first and then its shadow (R16).",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsShadowSemantics": "Shadow of {symbol}",
+  "@shadowsShadowSemantics": {
+    "description": "Screen-reader label (not visible) of an empty shadow (a one-colour silhouette). {symbol} is the emoji whose shape it has.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsPlacedSemantics": "{symbol} on its shadow",
+  "@shadowsPlacedSemantics": {
+    "description": "Screen-reader label (not visible) of a picture already placed on its shadow.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsTimeUpFewerObjects": "Time's up! Let's try again with fewer pictures.",
+  "@shadowsTimeUpFewerObjects": {
+    "description": "Shown when time runs out (Premium only): a helpful message, never a punishment. The next board has fewer pictures."
+  },
+  "levelLockedSemantics": "Level {level} locked",
+  "@levelLockedSemantics": {
+    "description": "Screen-reader label (not visible) for a locked level dot. Neutral: it must not invite the child to buy anything (R11).",
+    "placeholders": {
+      "level": {
+        "type": "int",
+        "example": "8"
+      }
+    }
   }
 }

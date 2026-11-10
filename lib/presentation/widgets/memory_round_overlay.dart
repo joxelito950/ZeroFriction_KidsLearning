@@ -64,9 +64,13 @@ class MemoryCelebration extends StatelessWidget {
 /// Aviso de «se acabó el tiempo» (HU-001 R15, D-021): mensaje de ayuda, nunca de
 /// castigo; sin botones ni sonido, y desaparece solo.
 class MemoryTimeUpNotice extends StatelessWidget {
-  const MemoryTimeUpNotice({super.key, required this.loss});
+  const MemoryTimeUpNotice({super.key, required this.loss, this.fewerMessage});
 
   final MemoryLoss loss;
+
+  /// Mensaje propio del juego al bajar de nivel (Sombras habla de dibujos, no
+  /// de cartas). Sin él, el de la memoria.
+  final String? fewerMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +84,7 @@ class MemoryTimeUpNotice extends StatelessWidget {
         const Icon(Icons.hourglass_bottom_rounded, size: 48, color: AppPalette.deepTeal),
         const SizedBox(height: 12),
         Text(
-          loss == MemoryLoss.restart ? l10n.memoryTimeUpRestart : l10n.memoryTimeUpFewerCards,
+          loss == MemoryLoss.restart ? l10n.memoryTimeUpRestart : fewerMessage ?? l10n.memoryTimeUpFewerCards,
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         ),
