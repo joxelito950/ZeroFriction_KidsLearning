@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (desarrollada el 2026-11-10 en `feature/hu-032-feedback`; falta verla en el moto g55). Refinamiento cerrado el 2026-11-10 |
+| **Estado** | Hecha (desarrollada y vista en el moto g55 el 2026-11-10, rama `feature/hu-032-feedback`). Refinamiento cerrado el 2026-11-10 |
 | **Épica** | E2 · Zona de padres |
 | **Prioridad** | P2: conviene en la primera actualización de la prueba cerrada |
 | **Tamaño** | S (estimación: 1 día) |
@@ -98,4 +98,4 @@
 
 | Entrega | Estado | Contenido |
 |---|---|---|
-| Única | 2026-11-10, rama `feature/hu-032-feedback` | `FeedbackEmail` (dominio): el enlace `mailto:` con los espacios como `%20`, las dos líneas guía y los datos técnicos al final. `IFeedbackChannel` con su implementación `PlatformFeedbackChannel` (`package_info_plus`, `device_info_plus`, `url_launcher`); un dato que no se lee sale como «?» y el correo se abre igual. Tarjeta `ParentsFeedbackSection` antes de «Privacidad», con la dirección y «Copiar» si no hay app de correo. `<queries>` de `SENDTO`/`mailto` en el manifiesto. Textos en los 9 idiomas (los 7 que no son español ni inglés, pendientes de TD-011). Política de privacidad (es, en) con la sección «Comentarios», fechada el 10 de noviembre de 2026 |
+| Única | 2026-11-10, rama `feature/hu-032-feedback` | `FeedbackEmail` (dominio): el enlace `mailto:` con los espacios como `%20`, las dos líneas guía y los datos técnicos al final. `IFeedbackChannel` con su implementación `PlatformFeedbackChannel` (`package_info_plus`, `device_info_plus`, `url_launcher`); un dato que no se lee sale como «?» y el correo se abre igual. Tarjeta `ParentsFeedbackSection` antes de «Privacidad», con la dirección y «Copiar» si no hay app de correo. `<queries>` de `SENDTO`/`mailto` en el manifiesto. Textos en los 9 idiomas (los 7 que no son español ni inglés, pendientes de TD-011). Política de privacidad (es, en) con la sección «Comentarios», fechada el 10 de noviembre de 2026. **Moto g55 (2026-11-10, en inglés):** la tarjeta sale antes de «Privacidad»; «Send feedback» abre Gmail directamente con el destinatario, el asunto «ToddlerLogic · Feedback (1.0.0-rc.2+3)», las dos líneas guía y «App: 1.0.0-rc.2+3 / Android: 16 (SDK 36) / Device: motorola moto g55 5G / Language: en», con los espacios bien (sin «+») |
