@@ -93,5 +93,14 @@
   "shadowsShadowSemantics": "{symbol} 그림자",
   "shadowsPlacedSemantics": "그림자에 놓인 {symbol}",
   "shadowsTimeUpFewerObjects": "시간이 다 됐어요! 그림을 줄여서 다시 해 봐요.",
-  "levelLockedSemantics": "잠긴 레벨 {level}"
+  "levelLockedSemantics": "잠긴 레벨 {level}",
+  "parentsFeedbackTitle": "도움말 및 의견",
+  "parentsFeedbackIntro": "작동하지 않는 부분이나 아이디어가 있나요? 메일로 알려 주세요. 앱이 스스로 보내는 것은 없어요.",
+  "parentsFeedbackSend": "의견 보내기",
+  "parentsFeedbackNoEmailApp": "메일 앱을 열 수 없었어요. 이 주소로 보내 주세요:",
+  "parentsFeedbackCopy": "복사",
+  "parentsFeedbackCopied": "주소를 복사했어요",
+  "feedbackEmailSubject": "ToddlerLogic · 의견 ({version})",
+  "feedbackEmailWhatHappened": "무슨 일이 있었나요?",
+  "feedbackEmailWhatExpected": "어떻게 될 거라고 생각했나요?"
 }

@@ -93,5 +93,14 @@
   "shadowsShadowSemantics": "{symbol} の かげ",
   "shadowsPlacedSemantics": "かげに おいた {symbol}",
   "shadowsTimeUpFewerObjects": "じかんぎれ！ えを へらして もういちど やってみよう。",
-  "levelLockedSemantics": "レベル {level}（ロック中）"
+  "levelLockedSemantics": "レベル {level}（ロック中）",
+  "parentsFeedbackTitle": "ヘルプとご意見",
+  "parentsFeedbackIntro": "うまく動かないところやアイデアはありますか？メールでお知らせください。アプリが自動で送ることはありません。",
+  "parentsFeedbackSend": "ご意見を送る",
+  "parentsFeedbackNoEmailApp": "メールアプリを開けませんでした。こちらにご連絡ください：",
+  "parentsFeedbackCopy": "コピー",
+  "parentsFeedbackCopied": "アドレスをコピーしました",
+  "feedbackEmailSubject": "ToddlerLogic · ご意見（{version}）",
+  "feedbackEmailWhatHappened": "何が起きましたか？",
+  "feedbackEmailWhatExpected": "どうなると思っていましたか？"
 }
