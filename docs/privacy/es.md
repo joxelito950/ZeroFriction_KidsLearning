@@ -1,6 +1,6 @@
 # Política de privacidad de ToddlerLogic
 
-Última actualización: 6 de noviembre de 2026
+Última actualización: 10 de noviembre de 2026
 
 ToddlerLogic es una app de juegos para niños pequeños. Está pensada para que la use un niño acompañado de un adulto, sin cuentas, sin anuncios y sin conexión a internet.
 
@@ -40,6 +40,12 @@ Los ajustes de la app están en la Zona de Padres, protegida por un desafío par
 ## Compras
 
 Por ahora la app es gratuita y no tiene compras. Si en el futuro se añade un pago único a través de Google Play, el pago lo gestionará Google Play y esta política se actualizará antes de publicarlo.
+
+## Comentarios
+
+En la Zona de Padres, «Enviar comentarios» abre la app de correo del teléfono con un correo preparado y **sin enviar**. Al final lleva la versión de la app, la versión de Android, el modelo del teléfono y el idioma de la app, para ayudarnos a entender un fallo; nada del niño ni de su progreso. El adulto ve todo el contenido, puede cambiarlo o borrarlo y decide si lo envía: la app no envía nada por su cuenta.
+
+Si nos escribes, recibimos tu dirección de correo y lo que escribas. Solo lo usamos para responderte y no lo compartimos con nadie.
 
 ## Cambios en esta política
 

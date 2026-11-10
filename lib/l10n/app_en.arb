@@ -483,5 +483,47 @@
         "example": "8"
       }
     }
+  },
+  "parentsFeedbackTitle": "Help and feedback",
+  "@parentsFeedbackTitle": {
+    "description": "Title of the Help and feedback card in the Parents zone (HU-032). Read by parents."
+  },
+  "parentsFeedbackIntro": "Something not working, or have an idea? Write to us: the app sends nothing by itself.",
+  "@parentsFeedbackIntro": {
+    "description": "One line under the title: invite the adult to write about a problem or an idea. The app sends nothing by itself."
+  },
+  "parentsFeedbackSend": "Send feedback",
+  "@parentsFeedbackSend": {
+    "description": "Button that opens the phone's email app with a prepared, unsent email."
+  },
+  "parentsFeedbackNoEmailApp": "We couldn't open an email app. Write to us at:",
+  "@parentsFeedbackNoEmailApp": {
+    "description": "Shown when no email app could be opened, right above the contact address."
+  },
+  "parentsFeedbackCopy": "Copy",
+  "@parentsFeedbackCopy": {
+    "description": "Button that copies the contact email address."
+  },
+  "parentsFeedbackCopied": "Address copied",
+  "@parentsFeedbackCopied": {
+    "description": "Short message after copying the address."
+  },
+  "feedbackEmailSubject": "ToddlerLogic · Feedback ({version})",
+  "@feedbackEmailSubject": {
+    "description": "Subject of the prepared feedback email. Keep the brand name ToddlerLogic as is. {version} is the app version, such as 1.0.0-rc.2+3.",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0-rc.2+3"
+      }
+    }
+  },
+  "feedbackEmailWhatHappened": "What happened?",
+  "@feedbackEmailWhatHappened": {
+    "description": "First guide line in the body of the prepared email, followed by space to write."
+  },
+  "feedbackEmailWhatExpected": "What did you expect?",
+  "@feedbackEmailWhatExpected": {
+    "description": "Second guide line in the body of the prepared email, followed by space to write."
   }
 }

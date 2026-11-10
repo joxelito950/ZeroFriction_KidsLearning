@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
+import '../widgets/parents_feedback_section.dart';
 import '../widgets/parents_games_section.dart';
 import '../widgets/parents_language_section.dart';
 import '../widgets/parents_play_time_section.dart';
@@ -45,6 +46,9 @@ class ParentsZoneScreen extends StatelessWidget {
               const ParentsPlayTimeSection(),
               const SizedBox(height: 16),
               const _ScreenPinningSection(),
+              const SizedBox(height: 16),
+              // Ayuda y comentarios (HU-032), antes de la privacidad (P3).
+              const ParentsFeedbackSection(),
               const SizedBox(height: 16),
               const ParentsPrivacySection(),
             ],

@@ -93,5 +93,14 @@
   "shadowsShadowSemantics": "Sombra de {symbol}",
   "shadowsPlacedSemantics": "{symbol} en su sombra",
   "shadowsTimeUpFewerObjects": "¡Se acabó el tiempo! Probemos con menos dibujos.",
-  "levelLockedSemantics": "Nivel {level} bloqueado"
+  "levelLockedSemantics": "Nivel {level} bloqueado",
+  "parentsFeedbackTitle": "Ayuda y comentarios",
+  "parentsFeedbackIntro": "¿Algo no funciona o tienes una idea? Escríbenos: la app no envía nada por su cuenta.",
+  "parentsFeedbackSend": "Enviar comentarios",
+  "parentsFeedbackNoEmailApp": "No pudimos abrir una app de correo. Escríbenos a:",
+  "parentsFeedbackCopy": "Copiar",
+  "parentsFeedbackCopied": "Dirección copiada",
+  "feedbackEmailSubject": "ToddlerLogic · Comentarios ({version})",
+  "feedbackEmailWhatHappened": "¿Qué pasó?",
+  "feedbackEmailWhatExpected": "¿Qué esperabas?"
 }
