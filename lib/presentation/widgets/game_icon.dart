@@ -24,6 +24,10 @@ class GameIcon extends StatefulWidget {
   const GameIcon.memory({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
       : this(key: key, asset: BrandAssets.memoryIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
 
+  /// Icono del juego Sombras (HU-007).
+  const GameIcon.shadows({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
+      : this(key: key, asset: BrandAssets.shadowsIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
+
   final String asset;
   final double size;
   final double goldFraction;

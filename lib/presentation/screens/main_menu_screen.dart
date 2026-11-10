@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../brand/brand_assets.dart';
 import '../../domain/entities/memory_progress.dart';
+import '../../domain/entities/shadow_progress.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
@@ -14,6 +15,7 @@ import '../widgets/liquid_gold.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
 import 'memory_game_screen.dart';
+import 'shadow_game_screen.dart';
 
 /// Menú principal súper visual y simplificado para niños de 3 años.
 class MainMenuScreen extends StatelessWidget {
@@ -131,30 +133,55 @@ class _MenuActionsState extends State<_MenuActions> {
   /// El menú solo lee lo guardado, sin calcular la pérdida (D-037).
   MemoryProgress _memory = MemoryProgress.initial;
 
+  /// Progreso de Sombras (HU-007): medalla y dorado.
+  ShadowProgress _shadows = ShadowProgress.initial;
+
   @override
   void initState() {
     super.initState();
     _loadProgress();
   }
 
-  /// Si no se puede leer el progreso, el menú se muestra sin medalla ni dorado.
+  /// Si no se puede leer un progreso, su botón se muestra sin medalla ni dorado.
   Future<void> _loadProgress() async {
-    MemoryProgress progress;
+    final IPersistenceRepository repository = context.read<IPersistenceRepository>();
+    MemoryProgress memory;
+    ShadowProgress shadows;
     try {
-      progress = await context.read<IPersistenceRepository>().readMemoryProgress();
+      memory = await repository.readMemoryProgress();
     } catch (_) {
-      progress = MemoryProgress.initial;
+      memory = MemoryProgress.initial;
     }
-    if (mounted && progress != _memory) setState(() => _memory = progress);
+    try {
+      shadows = await repository.readShadowProgress();
+    } catch (_) {
+      shadows = ShadowProgress.initial;
+    }
+    if (!mounted || (memory == _memory && shadows == _shadows)) return;
+    setState(() {
+      _memory = memory;
+      _shadows = shadows;
+    });
   }
 
-  Future<void> _openMemoryGame() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const MemoryGameScreen()),
-    );
-    // Al volver, la insignia o el dorado pueden haber cambiado.
+  /// Abre un juego y, al volver, relee el progreso: la medalla o el dorado
+  /// pueden haber cambiado.
+  Future<void> _open(Widget game) async {
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => game));
     await _loadProgress();
   }
+
+  /// La medalla del juego, sobre un círculo blanco: el dorado no contrasta con
+  /// el color del botón.
+  Widget _medal(String key, String label) => Semantics(
+        label: label,
+        excludeSemantics: true,
+        child: CircleAvatar(
+          radius: 20,
+          backgroundColor: AppPalette.white,
+          child: Icon(Icons.military_tech_rounded, key: ValueKey<String>(key), color: AppPalette.gold, size: 30),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -180,24 +207,27 @@ class _MenuActionsState extends State<_MenuActions> {
             _memory.stars,
             MemoryProgress.maxStars,
           ),
-          badge: _memory.hasBadge
-              ? Semantics(
-                  label: l10n.menuBadgeSemantics,
-                  excludeSemantics: true,
-                  // El dorado no contrasta con el azul petróleo: va sobre un círculo blanco.
-                  child: const CircleAvatar(
-                    radius: 20,
-                    backgroundColor: AppPalette.white,
-                    child: Icon(
-                      Icons.military_tech_rounded,
-                      key: ValueKey<String>('menu-memory-badge'),
-                      color: AppPalette.gold,
-                      size: 30,
-                    ),
-                  ),
-                )
-              : null,
-          onTap: _openMemoryGame,
+          badge: _memory.hasBadge ? _medal('menu-memory-badge', l10n.menuBadgeSemantics) : null,
+          onTap: () => _open(const MemoryGameScreen()),
+        ),
+        const SizedBox(height: 16),
+        // Segundo juego, debajo de «Memoria» (HU-007 R1).
+        _MenuButton(
+          key: const ValueKey<String>('menu-shadows'),
+          title: l10n.shadowsGameTitle,
+          subtitle: l10n.menuShadowsSubtitle,
+          // Teal profundo: se distingue del azul petróleo de la memoria.
+          backgroundColor: AppPalette.deepTeal,
+          textColor: AppPalette.white,
+          icon: const GameIcon.shadows(key: ValueKey<String>('menu-shadows-icon'), size: 52),
+          goldFraction: _shadows.goldFraction,
+          goldLabel: l10n.menuGameGoldSemantics(
+            (_shadows.goldFraction * 100).round(),
+            _shadows.stars,
+            ShadowProgress.maxStars,
+          ),
+          badge: _shadows.hasMedal ? _medal('menu-shadows-badge', l10n.menuBadgeSemantics) : null,
+          onTap: () => _open(const ShadowGameScreen()),
         ),
         const SizedBox(height: 40),
 
@@ -240,6 +270,7 @@ class _MenuButton extends StatelessWidget {
   final String? goldLabel;
 
   const _MenuButton({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.backgroundColor,

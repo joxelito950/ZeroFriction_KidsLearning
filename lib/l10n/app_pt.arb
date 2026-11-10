@@ -102,5 +102,6 @@
   "parentsFeedbackCopied": "Endereço copiado",
   "feedbackEmailSubject": "ToddlerLogic · Comentários ({version})",
   "feedbackEmailWhatHappened": "O que aconteceu?",
-  "feedbackEmailWhatExpected": "O que você esperava?"
+  "feedbackEmailWhatExpected": "O que você esperava?",
+  "menuShadowsSubtitle": "Encontre cada sombra"
 }

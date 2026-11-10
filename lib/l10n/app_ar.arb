@@ -102,5 +102,6 @@
   "parentsFeedbackCopied": "تم نسخ العنوان",
   "feedbackEmailSubject": "ToddlerLogic · ملاحظات ({version})",
   "feedbackEmailWhatHappened": "ماذا حدث؟",
-  "feedbackEmailWhatExpected": "ماذا كنت تتوقع؟"
+  "feedbackEmailWhatExpected": "ماذا كنت تتوقع؟",
+  "menuShadowsSubtitle": "ابحث عن كل ظل"
 }

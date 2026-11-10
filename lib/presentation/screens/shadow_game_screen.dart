@@ -11,6 +11,7 @@ import '../blocs/play_time/play_time_cubit.dart';
 import '../blocs/shadow_game/shadow_game_cubit.dart';
 import '../blocs/shadow_game/shadow_game_state.dart';
 import '../theme/app_palette.dart';
+import '../widgets/game_icon.dart';
 import '../widgets/gesture_hint.dart';
 import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
@@ -228,6 +229,9 @@ class _Header extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           children: [
+            // Icono del juego, sin dorado: el dorado se ve en el menú (HU-002 R16).
+            const GameIcon.shadows(key: ValueKey<String>('shadows-game-icon'), size: 44),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,11 +247,12 @@ class _Header extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // Sin Premium, el nivel 8 se ve con un candado sutil (R11).
+            // Versión sin pago (2026-11-10): sin Premium solo existen los 7 niveles
+            // gratis, sin candado, hasta que llegue la compra (HU-006). Con
+            // Premium, los 8 (R11).
             MemoryLevelIndicator(
               level: state.level,
-              total: ShadowLadder.maxLevel,
-              lockedLevel: state.premium ? null : ShadowLadder.maxLevel,
+              total: state.premium ? ShadowLadder.maxLevel : ShadowLadder.maxLevel - 1,
             ),
           ],
         ),

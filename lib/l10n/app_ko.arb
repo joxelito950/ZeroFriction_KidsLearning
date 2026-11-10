@@ -102,5 +102,6 @@
   "parentsFeedbackCopied": "주소를 복사했어요",
   "feedbackEmailSubject": "ToddlerLogic · 의견 ({version})",
   "feedbackEmailWhatHappened": "무슨 일이 있었나요?",
-  "feedbackEmailWhatExpected": "어떻게 될 거라고 생각했나요?"
+  "feedbackEmailWhatExpected": "어떻게 될 거라고 생각했나요?",
+  "menuShadowsSubtitle": "그림자를 찾아요"
 }
