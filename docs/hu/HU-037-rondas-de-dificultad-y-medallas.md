@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-10; preguntas en la sección 8) |
+| **Estado** | En refinamiento (iniciado el 2026-11-10; avanzado el mismo día sin respuestas del dueño, sección 10) |
 | **Épica** | E1 · Juegos (afecta a todos) y E2 · Zona de Padres |
 | **Prioridad** | P2: cambia el progreso guardado de todos los juegos; cuanto antes, menos datos que migrar |
 | **Tamaño** | L (estimación: 3–4 entregas) |
@@ -139,3 +139,63 @@ La dificultad deja de ser solo un ajuste: ahora es **la ronda en la que va el ni
 - Varios perfiles de niños (HU-033).
 - Rondas distintas en cada juego más allá de las tres dificultades.
 - Sonidos de las medallas (HU-005).
+
+## 10. Avance del refinamiento (2026-11-10, sin respuestas del dueño)
+
+### 10.1 Modelo de datos propuesto (con las recomendaciones de la sección 8)
+
+Un modelo **común** para todos los juegos, en `domain/progress/`:
+
+| Pieza | Qué es |
+|---|---|
+| `GameRound` | `easy`, `normal`, `impossible` (reutiliza `GameDifficulty`) |
+| `RoundLadder` | La escalera de un juego: el tutorial y los niveles con tiempo, con su serie de tiempos por ronda (la de HU-030 para la memoria y la tabla 4.3 para Sombras) |
+| `GameProgress` | Ronda actual, nivel actual, medallas ganadas (`Set<GameRound>`), récords por (ronda, nivel) con su fecha, última partida. Implementa `DecayingProgress` (la pérdida de estrellas no cambia) |
+
+Guardado: se **añaden** campos a los modelos actuales, sin typeId nuevo y sin reutilizar índices (SPECIFICATION 3.4):
+
+| Modelo | Campo nuevo | Contenido |
+|---|---|---|
+| `MemoryProgressHiveModel` (typeId 2) y `ShadowProgressHiveModel` (typeId 4) | 5 `round` | Nombre de la ronda (`null` → la de la migración, P7) |
+| | 6 `medals` | Lista de rondas con medalla |
+| | 7 `bestStarsByRoundLevel` | Clave `ronda*10 + nivel` → estrellas |
+| | 8 `achievedAtByRoundLevel` | Misma clave → fecha |
+
+Los campos 2 y 3 actuales (estrellas y fechas por nivel) se leen una vez para migrar y se dejan de escribir; su índice queda reservado.
+
+### 10.2 Migración (P7, recomendada)
+
+| Hoy | Tras la actualización |
+|---|---|
+| Nivel actual N, sin insignia | Ronda **Normal**, nivel N |
+| Insignia de la memoria o medalla de Sombras | Medalla de **plata** (y bronce: se da por superada Fácil) |
+| Estrellas por nivel | Estrellas de la ronda **Normal** en el mismo nivel; el nivel 1 (ahora tutorial) se descarta (P2) |
+
+La migración se prueba con *fixtures* de los datos actuales (como `test/fixtures/hive_v2/`).
+
+### 10.3 Dorado con tres rondas
+
+| Juego | Niveles con estrellas por ronda | 100 % |
+|---|---|---|
+| Memoria | 4 (2×3, 2×4, 3×4, 4×4) | 36★ |
+| Sombras gratis (7 niveles) | 6 | 54★ |
+| Sombras con Premium (8 niveles) | 7 | 63★ |
+
+Con la migración, quien hoy tiene la memoria al 100 % (15★, de las que 3 son del 2×2) pasa a 12/36 ≈ 33 %. **Es una bajada visible del dorado**: conviene una celebración única tras la actualización («¡Nuevos retos!») para que no se viva como una pérdida (P11).
+
+### 10.4 Entregas propuestas
+
+| # | Entrega | Contenido |
+|---|---|---|
+| 1 | Dominio común | `GameRound`, `RoundLadder`, `GameProgress`, medallas, dorado sobre tres rondas, tests |
+| 2 | Guardado y migración | Campos 5–8, lectura de lo antiguo, *fixtures* |
+| 3 | Juegos | Memoria y Sombras sobre el modelo común; paso de ronda con la celebración de la medalla; color de los puntos según la ronda (P8) |
+| 4 | Menú y Zona de Padres | Medalla más alta en el menú; sección «Juegos» por juego (P1); «Jugar sin tiempo» sigue general; textos en 9 idiomas; moto g55 |
+
+### 10.5 Preguntas nuevas
+
+| # | Pregunta | Recomendación | Bloquea |
+|---|---|---|---|
+| P11 | ¿Se avisa al niño o al adulto del cambio de dorado tras la actualización? | **Sí:** una celebración única al abrir cada juego por primera vez tras la actualización, con las medallas que ya tiene, y una línea en la Zona de Padres que explique las rondas | No |
+| P12 | ¿Las ayudas de Fácil (vista previa de 1 s, animación de inicio) siguen en Normal? | **Sí**, como hoy (HU-030 R10): solo Imposible va sin ayudas | No |
+| P13 | ¿HU-010 (punto de partida) se absorbe aquí? | **Sí**, si se acepta P1: cambiar de ronda cubre «saltarse lo que ya domina» (HU-010 sección 10) | No |

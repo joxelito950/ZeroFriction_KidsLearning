@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27; el desarrollo **no** ha empezado) |
+| **Estado** | En pausa (2026-11-10): lista desde el 2026-10-27, pero **depende de HU-037**, que cambia dónde empieza cada juego. Se retoma, o se absorbe, al cerrar HU-037 (sección 10) |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | S (1 día) |
@@ -83,3 +83,23 @@ Punto de partida 3×4. Partida: 3×4 con 45 s → gana → 4×4 con 30 s → gan
 - Tableros distintos de los 5 de la escalera.
 - Configurar las temáticas del juego.
 - Ajustes de otros juegos (HU-007, HU-008).
+
+## 10. Revisión del 2026-11-10: choque con HU-037
+
+HU-037 (rondas de dificultad y medallas, en refinamiento) cambia justo lo que esta historia configura:
+
+| Esta historia | HU-037 |
+|---|---|
+| Elegir el tablero de partida (2×2 a 4×4) | Cada ronda empieza siempre por su **tutorial** (el 2×2 sin tiempo) |
+| Tras la insignia, volver al punto de partida (R5) | Tras cada ronda, medalla y **paso a la ronda siguiente**; tras el oro, seguir en Imposible |
+| Sección «Juego de memoria» en la Zona de Padres | Sección «Juegos» **por juego** con la ronda actual (HU-037 P1) |
+| Campo 5 `startLevel` en `MemoryProgressHiveModel` | Campos 5–7 para la ronda, las medallas y las estrellas por ronda |
+
+Desarrollarla ahora obligaría a migrar otra vez el progreso guardado y a rehacer la sección de la Zona de Padres. **Propuesta:** esperar a cerrar HU-037 y entonces:
+
+- si el dueño acepta HU-037 P1 (ronda por juego), **absorber** esta historia en HU-037: «saltar a una ronda» cubre lo que pedía «saltarse los primeros tableros»;
+- si no, retomarla tal cual, con el índice de campo libre que deje HU-037.
+
+| # | Pregunta | Recomendación | Bloquea |
+|---|---|---|---|
+| P6 | ¿Se absorbe en HU-037 o se mantiene aparte? | **Absorberla** si se acepta HU-037 P1 | Sí (depende de HU-037) |
