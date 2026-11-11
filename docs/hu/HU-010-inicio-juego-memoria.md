@@ -102,4 +102,4 @@ Desarrollarla ahora obligaría a migrar otra vez el progreso guardado y a rehace
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P6 | ¿Se absorbe en HU-037 o se mantiene aparte? | **Absorberla** si se acepta HU-037 P1 | Sí (depende de HU-037) |
+| P6 | ¿Se absorbe en HU-037 o se mantiene aparte? | **Absorberla:** el dueño aceptó HU-037 P1 (ronda por juego) el 2026-11-10, que era la condición. Falta su confirmación explícita (HU-037 P13) | Sí |

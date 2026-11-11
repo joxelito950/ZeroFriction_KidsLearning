@@ -82,5 +82,5 @@ Teléfono en vertical, 3 juegos: dos tarjetas en la primera fila (Memoria y Somb
 |---|---|---|---|
 | P1 | ¿Cuadrícula de tarjetas o seguir con botones anchos en lista? | **Cuadrícula** (3.1): el icono grande es lo que el niño reconoce y escala a 6 juegos sin scroll | Sí |
 | P2 | ¿Orden fijo o el último jugado primero? | **Fijo** (R3) | No |
-| P3 | ¿Puede haber juegos enteros de Premium, o todos tienen una parte gratis? | **Todos con una parte gratis** (como D-028): ningún juego aparece cerrado del todo para el niño. Depende de HU-037 P6 | No |
+| P3 | ¿Puede haber juegos enteros de Premium, o todos tienen una parte gratis? | ✅ Respondida por HU-037 P6 (2026-11-10): **sí habrá juegos enteros de Premium** (a partir del cuarto). Su tarjeta se ve igual, con el candado sutil; si hay una edición especial gratis (HU-042), sin candado mientras dure. Al tocar un juego cerrado: una animación suave de «cerrado», sin texto ni tienda (3.3) | — |
 | P4 | ¿Se desarrolla antes o después de HU-037? | **Después:** HU-037 cambia qué muestra cada tarjeta (medalla más alta, dorado sobre tres rondas) y crea el modelo común de progreso | No |
