@@ -14,6 +14,9 @@ class AudioplayersSoundEffects implements ISoundEffects {
   /// Un reproductor por sonido, creado al usarlo por primera vez.
   final Map<GameSound, AudioPlayer> _players = {};
 
+  /// El contexto de sonido de interfaz se fija una vez para todos los reproductores.
+  static bool _globalContextSet = false;
+
   /// Volumen dentro del volumen del teléfono: moderado (P2). Nunca lo sube (R5).
   static const double volume = 0.7;
 
@@ -44,6 +47,13 @@ class AudioplayersSoundEffects implements ISoundEffects {
     final completer = Completer<void>();
     runZonedGuarded(
       () async {
+        // Sin esto, cada reproductor nace como «multimedia» y Android crea un
+        // segundo grupo de sonidos que no respeta el modo silencio (visto en el
+        // moto g55, 2026-11-10).
+        if (!_globalContextSet) {
+          _globalContextSet = true;
+          await AudioPlayer.global.setAudioContext(_context);
+        }
         final AudioPlayer player =
             _players.putIfAbsent(sound, () => AudioPlayer()..setPlayerMode(PlayerMode.lowLatency));
         await player.stop();
