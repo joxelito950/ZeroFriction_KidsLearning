@@ -26,8 +26,8 @@ abstract final class AppPalette {
   /// Texto sobre azul petróleo y superficies de tarjetas.
   static const Color white = Color(0xFFFFFFFF);
 
-  /// Medalla de bronce (HU-037): un cobre de la familia del ámbar y el dorado.
-  static const Color medalBronze = Color(0xFFB8743F);
+  /// Medalla de bronce (HU-037): un cobre rojizo entre el coral y el dorado, distinto del oro.
+  static const Color medalBronze = Color(0xFFB0603C);
 
   /// Medalla de plata (HU-037): un gris con el matiz del teal de la marca.
   static const Color medalSilver = Color(0xFF748A8E);
