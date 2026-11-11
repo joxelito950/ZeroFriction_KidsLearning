@@ -225,7 +225,7 @@ Memoria en Normal: tutorial → 2×3 → 2×4 → pierde → 2×3 → pierde →
 |---|---|---|---|
 | Memoria (HU-001) | Todo | Nada | 100 % |
 | Sombras (HU-007) | Las tres rondas, niveles 1 a 7, con sus estrellas y sus medallas (P16) | El nivel 8 de cada ronda y «Jugar sin tiempo» | 54 de 63 estrellas ≈ **86 %** |
-| ¿Cuál es diferente? (HU-025, el próximo) | Propuesta: la ronda Fácil completa y la primera mitad de Normal | El resto de Normal e Imposible | ≈ 50 % |
+| ¿Cuál es diferente? (HU-025, el próximo) | Las rondas Fácil y Normal completas (decidido el 2026-11-11: sin cortes antes que un 50 % exacto) | La ronda Imposible | ≈ 67 % |
 | Los siguientes | Ediciones especiales gratis por un tiempo (HU-042) | El juego completo | 0 % fuera de las ediciones |
 
 «Jugar sin tiempo» (HU-030) sigue siendo de Premium y general para todos los juegos.
