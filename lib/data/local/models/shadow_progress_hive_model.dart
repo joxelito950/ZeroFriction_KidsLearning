@@ -1,6 +1,5 @@
 import 'package:hive_ce/hive.dart';
 
-import '../../../domain/entities/shadow_progress.dart';
 
 import '../../../domain/progress/game_progress.dart';
 import '../../../domain/progress/level_record.dart';
@@ -9,7 +8,7 @@ import '../../../domain/settings/game_difficulty.dart';
 
 part 'shadow_progress_hive_model.g.dart';
 
-/// Formato de guardado de [ShadowProgress] (HU-007 R14, P8). typeId 4 e índices
+/// Formato de guardado del progreso (HU-007 R14, P8). typeId 4 e índices
 /// de campo fijos: NO deben cambiar (SPECIFICATION 3.4). Mismo formato que la
 /// memoria: los resultados por nivel, en dos mapas con la misma clave.
 @HiveType(typeId: 4)
@@ -26,20 +25,6 @@ class ShadowProgressHiveModel {
     this.achievedAtByRoundLevel,
     this.tutorialFalls,
   });
-
-  factory ShadowProgressHiveModel.fromEntity(ShadowProgress entity) {
-    return ShadowProgressHiveModel(
-      currentLevel: entity.currentLevel,
-      hasMedal: entity.hasMedal,
-      bestStarsByLevel: {
-        for (final entry in entity.levelRecords.entries) entry.key: entry.value.bestStars,
-      },
-      achievedAtByLevel: {
-        for (final entry in entity.levelRecords.entries) entry.key: entry.value.achievedAt,
-      },
-      lastPlayedAt: entity.lastPlayedAt,
-    );
-  }
 
   /// Guarda el progreso con rondas (HU-037). [currentLevel] es el nivel dentro
   /// de la ronda y [hasMedal] dice si hay alguna medalla; los mapas
@@ -115,17 +100,4 @@ class ShadowProgressHiveModel {
     );
   }
 
-  /// Las reglas (nivel válido, estrellas entre 0 y 3) las valida la entidad.
-  ShadowProgress toEntity() {
-    return ShadowProgress(
-      currentLevel: currentLevel,
-      hasMedal: hasMedal,
-      levelRecords: {
-        for (final entry in bestStarsByLevel.entries)
-          if (achievedAtByLevel[entry.key] case final DateTime achievedAt)
-            entry.key: LevelRecord(bestStars: entry.value, achievedAt: achievedAt),
-      },
-      lastPlayedAt: lastPlayedAt,
-    );
-  }
 }

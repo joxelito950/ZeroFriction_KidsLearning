@@ -73,7 +73,7 @@
   "restTitle": "حان وقت الراحة!",
   "restSubtitle": "نلعب مجددًا غدًا",
   "parentsZoneGamesTitle": "الألعاب",
-  "parentsZoneGamesIntro": "تنطبق هذه الإعدادات على كل الألعاب. تظهر التغييرات في اللوحة التالية.",
+  "parentsZoneGamesIntro": "تظهر التغييرات في المرة القادمة التي تُفتح فيها اللعبة.",
   "parentsZoneDifficultyLabel": "الصعوبة",
   "difficultyEasy": "سهل",
   "difficultyNormal": "عادي",
@@ -111,5 +111,7 @@
   "medalSilverTitle": "ميدالية فضية!",
   "medalGoldTitle": "ميدالية ذهبية!",
   "medalNextRoundMessage": "اكتملت الجولة! الآن تحدٍّ أكبر.",
-  "roundEasierMessage": "انتهى الوقت! لنجرب تحديًا أهدأ."
+  "roundEasierMessage": "انتهى الوقت! لنجرب تحديًا أهدأ.",
+  "parentsZoneRoundsLabel": "جولة كل لعبة",
+  "parentsZoneRoundsHint": "تنتقل كل لعبة إلى الجولة التالية وحدها عند إكمالها. تغييرها لا يزيل النجوم ولا الميداليات."
 }

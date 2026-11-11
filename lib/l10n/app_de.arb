@@ -73,7 +73,7 @@
   "restTitle": "Zeit für eine Pause!",
   "restSubtitle": "Morgen spielen wir weiter",
   "parentsZoneGamesTitle": "Spiele",
-  "parentsZoneGamesIntro": "Diese Einstellungen gelten für alle Spiele. Änderungen siehst du beim nächsten Spielfeld.",
+  "parentsZoneGamesIntro": "Änderungen gelten ab dem nächsten Öffnen des Spiels.",
   "parentsZoneDifficultyLabel": "Schwierigkeit",
   "difficultyEasy": "Leicht",
   "difficultyNormal": "Normal",
@@ -111,5 +111,7 @@
   "medalSilverTitle": "Silbermedaille!",
   "medalGoldTitle": "Goldmedaille!",
   "medalNextRoundMessage": "Runde geschafft! Jetzt eine größere Herausforderung.",
-  "roundEasierMessage": "Die Zeit ist um! Versuchen wir eine ruhigere Herausforderung."
+  "roundEasierMessage": "Die Zeit ist um! Versuchen wir eine ruhigere Herausforderung.",
+  "parentsZoneRoundsLabel": "Runde jedes Spiels",
+  "parentsZoneRoundsHint": "Jedes Spiel steigt von selbst eine Runde auf, wenn sie geschafft ist. Ein Wechsel nimmt keine Sterne oder Medaillen weg."
 }

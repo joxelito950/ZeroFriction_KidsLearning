@@ -73,7 +73,7 @@
   "restTitle": "È ora di riposare!",
   "restSubtitle": "Si gioca di nuovo domani",
   "parentsZoneGamesTitle": "Giochi",
-  "parentsZoneGamesIntro": "Queste impostazioni valgono per tutti i giochi. Le modifiche si vedono dal tavolo successivo.",
+  "parentsZoneGamesIntro": "Le modifiche si vedono la prossima volta che si apre il gioco.",
   "parentsZoneDifficultyLabel": "Difficoltà",
   "difficultyEasy": "Facile",
   "difficultyNormal": "Normale",
@@ -111,5 +111,7 @@
   "medalSilverTitle": "Medaglia d'argento!",
   "medalGoldTitle": "Medaglia d'oro!",
   "medalNextRoundMessage": "Round completato! Ora una sfida più grande.",
-  "roundEasierMessage": "Tempo scaduto! Proviamo una sfida più tranquilla."
+  "roundEasierMessage": "Tempo scaduto! Proviamo una sfida più tranquilla.",
+  "parentsZoneRoundsLabel": "Round di ogni gioco",
+  "parentsZoneRoundsHint": "Ogni gioco passa da solo al round successivo quando lo completa. Cambiarlo non toglie stelle né medaglie."
 }

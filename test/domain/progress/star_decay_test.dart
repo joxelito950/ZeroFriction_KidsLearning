@@ -1,6 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/memory/memory_ladder.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/progress/level_record.dart';
+import 'package:toddler_logic/domain/progress/round_ladder.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/progress/star_decay.dart';
 
@@ -31,51 +35,49 @@ void main() {
     });
   });
 
-  group('MemoryProgress gold', () {
-    MemoryProgress progress(Map<int, (int, int)> starsAndDay) => MemoryProgress(
-          currentLevel: 1,
-          hasBadge: true,
-          levelRecords: {
+  group('gold with rounds (HU-002 with HU-037)', () {
+    GameProgress progress(Map<int, (int, int)> starsAndDay) => GameProgress(
+          position: const RoundPosition(round: GameDifficulty.normal, level: 2),
+          medals: const {GameDifficulty.easy},
+          records: {
             for (final entry in starsAndDay.entries)
-              entry.key: MemoryLevelRecord(
-                bestStars: entry.value.$1,
-                achievedAt: DateTime(2026, 10, entry.value.$2),
-              ),
+              RoundLevel(GameDifficulty.normal, entry.key):
+                  LevelRecord(bestStars: entry.value.$1, achievedAt: DateTime(2026, 10, entry.value.$2)),
           },
           lastPlayedAt: played,
         );
 
-    test('is the best stars of each level over 15 (R2, criteria 4 and 5)', () {
-      expect(MemoryProgress.maxStars, 15);
-      expect(MemoryProgress.initial.goldFraction, 0);
-      final nine = progress({1: (3, 1), 2: (3, 2), 3: (3, 3)});
+    test('is the best stars of each round and level over 36 in memory (R2)', () {
+      expect(MemoryLadder.rounds.maxStars, 36);
+      expect(GameProgress.initial().goldFraction(MemoryLadder.rounds), 0);
+      final nine = progress({2: (3, 1), 3: (3, 2), 4: (3, 3)});
       expect(nine.stars, 9);
-      expect(nine.goldFraction, closeTo(0.6, 1e-9));
-      expect(progress({for (var level = 1; level <= 5; level++) level: (3, level)}).goldFraction, 1);
+      expect(nine.goldFraction(MemoryLadder.rounds), closeTo(0.25, 1e-9));
     });
 
-    test('losing empties the oldest achievement first, keeping dates and the badge (R8, R10, R14, criterion 13)', () {
-      final before = progress({1: (3, 5), 2: (2, 1), 3: (3, 9)});
+    test('losing empties the oldest achievement first, keeping dates and medals (R8, R10, R14, criterion 13)', () {
+      final before = progress({2: (3, 5), 3: (2, 1), 4: (3, 9)});
 
       final after = before.loseStars(3);
 
-      expect(after.levelRecords[2]!.bestStars, 0);
-      expect(after.levelRecords[2]!.achievedAt, DateTime(2026, 10, 1));
-      expect(after.levelRecords[1]!.bestStars, 2);
-      expect(after.levelRecords[3]!.bestStars, 3);
-      expect(after.hasBadge, isTrue);
+      const RoundLevel oldest = RoundLevel(GameDifficulty.normal, 3);
+      expect(after.records[oldest]!.bestStars, 0);
+      expect(after.records[oldest]!.achievedAt, DateTime(2026, 10, 1));
+      expect(after.records[const RoundLevel(GameDifficulty.normal, 2)]!.bestStars, 2);
+      expect(after.records[const RoundLevel(GameDifficulty.normal, 4)]!.bestStars, 3);
+      expect(after.medals, {GameDifficulty.easy});
       expect(after.lastPlayedAt, played);
     });
 
     test('cannot lose more than there is, nor a negative amount', () {
-      expect(progress({1: (1, 1)}).loseStars(10).stars, 0);
-      expect(progress({1: (1, 1)}).loseStars(0).stars, 1);
-      expect(() => progress({1: (1, 1)}).loseStars(-1), throwsRangeError);
+      expect(progress({2: (1, 1)}).loseStars(10).stars, 0);
+      expect(progress({2: (1, 1)}).loseStars(0).stars, 1);
+      expect(() => progress({2: (1, 1)}).loseStars(-1), throwsRangeError);
     });
 
     test('opening the game counts as playing (R13)', () {
       final DateTime now = DateTime(2026, 11, 30);
-      final opened = progress({1: (2, 1)}).playedAt(now);
+      final opened = progress({2: (2, 1)}).playedAt(now);
       expect(opened.lastPlayedAt, now);
       expect(opened.stars, 2);
     });

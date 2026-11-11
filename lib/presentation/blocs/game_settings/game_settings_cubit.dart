@@ -1,21 +1,25 @@
 import 'package:bloc/bloc.dart';
 
 import '../../../domain/entities/parental_settings.dart';
+import '../../../domain/progress/game_progress.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
 import '../../../domain/settings/game_difficulty.dart';
 
-/// Ajustes de la sección «Juegos» de la Zona de Padres (HU-030).
+/// Ajustes de la sección «Juegos» de la Zona de Padres (HU-030), con la ronda
+/// de cada juego (HU-037 P1) en lugar de la dificultad general.
 final class GameSettingsState {
   const GameSettingsState({
     this.loaded = false,
-    this.difficulty = GameDifficulty.normal,
+    this.rounds = const {GameId.memory: GameDifficulty.easy, GameId.shadows: GameDifficulty.easy},
     this.timerDisabled = false,
     this.isPremium = false,
     this.keepStars = false,
   });
 
   final bool loaded;
-  final GameDifficulty difficulty;
+
+  /// Ronda en la que va cada juego.
+  final Map<GameId, GameDifficulty> rounds;
   final bool timerDisabled;
 
   /// «Jugar sin tiempo» solo lo cambia un adulto con Premium (R4).
@@ -24,10 +28,10 @@ final class GameSettingsState {
   /// «Mantener las estrellas» (HU-016): gratuito.
   final bool keepStars;
 
-  GameSettingsState copyWith({GameDifficulty? difficulty, bool? timerDisabled, bool? keepStars}) =>
+  GameSettingsState copyWith({Map<GameId, GameDifficulty>? rounds, bool? timerDisabled, bool? keepStars}) =>
       GameSettingsState(
         loaded: loaded,
-        difficulty: difficulty ?? this.difficulty,
+        rounds: rounds ?? this.rounds,
         timerDisabled: timerDisabled ?? this.timerDisabled,
         isPremium: isPremium,
         keepStars: keepStars ?? this.keepStars,
@@ -37,17 +41,23 @@ final class GameSettingsState {
   bool operator ==(Object other) =>
       other is GameSettingsState &&
       other.loaded == loaded &&
-      other.difficulty == difficulty &&
+      other.rounds.length == rounds.length &&
+      rounds.entries.every((entry) => other.rounds[entry.key] == entry.value) &&
       other.timerDisabled == timerDisabled &&
       other.isPremium == isPremium &&
       other.keepStars == keepStars;
 
   @override
-  int get hashCode => Object.hash(loaded, difficulty, timerDisabled, isPremium, keepStars);
+  int get hashCode => Object.hash(
+      loaded,
+      Object.hashAllUnordered(rounds.entries.map((e) => Object.hash(e.key, e.value))),
+      timerDisabled,
+      isPremium,
+      keepStars);
 }
 
-/// Lee y cambia la dificultad y «Jugar sin tiempo». Los cambios se guardan al
-/// instante; los juegos los aplican en el siguiente tablero (R6).
+/// Lee y cambia la ronda de cada juego, «Jugar sin tiempo» y «Mantener las
+/// estrellas». Los cambios se guardan al instante.
 class GameSettingsCubit extends Cubit<GameSettingsState> {
   GameSettingsCubit({required IPersistenceRepository repository, DateTime Function()? now})
       : _repository = repository,
@@ -65,10 +75,13 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
       if (settings.timerDisabled && !premium) {
         settings = await _repository.updateParentalSettings((current) => current.withTimerDisabled(false));
       }
+      final Map<GameId, GameDifficulty> rounds = {
+        for (final GameId game in GameId.values) game: (await _repository.readGameProgress(game)).position.round,
+      };
       if (isClosed) return;
       emit(GameSettingsState(
         loaded: true,
-        difficulty: settings.difficulty,
+        rounds: rounds,
         timerDisabled: settings.timerDisabled,
         isPremium: premium,
         keepStars: settings.keepStars,
@@ -80,10 +93,17 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     }
   }
 
-  Future<void> setDifficulty(GameDifficulty difficulty) async {
-    if (difficulty == state.difficulty) return;
-    emit(state.copyWith(difficulty: difficulty));
-    await _save((current) => current.withDifficulty(difficulty));
+  /// El adulto cambia la ronda de [game] (HU-037 P1): se empieza por su
+  /// tutorial, sin perder estrellas ni medallas (R5).
+  Future<void> setRound(GameId game, GameDifficulty round) async {
+    if (round == state.rounds[game]) return;
+    emit(state.copyWith(rounds: {...state.rounds, game: round}));
+    try {
+      final GameProgress progress = await _repository.readGameProgress(game);
+      await _repository.saveGameProgress(game, progress.withRound(round));
+    } catch (error, stackTrace) {
+      if (!isClosed) addError(error, stackTrace);
+    }
   }
 
   /// Sin Premium no hace nada (R4).

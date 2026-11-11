@@ -362,7 +362,7 @@
   "@parentsZoneGamesTitle": {
     "description": "Title of the Parents' Zone section with the settings that apply to every game (HU-030). Read by parents. Max ~25 characters."
   },
-  "parentsZoneGamesIntro": "These settings apply to every game. Changes show up on the next board.",
+  "parentsZoneGamesIntro": "Changes show up the next time the game is opened.",
   "@parentsZoneGamesIntro": {
     "description": "One line under the Games section title: the settings apply to all games and take effect on the next board. Read by parents."
   },
@@ -561,5 +561,13 @@
   "roundEasierMessage": "Time's up! Let's try a calmer challenge.",
   "@roundEasierMessage": {
     "description": "Shown when time runs out and the game moves back to the previous, easier round (HU-037 R10). Helpful, never a punishment."
+  },
+  "parentsZoneRoundsLabel": "Round of each game",
+  "@parentsZoneRoundsLabel": {
+    "description": "Label above the per-game round choice in the Parents zone (HU-037): each game has three rounds (Easy, Normal, Impossible)."
+  },
+  "parentsZoneRoundsHint": "Each game moves up a round by itself when it is completed. Changing it keeps stars and medals.",
+  "@parentsZoneRoundsHint": {
+    "description": "One line under the label: games move up a round by themselves; changing it keeps stars and medals."
   }
 }

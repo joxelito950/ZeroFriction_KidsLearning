@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/blocs/game_settings/game_settings_cubit.dart';
@@ -12,7 +13,7 @@ import 'package:toddler_logic/presentation/widgets/parents_games_section.dart';
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
 
-/// Sección «Juegos» de la Zona de Padres (HU-030 3.1).
+/// Sección «Juegos» de la Zona de Padres (HU-030, HU-016 y la ronda de cada juego de HU-037).
 void main() {
   setUpAll(registerMemoryGameFallbacks);
 
@@ -43,36 +44,40 @@ void main() {
     await tester.pump();
   }
 
-  ChoiceChip chip(WidgetTester tester, GameDifficulty difficulty) =>
-      tester.widget<ChoiceChip>(find.byKey(ValueKey<String>('difficulty-${difficulty.name}')));
+  ChoiceChip chip(WidgetTester tester, GameId game, GameDifficulty round) =>
+      tester.widget<ChoiceChip>(find.byKey(ValueKey<String>('round-${game.name}-${round.name}')));
 
   SwitchListTile noTime(WidgetTester tester) =>
       tester.widget<SwitchListTile>(find.byKey(const ValueKey<String>('games-no-time')));
 
-  testWidgets('starts in Normal with time (criterion 1)', (tester) async {
+  testWidgets('shows the round of each game, Easy for a new player (HU-037 P1, R1)', (tester) async {
+    when(() => repository.readGameProgress(GameId.shadows))
+        .thenAnswer((_) async => progressAt(3, round: GameDifficulty.impossible));
     await pumpSection(tester);
 
     expect(find.text(l10n.parentsZoneGamesTitle), findsOneWidget);
-    expect(chip(tester, GameDifficulty.normal).selected, isTrue);
-    expect(find.text(l10n.difficultyNormalHint), findsOneWidget);
+    expect(find.text(l10n.parentsZoneRoundsHint), findsOneWidget);
+    expect(chip(tester, GameId.memory, GameDifficulty.easy).selected, isTrue);
+    expect(chip(tester, GameId.shadows, GameDifficulty.impossible).selected, isTrue);
     // Sin Premium, «Jugar sin tiempo» no se muestra (R4, 2026-11-09).
     expect(find.byKey(const ValueKey<String>('games-no-time')), findsNothing);
   });
 
-  testWidgets('choosing a difficulty saves it and explains it', (tester) async {
+  testWidgets('choosing a round saves it in that game only, from its tutorial, keeping its medals (R5)', (tester) async {
+    when(() => repository.readGameProgress(GameId.memory))
+        .thenAnswer((_) async => progressAt(4, medals: const {GameDifficulty.easy}));
     await pumpSection(tester);
 
-    await tester.tap(find.byKey(const ValueKey<String>('difficulty-impossible')));
+    await tester.tap(find.byKey(const ValueKey<String>('round-memory-easy')));
     await tester.pump();
 
-    expect(chip(tester, GameDifficulty.impossible).selected, isTrue);
-    expect(find.text(l10n.difficultyImpossibleHint), findsOneWidget);
-    expect(stored.difficulty, GameDifficulty.impossible);
-
-    await tester.tap(find.byKey(const ValueKey<String>('difficulty-easy')));
-    await tester.pump();
-    expect(find.text(l10n.difficultyEasyHint), findsOneWidget);
-    expect(stored.difficulty, GameDifficulty.easy);
+    expect(chip(tester, GameId.memory, GameDifficulty.easy).selected, isTrue);
+    final GameProgress saved =
+        verify(() => repository.saveGameProgress(GameId.memory, captureAny())).captured.single as GameProgress;
+    expect(saved.position.round, GameDifficulty.easy);
+    expect(saved.position.level, 1);
+    expect(saved.medals, {GameDifficulty.easy});
+    verifyNever(() => repository.saveGameProgress(GameId.shadows, any()));
   });
 
   testWidgets('without Premium the switch is not shown until it can be bought (R4, 2026-11-09)', (tester) async {
@@ -131,10 +136,11 @@ void main() {
       final cubit = GameSettingsCubit(repository: repository);
       await cubit.load();
 
-      await cubit.setDifficulty(GameDifficulty.normal);
+      await cubit.setRound(GameId.memory, GameDifficulty.easy);
       await cubit.setTimerDisabled(true);
 
       verifyNever(() => repository.updateParentalSettings(any()));
+      verifyNever(() => repository.saveGameProgress(any(), any()));
       expect(cubit.state.timerDisabled, isFalse);
       await cubit.close();
     });
@@ -148,9 +154,9 @@ void main() {
       await cubit.load();
       expect(cubit.state, const GameSettingsState(loaded: true));
 
-      when(() => repository.updateParentalSettings(any())).thenThrow(StateError('full'));
-      await cubit.setDifficulty(GameDifficulty.easy);
-      expect(cubit.state.difficulty, GameDifficulty.easy);
+      when(() => repository.saveGameProgress(any(), any())).thenThrow(StateError('full'));
+      await cubit.setRound(GameId.shadows, GameDifficulty.normal);
+      expect(cubit.state.rounds[GameId.shadows], GameDifficulty.normal);
       await cubit.close();
     });
 
@@ -158,7 +164,7 @@ void main() {
       const a = GameSettingsState(loaded: true, isPremium: true);
       expect(a, const GameSettingsState(loaded: true, isPremium: true));
       expect(a.hashCode, const GameSettingsState(loaded: true, isPremium: true).hashCode);
-      expect(a, isNot(a.copyWith(difficulty: GameDifficulty.easy)));
+      expect(a, isNot(a.copyWith(rounds: const {GameId.memory: GameDifficulty.normal})));
     });
   });
 

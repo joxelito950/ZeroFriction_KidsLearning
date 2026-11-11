@@ -1,8 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
-import 'package:toddler_logic/domain/entities/shadow_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
@@ -19,9 +17,7 @@ class FakeUserProfile extends Fake implements UserProfile {}
 void registerMemoryGameFallbacks() {
   registerFallbackValue(FakeLevelState());
   registerFallbackValue(FakeUserProfile());
-  registerFallbackValue(MemoryProgress.initial);
   registerFallbackValue(ParentalSettings.initial);
-  registerFallbackValue(ShadowProgress.initial);
   registerFallbackValue(GameProgress.initial());
   registerFallbackValue(GameId.memory);
   registerFallbackValue((ParentalSettings current) => current);
@@ -36,10 +32,6 @@ void stubPersistenceRepository(MockPersistenceRepository repository) {
   );
   when(() => repository.saveUserProfile(any())).thenAnswer((_) async {});
   when(() => repository.saveLevelStates(any())).thenAnswer((_) async {});
-  when(() => repository.readMemoryProgress()).thenAnswer((_) async => MemoryProgress.initial);
-  when(() => repository.saveMemoryProgress(any())).thenAnswer((_) async {});
-  when(() => repository.readShadowProgress()).thenAnswer((_) async => ShadowProgress.initial);
-  when(() => repository.saveShadowProgress(any())).thenAnswer((_) async {});
   when(() => repository.readGameProgress(any())).thenAnswer((_) async => GameProgress.initial());
   when(() => repository.saveGameProgress(any(), any())).thenAnswer((_) async {});
   when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings.initial);

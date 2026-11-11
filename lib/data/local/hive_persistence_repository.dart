@@ -1,9 +1,7 @@
 import 'package:hive_ce/hive.dart';
 
 import '../../domain/entities/level_state.dart';
-import '../../domain/entities/memory_progress.dart';
 import '../../domain/entities/parental_settings.dart';
-import '../../domain/entities/shadow_progress.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
@@ -87,26 +85,6 @@ class HivePersistenceRepository implements IPersistenceRepository {
       _userProfileKey,
       UserProfileHiveModel.fromEntity(userProfile),
     );
-  }
-
-  @override
-  Future<MemoryProgress> readMemoryProgress() async {
-    return _memoryProgressBox.get(_memoryProgressKey)?.toEntity() ?? MemoryProgress.initial;
-  }
-
-  @override
-  Future<void> saveMemoryProgress(MemoryProgress progress) async {
-    await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromEntity(progress));
-  }
-
-  @override
-  Future<ShadowProgress> readShadowProgress() async {
-    return _shadowProgressBox.get(_shadowProgressKey)?.toEntity() ?? ShadowProgress.initial;
-  }
-
-  @override
-  Future<void> saveShadowProgress(ShadowProgress progress) async {
-    await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromEntity(progress));
   }
 
   @override

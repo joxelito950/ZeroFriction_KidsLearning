@@ -1,6 +1,5 @@
 import 'package:hive_ce/hive.dart';
 
-import '../../../domain/entities/memory_progress.dart';
 
 import '../../../domain/progress/game_progress.dart';
 import '../../../domain/progress/level_record.dart';
@@ -9,7 +8,7 @@ import '../../../domain/settings/game_difficulty.dart';
 
 part 'memory_progress_hive_model.g.dart';
 
-/// Formato de guardado de [MemoryProgress] (HU-001). typeId 2 e índices de
+/// Formato de guardado del progreso (HU-001). typeId 2 e índices de
 /// campo fijos: NO deben cambiar (SPECIFICATION 3.4). Los resultados por nivel
 /// se guardan como dos mapas con la misma clave (número de nivel).
 @HiveType(typeId: 2)
@@ -26,20 +25,6 @@ class MemoryProgressHiveModel {
     this.achievedAtByRoundLevel,
     this.tutorialFalls,
   });
-
-  factory MemoryProgressHiveModel.fromEntity(MemoryProgress entity) {
-    return MemoryProgressHiveModel(
-      currentLevel: entity.currentLevel,
-      hasBadge: entity.hasBadge,
-      bestStarsByLevel: {
-        for (final entry in entity.levelRecords.entries) entry.key: entry.value.bestStars,
-      },
-      achievedAtByLevel: {
-        for (final entry in entity.levelRecords.entries) entry.key: entry.value.achievedAt,
-      },
-      lastPlayedAt: entity.lastPlayedAt,
-    );
-  }
 
   /// Guarda el progreso con rondas (HU-037). [currentLevel] es el nivel dentro
   /// de la ronda y [hasBadge] dice si hay alguna medalla; los mapas
@@ -115,17 +100,4 @@ class MemoryProgressHiveModel {
     );
   }
 
-  /// Las reglas (nivel válido, estrellas entre 0 y 3) las valida la entidad.
-  MemoryProgress toEntity() {
-    return MemoryProgress(
-      currentLevel: currentLevel,
-      hasBadge: hasBadge,
-      levelRecords: {
-        for (final entry in bestStarsByLevel.entries)
-          if (achievedAtByLevel[entry.key] case final DateTime achievedAt)
-            entry.key: MemoryLevelRecord(bestStars: entry.value, achievedAt: achievedAt),
-      },
-      lastPlayedAt: lastPlayedAt,
-    );
-  }
 }

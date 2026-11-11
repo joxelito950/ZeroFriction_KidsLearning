@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/progress/game_progress.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/game_settings/game_settings_cubit.dart';
 import '../theme/app_palette.dart';
+import 'round_style.dart';
 
-/// Sección «Juegos» de la Zona de Padres (HU-030 3.1): la dificultad y «Jugar
-/// sin tiempo», para todos los juegos. Los cambios se ven en el siguiente
-/// tablero (R6).
+/// Sección «Juegos» de la Zona de Padres: la ronda de cada juego (HU-037 P1),
+/// «Mantener las estrellas» (HU-016) y «Jugar sin tiempo» (HU-030, Premium).
 class ParentsGamesSection extends StatelessWidget {
   const ParentsGamesSection({super.key});
 
@@ -32,12 +33,6 @@ class _GamesCard extends StatelessWidget {
         GameDifficulty.easy => l10n.difficultyEasy,
         GameDifficulty.normal => l10n.difficultyNormal,
         GameDifficulty.impossible => l10n.difficultyImpossible,
-      };
-
-  static String _hint(AppLocalizations l10n, GameDifficulty difficulty) => switch (difficulty) {
-        GameDifficulty.easy => l10n.difficultyEasyHint,
-        GameDifficulty.normal => l10n.difficultyNormalHint,
-        GameDifficulty.impossible => l10n.difficultyImpossibleHint,
       };
 
   @override
@@ -70,28 +65,36 @@ class _GamesCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(l10n.parentsZoneGamesIntro, style: theme.textTheme.bodyMedium),
                 const SizedBox(height: 16),
-                Text(l10n.parentsZoneDifficultyLabel, style: theme.textTheme.titleSmall),
-                const SizedBox(height: 8),
-                // Chips que saltan de línea: con el texto ampliado no se desbordan.
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final difficulty in GameDifficulty.values)
-                      ChoiceChip(
-                        key: ValueKey<String>('difficulty-${difficulty.name}'),
-                        label: Text(_label(l10n, difficulty)),
-                        selected: state.difficulty == difficulty,
-                        onSelected: state.loaded ? (_) => cubit.setDifficulty(difficulty) : null,
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 8),
+                Text(l10n.parentsZoneRoundsLabel, style: theme.textTheme.titleSmall),
+                const SizedBox(height: 4),
                 Text(
-                  _hint(l10n, state.difficulty),
-                  key: const ValueKey<String>('difficulty-hint'),
+                  l10n.parentsZoneRoundsHint,
+                  key: const ValueKey<String>('rounds-hint'),
                   style: theme.textTheme.bodySmall?.copyWith(color: AppPalette.deepTeal),
                 ),
+                for (final (GameId game, String name) in [
+                  (GameId.memory, l10n.menuMemoryTitle),
+                  (GameId.shadows, l10n.shadowsGameTitle),
+                ]) ...[
+                  const SizedBox(height: 12),
+                  Text(name, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 6),
+                  // Chips que saltan de línea: con el texto ampliado no se desbordan.
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final round in GameDifficulty.values)
+                        ChoiceChip(
+                          key: ValueKey<String>('round-${game.name}-${round.name}'),
+                          avatar: Icon(Icons.military_tech_rounded, color: RoundStyle.colorOf(round), size: 18),
+                          label: Text(_label(l10n, round)),
+                          selected: state.rounds[game] == round,
+                          onSelected: state.loaded ? (_) => cubit.setRound(game, round) : null,
+                        ),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: 8),
                 // Gratuito: protege al niño (HU-016 R6).
                 SwitchListTile(

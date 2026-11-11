@@ -1,7 +1,5 @@
 import '../entities/level_state.dart';
-import '../entities/memory_progress.dart';
 import '../entities/parental_settings.dart';
-import '../entities/shadow_progress.dart';
 import '../entities/user_profile.dart';
 import '../progress/game_progress.dart';
 
@@ -17,16 +15,6 @@ abstract interface class IPersistenceRepository {
   Future<UserProfile?> readUserProfile();
 
   Future<void> saveUserProfile(UserProfile userProfile);
-
-  /// Progreso del juego de memoria; [MemoryProgress.initial] si nunca se ha jugado.
-  Future<MemoryProgress> readMemoryProgress();
-
-  Future<void> saveMemoryProgress(MemoryProgress progress);
-
-  /// Progreso de Sombras (HU-007); [ShadowProgress.initial] si nunca se ha jugado.
-  Future<ShadowProgress> readShadowProgress();
-
-  Future<void> saveShadowProgress(ShadowProgress progress);
 
   /// Progreso con rondas de [game] (HU-037). Lo guardado antes de las rondas se
   /// migra a Normal al leerlo (P7); [GameProgress.initial] si nunca se jugó.
