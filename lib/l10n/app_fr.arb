@@ -103,5 +103,7 @@
   "feedbackEmailSubject": "ToddlerLogic · Commentaires ({version})",
   "feedbackEmailWhatHappened": "Que s'est-il passé ?",
   "feedbackEmailWhatExpected": "À quoi vous attendiez-vous ?",
-  "menuShadowsSubtitle": "Trouve chaque ombre"
+  "menuShadowsSubtitle": "Trouve chaque ombre",
+  "parentsZoneSoundTitle": "Son",
+  "parentsZoneSoundHint": "Des sons doux quand une carte se retourne, qu'une paire est trouvée ou qu'un plateau est terminé. Les erreurs ne font jamais de bruit."
 }
