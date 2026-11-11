@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-10; avanzado el mismo día sin respuestas del dueño, sección 10) |
+| **Estado** | En refinamiento: el dueño decidió P1 a P10 el 2026-11-10 (sección 11); quedan P11 a P16 |
 | **Épica** | E1 · Juegos (afecta a todos) y E2 · Zona de Padres |
 | **Prioridad** | P2: cambia el progreso guardado de todos los juegos; cuanto antes, menos datos que migrar |
 | **Tamaño** | L (estimación: 3–4 entregas) |
@@ -95,6 +95,8 @@ La dificultad deja de ser solo un ajuste: ahora es **la ronda en la que va el ni
 | R6 | La pérdida de estrellas sin jugar (D-031, HU-016) sigue igual y afecta a todas las rondas. Las medallas no se pierden (P5). |
 | R7 | Las ayudas solo en Fácil y Normal (HU-030 R10). |
 | R8 | El progreso que ya existe en los teléfonos se conserva al actualizar (P7). |
+| R9 | **Al superar el tutorial** no hay estrellas ni celebración de nivel: una **invitación a jugar** breve (unos 1,5 s, sin botones, D-022), por ejemplo la mano de HU-022 con un gesto de «¡vamos!» y los puntos de nivel que se encienden, y empieza el primer nivel con tiempo (P2). |
+| R10 | **Bajar de ronda** (P3): si el niño llega por segunda vez al tutorial de una ronda (ver P15), pasa a la ronda anterior, en el nivel de P14. No pierde medallas ni estrellas. En Fácil no hay ronda anterior: se sigue como hoy. |
 
 ## 6. Encaje con lo ya decidido
 
@@ -123,16 +125,16 @@ La dificultad deja de ser solo un ajuste: ahora es **la ronda en la que va el ni
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿La ronda se cambia en la Zona de Padres **por juego** o con un ajuste **general**? | **Por juego.** Como ahora sube sola en cada juego, cada uno puede ir en una ronda distinta (un niño puede dominar la memoria y estar empezando Sombras). Un ajuste general obligaría a mover todos los juegos a la vez. La sección «Juegos» mostraría, por juego, «Fácil · Normal · Imposible» con la ronda actual marcada | Sí |
-| P2 | ¿El tutorial (nivel 1) da estrellas y cuenta para el dorado? | **No.** Es una ayuda sin tiempo ni reto: el dorado mide lo que cuesta. Así cada ronda vale lo mismo (4 niveles en la memoria) | Sí |
-| P3 | Al perder en el primer nivel con tiempo de Normal o Imposible, ¿se vuelve a la ronda anterior? | **No.** Se vuelve al tutorial de la misma ronda, sin tiempo. Bajar de ronda solo lo decide el adulto (P1): perder no quita la ronda ganada | Sí |
-| P4 | ¿Qué pasa al completar Imposible (tras el oro)? | **Se sigue en Imposible**, desde su tutorial, para mejorar estrellas y mantener el dorado. No se vuelve a Fácil | No |
-| P5 | ¿Las medallas se pierden con el tiempo, como las estrellas? | **No.** Son el recuerdo de la etapa superada (como la insignia de hoy, HU-002 R10). Lo que se pierde es el dorado | No |
-| P6 | ¿Cómo encaja Premium (D-028)? Hoy Sombras gratis no tiene tiempo ni nivel 8 | **Por decidir con HU-006.** Dos opciones: (a) gratis = la ronda Fácil completa y su bronce; Premium = Normal, Imposible, plata y oro; (b) gratis = las tres rondas sin tiempo; Premium = el tiempo, el último nivel y las 3★. Recomiendo **(a)**: es fácil de entender para los padres («Premium desbloquea los retos difíciles») y el niño gratis tiene un juego completo con su medalla | Sí, para Sombras |
-| P7 | ¿Qué pasa con el progreso de quien ya juega? | **Se conserva en Normal** (la dificultad por defecto de hoy): sus estrellas pasan a la ronda Normal y su insignia, a plata. El niño sigue en Normal. Nadie pierde nada | Sí |
-| P8 | ¿Un indicador de la ronda en la cabecera del juego? | **Sí, discreto:** el color de los puntos de nivel (bronce, plata, oro) dice en qué ronda va, sin texto | No |
-| P9 | La versión sin pago de Sombras que se publica ahora (7 niveles sin tiempo), ¿cómo queda? | Se publica tal cual. Al desarrollar esta historia, con P6 (a), el juego gratis sería la ronda Fácil completa (tutorial y niveles con el tiempo de Fácil) y su bronce | No |
-| P10 | ¿Cuándo se desarrolla? | **Después de la preview de Sombras y antes de HU-006 (pago):** el pago depende de P6, y cambiar el progreso guardado es más barato con pocos jugadores | No |
+| P1 | ¿La ronda se cambia en la Zona de Padres **por juego** o con un ajuste **general**? | ✅ Decidido (2026-11-10): **por juego**, como la recomendación | — |
+| P2 | ¿El tutorial (nivel 1) da estrellas y cuenta para el dorado? | ✅ Decidido (2026-11-10): **no** da estrellas ni cuenta para el dorado. **Además:** al superar el tutorial no se muestra la celebración con estrellas, sino una **invitación a jugar** (R9) | — |
+| P3 | Al perder en el primer nivel con tiempo de Normal o Imposible, ¿se vuelve a la ronda anterior? | ✅ Decidido (2026-11-10), **distinto de la recomendación:** para evitar la frustración, si se llega **por segunda vez** al tutorial de la misma ronda, se **baja a la ronda anterior** (R10). Así el niño encuentra solo su nivel y el adulto no tiene que intervenir a menudo. Detalles en P14 y P15 | — |
+| P4 | ¿Qué pasa al completar Imposible (tras el oro)? | ✅ Decidido (2026-11-10): se sigue en Imposible, como la recomendación | — |
+| P5 | ¿Las medallas se pierden con el tiempo, como las estrellas? | ✅ Decidido (2026-11-10): las medallas no se pierden, como la recomendación | — |
+| P6 | ¿Cómo encaja Premium (D-028)? Hoy Sombras gratis no tiene tiempo ni nivel 8 | ✅ Decidido (2026-11-10): **cada juego decide** qué es Premium, o si el juego entero lo es. Memoria, **100 % gratis**; Sombras, **80 % o más gratis**; el próximo juego, **alrededor del 50 % gratis**; los demás, **100 % Premium**, con **ediciones especiales** (pruebas o muestras gratis de juegos nuevos o de temporada que después pasan a Premium). Reparto de Sombras en P16; ediciones especiales en HU-042. Actualiza D-028 | — |
+| P7 | ¿Qué pasa con el progreso de quien ya juega? | ✅ Decidido (2026-11-10): como la recomendación | — |
+| P8 | ¿Un indicador de la ronda en la cabecera del juego? | ✅ Decidido (2026-11-10): como la recomendación | — |
+| P9 | La versión sin pago de Sombras que se publica ahora (7 niveles sin tiempo), ¿cómo queda? | ✅ Decidido (2026-11-10): como la recomendación | — |
+| P10 | ¿Cuándo se desarrolla? | ✅ Decidido (2026-11-10): como la recomendación | — |
 
 ## 9. Fuera de alcance
 
@@ -199,3 +201,41 @@ Con la migración, quien hoy tiene la memoria al 100 % (15★, de las que 3 son 
 | P11 | ¿Se avisa al niño o al adulto del cambio de dorado tras la actualización? | **Sí:** una celebración única al abrir cada juego por primera vez tras la actualización, con las medallas que ya tiene, y una línea en la Zona de Padres que explique las rondas | No |
 | P12 | ¿Las ayudas de Fácil (vista previa de 1 s, animación de inicio) siguen en Normal? | **Sí**, como hoy (HU-030 R10): solo Imposible va sin ayudas | No |
 | P13 | ¿HU-010 (punto de partida) se absorbe aquí? | **Sí**, si se acepta P1: cambiar de ronda cubre «saltarse lo que ya domina» (HU-010 sección 10) | No |
+
+## 11. Decisiones del dueño (2026-11-10) y lo que cambian
+
+### 11.1 Resumen
+
+| # | Decisión |
+|---|---|
+| P1 | Ronda **por juego** en la Zona de Padres |
+| P2 | El tutorial no da estrellas; al superarlo, **invitación a jugar** (R9) |
+| P3 | Llegar **dos veces** al tutorial de una ronda **baja de ronda** (R10) |
+| P4, P5 | Tras el oro se sigue en Imposible; las medallas no se pierden |
+| P6 | **Cada juego decide su parte Premium:** Memoria 100 % gratis, Sombras ≥ 80 % gratis, el próximo juego ≈ 50 % gratis, los demás 100 % Premium con ediciones especiales gratis por un tiempo (HU-042) |
+| P7 a P10 | Como las recomendaciones: migración a Normal, puntos de nivel del color de la ronda, la versión sin pago de Sombras se publica tal cual y se desarrolla antes de HU-006 |
+
+### 11.2 Bajar de ronda (R10), con un ejemplo
+
+Memoria en Normal: tutorial → 2×3 → 2×4 → pierde → 2×3 → pierde → **tutorial (2.ª vez)** → pasa a **Fácil**, en el nivel de P14. Al volver a completar Fácil, el niño sube otra vez a Normal (sin nueva medalla de bronce: ya la tiene).
+
+### 11.3 Reparto gratis y Premium de cada juego (P6)
+
+| Juego | Gratis | Premium | Parte gratis |
+|---|---|---|---|
+| Memoria (HU-001) | Todo | Nada | 100 % |
+| Sombras (HU-007) | Las tres rondas, niveles 1 a 7, con sus estrellas y sus medallas (P16) | El nivel 8 de cada ronda y «Jugar sin tiempo» | 54 de 63 estrellas ≈ **86 %** |
+| ¿Cuál es diferente? (HU-025, el próximo) | Propuesta: la ronda Fácil completa y la primera mitad de Normal | El resto de Normal e Imposible | ≈ 50 % |
+| Los siguientes | Ediciones especiales gratis por un tiempo (HU-042) | El juego completo | 0 % fuera de las ediciones |
+
+«Jugar sin tiempo» (HU-030) sigue siendo de Premium y general para todos los juegos.
+
+### 11.4 Preguntas nuevas
+
+| # | Pregunta | Recomendación | Bloquea |
+|---|---|---|---|
+| P14 | Al bajar de ronda (R10), ¿en qué nivel se sigue? | En el **primer nivel con tiempo** de la ronda anterior (el 2×3 en Memoria), con su tiempo. Volver a su tutorial sería otro paso atrás sin reto, y un nivel alto podría frustrar otra vez | Sí |
+| P15 | ¿Qué cuenta como «llegar al tutorial» para R10? ¿También la entrada en la ronda, que empieza por el tutorial? | **Solo las caídas**: llegar al tutorial **por perder**. Así baja de ronda quien cae dos veces, no quien acaba de subir y pierde una vez. El contador vuelve a cero al cambiar de ronda. Si se cuenta la entrada, bastaría una sola caída para bajar | Sí |
+| P16 | En Sombras gratis, ¿una ronda se completa (y da su medalla) al superar el nivel 7, y el nivel 8 es el extra de Premium? | **Sí.** Así lo gratis tiene las tres medallas (el juego completo de verdad, ≈ 86 %), y Premium suma el nivel más difícil de cada ronda y sus estrellas. Con Premium, la ronda termina en el nivel 8 | Sí |
+| P11 a P13 | (sección 10.5) Aviso tras la actualización, ayudas en Normal, absorber HU-010 | Las recomendaciones de la sección 10.5 | No |
+

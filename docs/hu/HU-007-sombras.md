@@ -39,6 +39,8 @@
 
 El ajuste de dificultad de HU-030 aplica en los dos modos (P7).
 
+> **Cambia con HU-037 (decidido el 2026-11-10, P6):** Sombras será **80 % o más gratis**. Con las rondas de dificultad, la propuesta (HU-037 P16) es gratis las tres rondas con los niveles 1 a 7, sus estrellas y sus medallas, y Premium el nivel 8 de cada ronda y «Jugar sin tiempo» (≈ 86 % gratis). Esta tabla describe la versión publicada hoy.
+
 ## 4. Comportamiento propuesto
 
 ### 4.1 Pantalla

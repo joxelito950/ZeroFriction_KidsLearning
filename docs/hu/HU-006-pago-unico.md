@@ -137,3 +137,12 @@ HU-037 (rondas de dificultad y medallas) cambia **qué es Premium** (su P6): la 
 |---|---|---|---|
 | P9 | ¿Se permite compartir Premium con la familia (Google Play Family Library)? | **Sí, más adelante:** es un interruptor en Play Console y encaja con hermanos (HU-033). No en la primera versión | No |
 | P10 | ¿El precio se ajusta por país o se deja la conversión automática de Google? | **Automática** al principio; revisar después con los datos de la consola | No |
+
+## 11. Cambio por la decisión de HU-037 P6 (2026-11-10)
+
+Qué es Premium ya no es una lista fija: **cada juego decide** (HU-037 P6). Con eso, la respuesta a P3 queda casi hecha:
+
+> **Premium incluye:** «Jugar sin tiempo» en todos los juegos; el nivel más difícil de cada ronda de Sombras; la mitad del juego «¿Cuál es diferente?»; y los juegos completos que lleguen (con ediciones especiales gratis por un tiempo, HU-042).
+
+Lo único que falta decidir de P3 es **cómo se anuncia** en la Zona de Padres y en la ficha sin prometer juegos concretos con fecha. **Recomendación:** la frase de arriba sin nombres de juegos futuros («y los juegos nuevos que lleguen»). P1 (precio) sigue abierta.
+

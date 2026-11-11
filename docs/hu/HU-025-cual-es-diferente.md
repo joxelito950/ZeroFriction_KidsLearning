@@ -75,11 +75,11 @@ El tiempo, como en la memoria: el nivel 1 sin tiempo y después una serie por di
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Modelo de acceso? | **Gratis los niveles 1–4 y Premium el 5 y el tiempo**, como Sombras (D-028). Mantiene la coherencia entre juegos | Sí |
+| P1 | ¿Modelo de acceso? | ⏳ **Reencuadrada por HU-037 P6 (2026-11-10):** es el «próximo juego», **≈ 50 % gratis**. **Recomendación:** gratis la ronda **Fácil completa y la primera mitad de Normal** (tutorial y los dos primeros niveles); Premium, el resto de Normal e Imposible. El niño gratis consigue el bronce | Sí |
 | P2 | ¿Cuántos niveles y objetos? | La tabla de la sección 4 (5 niveles, de 3 a 6 objetos) | Sí |
 | P3 | ¿Cuántos tableros por nivel? | **3 tableros por nivel**: uno solo es muy corto para un nivel | No |
 | P4 | ¿Las categorías se basan en significado (granja/salvaje) o en rasgos visibles (color, forma)? | **Las dos**, pero los rasgos visibles solo en niveles altos: a los 3 años, el significado se aprende antes | No |
-| P5 | ¿Progreso propio o modelo común? | Decidirlo en HU-023, antes del tercer juego | No |
+| P5 | ¿Progreso propio o modelo común? | ✅ Cerrada por HU-037 (2026-11-10): **modelo común de progreso**, sin typeId propio | — |
 
 ## 9. Fuera de alcance
 
