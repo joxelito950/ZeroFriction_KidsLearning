@@ -20,6 +20,8 @@ import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
 import '../widgets/memory_time_bar.dart';
 import '../widgets/protected_exit.dart';
+import '../widgets/round_style.dart';
+import '../../domain/settings/game_difficulty.dart';
 
 /// Juego de memoria progresivo (HU-001): sin botones dentro del juego (R13); se
 /// sale con «atrás» repetido (R19).
@@ -42,7 +44,7 @@ class MemoryGameScreen extends StatelessWidget {
   static bool boardInProgress(MemoryLadderState state) {
     return switch (state.phase) {
       MemoryRoundPhase.playing => state.moves > 0 || state.firstSelectedCardIndex != null,
-      MemoryRoundPhase.celebrating || MemoryRoundPhase.timeUp => true,
+      MemoryRoundPhase.celebrating || MemoryRoundPhase.timeUp || MemoryRoundPhase.inviting => true,
       _ => false,
     };
   }
@@ -109,7 +111,6 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
     super.dispose();
   }
 
-
   /// El cronómetro se pausa con la app en segundo plano o la pantalla apagada (R11).
   @override
   void didChangeAppLifecycleState(AppLifecycleState lifecycle) {
@@ -145,7 +146,7 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            _Header(level: state.level, moves: state.moves),
+                            _Header(level: state.level, moves: state.moves, round: state.gameRound),
                             if (state.remainingFraction case final double fraction) ...[
                               const SizedBox(height: 12),
                               MemoryTimeBar(fraction: fraction),
@@ -176,7 +177,9 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
 
   Widget _overlayFor(MemoryLadderState state) {
     return switch (state.phase) {
-      MemoryRoundPhase.celebrating => MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.badgeEarned),
+      MemoryRoundPhase.celebrating =>
+        MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.badgeEarned, medal: state.medal),
+      MemoryRoundPhase.inviting => PlayInvitation(round: state.gameRound),
       MemoryRoundPhase.timeUp => MemoryTimeUpNotice(loss: state.loss ?? MemoryLoss.fewerCards),
       _ => const SizedBox.shrink(),
     };
@@ -212,11 +215,13 @@ class _Board extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.level, required this.moves});
+  const _Header({required this.level, required this.moves, required this.round});
 
   final int level;
   final int moves;
 
+  /// Ronda en juego: el color de los puntos (HU-037 P8).
+  final GameDifficulty round;
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +231,9 @@ class _Header extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppPalette.white,
         borderRadius: BorderRadius.circular(28),
-        boxShadow: [BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))],
+        boxShadow: [
+          BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
@@ -258,7 +265,7 @@ class _Header extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                MemoryLevelIndicator(level: level, total: MemoryLadder.maxLevel),
+                MemoryLevelIndicator(level: level, total: MemoryLadder.maxLevel, color: RoundStyle.colorOf(round)),
                 const SizedBox(width: 12),
                 // Se encoge antes que desbordarse con textos largos (árabe).
                 Expanded(

@@ -1,10 +1,9 @@
 import 'package:hive_ce/hive.dart';
 
 import '../../domain/entities/level_state.dart';
-import '../../domain/entities/memory_progress.dart';
 import '../../domain/entities/parental_settings.dart';
-import '../../domain/entities/shadow_progress.dart';
 import '../../domain/entities/user_profile.dart';
+import '../../domain/progress/game_progress.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import 'models/level_state_hive_model.dart';
 import 'models/memory_progress_hive_model.dart';
@@ -89,23 +88,22 @@ class HivePersistenceRepository implements IPersistenceRepository {
   }
 
   @override
-  Future<MemoryProgress> readMemoryProgress() async {
-    return _memoryProgressBox.get(_memoryProgressKey)?.toEntity() ?? MemoryProgress.initial;
+  Future<GameProgress> readGameProgress(GameId game) async {
+    return switch (game) {
+          GameId.memory => _memoryProgressBox.get(_memoryProgressKey)?.toGameProgress(),
+          GameId.shadows => _shadowProgressBox.get(_shadowProgressKey)?.toGameProgress(),
+        } ??
+        GameProgress.initial();
   }
 
   @override
-  Future<void> saveMemoryProgress(MemoryProgress progress) async {
-    await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromEntity(progress));
-  }
-
-  @override
-  Future<ShadowProgress> readShadowProgress() async {
-    return _shadowProgressBox.get(_shadowProgressKey)?.toEntity() ?? ShadowProgress.initial;
-  }
-
-  @override
-  Future<void> saveShadowProgress(ShadowProgress progress) async {
-    await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromEntity(progress));
+  Future<void> saveGameProgress(GameId game, GameProgress progress) async {
+    switch (game) {
+      case GameId.memory:
+        await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromGameProgress(progress));
+      case GameId.shadows:
+        await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromGameProgress(progress));
+    }
   }
 
   @override

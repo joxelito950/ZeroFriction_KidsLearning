@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 
 import '../../../domain/entities/parental_settings.dart';
-import '../../../domain/entities/shadow_progress.dart';
+import '../../../domain/progress/game_progress.dart';
+import '../../../domain/progress/round_ladder.dart';
 import '../../../domain/progress/star_decay.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
+import '../../../domain/settings/game_difficulty.dart';
 import '../../../domain/shadows/shadow_drop.dart';
 import '../../../domain/shadows/shadow_ladder.dart';
 import '../../../domain/shadows/shadow_themes.dart';
@@ -30,6 +32,9 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
   /// Celebración tras completar un tablero (R8), como en la memoria.
   static const Duration celebrationDuration = Duration(seconds: 2);
 
+  /// Invitación a jugar tras el tutorial (HU-037 R9).
+  static const Duration invitationDuration = Duration(milliseconds: 1500);
+
   /// Aviso de «se acabó el tiempo», como en la memoria.
   static const Duration timeUpDuration = Duration(milliseconds: 2500);
 
@@ -37,10 +42,15 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
   final Random _random;
   final DateTime Function() _now;
 
-  ShadowProgress _progress = ShadowProgress.initial;
+  static final RoundLadder _ladder = ShadowLadder.rounds;
 
-  /// Reglas con las que se repartió el tablero en juego. Un cambio (dificultad,
-  /// «Jugar sin tiempo» o Premium) se aplica en el siguiente tablero (R12).
+  GameProgress _progress = GameProgress.initial();
+
+  /// Posición del tablero en juego, con su ronda y sus caídas al tutorial.
+  RoundPosition _position = GameProgress.initial().position;
+
+  /// Reglas del tablero en juego: la dificultad es la ronda (HU-037); Premium
+  /// y «Jugar sin tiempo» se vuelven a leer antes de cada tablero (R12).
   ShadowRules _rules = const ShadowRules();
   Timer? _ticker;
   Timer? _transition;
@@ -50,15 +60,23 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
   /// tablero del nivel guardado con su límite de llegada.
   Future<void> start() async {
     try {
-      _progress = await _repository.readShadowProgress();
+      _progress = await _repository.readGameProgress(GameId.shadows);
       await _settleStars();
     } catch (error, stackTrace) {
       addError(error, stackTrace);
     }
-    final ShadowRules rules = await _readRules();
+    final ShadowRules access = await _readRules();
     if (isClosed) return;
-    _rules = rules;
-    _deal(ShadowLadder.arrivalPosition(_progress.currentLevel, rules));
+    final RoundPosition saved = _progress.position;
+    // Sin Premium, el nivel 8 no existe: se juega el 7 (HU-037 P16).
+    final int level = saved.level.clamp(1, ShadowLadder.lastLevelFor(premium: access.premium));
+    _rules = _rulesFor(saved.round, access);
+    _deal(RoundPosition(
+      round: saved.round,
+      level: level,
+      timeLimit: _ladder.limitFor(saved.round, level, timed: _timed(access)),
+      tutorialFalls: saved.tutorialFalls,
+    ));
   }
 
   /// Como en la memoria: abrir el juego cuenta como jugar, y la pérdida
@@ -74,9 +92,9 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
     await _saveProgress();
   }
 
-  /// Dificultad, «Jugar sin tiempo» y Premium. Sin Premium, «Jugar sin tiempo»
-  /// vuelve a su valor por defecto y se guarda así (HU-030 R11). Si no se
-  /// pueden leer, Normal y gratis.
+  /// Premium y «Jugar sin tiempo». Sin Premium, «Jugar sin tiempo» vuelve a su
+  /// valor por defecto y se guarda así (HU-030 R11). Si no se pueden leer,
+  /// gratis y con tiempo. La dificultad la pone la ronda ([_rulesFor]).
   Future<ShadowRules> _readRules() async {
     try {
       final ParentalSettings settings = await _repository.readParentalSettings();
@@ -94,6 +112,13 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
       return const ShadowRules();
     }
   }
+
+  ShadowRules _rulesFor(GameDifficulty round, ShadowRules access) =>
+      ShadowRules(difficulty: round, premium: access.premium, timerDisabled: access.timerDisabled);
+
+  /// Con las rondas hay tiempo también sin Premium; quitarlo («Jugar sin
+  /// tiempo») sí es de Premium (HU-037 sección 11.3).
+  static bool _timed(ShadowRules rules) => !(rules.premium && rules.timerDisabled);
 
   /// Termina la animación de inicio (R19): empieza el juego. La pantalla la
   /// llama al acabar la animación, o enseguida con «reducir movimiento».
@@ -157,20 +182,22 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
 
   void resume() => _paused = false;
 
-  void _deal(ShadowPosition position) {
+  void _deal(RoundPosition position) {
     _stopTimer();
+    _position = position;
     final ShadowLevel level = ShadowLadder.levelAt(position.level);
     final ShadowBoardContent content = ShadowThemes.pick(_random, level, freeShadows: _rules.freeShadows);
     emit(ShadowGameState(
       phase: _rules.startAnimation ? ShadowRoundPhase.introducing : ShadowRoundPhase.playing,
       round: state.round + 1,
-      position: position,
+      position: ShadowPosition(level: position.level, timeLimit: position.timeLimit),
       layout: _rules.layoutFor(_random),
       objects: List.of(content.objects)..shuffle(_random),
       shadows: content.shadows,
       premium: _rules.premium,
-      hasMedal: _progress.hasMedal,
-      goldFraction: _progress.goldFraction,
+      hasMedal: _progress.bestMedal != null,
+      goldFraction: _progress.goldFraction(_ladder),
+      gameRound: position.round,
     ));
   }
 
@@ -192,53 +219,77 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
 
   void _win() {
     _stopTimer();
-    final int level = state.level;
-    final int stars = ShadowStars.forWin(
-      objects: ShadowLadder.levelAt(level).objects,
-      fails: state.fails,
-      premium: _rules.premium,
+    final RoundPosition won = _position;
+    // Con las rondas, las 3 estrellas son de todos (HU-037 P16); el tutorial
+    // no da ninguna (P2).
+    final int stars = won.isTutorial
+        ? 0
+        : ShadowStars.forWin(objects: ShadowLadder.levelAt(won.level).objects, fails: state.fails, premium: true);
+    final RoundStep step = _ladder.afterWin(
+      won,
+      lastLevel: ShadowLadder.lastLevelFor(premium: _rules.premium),
+      timed: _timed(_rules),
     );
-    final ShadowStep step = ShadowLadder.afterWin(state.position, _rules);
-    _progress = _progress.recordWin(level: level, stars: stars, step: step, at: _now());
+    _progress = _progress.recordWin(won: won, stars: stars, step: step, at: _now());
     unawaited(_saveProgress());
+    if (step.fromTutorial) {
+      emit(state.copyWith(phase: ShadowRoundPhase.inviting));
+      _scheduleNextRound(invitationDuration, step.next);
+      return;
+    }
     emit(state.copyWith(
       phase: ShadowRoundPhase.celebrating,
       stars: stars,
-      medalEarned: step.medalEarned,
-      hasMedal: _progress.hasMedal,
-      goldFraction: _progress.goldFraction,
+      medalEarned: step.medal != null,
+      medal: step.medal,
+      hasMedal: _progress.bestMedal != null,
+      goldFraction: _progress.goldFraction(_ladder),
     ));
     _scheduleNextRound(celebrationDuration, step.next);
   }
 
   void _timeUp() {
     _stopTimer();
-    final ShadowStep step = ShadowLadder.afterLoss(state.position);
+    final RoundStep step = _ladder.afterLoss(_position, timed: _timed(_rules));
     _progress = _progress.recordLoss(step: step, at: _now());
     unawaited(_saveProgress());
-    emit(state.copyWith(phase: ShadowRoundPhase.timeUp, elapsed: state.position.timeLimit));
+    emit(state.copyWith(
+      phase: ShadowRoundPhase.timeUp,
+      elapsed: state.position.timeLimit,
+      lossKind: step.droppedRound
+          ? ShadowLoss.easierRound
+          : step.next.isTutorial
+              ? ShadowLoss.restart
+              : ShadowLoss.fewerObjects,
+    ));
     _scheduleNextRound(timeUpDuration, step.next);
   }
 
   /// Antes del tablero siguiente se vuelven a leer las reglas: si cambiaron
   /// (por ejemplo, se compró Premium), se sigue en el mismo nivel con el límite
   /// de llegada de las reglas nuevas (R12, HU-030 R6).
-  void _scheduleNextRound(Duration delay, ShadowPosition next) {
+  void _scheduleNextRound(Duration delay, RoundPosition next) {
     _transition?.cancel();
     _transition = Timer(delay, () async {
       if (isClosed) return;
-      final ShadowRules rules = await _readRules();
+      final ShadowRules access = await _readRules();
       if (isClosed) return;
-      final ShadowPosition position = rules == _rules ? next : ShadowLadder.arrivalPosition(next.level, rules);
-      _rules = rules;
-      _deal(position);
+      // Sin Premium (perdido a mitad), el nivel 8 se juega como el 7.
+      final int level = next.level.clamp(1, ShadowLadder.lastLevelFor(premium: access.premium));
+      _rules = _rulesFor(next.round, access);
+      _deal(RoundPosition(
+        round: next.round,
+        level: level,
+        timeLimit: _ladder.limitFor(next.round, level, timed: _timed(access)),
+        tutorialFalls: next.tutorialFalls,
+      ));
     });
   }
 
   /// Un fallo al guardar no interrumpe el juego; se reporta (D-010).
   Future<void> _saveProgress() async {
     try {
-      await _repository.saveShadowProgress(_progress);
+      await _repository.saveGameProgress(GameId.shadows, _progress);
     } catch (error, stackTrace) {
       if (!isClosed) addError(error, stackTrace);
     }

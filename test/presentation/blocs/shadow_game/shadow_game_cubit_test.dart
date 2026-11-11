@@ -4,7 +4,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
-import 'package:toddler_logic/domain/entities/shadow_progress.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/progress/level_record.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
@@ -37,16 +37,18 @@ void main() {
   setUp(() {
     repository = MockPersistenceRepository();
     stubPersistenceRepository(repository);
+    // Normal por defecto: el juego de antes de las rondas (HU-037).
+    when(() => repository.readGameProgress(GameId.shadows)).thenAnswer((_) async => progressAt(1));
   });
 
   void givenPremium(bool premium) => when(() => repository.readUserProfile())
       .thenAnswer((_) async => UserProfile(isPremium: premium, isSoundEnabled: true));
   void givenSettings(ParentalSettings settings) =>
       when(() => repository.readParentalSettings()).thenAnswer((_) async => settings);
-  void givenProgress(ShadowProgress progress) =>
-      when(() => repository.readShadowProgress()).thenAnswer((_) async => progress);
-  ShadowProgress lastSaved() =>
-      verify(() => repository.saveShadowProgress(captureAny())).captured.last as ShadowProgress;
+  void givenProgress(GameProgress progress) =>
+      when(() => repository.readGameProgress(GameId.shadows)).thenAnswer((_) async => progress);
+  GameProgress lastSaved() =>
+      verify(() => repository.saveGameProgress(GameId.shadows, captureAny())).captured.last as GameProgress;
 
   /// Arranca el juego y deja el tablero listo para jugar.
   ShadowGameCubit started(FakeAsync async) {
@@ -69,8 +71,9 @@ void main() {
       state.shadows.firstWhere((shadow) => shadow != object && !state.placed.contains(shadow));
 
   group('start', () {
-    test('first time: level 1 with its start animation, free, no time, and the game counts as played', () {
+    test('first time: the Easy tutorial with its start animation, free, no time, and the game counts as played', () {
       fakeAsync((async) {
+        givenProgress(GameProgress.initial());
         final cubit = ShadowGameCubit(repository: repository, random: Random(1), now: () => now);
         cubit.start();
         async.flushMicrotasks();
@@ -95,8 +98,7 @@ void main() {
 
     test('Impossible has no start animation; Easy has no free shadows', () {
       fakeAsync((async) {
-        givenProgress(ShadowProgress(currentLevel: 4));
-        givenSettings(ParentalSettings(difficulty: GameDifficulty.impossible));
+        givenProgress(progressAt(4, round: GameDifficulty.impossible));
         final cubit = ShadowGameCubit(repository: repository, random: Random(1), now: () => now);
         cubit.start();
         async.flushMicrotasks();
@@ -104,7 +106,7 @@ void main() {
         expect(cubit.state.shadows, hasLength(5));
         cubit.close();
 
-        givenSettings(ParentalSettings(difficulty: GameDifficulty.easy));
+        givenProgress(progressAt(4, round: GameDifficulty.easy));
         final easy = started(async);
         expect(easy.state.shadows, hasLength(4));
         easy.close();
@@ -113,7 +115,7 @@ void main() {
 
     test('a level 8 saved without Premium plays level 7', () {
       fakeAsync((async) {
-        givenProgress(ShadowProgress(currentLevel: 8));
+        givenProgress(progressAt(8));
         final cubit = started(async);
         expect(cubit.state.level, 7);
         cubit.close();
@@ -122,9 +124,11 @@ void main() {
 
     test('applies the star loss when the game starts (D-037)', () {
       fakeAsync((async) {
-        givenProgress(ShadowProgress(
-          currentLevel: 1,
-          levelRecords: {1: LevelRecord(bestStars: 2, achievedAt: DateTime(2026, 10, 1))},
+        givenProgress(progressAt(
+          1,
+          records: {
+            const RoundLevel(GameDifficulty.normal, 2): LevelRecord(bestStars: 2, achievedAt: DateTime(2026, 10, 1)),
+          },
           lastPlayedAt: now.subtract(const Duration(days: 13)),
         ));
         final cubit = started(async);
@@ -171,7 +175,7 @@ void main() {
 
     test('Easy snaps at 40 %, and an occupied shadow no longer counts as a mistake', () {
       fakeAsync((async) {
-        givenSettings(ParentalSettings(difficulty: GameDifficulty.easy));
+        givenProgress(progressAt(1, round: GameDifficulty.easy));
         final cubit = started(async);
         final [String first, String second] = cubit.state.objects;
         final shadows = {first: box, second: shifted(300)};
@@ -199,19 +203,32 @@ void main() {
   });
 
   group('winning (R6, R8, R9, R10)', () {
-    test('placing everything celebrates with at most 2 stars for free and moves up after the celebration', () {
+    test('placing everything in the tutorial invites to play, without stars (HU-037 R9)', () {
       fakeAsync((async) {
+        final cubit = started(async);
+        placeAll(cubit);
+        expect(cubit.state.phase, ShadowRoundPhase.inviting);
+        expect(lastSaved().stars, 0);
+        async.elapse(ShadowGameCubit.invitationDuration);
+        expect(cubit.state.level, 2);
+        cubit.close();
+      });
+    });
+
+    test('placing everything celebrates with 3 stars, also for free (HU-037 P16), and moves up', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(2));
         final cubit = started(async);
         placeAll(cubit);
 
         expect(cubit.state.phase, ShadowRoundPhase.celebrating);
-        expect(cubit.state.stars, 2);
-        expect(cubit.state.goldFraction, 2 / 24);
-        expect(lastSaved().levelRecords[1]!.bestStars, 2);
+        expect(cubit.state.stars, 3);
+        expect(cubit.state.goldFraction, 3 / 63);
+        expect(lastSaved().records[const RoundLevel(GameDifficulty.normal, 2)]!.bestStars, 3);
         expect(cubit.match(cubit.state.objects.first, cubit.state.objects.first), ShadowDropOutcome.missed);
 
         async.elapse(ShadowGameCubit.celebrationDuration);
-        expect(cubit.state.level, 2);
+        expect(cubit.state.level, 3);
         expect(cubit.state.phase, ShadowRoundPhase.introducing);
         expect(cubit.state.placed, isEmpty);
         cubit.close();
@@ -220,10 +237,10 @@ void main() {
 
     test('many shape mistakes give fewer stars', () {
       fakeAsync((async) {
-        givenPremium(true);
+        givenProgress(progressAt(2));
         final cubit = started(async);
         final String object = cubit.state.objects.first;
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 4; i++) {
           cubit.match(object, otherShadow(cubit.state, object));
         }
         placeAll(cubit);
@@ -232,14 +249,16 @@ void main() {
       });
     });
 
-    test('without Premium, level 7 goes back to level 1 without a medal', () {
+    test('without Premium, level 7 completes the round with its medal (HU-037 P16)', () {
       fakeAsync((async) {
-        givenProgress(ShadowProgress(currentLevel: 7));
+        givenProgress(progressAt(7));
         final cubit = started(async);
         placeAll(cubit);
-        expect(cubit.state.medalEarned, isFalse);
+        expect(cubit.state.medalEarned, isTrue);
+        expect(cubit.state.medal, GameDifficulty.normal);
         async.elapse(ShadowGameCubit.celebrationDuration);
         expect(cubit.state.level, 1);
+        expect(cubit.state.gameRound, GameDifficulty.impossible);
         cubit.close();
       });
     });
@@ -247,39 +266,39 @@ void main() {
     test('with Premium, level 8 gives 3 stars and the medal', () {
       fakeAsync((async) {
         givenPremium(true);
-        givenProgress(ShadowProgress(currentLevel: 8));
+        givenProgress(progressAt(8));
         final cubit = started(async);
         expect(cubit.state.premium, isTrue);
         placeAll(cubit);
         expect(cubit.state.stars, 3);
         expect(cubit.state.medalEarned, isTrue);
         expect(cubit.state.hasMedal, isTrue);
-        expect(lastSaved().hasMedal, isTrue);
+        expect(lastSaved().medals, {GameDifficulty.normal});
         cubit.close();
       });
     });
 
-    test('buying Premium mid-board brings time on the next board (R12)', () {
+    test('buying Premium mid-board applies on the next board (R12)', () {
       fakeAsync((async) {
+        givenProgress(progressAt(2));
         final cubit = started(async);
+        expect(cubit.state.premium, isFalse);
         givenPremium(true);
         placeAll(cubit);
-        expect(cubit.state.stars, 2, reason: 'this board was played without Premium');
         async.elapse(ShadowGameCubit.celebrationDuration);
-        expect(cubit.state.position, const ShadowPosition(level: 2, timeLimit: Duration(seconds: 60)));
+        expect(cubit.state.position, const ShadowPosition(level: 3, timeLimit: Duration(seconds: 50)));
         expect(cubit.state.premium, isTrue);
         cubit.close();
       });
     });
   });
 
-  group('time with Premium (R7, 4.3)', () {
+  group('time (R7, 4.3, HU-037)', () {
     test('starts on the first touch, pauses in the background and moves down when it runs out', () {
       fakeAsync((async) {
-        givenPremium(true);
-        givenProgress(ShadowProgress(currentLevel: 2));
+        givenProgress(progressAt(2));
         final cubit = started(async);
-        expect(cubit.state.position.timeLimit, const Duration(seconds: 60));
+        expect(cubit.state.position.timeLimit, const Duration(seconds: 60), reason: 'with rounds, free has time too');
         expect(cubit.state.remainingFraction, 1);
 
         async.elapse(const Duration(seconds: 5));
@@ -297,9 +316,10 @@ void main() {
 
         expect(cubit.state.phase, ShadowRoundPhase.timeUp);
         expect(cubit.state.remaining, Duration.zero);
-        expect(lastSaved().currentLevel, 1);
+        expect(cubit.state.lossKind, ShadowLoss.restart);
+        expect(lastSaved().position.level, 1);
         async.elapse(ShadowGameCubit.timeUpDuration);
-        expect(cubit.state.position, const ShadowPosition(level: 1, timeLimit: Duration(seconds: 60)));
+        expect(cubit.state.position, const ShadowPosition(level: 1), reason: 'the tutorial has no time');
         cubit.close();
       });
     });
@@ -308,7 +328,7 @@ void main() {
       fakeAsync((async) {
         givenPremium(true);
         givenSettings(ParentalSettings(timerDisabled: true));
-        givenProgress(ShadowProgress(currentLevel: 8));
+        givenProgress(progressAt(8));
         final cubit = started(async);
         expect(cubit.state.position, const ShadowPosition(level: 8));
         expect(cubit.state.remainingFraction, isNull);
@@ -320,21 +340,21 @@ void main() {
   group('errors (D-010)', () {
     test('an unreadable progress or settings still plays level 1, Normal and free', () {
       fakeAsync((async) {
-        when(() => repository.readShadowProgress()).thenThrow(StateError('disk'));
+        when(() => repository.readGameProgress(GameId.shadows)).thenThrow(StateError('disk'));
         when(() => repository.readParentalSettings()).thenThrow(StateError('disk'));
         final cubit = _ErrorRecordingCubit(repository: repository);
         cubit.start();
         async.flushMicrotasks();
         expect(cubit.state.position, ShadowLadder.start);
         expect(cubit.errors, hasLength(2));
-        verifyNever(() => repository.saveShadowProgress(any()));
+        verifyNever(() => repository.saveGameProgress(any(), any()));
         cubit.close();
       });
     });
 
     test('a failed save does not stop the game', () {
       fakeAsync((async) {
-        when(() => repository.saveShadowProgress(any())).thenThrow(StateError('disk'));
+        when(() => repository.saveGameProgress(any(), any())).thenThrow(StateError('disk'));
         when(() => repository.readParentalSettings()).thenAnswer((_) async {
           throw StateError('settings');
         });
@@ -344,7 +364,7 @@ void main() {
         cubit.finishIntro();
         placeAll(cubit);
         async.flushMicrotasks();
-        expect(cubit.state.phase, ShadowRoundPhase.celebrating);
+        expect(cubit.state.phase, ShadowRoundPhase.inviting, reason: 'the tutorial still invites to play');
         expect(cubit.errors.whereType<StateError>().map((e) => e.message), containsAll(['disk', 'settings']));
         cubit.close();
         async.elapse(ShadowGameCubit.celebrationDuration);

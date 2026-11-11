@@ -7,7 +7,7 @@ import '../theme/app_palette.dart';
 /// Muestra el alcance del juego y el avance logrado. Sombras lo usa también,
 /// con su último nivel bloqueado sin Premium (HU-007 R11).
 class MemoryLevelIndicator extends StatelessWidget {
-  const MemoryLevelIndicator({super.key, required this.level, required this.total, this.lockedLevel});
+  const MemoryLevelIndicator({super.key, required this.level, required this.total, this.lockedLevel, this.color});
 
   final int level;
   final int total;
@@ -16,8 +16,10 @@ class MemoryLevelIndicator extends StatelessWidget {
   /// ni invita a comprar nada (R11).
   final int? lockedLevel;
 
+  /// Color de los puntos alcanzados: el de la ronda (HU-037 P8). Sin él, dorado.
+  final Color? color;
+
   static const Color _reached = AppPalette.gold;
-  static final Color _pending = AppPalette.gold.withValues(alpha: 0.2);
 
   // Sufijos de las claves de test de cada punto.
   static const String _reachedKey = 'reached';
@@ -53,7 +55,7 @@ class MemoryLevelIndicator extends StatelessWidget {
                   height: 10,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: dot <= level ? _reached : _pending,
+                    color: dot <= level ? (color ?? _reached) : (color ?? _reached).withValues(alpha: 0.2),
                   ),
                 ),
               ),

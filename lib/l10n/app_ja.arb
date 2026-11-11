@@ -73,7 +73,7 @@
   "restTitle": "ひと休みしよう！",
   "restSubtitle": "また明日あそぼうね",
   "parentsZoneGamesTitle": "ゲーム",
-  "parentsZoneGamesIntro": "この設定はすべてのゲームに適用されます。変更は次の盤面から反映されます。",
+  "parentsZoneGamesIntro": "変更は次にゲームを開いたときに反映されます。",
   "parentsZoneDifficultyLabel": "難易度",
   "difficultyEasy": "かんたん",
   "difficultyNormal": "ふつう",
@@ -105,5 +105,13 @@
   "feedbackEmailWhatExpected": "どうなると思っていましたか？",
   "menuShadowsSubtitle": "かげを みつけよう",
   "parentsZoneSoundTitle": "おと",
-  "parentsZoneSoundHint": "カードをめくったとき、ペアを見つけたとき、ボードをクリアしたときにやさしい音が鳴ります。まちがえても音は鳴りません。"
+  "parentsZoneSoundHint": "カードをめくったとき、ペアを見つけたとき、ボードをクリアしたときにやさしい音が鳴ります。まちがえても音は鳴りません。",
+  "roundInvitationTitle": "さあ、あそぼう！",
+  "medalBronzeTitle": "どうメダル！",
+  "medalSilverTitle": "ぎんメダル！",
+  "medalGoldTitle": "きんメダル！",
+  "medalNextRoundMessage": "ラウンドクリア！ つぎは もっと むずかしいよ。",
+  "roundEasierMessage": "じかんぎれ！ もっと やさしい チャレンジに しよう。",
+  "parentsZoneRoundsLabel": "ゲームごとのラウンド",
+  "parentsZoneRoundsHint": "ラウンドをクリアすると、ゲームは自動で次のラウンドに進みます。変えても星やメダルはなくなりません。"
 }

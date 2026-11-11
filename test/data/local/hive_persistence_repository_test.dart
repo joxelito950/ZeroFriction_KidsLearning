@@ -8,10 +8,7 @@ import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dar
 import 'package:toddler_logic/data/local/models/shadow_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
-import 'package:toddler_logic/domain/entities/shadow_progress.dart';
-import 'package:toddler_logic/domain/progress/level_record.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
@@ -181,71 +178,6 @@ void main() {
           .single as UserProfileHiveModel;
       expect(saved.toEntity(), userProfile);
     });
-    test('readMemoryProgress returns the initial progress when nothing is stored', () async {
-      when(() => memoryProgressBox.get('current_memory_progress')).thenReturn(null);
-
-      expect(await repository.readMemoryProgress(), MemoryProgress.initial);
-    });
-
-    test('readMemoryProgress converts the stored model to the domain entity', () async {
-      final playedAt = DateTime.utc(2026, 10, 22, 9);
-      when(() => memoryProgressBox.get('current_memory_progress')).thenReturn(
-        MemoryProgressHiveModel(
-          currentLevel: 3,
-          hasBadge: true,
-          bestStarsByLevel: const {1: 3, 2: 2},
-          achievedAtByLevel: {1: playedAt, 2: playedAt},
-          lastPlayedAt: playedAt,
-        ),
-      );
-
-      final progress = await repository.readMemoryProgress();
-
-      expect(progress.currentLevel, 3);
-      expect(progress.hasBadge, isTrue);
-      expect(progress.levelRecords[2], MemoryLevelRecord(bestStars: 2, achievedAt: playedAt));
-      expect(progress.lastPlayedAt, playedAt);
-    });
-
-    test('saveMemoryProgress stores the persistence model under a fixed key', () async {
-      final progress = MemoryProgress(
-        currentLevel: 4,
-        levelRecords: {3: MemoryLevelRecord(bestStars: 1, achievedAt: DateTime.utc(2026, 10, 22))},
-      );
-      when(() => memoryProgressBox.put(any(), any())).thenAnswer((_) async {});
-
-      await repository.saveMemoryProgress(progress);
-
-      final saved = verify(() => memoryProgressBox.put('current_memory_progress', captureAny()))
-          .captured
-          .single as MemoryProgressHiveModel;
-      expect(saved.toEntity(), progress);
-    });
-
-    test('readShadowProgress returns the initial progress when nothing is stored', () async {
-      when(() => shadowProgressBox.get('current_shadow_progress')).thenReturn(null);
-
-      expect(await repository.readShadowProgress(), ShadowProgress.initial);
-    });
-
-    test('saveShadowProgress stores the persistence model under a fixed key and reads it back', () async {
-      final progress = ShadowProgress(
-        currentLevel: 8,
-        hasMedal: true,
-        levelRecords: {7: LevelRecord(bestStars: 3, achievedAt: DateTime.utc(2026, 11, 9))},
-        lastPlayedAt: DateTime.utc(2026, 11, 9, 10),
-      );
-      when(() => shadowProgressBox.put(any(), any())).thenAnswer((_) async {});
-
-      await repository.saveShadowProgress(progress);
-
-      final saved = verify(() => shadowProgressBox.put('current_shadow_progress', captureAny()))
-          .captured
-          .single as ShadowProgressHiveModel;
-      when(() => shadowProgressBox.get('current_shadow_progress')).thenReturn(saved);
-      expect(await repository.readShadowProgress(), progress);
-    });
-
     test('readParentalSettings returns the defaults when nothing is stored', () async {
       when(() => parentalSettingsBox.get('current_parental_settings')).thenReturn(null);
 

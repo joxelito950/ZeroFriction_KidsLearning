@@ -3,13 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/brand/brand_assets.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/widgets/game_icon.dart';
 import 'package:toddler_logic/presentation/widgets/liquid_gold.dart';
 
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
+import 'package:toddler_logic/domain/progress/level_record.dart';
 
 /// HU-013, criterios 3 a 5: logo en el menú, icono en el botón y en la cabecera
 /// del juego, todos ignorados por el lector de pantalla.
@@ -45,11 +47,13 @@ void main() {
     final SemanticsHandle semantics = tester.ensureSemantics();
     final repository = MockPersistenceRepository();
     stubPersistenceRepository(repository);
-    when(() => repository.readMemoryProgress()).thenAnswer(
-      (_) async => MemoryProgress(
-        currentLevel: 1,
-        levelRecords: {
-          for (var level = 1; level <= 3; level++) level: MemoryLevelRecord(bestStars: 3, achievedAt: DateTime(2026)),
+    // Con las rondas (HU-037) el dorado cubre 36 estrellas: 9 son el 25 %.
+    when(() => repository.readGameProgress(GameId.memory)).thenAnswer(
+      (_) async => progressAt(
+        2,
+        records: {
+          for (var level = 2; level <= 4; level++)
+            RoundLevel(GameDifficulty.normal, level): LevelRecord(bestStars: 3, achievedAt: DateTime(2026)),
         },
       ),
     );
@@ -57,9 +61,9 @@ void main() {
     await tester.pump();
 
     final LiquidGold gold = tester.widget<LiquidGold>(find.byType(LiquidGold).first);
-    expect(gold.fraction, closeTo(0.6, 1e-9));
+    expect(gold.fraction, closeTo(0.25, 1e-9));
     expect(find.bySemanticsLabel(RegExp(l10n.menuMemoryTitle)), findsWidgets);
-    final String expected = l10n.menuGameGoldSemantics(60, 9, 15);
+    final String expected = l10n.menuGameGoldSemantics(25, 9, 36);
     expect(find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.value == expected),
         findsOneWidget);
     semantics.dispose();

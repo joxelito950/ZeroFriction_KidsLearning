@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/progress/level_record.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
 import 'package:toddler_logic/domain/memory/memory_themes.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
@@ -61,9 +63,9 @@ void main() {
     stubPersistenceRepository(repository);
   });
 
-  MemoryLadderCubit startedCubit(FakeAsync async, {MemoryProgress? saved, int seed = 1}) {
+  MemoryLadderCubit startedCubit(FakeAsync async, {GameProgress? saved, int seed = 1}) {
     if (saved != null) {
-      when(() => repository.readMemoryProgress()).thenAnswer((_) async => saved);
+      when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => saved);
     }
     final cubit = MemoryLadderCubit(repository: repository, random: Random(seed), now: () => _now, preview: Duration.zero);
     cubit.start();
@@ -71,11 +73,11 @@ void main() {
     return cubit;
   }
 
-  MemoryProgress lastSavedProgress() =>
-      verify(() => repository.saveMemoryProgress(captureAny())).captured.last as MemoryProgress;
+  GameProgress lastSavedProgress() =>
+      verify(() => repository.saveGameProgress(GameId.memory, captureAny())).captured.last as GameProgress;
 
   group('start', () {
-    test('a child who never played gets a 2x2 board without time (criterion 2)', () {
+    test('a child who never played gets the 2x2 tutorial of Easy, without time (criterion 2, HU-037 R1)', () {
       fakeAsync((async) {
         final cubit = startedCubit(async);
 
@@ -83,12 +85,13 @@ void main() {
         expect(cubit.state.position, MemoryLadder.start);
         expect(cubit.state.cards, hasLength(4));
         expect(cubit.state.remainingFraction, isNull);
+        expect(cubit.state.gameRound, GameDifficulty.easy);
       });
     });
 
     test('starts at the saved level with its arrival time limit (criterion 12)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 3));
+        final cubit = startedCubit(async, saved: progressAt(3));
 
         expect(cubit.state.position, MemoryLadder.arrivalPosition(3));
         expect(cubit.state.cards, hasLength(8));
@@ -98,7 +101,7 @@ void main() {
 
     test('all cards of a board belong to one theme, two of each emoji (criterion 14)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 5), seed: 9);
+        final cubit = startedCubit(async, saved: progressAt(5), seed: 9);
         final symbols = cubit.state.cards.map((card) => card.assetPath).toList();
         final theme = MemoryThemes.all.where((theme) => theme.symbols.toSet().containsAll(symbols));
 
@@ -109,7 +112,7 @@ void main() {
 
     test('a failure reading the progress is reported and the game starts from the beginning', () {
       fakeAsync((async) {
-        when(() => repository.readMemoryProgress()).thenThrow(StateError('corrupt'));
+        when(() => repository.readGameProgress(GameId.memory)).thenThrow(StateError('corrupt'));
         final cubit = _ErrorRecordingCubit(repository: repository, random: Random(1));
         cubit.start();
         async.flushMicrotasks();
@@ -134,7 +137,7 @@ void main() {
 
     test('starts with the first touched card, not when the board appears (criterion 3)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 2));
+        final cubit = startedCubit(async, saved: progressAt(2));
         async.elapse(const Duration(seconds: 20));
         expect(cubit.state.elapsed, Duration.zero);
 
@@ -149,7 +152,7 @@ void main() {
 
     test('pauses in the background and continues where it was (criterion 11)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 2));
+        final cubit = startedCubit(async, saved: progressAt(2));
         cubit.flipCard(0);
         async.elapse(const Duration(seconds: 5));
 
@@ -167,14 +170,14 @@ void main() {
   group('winning', () {
     test('a perfect round celebrates 3 stars, saves the record and moves up on its own (criteria 4, 5, 20, 21)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 2));
+        final cubit = startedCubit(async, saved: progressAt(2));
         _winPerfectly(async, cubit);
 
         expect(cubit.state.phase, MemoryRoundPhase.celebrating);
         expect(cubit.state.stars, 3);
         final saved = lastSavedProgress();
-        expect(saved.currentLevel, 3);
-        expect(saved.levelRecords[2], MemoryLevelRecord(bestStars: 3, achievedAt: _now));
+        expect(saved.position.level, 3);
+        expect(saved.records[const RoundLevel(GameDifficulty.normal, 2)], LevelRecord(bestStars: 3, achievedAt: _now));
         expect(saved.lastPlayedAt, _now);
 
         async.elapse(MemoryLadderCubit.celebrationDuration);
@@ -185,39 +188,44 @@ void main() {
       });
     });
 
-    test('the first win without time moves to 2x3 with 90 s (criterion 4)', () {
+    test('winning the tutorial invites to play, gives no stars and moves to 2x3 with the Easy time (HU-037 R9)', () {
       fakeAsync((async) {
         final cubit = startedCubit(async);
         _winPerfectly(async, cubit);
-        async.elapse(MemoryLadderCubit.celebrationDuration);
+        expect(cubit.state.phase, MemoryRoundPhase.inviting);
+        expect(lastSavedProgress().stars, 0);
+        async.elapse(MemoryLadderCubit.invitationDuration);
 
-        expect(cubit.state.position, MemoryLadder.arrivalPosition(2));
+        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 270)));
       });
     });
 
     test('more moves give fewer stars (D-030)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async);
+        final cubit = startedCubit(async, saved: progressAt(2));
+        _miss(async, cubit);
         _miss(async, cubit);
         _miss(async, cubit);
         _winPerfectly(async, cubit);
 
-        expect(cubit.state.moves, 4);
+        expect(cubit.state.moves, 6);
         expect(cubit.state.stars, 2);
       });
     });
 
-    test('winning the 4x4 earns the badge and restarts at 2x2 without time (criterion 8)', () {
+    test('winning the 4x4 earns the round medal and goes to the next round tutorial (criterion 8, HU-037 R2)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 5));
+        final cubit = startedCubit(async, saved: progressAt(5));
         _winPerfectly(async, cubit);
 
         expect(cubit.state.badgeEarned, isTrue);
+        expect(cubit.state.medal, GameDifficulty.normal);
         expect(cubit.state.hasBadge, isTrue);
-        expect(lastSavedProgress().hasBadge, isTrue);
+        expect(lastSavedProgress().medals, {GameDifficulty.normal});
 
         async.elapse(MemoryLadderCubit.celebrationDuration);
         expect(cubit.state.position, MemoryLadder.start);
+        expect(cubit.state.gameRound, GameDifficulty.impossible);
         expect(cubit.state.hasBadge, isTrue);
         expect(cubit.state.badgeEarned, isFalse);
       });
@@ -227,14 +235,14 @@ void main() {
   group('losing by time', () {
     test('goes down one level keeping the limit, on its own (criterion 6)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 4));
+        final cubit = startedCubit(async, saved: progressAt(4));
         cubit.flipCard(0);
         async.elapse(const Duration(seconds: 45));
 
         expect(cubit.state.phase, MemoryRoundPhase.timeUp);
         expect(cubit.state.loss, MemoryLoss.fewerCards);
         expect(cubit.state.remainingFraction, 0);
-        expect(lastSavedProgress().currentLevel, 3);
+        expect(lastSavedProgress().position.level, 3);
 
         async.elapse(MemoryLadderCubit.timeUpDuration);
         expect(cubit.state.phase, MemoryRoundPhase.playing);
@@ -242,26 +250,35 @@ void main() {
       });
     });
 
-    test('losing the timed 2x2 restarts without time (criterion 7)', () {
+    test('losing the first timed level goes back to the tutorial, without time (criterion 7, HU-037 R3)', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 2));
-        cubit.flipCard(0);
-        async.elapse(const Duration(seconds: 90));
-        async.elapse(MemoryLadderCubit.timeUpDuration);
-        expect(cubit.state.position, const MemoryLadderPosition(level: 1, timeLimit: Duration(seconds: 90)));
-
+        final cubit = startedCubit(async, saved: progressAt(2));
         cubit.flipCard(0);
         async.elapse(const Duration(seconds: 90));
         expect(cubit.state.loss, MemoryLoss.restart);
 
         async.elapse(MemoryLadderCubit.timeUpDuration);
         expect(cubit.state.position, MemoryLadder.start);
+        expect(lastSavedProgress().position.tutorialFalls, 1);
+      });
+    });
+
+    test('a second fall to the tutorial moves to the easier round, at its first timed level (HU-037 R10)', () {
+      fakeAsync((async) {
+        final cubit = startedCubit(async, saved: progressAt(2, tutorialFalls: 1));
+        cubit.flipCard(0);
+        async.elapse(const Duration(seconds: 90));
+        expect(cubit.state.loss, MemoryLoss.easierRound);
+
+        async.elapse(MemoryLadderCubit.timeUpDuration);
+        expect(cubit.state.gameRound, GameDifficulty.easy);
+        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 270)));
       });
     });
 
     test('time running out during a mismatch does not touch the next board', () {
       fakeAsync((async) {
-        final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 5));
+        final cubit = startedCubit(async, saved: progressAt(5));
         cubit.flipCard(0);
         async.elapse(const Duration(seconds: 29, milliseconds: 500));
         final pairs = _pairs(cubit.state);
@@ -318,7 +335,7 @@ void main() {
 
   test('a failure saving the progress is reported and the game goes on (D-010)', () {
     fakeAsync((async) {
-      when(() => repository.saveMemoryProgress(any())).thenThrow(StateError('disk full'));
+      when(() => repository.saveGameProgress(any(), any())).thenThrow(StateError('disk full'));
       final cubit = _ErrorRecordingCubit(repository: repository, random: Random(3), now: () => _now);
       cubit.start();
       async.flushMicrotasks();
@@ -327,13 +344,13 @@ void main() {
 
       // Falla al abrir el juego (HU-002 R13) y al ganar; el juego sigue igual.
       expect(cubit.errors, [isA<StateError>(), isA<StateError>()]);
-      expect(cubit.state.position, MemoryLadder.arrivalPosition(2));
+      expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 270)));
     });
   });
 
   test('closing the screen stops every pending timer', () {
     fakeAsync((async) {
-      final cubit = startedCubit(async, saved: MemoryProgress(currentLevel: 2));
+      final cubit = startedCubit(async, saved: progressAt(2));
       cubit.flipCard(0);
       cubit.close();
       async.elapse(const Duration(minutes: 5));

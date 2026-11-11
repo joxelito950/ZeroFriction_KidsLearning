@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
-import 'package:toddler_logic/domain/entities/shadow_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
@@ -20,6 +19,7 @@ import 'package:toddler_logic/presentation/widgets/shadow_board.dart';
 
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 
 /// Abre el juego desde una pantalla previa, para poder comprobar la salida.
 class _Launcher extends StatelessWidget {
@@ -65,6 +65,7 @@ void main() {
   Future<void> pumpScreen(
     WidgetTester tester, {
     int level = 1,
+    GameDifficulty round = GameDifficulty.normal,
     bool premium = false,
     ParentalSettings? settings,
     Size size = portrait,
@@ -74,7 +75,7 @@ void main() {
     tester.view.physicalSize = size * 2;
     tester.view.devicePixelRatio = 2;
     addTearDown(tester.view.reset);
-    when(() => repository.readShadowProgress()).thenAnswer((_) async => ShadowProgress(currentLevel: level));
+    when(() => repository.readGameProgress(GameId.shadows)).thenAnswer((_) async => progressAt(level, round: round));
     when(() => repository.readUserProfile())
         .thenAnswer((_) async => UserProfile(isPremium: premium, isSoundEnabled: true));
     if (settings != null) when(() => repository.readParentalSettings()).thenAnswer((_) async => settings);
@@ -144,7 +145,7 @@ void main() {
     });
 
     testWidgets('Impossible starts without the animation', (tester) async {
-      await pumpScreen(tester, settings: ParentalSettings(difficulty: GameDifficulty.impossible), waitIntro: false);
+      await pumpScreen(tester, round: GameDifficulty.impossible, waitIntro: false);
       expect(stateOf(tester).phase, ShadowRoundPhase.playing);
     });
   });
@@ -193,8 +194,20 @@ void main() {
       await tester.pump(ShadowBoard.flightDuration);
     });
 
-    testWidgets('placing every object celebrates and moves to the next level (R8)', (tester) async {
+    testWidgets('completing the tutorial invites to play, without stars (HU-037 R9)', (tester) async {
       await pumpScreen(tester);
+      for (final object in List.of(stateOf(tester).objects)) {
+        await dragTo(tester, object, object);
+      }
+      expect(find.byKey(const ValueKey<String>('play-invitation')), findsOneWidget);
+
+      await tester.pump(ShadowGameCubit.invitationDuration);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(stateOf(tester).level, 2);
+    });
+
+    testWidgets('placing every object celebrates and moves to the next level (R8)', (tester) async {
+      await pumpScreen(tester, level: 2);
       for (final object in List.of(stateOf(tester).objects)) {
         await dragTo(tester, object, object);
       }
@@ -202,7 +215,7 @@ void main() {
 
       await tester.pump(ShadowGameCubit.celebrationDuration);
       await tester.pump(const Duration(milliseconds: 500));
-      expect(stateOf(tester).level, 2);
+      expect(stateOf(tester).level, 3);
     });
   });
 
@@ -231,7 +244,7 @@ void main() {
 
   group('time and tutorial (R7, R15)', () {
     testWidgets('with Premium, the time bar shows and running out shows a helpful notice', (tester) async {
-      await pumpScreen(tester, level: 2, premium: true);
+      await pumpScreen(tester, level: 3, premium: true);
       expect(find.byKey(const ValueKey<String>('memory-time-bar')), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('memory-level-dot-8-pending')), findsOneWidget);
 
@@ -240,22 +253,16 @@ void main() {
       await tester.pump(const Duration(seconds: 5));
       expect(stateOf(tester).elapsed, Duration.zero, reason: 'paused in the background');
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      await tester.pump(const Duration(seconds: 61));
+      await tester.pump(const Duration(seconds: 51));
 
       expect(find.text('¡Se acabó el tiempo! Probemos con menos dibujos.'), findsOneWidget);
       await tester.pump(ShadowGameCubit.timeUpDuration);
       await tester.pump(const Duration(milliseconds: 500));
-      expect(stateOf(tester).level, 1);
+      expect(stateOf(tester).level, 2);
     });
 
-    testWidgets('losing the timed level 1 restarts calmly', (tester) async {
-      await pumpScreen(tester, level: 2, premium: true);
-      // Se pierde el nivel 2 y se llega al 1 con tiempo; se pierde también.
-      cubitOf(tester).grab(stateOf(tester).objects.first);
-      await tester.pump(const Duration(seconds: 61));
-      await tester.pump(ShadowGameCubit.timeUpDuration);
-      await finishIntro(tester);
-      await tester.pump(const Duration(milliseconds: 500));
+    testWidgets('losing the first timed level goes back to the tutorial calmly (HU-037)', (tester) async {
+      await pumpScreen(tester, level: 2);
       cubitOf(tester).grab(stateOf(tester).objects.first);
       await tester.pump(const Duration(seconds: 61));
       expect(find.text('¡Se acabó el tiempo! Empecemos de nuevo, sin prisa.'), findsOneWidget);

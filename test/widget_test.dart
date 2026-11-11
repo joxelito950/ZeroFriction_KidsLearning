@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
@@ -12,8 +11,9 @@ import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
 
 import 'presentation/memory_game_test_support.dart';
 import 'presentation/l10n_test_support.dart';
-import 'package:toddler_logic/domain/entities/shadow_progress.dart';
 import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 
 void main() {
   setUpAll(() {
@@ -132,15 +132,15 @@ void main() {
     });
 
     testWidgets('shows the medal next to Memoria once the badge is earned', (tester) async {
-      when(() => repository.readMemoryProgress())
-          .thenAnswer((_) async => MemoryProgress(currentLevel: 1, hasBadge: true));
+      when(() => repository.readGameProgress(GameId.memory))
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy, GameDifficulty.normal}));
 
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
 
       expect(badgeFinder, findsOneWidget);
       expect(
-        find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.label == 'Insignia dorada obtenida'),
+        find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.label == '¡Medalla de plata!'),
         findsOneWidget,
       );
     });
@@ -151,8 +151,8 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
 
-      when(() => repository.readMemoryProgress())
-          .thenAnswer((_) async => MemoryProgress(currentLevel: 1, hasBadge: true));
+      when(() => repository.readGameProgress(GameId.memory))
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy, GameDifficulty.normal}));
       await tester.binding.handlePopRoute();
       await tester.pump();
       await tester.binding.handlePopRoute();
@@ -163,7 +163,7 @@ void main() {
     });
 
     testWidgets('still shows the menu without medal if the progress cannot be read', (tester) async {
-      when(() => repository.readMemoryProgress()).thenThrow(Exception('disk error'));
+      when(() => repository.readGameProgress(GameId.memory)).thenThrow(Exception('disk error'));
 
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
@@ -189,13 +189,13 @@ void main() {
     });
 
     testWidgets('shows the Sombras medal, and the menu still works if its progress cannot be read', (tester) async {
-      when(() => repository.readShadowProgress())
-          .thenAnswer((_) async => ShadowProgress(currentLevel: 1, hasMedal: true));
+      when(() => repository.readGameProgress(GameId.shadows))
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy}));
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
       expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsOneWidget);
 
-      when(() => repository.readShadowProgress()).thenThrow(Exception('disk error'));
+      when(() => repository.readGameProgress(GameId.shadows)).thenThrow(Exception('disk error'));
       await tester.pumpWidget(ToddlerLogicApp(key: UniqueKey(), repository: repository, locale: testLocale));
       await tester.pump();
       expect(find.text('Sombras'), findsOneWidget);
@@ -281,7 +281,7 @@ void main() {
 
         await chooseLanguage(tester, 'ja');
 
-        verifyNever(() => repository.saveMemoryProgress(any()));
+        verifyNever(() => repository.saveGameProgress(any(), any()));
       });
     });
   });

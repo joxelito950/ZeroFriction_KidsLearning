@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/app_language.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
-import 'package:toddler_logic/domain/entities/shadow_progress.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
 import 'package:toddler_logic/domain/parental/parental_gate.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
@@ -25,6 +23,7 @@ import 'package:toddler_logic/presentation/widgets/shadow_board.dart';
 
 import 'l10n_test_support.dart';
 import 'memory_game_test_support.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 
 /// Ninguna pantalla debe desbordarse (un overflow hace fallar el test) ni recortar
 /// cartas, en ningún idioma, en vertical u horizontal, en los dos tamaños de
@@ -253,7 +252,7 @@ void main() {
           // debajo de la cabecera, en todos los idiomas y orientaciones.
           testWidgets('shadows level 7 fits below the header', (tester) async {
             _usePhone(tester, phone, textScale);
-            when(() => repository.readShadowProgress()).thenAnswer((_) async => ShadowProgress(currentLevel: 7));
+            when(() => repository.readGameProgress(GameId.shadows)).thenAnswer((_) async => progressAt(7));
 
             await tester.pumpWidget(
               localizedApp(
@@ -290,8 +289,8 @@ void main() {
           for (final level in MemoryLadder.levels) {
             testWidgets('memory level ${level.number} (${level.cards} cards) fits above the footer', (tester) async {
               _usePhone(tester, phone, textScale);
-              when(() => repository.readMemoryProgress())
-                  .thenAnswer((_) async => MemoryProgress(currentLevel: level.number));
+              when(() => repository.readGameProgress(GameId.memory))
+                  .thenAnswer((_) async => progressAt(level.number));
 
               await tester.pumpWidget(
                 localizedApp(

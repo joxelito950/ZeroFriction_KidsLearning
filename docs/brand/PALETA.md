@@ -19,6 +19,8 @@ Fuente de verdad de los colores de la app (decisión **D-032**, 2026-10-27). La 
 | Dorado | `#A86B12` | `AppPalette.gold` | Progreso de juego: estrellas, insignia, dorado progresivo del icono (HU-002) |
 | Azul petróleo | `#176B78` | `AppPalette.petrolBlue` | Acción principal y acento frío: botones, elementos interactivos, foco |
 | Blanco | `#FFFFFF` | `AppPalette.white` | Texto sobre el azul petróleo y superficies de tarjetas (como en la referencia) |
+| Bronce | `#B0603C` | `AppPalette.medalBronze` | Solo medallas y ronda Fácil (HU-037): cobre rojizo entre el coral y el dorado, para que no se confunda con el oro. 4,58:1 sobre blanco y 4,16:1 sobre crema |
+| Plata | `#748A8E` | `AppPalette.medalSilver` | Solo medallas y ronda Normal (HU-037): gris con el matiz del teal. 3,64:1 sobre blanco y 3,30:1 sobre crema (elemento no textual) |
 
 El teal profundo sigue para marca y texto; el azul petróleo se reserva a acciones, para diferenciar función y color.
 

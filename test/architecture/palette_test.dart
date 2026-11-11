@@ -70,6 +70,8 @@ void main() {
       'gold': AppPalette.gold,
       'petrolBlue': AppPalette.petrolBlue,
       'white': AppPalette.white,
+      'medalBronze': AppPalette.medalBronze,
+      'medalSilver': AppPalette.medalSilver,
     };
 
     test('tiene exactamente los colores de la tabla de PALETA.md', () {
@@ -79,14 +81,14 @@ void main() {
           match.group(2)!: Color(0xFF000000 | int.parse(match.group(1)!, radix: 16)),
       };
 
-      expect(inDocs, hasLength(7));
+      expect(inDocs, hasLength(9));
       expect(inCode, equals(inDocs));
       expect(AppPalette.all, unorderedEquals(inDocs.values));
     });
 
-    test('no define más colores que los 7', () {
+    test('no define más colores que los 9', () {
       final String source = File(palettePath).readAsStringSync();
-      expect(RegExp(r'\bColor\(0x').allMatches(source), hasLength(7));
+      expect(RegExp(r'\bColor\(0x').allMatches(source), hasLength(9));
     });
   });
 
