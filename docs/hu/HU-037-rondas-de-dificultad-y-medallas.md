@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento: el dueño decidió P1 a P10 el 2026-11-10 (sección 11); quedan P11 a P16 |
+| **Estado** | Lista (2026-11-11): el dueño decidió P1 a P10 el 2026-11-10 y P14 a P16 el 2026-11-11. Quedan P11 a P13, que no bloquean y se desarrollan con su recomendación salvo que el dueño diga otra cosa |
 | **Épica** | E1 · Juegos (afecta a todos) y E2 · Zona de Padres |
 | **Prioridad** | P2: cambia el progreso guardado de todos los juegos; cuanto antes, menos datos que migrar |
 | **Tamaño** | L (estimación: 3–4 entregas) |
@@ -234,8 +234,8 @@ Memoria en Normal: tutorial → 2×3 → 2×4 → pierde → 2×3 → pierde →
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P14 | Al bajar de ronda (R10), ¿en qué nivel se sigue? | En el **primer nivel con tiempo** de la ronda anterior (el 2×3 en Memoria), con su tiempo. Volver a su tutorial sería otro paso atrás sin reto, y un nivel alto podría frustrar otra vez | Sí |
-| P15 | ¿Qué cuenta como «llegar al tutorial» para R10? ¿También la entrada en la ronda, que empieza por el tutorial? | **Solo las caídas**: llegar al tutorial **por perder**. Así baja de ronda quien cae dos veces, no quien acaba de subir y pierde una vez. El contador vuelve a cero al cambiar de ronda. Si se cuenta la entrada, bastaría una sola caída para bajar | Sí |
-| P16 | En Sombras gratis, ¿una ronda se completa (y da su medalla) al superar el nivel 7, y el nivel 8 es el extra de Premium? | **Sí.** Así lo gratis tiene las tres medallas (el juego completo de verdad, ≈ 86 %), y Premium suma el nivel más difícil de cada ronda y sus estrellas. Con Premium, la ronda termina en el nivel 8 | Sí |
+| P14 | Al bajar de ronda (R10), ¿en qué nivel se sigue? | ✅ Decidido (2026-11-11): en el **primer nivel con tiempo** de la ronda anterior, como la recomendación | — |
+| P15 | ¿Qué cuenta como «llegar al tutorial» para R10? ¿También la entrada en la ronda, que empieza por el tutorial? | ✅ Decidido (2026-11-11): **solo las caídas** (llegar al tutorial por perder) cuentan; el contador vuelve a cero al cambiar de ronda, como la recomendación | — |
+| P16 | En Sombras gratis, ¿una ronda se completa (y da su medalla) al superar el nivel 7, y el nivel 8 es el extra de Premium? | ✅ Decidido (2026-11-11): en Sombras gratis la ronda se completa (y da su medalla) al superar el nivel 7; el nivel 8 es el extra de Premium, como la recomendación | — |
 | P11 a P13 | (sección 10.5) Aviso tras la actualización, ayudas en Normal, absorber HU-010 | Las recomendaciones de la sección 10.5 | No |
 
