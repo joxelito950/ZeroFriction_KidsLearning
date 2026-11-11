@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../brand/brand_assets.dart';
 import '../../domain/memory/memory_ladder.dart';
+import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/settings/game_difficulty.dart';
 import '../../domain/shadows/shadow_ladder.dart';
@@ -18,6 +19,7 @@ import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
 import '../widgets/round_style.dart';
 import 'memory_game_screen.dart';
+import 'odd_one_out_screen.dart';
 import 'shadow_game_screen.dart';
 
 /// Menú principal súper visual y simplificado para niños de 3 años.
@@ -139,6 +141,9 @@ class _MenuActionsState extends State<_MenuActions> {
   /// Progreso de Sombras (HU-007): medalla y dorado.
   GameProgress _shadows = GameProgress.initial();
 
+  /// Progreso de «¿Cuál es diferente?» (HU-025).
+  GameProgress _oddOneOut = GameProgress.initial();
+
   @override
   void initState() {
     super.initState();
@@ -160,10 +165,17 @@ class _MenuActionsState extends State<_MenuActions> {
     } catch (_) {
       shadows = GameProgress.initial();
     }
-    if (!mounted || (memory == _memory && shadows == _shadows)) return;
+    GameProgress oddOneOut;
+    try {
+      oddOneOut = await repository.readGameProgress(GameId.oddOneOut);
+    } catch (_) {
+      oddOneOut = GameProgress.initial();
+    }
+    if (!mounted || (memory == _memory && shadows == _shadows && oddOneOut == _oddOneOut)) return;
     setState(() {
       _memory = memory;
       _shadows = shadows;
+      _oddOneOut = oddOneOut;
     });
   }
 
@@ -243,6 +255,29 @@ class _MenuActionsState extends State<_MenuActions> {
             null => null,
           },
           onTap: () => _open(const ShadowGameScreen()),
+        ),
+        const SizedBox(height: 16),
+        // Tercer juego (HU-025). El menú para varios juegos (HU-023) llega antes
+        // del cuarto: con tres, los botones anchos aún caben.
+        _MenuButton(
+          key: const ValueKey<String>('menu-odd-one-out'),
+          title: l10n.oddOneOutTitle,
+          subtitle: l10n.menuOddOneOutSubtitle,
+          // Blanco con texto teal: se distingue de los dos botones oscuros.
+          backgroundColor: AppPalette.white,
+          textColor: AppPalette.deepTeal,
+          icon: const GameIcon.oddOneOut(key: ValueKey<String>('menu-odd-one-out-icon'), size: 52),
+          goldFraction: _oddOneOut.goldFraction(OddOneOut.rounds),
+          goldLabel: l10n.menuGameGoldSemantics(
+            (_oddOneOut.goldFraction(OddOneOut.rounds) * 100).round(),
+            _oddOneOut.stars,
+            OddOneOut.rounds.maxStars,
+          ),
+          badge: switch (_oddOneOut.bestMedal) {
+            final GameDifficulty medal => _medal('menu-odd-one-out-badge', RoundStyle.medalTitle(l10n, medal), medal),
+            null => null,
+          },
+          onTap: () => _open(const OddOneOutScreen()),
         ),
         const SizedBox(height: 40),
 

@@ -113,5 +113,9 @@
   "medalNextRoundMessage": "라운드 완료! 이제 더 큰 도전이에요.",
   "roundEasierMessage": "시간이 다 됐어요! 더 쉬운 도전을 해 봐요.",
   "parentsZoneRoundsLabel": "게임별 라운드",
-  "parentsZoneRoundsHint": "라운드를 완료하면 게임이 스스로 다음 라운드로 올라가요. 바꿔도 별과 메달은 그대로예요."
+  "parentsZoneRoundsHint": "라운드를 완료하면 게임이 스스로 다음 라운드로 올라가요. 바꿔도 별과 메달은 그대로예요.",
+  "oddOneOutTitle": "무엇이 다를까요?",
+  "oddOneOutInstructions": "다른 것과 다른 하나를 눌러요.",
+  "menuOddOneOutSubtitle": "다른 하나를 찾아요",
+  "oddOneOutObjectSemantics": "그림 {symbol}"
 }

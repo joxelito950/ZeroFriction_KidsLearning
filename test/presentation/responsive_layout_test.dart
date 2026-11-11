@@ -24,6 +24,7 @@ import 'package:toddler_logic/presentation/widgets/shadow_board.dart';
 import 'l10n_test_support.dart';
 import 'memory_game_test_support.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/presentation/screens/odd_one_out_screen.dart';
 
 /// Ninguna pantalla debe desbordarse (un overflow hace fallar el test) ni recortar
 /// cartas, en ningún idioma, en vertical u horizontal, en los dos tamaños de
@@ -110,7 +111,13 @@ void main() {
 
             await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: locale));
 
-            for (final label in [l10n.menuMemoryTitle, l10n.shadowsGameTitle, l10n.menuParentsZone, l10n.menuExit]) {
+            for (final label in [
+              l10n.menuMemoryTitle,
+              l10n.shadowsGameTitle,
+              l10n.oddOneOutTitle,
+              l10n.menuParentsZone,
+              l10n.menuExit,
+            ]) {
               await tester.ensureVisible(find.text(label));
               expect(find.text(label).hitTestable(), findsOneWidget, reason: label);
             }
@@ -283,6 +290,34 @@ void main() {
               expect(rect.bottom, lessThanOrEqualTo(screen.height), reason: '$name clipped');
               expect(rect.left, greaterThanOrEqualTo(0), reason: name);
               expect(rect.right, lessThanOrEqualTo(screen.width), reason: name);
+            }
+          });
+
+          // HU-025: el nivel 5 (6 objetos) entra entero debajo de la cabecera.
+          testWidgets('odd one out level 5 fits below the header', (tester) async {
+            _usePhone(tester, phone, textScale);
+            when(() => repository.readGameProgress(GameId.oddOneOut)).thenAnswer((_) async => progressAt(5));
+
+            await tester.pumpWidget(
+              localizedApp(
+                locale: locale,
+                home: RepositoryProvider<IPersistenceRepository>.value(
+                  value: repository,
+                  child: OddOneOutScreen(random: Random(5)),
+                ),
+              ),
+            );
+            await tester.pump();
+            await tester.pump(const Duration(milliseconds: 700));
+
+            final double headerBottom = tester.getBottomLeft(find.text(l10n.oddOneOutInstructions)).dy;
+            final Size screen = tester.view.physicalSize / tester.view.devicePixelRatio;
+            for (var index = 0; index < 6; index++) {
+              final Rect rect = tester.getRect(find.byKey(ValueKey<String>('odd-object-$index')));
+              expect(rect.top, greaterThan(headerBottom), reason: 'object $index under the header');
+              expect(rect.bottom, lessThanOrEqualTo(screen.height), reason: 'object $index clipped');
+              expect(rect.left, greaterThanOrEqualTo(0));
+              expect(rect.right, lessThanOrEqualTo(screen.width));
             }
           });
 

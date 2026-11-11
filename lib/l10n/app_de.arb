@@ -113,5 +113,9 @@
   "medalNextRoundMessage": "Runde geschafft! Jetzt eine größere Herausforderung.",
   "roundEasierMessage": "Die Zeit ist um! Versuchen wir eine ruhigere Herausforderung.",
   "parentsZoneRoundsLabel": "Runde jedes Spiels",
-  "parentsZoneRoundsHint": "Jedes Spiel steigt von selbst eine Runde auf, wenn sie geschafft ist. Ein Wechsel nimmt keine Sterne oder Medaillen weg."
+  "parentsZoneRoundsHint": "Jedes Spiel steigt von selbst eine Runde auf, wenn sie geschafft ist. Ein Wechsel nimmt keine Sterne oder Medaillen weg.",
+  "oddOneOutTitle": "Was passt nicht?",
+  "oddOneOutInstructions": "Tippe auf das, was nicht zu den anderen passt.",
+  "menuOddOneOutSubtitle": "Finde das andere",
+  "oddOneOutObjectSemantics": "Bild {symbol}"
 }

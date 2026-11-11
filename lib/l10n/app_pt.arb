@@ -113,5 +113,9 @@
   "medalNextRoundMessage": "Rodada completa! Agora, um desafio maior.",
   "roundEasierMessage": "O tempo acabou! Vamos tentar um desafio mais tranquilo.",
   "parentsZoneRoundsLabel": "Rodada de cada jogo",
-  "parentsZoneRoundsHint": "Cada jogo sobe de rodada sozinho ao completá-la. Mudar não tira estrelas nem medalhas."
+  "parentsZoneRoundsHint": "Cada jogo sobe de rodada sozinho ao completá-la. Mudar não tira estrelas nem medalhas.",
+  "oddOneOutTitle": "Qual é diferente?",
+  "oddOneOutInstructions": "Toque no que não é como os outros.",
+  "menuOddOneOutSubtitle": "Encontre o diferente",
+  "oddOneOutObjectSemantics": "Desenho {symbol}"
 }

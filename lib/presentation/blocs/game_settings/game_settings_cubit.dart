@@ -10,7 +10,11 @@ import '../../../domain/settings/game_difficulty.dart';
 final class GameSettingsState {
   const GameSettingsState({
     this.loaded = false,
-    this.rounds = const {GameId.memory: GameDifficulty.easy, GameId.shadows: GameDifficulty.easy},
+    this.rounds = const {
+      GameId.memory: GameDifficulty.easy,
+      GameId.shadows: GameDifficulty.easy,
+      GameId.oddOneOut: GameDifficulty.easy,
+    },
     this.timerDisabled = false,
     this.isPremium = false,
     this.keepStars = false,

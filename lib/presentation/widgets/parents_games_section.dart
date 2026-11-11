@@ -75,6 +75,7 @@ class _GamesCard extends StatelessWidget {
                 for (final (GameId game, String name) in [
                   (GameId.memory, l10n.menuMemoryTitle),
                   (GameId.shadows, l10n.shadowsGameTitle),
+                  (GameId.oddOneOut, l10n.oddOneOutTitle),
                 ]) ...[
                   const SizedBox(height: 12),
                   Text(name, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700)),
@@ -85,13 +86,16 @@ class _GamesCard extends StatelessWidget {
                     runSpacing: 8,
                     children: [
                       for (final round in GameDifficulty.values)
-                        ChoiceChip(
-                          key: ValueKey<String>('round-${game.name}-${round.name}'),
-                          avatar: Icon(Icons.military_tech_rounded, color: RoundStyle.colorOf(round), size: 18),
-                          label: Text(_label(l10n, round)),
-                          selected: state.rounds[game] == round,
-                          onSelected: state.loaded ? (_) => cubit.setRound(game, round) : null,
-                        ),
+                        // En «¿Cuál es diferente?», Imposible es de Premium (HU-025 P1): sin
+                        // Premium no se muestra, como todo lo que aún no se puede comprar.
+                        if (game != GameId.oddOneOut || round != GameDifficulty.impossible || state.isPremium)
+                          ChoiceChip(
+                            key: ValueKey<String>('round-${game.name}-${round.name}'),
+                            avatar: Icon(Icons.military_tech_rounded, color: RoundStyle.colorOf(round), size: 18),
+                            label: Text(_label(l10n, round)),
+                            selected: state.rounds[game] == round,
+                            onSelected: state.loaded ? (_) => cubit.setRound(game, round) : null,
+                          ),
                     ],
                   ),
                 ],

@@ -80,6 +80,20 @@ void main() {
     verifyNever(() => repository.saveGameProgress(GameId.shadows, any()));
   });
 
+  testWidgets('the third game has its rounds; Impossible only with Premium (HU-025 P1)', (tester) async {
+    await pumpSection(tester);
+    expect(find.text(l10n.oddOneOutTitle), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('round-oddOneOut-normal')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('round-oddOneOut-impossible')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('round-memory-impossible')), findsOneWidget);
+  });
+
+  testWidgets('with Premium the third game shows its Impossible round', (tester) async {
+    premium(true);
+    await pumpSection(tester);
+    expect(find.byKey(const ValueKey<String>('round-oddOneOut-impossible')), findsOneWidget);
+  });
+
   testWidgets('without Premium the switch is not shown until it can be bought (R4, 2026-11-09)', (tester) async {
     await pumpSection(tester);
 

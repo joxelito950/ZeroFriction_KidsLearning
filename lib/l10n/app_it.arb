@@ -113,5 +113,9 @@
   "medalNextRoundMessage": "Round completato! Ora una sfida più grande.",
   "roundEasierMessage": "Tempo scaduto! Proviamo una sfida più tranquilla.",
   "parentsZoneRoundsLabel": "Round di ogni gioco",
-  "parentsZoneRoundsHint": "Ogni gioco passa da solo al round successivo quando lo completa. Cambiarlo non toglie stelle né medaglie."
+  "parentsZoneRoundsHint": "Ogni gioco passa da solo al round successivo quando lo completa. Cambiarlo non toglie stelle né medaglie.",
+  "oddOneOutTitle": "Quale è diverso?",
+  "oddOneOutInstructions": "Tocca quello che non è come gli altri.",
+  "menuOddOneOutSubtitle": "Trova il diverso",
+  "oddOneOutObjectSemantics": "Disegno {symbol}"
 }

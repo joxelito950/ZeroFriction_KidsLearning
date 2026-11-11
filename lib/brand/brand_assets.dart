@@ -12,5 +12,8 @@ abstract final class BrandAssets {
   /// Icono del juego Sombras (HU-007): el elefante y su sombra.
   static const String shadowsIcon = 'assets/brand/shadows_icon.png';
 
-  static const List<String> all = [logo, memoryIcon, shadowsIcon];
+  /// Icono de «¿Cuál es diferente?» (HU-025): tres manzanas y una pera.
+  static const String oddOneOutIcon = 'assets/brand/odd_one_out_icon.png';
+
+  static const List<String> all = [logo, memoryIcon, shadowsIcon, oddOneOutIcon];
 }
