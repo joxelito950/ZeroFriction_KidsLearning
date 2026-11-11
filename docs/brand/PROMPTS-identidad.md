@@ -62,11 +62,16 @@ Pegar este bloque al principio de cada petición:
 
 Si sale una sombra proyectada en el suelo o difuminada, pedir: «La sombra no es una sombra de luz: es una silueta plana y nítida del mismo elefante, del mismo tamaño, detrás de él».
 
+## 9. Icono del juego «¿Cuál es diferente?» (silueta cerrada para el dorado, HU-025)
+
+> [Bloque común]
+> **Tres manzanas iguales** de plastilina en coral suave #D9735F, con su hojita en teal profundo #00454D, en fila y un poco solapadas, y **una pera** en ámbar #ECA463 un poco más adelantada y ligeramente inclinada, como si saludara: es la diferente. Contentas, sin caras exageradas. **Sin el niño.** Fondo totalmente transparente. El conjunto forma **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes, centrada y ocupando el 80 % del lienzo. Que a 48 px se lea «tres iguales y una distinta».
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2, 4, 5, 6, 7 y 8 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2, 4, 5, 6, 7, 8 y 9 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 

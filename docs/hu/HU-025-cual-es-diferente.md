@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-09; avanzado el 2026-11-10 sin respuestas del dueño, sección 10) |
+| **Estado** | En refinamiento (iniciado el 2026-11-09; avanzado el 2026-11-10 y el 2026-11-11 con las rondas de HU-037, sección 11). Es el **próximo juego**: va antes que HU-006 |
 | **Épica** | E4 · Nuevos juegos |
 | **Prioridad** | P2: candidato a tercer juego, el más barato de hacer después de Sombras |
 | **Tamaño** | M (estimación: 3–4 días) |
@@ -118,3 +118,41 @@ Con 3 tableros por nivel, un nivel dura unos 30–60 s a los 3 años: lo mismo q
 ### 10.4 Preguntas que quedan
 
 P1 (modelo de acceso, ahora ligado a HU-037 P6) y P2 (escalera) siguen abiertas y bloquean. P5 se cierra con HU-037.
+
+## 11. El juego con las rondas de HU-037 (avance del 2026-11-11)
+
+### 11.1 Escalera de cada ronda (propuesta para P2)
+
+Cada ronda (Fácil, Normal, Imposible) tiene la misma escalera: un **tutorial** y **4 niveles** con tiempo. Cada nivel son **3 tableros** seguidos (P3); el tiempo es para los tres.
+
+| Nivel | Objetos | Qué los hace diferentes | Fácil | Normal | Imposible |
+|---|---|---|---|---|---|
+| Tutorial | 3 | Grupos muy distintos (🐶 🐱 🚗) | Sin tiempo | Sin tiempo | Sin tiempo |
+| 2 | 4 | Grupos muy distintos | 60 s | 40 s | 25 s |
+| 3 | 4 | Grupos cercanos (granja frente a salvaje) | 50 s | 35 s | 20 s |
+| 4 | 5 | Grupos cercanos (tierra frente a aire) | 45 s | 30 s | 18 s |
+| 5 | 6 | Un rasgo visible (rojos frente a un amarillo) | 40 s | 25 s | 15 s |
+
+Para un adulto, un tablero cuesta 2–3 s: el nivel 5 en Imposible se hace en unos 9 s. Se ajustan jugando, como las de Sombras.
+
+### 11.2 Estrellas, ayudas y Premium
+
+- **Estrellas por nivel** (como HU-007 R9, sobre los 3 tableros): 3★ con como mucho 1 fallo, 2★ con como mucho 3, 1★ con como mucho 6. El tutorial no da estrellas (HU-037 P2).
+- **Ayuda** (solo en Fácil y Normal, HU-030 R10): al empezar cada tablero, el objeto diferente da un **saltito** muy breve. En Imposible, no.
+- **Reparto ≈ 50 % gratis** (P1): gratis la ronda Fácil completa (tutorial y niveles 2–5, con su bronce) y la primera mitad de Normal (tutorial y niveles 2–3). Premium: los niveles 4–5 de Normal y toda Imposible. En estrellas: 18 de 36 = **50 %**.
+- **Antes del pago (HU-006 va después):** al superar el nivel 3 de Normal, el niño vuelve al nivel 2 de Normal y sigue jugando lo gratis, sin candados a la vista ni invitaciones a comprar (como Sombras hoy, con su nivel 8 oculto). Ver P6.
+
+### 11.3 Icono del juego
+
+Texto para generarlo en la sección 9 de [PROMPTS-identidad.md](../brand/PROMPTS-identidad.md): tres frutas iguales y un objeto distinto, con una silueta compacta para el dorado.
+
+### 11.4 Preguntas
+
+| # | Pregunta | Recomendación | Bloquea |
+|---|---|---|---|
+| P1 | Reparto gratis y Premium (≈ 50 %) | Sección 11.2: Fácil completa y media Normal gratis | Sí |
+| P2 | Escalera y tiempos | Tabla 11.1 | Sí |
+| P6 | Mientras no exista el pago, ¿qué pasa al superar la parte gratis de Normal? | **Se repite la parte gratis de Normal** (vuelve al nivel 2), sin mostrar nada bloqueado. Con HU-006, sigue al nivel 4 | No |
+| P7 | ¿Nombre del juego? | «¿Cuál es diferente?» en español y «Odd one out» en inglés; los otros 7 idiomas con TD-011 | No |
+| P8 | ¿Ayuda del saltito también en Normal? | **Sí**, como el resto de ayudas (HU-030 R10, HU-037 P12) | No |
+
