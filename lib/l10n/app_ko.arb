@@ -103,5 +103,7 @@
   "feedbackEmailSubject": "ToddlerLogic · 의견 ({version})",
   "feedbackEmailWhatHappened": "무슨 일이 있었나요?",
   "feedbackEmailWhatExpected": "어떻게 될 거라고 생각했나요?",
-  "menuShadowsSubtitle": "그림자를 찾아요"
+  "menuShadowsSubtitle": "그림자를 찾아요",
+  "parentsZoneSoundTitle": "소리",
+  "parentsZoneSoundHint": "카드를 뒤집거나 짝을 찾거나 판을 완성하면 부드러운 소리가 나요. 실수했을 때는 소리가 나지 않아요."
 }

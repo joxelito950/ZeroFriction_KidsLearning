@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (refinamiento cerrado el 2026-10-27; el desarrollo **no** ha empezado) |
+| **Estado** | En curso (desarrollada el 2026-11-10 en `feature/hu-005-sounds`; faltan oírla en el moto g55 y que el dueño apruebe los sonidos, P5). Refinamiento cerrado el 2026-10-27 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (2–3 días) |
@@ -71,7 +71,7 @@
 | P2 | ¿El sonido viene activado o desactivado al instalar? | ✅ Decidido (2026-10-27): **activado**, a volumen moderado; un adulto lo apaga en la Zona de Padres | — |
 | P3 | ¿Música de fondo? | ✅ Asumida la recomendación: **no** en esta historia: distrae, cansa a los padres y aumenta el tamaño. Se puede proponer aparte | — |
 | P4 | ¿Qué paquete de audio? | ✅ Asumida la recomendación: **`audioplayers`**: maduro, mantenido y suficiente para efectos cortos. Se confirma midiendo el tamaño del APK | — |
-| P5 | ¿Quién elige los sonidos? | ✅ Decidido (2026-10-27): **el desarrollo propone** una selección corta de bancos CC0 (Kenney, freesound.org con filtro CC0) y **el dueño del producto aprueba** antes de integrarla | — |
+| P5 | ¿Quién elige los sonidos? | ✅ Decidido (2026-10-27): **el desarrollo propone** una selección corta de bancos CC0 (Kenney, freesound.org con filtro CC0) y **el dueño del producto aprueba** antes de integrarla. **2026-11-10:** en vez de bancos, el desarrollo propone sonidos **de creación propia**, sintetizados (sin licencias de terceros). ⏳ **Pendiente: que el dueño los apruebe** escuchándolos en el teléfono; si no le gustan, se cambian los parámetros del script o se usan los de un banco CC0 | Sí, para publicar |
 | P6 | ¿Narración por voz de las instrucciones (para niños que no leen)? | ✅ Asumida la recomendación: **fuera de esta historia**: es otra necesidad (voz por idioma, grabaciones o TTS) y se propuso como HU-018, **descartada** el 2026-10-28 (D-034: la app es visual y los sonidos solo acompañan logros e interacciones) | — |
 
 ## 8. Fuera de alcance
@@ -79,3 +79,11 @@
 - Música de fondo (P3).
 - Narración por voz (descartada, D-034).
 - Sonidos de juegos futuros (llegan con cada juego).
+
+## 9. Desarrollo
+
+| Entrega | Estado | Contenido |
+|---|---|---|
+| Única | 2026-11-10, rama `feature/hu-005-sounds` | **Sonidos** (`assets/sounds/`, 118 KB en total): `flip` (voltear), `match` (pareja o sombra encajada), `complete` (tablero) y `badge` (insignia o medalla). Son campanitas sintetizadas por `tool/sounds/generate_sounds.py` (solo la biblioteca estándar de Python): notas puras con un armónico suave, ataque de 8 ms sin clic y caída lenta; **de creación propia, sin licencias de terceros** (R6). **Reproducción:** `audioplayers` (P4) como sonidos de interfaz (`assistanceSonification`), que siguen el volumen del sistema y el modo silencio del teléfono (R5) y no paran la música que esté sonando; volumen 0,7 del del teléfono. Un fallo del plugin nunca llega al juego (R7). **Cuándo suena:** `GameSoundEvents` compara cada estado del juego con el anterior; los cubits no saben nada del sonido. Memoria: voltear, pareja, tablero, insignia; la vista previa, ocultar dos cartas distintas y el tiempo agotado no suenan (R2). Sombras: encajar y tablero o medalla; soltar en otra sombra no suena. **Interruptor «Sonido»** en la Zona de Padres, junto al idioma, con `isSoundEnabled` (activado por defecto, P2), al instante y guardado (R4). Textos en los 9 idiomas (los 7 que no son español ni inglés, pendientes de TD-011) |
+
+**Moto g55 (2026-11-10):** al voltear una carta, la app reproduce el sonido (Android registra la pista de ToddlerLogic) como sonido de interfaz, y con el teléfono en silencio no se oye, como pide R5. Se encontró y corrigió que el primer reproductor nacía como «multimedia» (que no respeta el silencio): ahora el contexto de sonido de interfaz se fija para todos antes de crear ninguno. Falta oírlo con el sonido del teléfono activado y que el dueño apruebe los sonidos (P5).

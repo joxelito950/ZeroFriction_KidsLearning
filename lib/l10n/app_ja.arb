@@ -103,5 +103,7 @@
   "feedbackEmailSubject": "ToddlerLogic · ご意見（{version}）",
   "feedbackEmailWhatHappened": "何が起きましたか？",
   "feedbackEmailWhatExpected": "どうなると思っていましたか？",
-  "menuShadowsSubtitle": "かげを みつけよう"
+  "menuShadowsSubtitle": "かげを みつけよう",
+  "parentsZoneSoundTitle": "おと",
+  "parentsZoneSoundHint": "カードをめくったとき、ペアを見つけたとき、ボードをクリアしたときにやさしい音が鳴ります。まちがえても音は鳴りません。"
 }

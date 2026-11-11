@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (desarrollada el 2026-11-06 en `feature/hu-002-016-gold-stars`, con HU-016; falta verla en el moto g55). Refinamiento cerrado el 2026-10-21 y revisado el 2026-11-05 |
+| **Estado** | Hecha (vista en el moto g55 el 2026-11-09 y publicada en `1.0.0-rc.2`). Antes: en curso (desarrollada el 2026-11-06 en `feature/hu-002-016-gold-stars`, con HU-016; falta verla en el moto g55). Refinamiento cerrado el 2026-10-21 y revisado el 2026-11-05 |
 | **Épica** | E1 · Juego de memoria (la regla del dorado aplica también a los juegos futuros) |
 | **Prioridad** | P3 |
 | **Tamaño** | M, al límite (unos 4 días): dominio de la pérdida, el dorado líquido animado y la etiqueta en 9 idiomas. HU-016 (S) va en el mismo PR |

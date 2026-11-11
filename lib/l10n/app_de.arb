@@ -103,5 +103,7 @@
   "feedbackEmailSubject": "ToddlerLogic · Feedback ({version})",
   "feedbackEmailWhatHappened": "Was ist passiert?",
   "feedbackEmailWhatExpected": "Was hast du erwartet?",
-  "menuShadowsSubtitle": "Finde jeden Schatten"
+  "menuShadowsSubtitle": "Finde jeden Schatten",
+  "parentsZoneSoundTitle": "Ton",
+  "parentsZoneSoundHint": "Sanfte Töne beim Umdrehen einer Karte, bei einem Paar oder einem fertigen Spielbrett. Fehler machen nie einen Ton."
 }

@@ -7,7 +7,10 @@ import '../../domain/memory/memory_ladder.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../domain/shadows/shadow_ladder.dart';
 import '../../l10n/app_localizations.dart';
+import '../../domain/sound/game_sound.dart';
 import '../blocs/play_time/play_time_cubit.dart';
+import '../blocs/sound/game_sound_events.dart';
+import '../blocs/sound/sound_cubit.dart';
 import '../blocs/shadow_game/shadow_game_cubit.dart';
 import '../blocs/shadow_game/shadow_game_state.dart';
 import '../theme/app_palette.dart';
@@ -71,11 +74,23 @@ class _ShadowGameViewState extends State<_ShadowGameView> with WidgetsBindingObs
   /// Tiempo de juego diario (HU-009); no está en algunos tests.
   PlayTimeCubit? _playTime;
 
+  /// Sonidos (HU-005); no está en algunos tests.
+  SoundCubit? _sound;
+  ShadowGameState _previous = const ShadowGameState();
+
+  void _onState(ShadowGameState state) {
+    _playTime?.setBoardInProgress(ShadowGameScreen.boardInProgress(state));
+    final GameSound? sound = GameSoundEvents.shadows(_previous, state);
+    _previous = state;
+    if (sound != null) _sound?.play(sound);
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _playTime = context.read<PlayTimeCubit?>();
+    _sound = context.read<SoundCubit?>();
   }
 
   @override
@@ -108,7 +123,7 @@ class _ShadowGameViewState extends State<_ShadowGameView> with WidgetsBindingObs
             color: AppPalette.warmCream,
             child: SafeArea(
               child: BlocConsumer<ShadowGameCubit, ShadowGameState>(
-                listener: (_, state) => _playTime?.setBoardInProgress(ShadowGameScreen.boardInProgress(state)),
+                listener: (_, state) => _onState(state),
                 builder: (context, state) {
                   final (GlobalKey objectKey, GlobalKey shadowKey) = _hintKeysFor(state.round);
                   final List<String> tray = state.trayObjects;

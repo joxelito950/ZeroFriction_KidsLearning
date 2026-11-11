@@ -4,12 +4,14 @@ import 'package:path_provider/path_provider.dart';
 
 import 'data/local/hive_persistence_config.dart';
 import 'data/local/hive_persistence_repository.dart';
+import 'data/platform/audioplayers_sound_effects.dart';
 import 'data/platform/platform_feedback_channel.dart';
 import 'domain/feedback/feedback_email.dart';
 import 'domain/repositories/i_persistence_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/blocs/app_locale/app_locale_cubit.dart';
 import 'presentation/blocs/play_time/play_time_cubit.dart';
+import 'presentation/blocs/sound/sound_cubit.dart';
 import 'presentation/l10n/startup_locale.dart';
 import 'presentation/screens/main_menu_screen.dart';
 import 'presentation/theme/app_theme.dart';
@@ -91,6 +93,10 @@ class _ToddlerLogicAppState extends State<ToddlerLogicApp> {
           // Tiempo de juego diario y descanso (HU-009).
           BlocProvider<PlayTimeCubit>(
             create: (_) => PlayTimeCubit(repository: repository, now: widget.now)..start(),
+          ),
+          // Sonidos suaves de los juegos y su interruptor (HU-005).
+          BlocProvider<SoundCubit>(
+            create: (_) => SoundCubit(repository: repository, effects: AudioplayersSoundEffects())..load(),
           ),
         ],
         child: BlocBuilder<AppLocaleCubit, Locale>(
