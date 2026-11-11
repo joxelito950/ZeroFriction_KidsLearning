@@ -2,6 +2,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/data/local/hive_persistence_repository.dart';
+import 'package:toddler_logic/data/local/models/game_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
@@ -28,6 +29,8 @@ class _FakeParentalSettingsHiveModel extends Fake implements ParentalSettingsHiv
 class _MockShadowProgressBox extends Mock implements Box<ShadowProgressHiveModel> {}
 
 class _FakeShadowProgressHiveModel extends Fake implements ShadowProgressHiveModel {}
+
+class _MockGameProgressBox extends Mock implements Box<GameProgressHiveModel> {}
 
 class _FakeLevelStateHiveModel extends Fake implements LevelStateHiveModel {}
 
@@ -69,6 +72,7 @@ void main() {
         memoryProgressBox: memoryProgressBox,
         parentalSettingsBox: parentalSettingsBox,
         shadowProgressBox: shadowProgressBox,
+        gameProgressBox: _MockGameProgressBox(),
       );
     });
 
