@@ -569,5 +569,27 @@
   "parentsZoneRoundsHint": "Each game moves up a round by itself when it is completed. Changing it keeps stars and medals.",
   "@parentsZoneRoundsHint": {
     "description": "One line under the label: games move up a round by themselves; changing it keeps stars and medals."
+  },
+  "oddOneOutTitle": "Odd one out",
+  "@oddOneOutTitle": {
+    "description": "Name of the Odd one out game (HU-025 P7), in the game header and on the menu button. Short."
+  },
+  "oddOneOutInstructions": "Tap the one that is not like the others.",
+  "@oddOneOutInstructions": {
+    "description": "One line under the game title, for the adult: tap the object that is not like the others."
+  },
+  "menuOddOneOutSubtitle": "Find the odd one",
+  "@menuOddOneOutSubtitle": {
+    "description": "Subtitle of the Odd one out button on the main menu. Very short, like 'Find the pairs'."
+  },
+  "oddOneOutObjectSemantics": "Picture {symbol}",
+  "@oddOneOutObjectSemantics": {
+    "description": "Screen-reader label (not visible) of an object on the board. {symbol} is an emoji; tapping it chooses it.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🍐"
+      }
+    }
   }
 }

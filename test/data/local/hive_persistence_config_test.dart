@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:toddler_logic/data/local/hive_persistence_config.dart';
+import 'package:toddler_logic/data/local/models/game_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
@@ -104,6 +105,8 @@ void main() {
       expect(Hive.isAdapterRegistered(3), isTrue);
       expect(HivePersistenceConfig.shadowProgressBox, isA<Box<ShadowProgressHiveModel>>());
       expect(Hive.isAdapterRegistered(4), isTrue);
+      expect(HivePersistenceConfig.gameProgressBox, isA<Box<GameProgressHiveModel>>());
+      expect(Hive.isAdapterRegistered(5), isTrue);
     });
 
     test('initializing again after success is a no-op that keeps the same boxes', () async {

@@ -14,6 +14,7 @@ import 'presentation/l10n_test_support.dart';
 import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
+import 'package:toddler_logic/presentation/screens/odd_one_out_screen.dart';
 
 void main() {
   setUpAll(() {
@@ -200,6 +201,36 @@ void main() {
       await tester.pump();
       expect(find.text('Sombras'), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsNothing);
+    });
+
+    testWidgets('shows the third game under Sombras with its icon, and opens it (HU-025)', (tester) async {
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+      await tester.pump();
+
+      expect(find.text('¿Cuál es diferente?'), findsOneWidget);
+      expect(find.text('Busca el diferente'), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('menu-odd-one-out-icon')), findsOneWidget);
+      expect(tester.getTopLeft(find.text('¿Cuál es diferente?')).dy,
+          greaterThan(tester.getTopLeft(find.text('Sombras')).dy));
+
+      await tester.ensureVisible(find.text('¿Cuál es diferente?'));
+      await tester.tap(find.text('¿Cuál es diferente?'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 700));
+      expect(find.byType(OddOneOutScreen), findsOneWidget);
+    });
+
+    testWidgets('shows the medal of the third game, and the menu works if its progress cannot be read', (tester) async {
+      when(() => repository.readGameProgress(GameId.oddOneOut))
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy}));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+      await tester.pump();
+      expect(find.byKey(const ValueKey<String>('menu-odd-one-out-badge')), findsOneWidget);
+
+      when(() => repository.readGameProgress(GameId.oddOneOut)).thenThrow(Exception('disk error'));
+      await tester.pumpWidget(ToddlerLogicApp(key: UniqueKey(), repository: repository, locale: testLocale));
+      await tester.pump();
+      expect(find.byKey(const ValueKey<String>('menu-odd-one-out-badge')), findsNothing);
     });
 
     testWidgets('Salir closes the app right away, without confirmation', (tester) async {

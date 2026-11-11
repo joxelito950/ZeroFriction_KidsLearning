@@ -5,6 +5,7 @@ import '../../domain/entities/parental_settings.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
+import 'models/game_progress_hive_model.dart';
 import 'models/level_state_hive_model.dart';
 import 'models/memory_progress_hive_model.dart';
 import 'models/parental_settings_hive_model.dart';
@@ -25,17 +26,22 @@ class HivePersistenceRepository implements IPersistenceRepository {
     required Box<MemoryProgressHiveModel> memoryProgressBox,
     required Box<ParentalSettingsHiveModel> parentalSettingsBox,
     required Box<ShadowProgressHiveModel> shadowProgressBox,
+    required Box<GameProgressHiveModel> gameProgressBox,
   })  : _levelStateBox = levelStateBox,
         _userProfileBox = userProfileBox,
         _memoryProgressBox = memoryProgressBox,
         _parentalSettingsBox = parentalSettingsBox,
-        _shadowProgressBox = shadowProgressBox;
+        _shadowProgressBox = shadowProgressBox,
+        _gameProgressBox = gameProgressBox;
 
   final Box<LevelStateHiveModel> _levelStateBox;
   final Box<UserProfileHiveModel> _userProfileBox;
   final Box<MemoryProgressHiveModel> _memoryProgressBox;
   final Box<ParentalSettingsHiveModel> _parentalSettingsBox;
   final Box<ShadowProgressHiveModel> _shadowProgressBox;
+
+  /// Progreso común de los juegos que nacen con las rondas, por su `GameId`.
+  final Box<GameProgressHiveModel> _gameProgressBox;
 
   @override
   Future<List<LevelState>> readAllLevelStates() async {
@@ -92,6 +98,7 @@ class HivePersistenceRepository implements IPersistenceRepository {
     return switch (game) {
           GameId.memory => _memoryProgressBox.get(_memoryProgressKey)?.toGameProgress(),
           GameId.shadows => _shadowProgressBox.get(_shadowProgressKey)?.toGameProgress(),
+          GameId.oddOneOut => _gameProgressBox.get(game.name)?.toGameProgress(),
         } ??
         GameProgress.initial();
   }
@@ -103,6 +110,8 @@ class HivePersistenceRepository implements IPersistenceRepository {
         await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromGameProgress(progress));
       case GameId.shadows:
         await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromGameProgress(progress));
+      case GameId.oddOneOut:
+        await _gameProgressBox.put(game.name, GameProgressHiveModel.fromGameProgress(progress));
     }
   }
 

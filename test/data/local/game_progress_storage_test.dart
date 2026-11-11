@@ -5,6 +5,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/data/local/hive_persistence_config.dart';
 import 'package:toddler_logic/data/local/hive_persistence_repository.dart';
+import 'package:toddler_logic/data/local/models/game_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
@@ -64,6 +65,18 @@ void main() {
           reason: 'level 1 is now the tutorial, and a star without its date is ignored');
     });
 
+    test('the common model round-trips, ignoring a record without its date', () {
+      expect(GameProgressHiveModel.fromGameProgress(progress).toGameProgress(), progress);
+      const model = GameProgressHiveModel(
+        round: 'normal',
+        level: 2,
+        medals: [],
+        bestStarsByRoundLevel: {12: 3},
+        achievedAtByRoundLevel: {},
+      );
+      expect(model.toGameProgress().records, isEmpty);
+    });
+
     test('a record without its date is ignored instead of inventing one', () {
       final model = ShadowProgressHiveModel(
         currentLevel: 2,
@@ -101,6 +114,7 @@ void main() {
           memoryProgressBox: HivePersistenceConfig.memoryProgressBox,
           parentalSettingsBox: _SettingsBox(),
           shadowProgressBox: HivePersistenceConfig.shadowProgressBox,
+          gameProgressBox: HivePersistenceConfig.gameProgressBox,
         );
 
     test('data saved by version 1.0.0-rc.3 is read and migrated without losing anything', () async {
@@ -129,6 +143,15 @@ void main() {
       expect(read.medals, progress.medals);
       expect(read.records.length, 2);
       expect(await repository().readGameProgress(GameId.memory), GameProgress.initial());
+    });
+
+    test('games born with rounds share one box, one key per game (HU-025 P5, typeId 5)', () async {
+      expect(await repository().readGameProgress(GameId.oddOneOut), GameProgress.initial());
+      await repository().saveGameProgress(GameId.oddOneOut, progress);
+      await HivePersistenceConfig.gameProgressBox.close();
+      await Hive.openBox<GameProgressHiveModel>(HivePersistenceConfig.gameProgressBoxName);
+      expect(await repository().readGameProgress(GameId.oddOneOut), progress);
+      expect(HivePersistenceConfig.gameProgressBox.keys, ['oddOneOut']);
     });
 
     test('a game never played starts in the Easy tutorial', () async {

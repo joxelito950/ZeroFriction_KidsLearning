@@ -113,5 +113,9 @@
   "medalNextRoundMessage": "ラウンドクリア！ つぎは もっと むずかしいよ。",
   "roundEasierMessage": "じかんぎれ！ もっと やさしい チャレンジに しよう。",
   "parentsZoneRoundsLabel": "ゲームごとのラウンド",
-  "parentsZoneRoundsHint": "ラウンドをクリアすると、ゲームは自動で次のラウンドに進みます。変えても星やメダルはなくなりません。"
+  "parentsZoneRoundsHint": "ラウンドをクリアすると、ゲームは自動で次のラウンドに進みます。変えても星やメダルはなくなりません。",
+  "oddOneOutTitle": "どれが ちがう？",
+  "oddOneOutInstructions": "ほかと ちがう ものを タッチしよう。",
+  "menuOddOneOutSubtitle": "ちがうものを さがそう",
+  "oddOneOutObjectSemantics": "え {symbol}"
 }

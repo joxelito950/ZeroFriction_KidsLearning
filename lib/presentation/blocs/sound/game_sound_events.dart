@@ -1,5 +1,6 @@
 import '../../../domain/sound/game_sound.dart';
 import '../memory_game/memory_ladder_state.dart';
+import '../odd_one_out/odd_one_out_state.dart';
 import '../shadow_game/shadow_game_state.dart';
 
 /// Qué sonido corresponde a un cambio de estado de los juegos (HU-005 R1, R2).
@@ -37,5 +38,17 @@ abstract final class GameSoundEvents {
     }
     if (previous.round != next.round || next.placed.length <= previous.placed.length) return null;
     return next.objects.every(next.placed.contains) ? null : GameSound.match;
+  }
+
+  /// ¿Cuál es diferente?: acertar suena como una pareja; completar el nivel o
+  /// ganar la medalla, como siempre. Un fallo no suena (R3).
+  static GameSound? oddOneOut(OddOneOutState previous, OddOneOutState next) {
+    if (next.phase == previous.phase) return null;
+    return switch (next.phase) {
+      OddPhase.solved => GameSound.match,
+      OddPhase.celebrating => next.medal != null ? GameSound.badge : GameSound.complete,
+      OddPhase.inviting => GameSound.complete,
+      _ => null,
+    };
   }
 }

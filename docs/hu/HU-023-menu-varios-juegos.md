@@ -4,7 +4,7 @@
 |---|---|
 | **Estado** | En refinamiento (iniciado el 2026-11-10 sin las respuestas del dueño; preguntas en la sección 8) |
 | **Épica** | E4 · Nuevos juegos |
-| **Prioridad** | P2: hace falta antes del tercer juego (HU-025) |
+| **Prioridad** | P2: **condición para empezar el cuarto juego** (decidido el 2026-11-11). El tercero (HU-025) cabe aún en la lista de botones anchos |
 | **Tamaño** | M (estimación: 2–3 días) |
 | **Depende de** | HU-013 (iconos de los juegos), HU-002 (dorado) y HU-037 (rondas y medallas: decide qué muestra cada botón) |
 
