@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-06; preguntas en la sección 8) |
+| **Estado** | Lista (2026-11-11): P1, P3, P11 y P12 decididas; el resto con su recomendación. **Se desarrolla después del tercer juego (HU-025)**, por decisión del dueño |
 | **Épica** | E3 · Premium y monetización |
 | **Prioridad** | P2: sin ella, todo lo Premium queda bloqueado en la versión publicada |
 | **Tamaño** | L (estimación: 1–1,5 semanas, sin contar la espera de Google para probar compras) |
@@ -86,9 +86,9 @@ Google Play solo deja probar compras con una versión subida a un canal (la prue
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Precio? | **2,99 USD** como precio base; Google Play lo convierte a cada país (se puede ajustar por país). Es un rango habitual para apps infantiles sin anuncios de pago único | Sí |
+| P1 | ¿Precio? | ✅ Decidido (2026-11-11): **precio que sube con el contenido.** Las primeras versiones, con 1 o 2 juegos con parte Premium, a **1 USD** (en Google Play, 0,99 USD); sube por escalones a medida que lleguen juegos, **hasta 3 USD** (2,99). Quien compra antes **conserva Premium completo sin pagar más**, incluidos los juegos que lleguen: es el premio por apoyar pronto. Escalones en P11 | — |
 | P2 | ¿Identificador del producto? | `premium` (no se puede cambiar una vez creado en Play Console) | No |
-| P3 | ¿Qué se anuncia que incluye? | Hoy: «Jugar sin tiempo»; con HU-007, Sombras completo (tiempo, nivel 8, 3.ª estrella, medalla). Y «los juegos que lleguen, con su contenido Premium». No prometer juegos concretos con fecha | Sí |
+| P3 | ¿Qué se anuncia que incluye? | ✅ Decidido (2026-11-11): se anuncia con la frase neutra «Un único pago. Incluye los juegos Premium que lleguen después», sin nombres de juegos futuros (sección 11) | — |
 | P4 | ¿Prueba gratis de Premium? Google Play no tiene pruebas para pagos únicos; la idea anterior de desbloquear Premium viendo anuncios se aparcó (anuncios en una app infantil complican la política de Familias) | **No en esta historia.** Lo gratis ya es una muestra completa (D-028) | No |
 | P5 | ¿Se desarrolla antes de abrir la prueba cerrada? | **No:** la prueba cerrada empieza con la app gratis; HU-006 llega como actualización durante la prueba o después. Así no se retrasan los 14 días | No |
 | P6 | ¿Interruptor de depuración (R11) aquí o en HU-007? | **Aquí**, como parte de la interfaz `IPremiumStore` (tienda falsa); HU-007 lo usa | No |
@@ -137,3 +137,52 @@ HU-037 (rondas de dificultad y medallas) cambia **qué es Premium** (su P6): la 
 |---|---|---|---|
 | P9 | ¿Se permite compartir Premium con la familia (Google Play Family Library)? | **Sí, más adelante:** es un interruptor en Play Console y encaja con hermanos (HU-033). No en la primera versión | No |
 | P10 | ¿El precio se ajusta por país o se deja la conversión automática de Google? | **Automática** al principio; revisar después con los datos de la consola | No |
+
+## 11. Cambio por la decisión de HU-037 P6 (2026-11-10)
+
+Qué es Premium ya no es una lista fija: **cada juego decide** (HU-037 P6). Con eso, la respuesta a P3 queda casi hecha:
+
+> **Premium incluye:** «Jugar sin tiempo» en todos los juegos; el nivel más difícil de cada ronda de Sombras; la mitad del juego «¿Cuál es diferente?»; y los juegos completos que lleguen (con ediciones especiales gratis por un tiempo, HU-042).
+
+Lo único que falta decidir de P3 es **cómo se anuncia** en la Zona de Padres y en la ficha sin prometer juegos concretos con fecha. **Recomendación:** la frase de arriba sin nombres de juegos futuros («y los juegos nuevos que lleguen»). P1 (precio) sigue abierta.
+
+## 12. Precio por escalones (decidido el 2026-11-11, P1)
+
+### 12.1 ¿Se puede cambiar el precio después?
+
+**Sí.** El precio de un producto de Google Play se cambia cuando se quiera en Play Console, sin publicar una versión nueva de la app. El cambio vale para las compras **nuevas**; quien ya compró **no paga nada más** y sigue teniendo el producto, porque Premium es un producto de **compra única**: queda asociado a su cuenta de Google para siempre y se restaura en otro teléfono (R5).
+
+Lo que **no** se puede cambiar es el **identificador** del producto (`premium`, P2).
+
+### 12.2 Cómo se cumple «quien compra pronto lo conserva todo»
+
+Basta con **no crear nunca un segundo producto**: todo lo Premium presente y futuro cuelga del mismo `premium`. Si algún día se vendiera algo aparte (por ejemplo, un paquete de temporada, HU-042), sería un producto distinto y **nunca** quitaría nada a quien ya tiene `premium`. Se anota como decisión D-039.
+
+### 12.3 Escalones propuestos
+
+| Momento | Juegos con parte Premium | Precio base |
+|---|---|---|
+| Primera versión con compras | Sombras (nivel 8) y «Jugar sin tiempo» | **0,99 USD** |
+| Con «¿Cuál es diferente?» (HU-025) | 2 | 0,99 USD |
+| Con el primer juego 100 % Premium | 3 | **1,99 USD** |
+| Con 5 o más juegos con parte Premium | 5+ | **2,99 USD** (tope) |
+
+Google Play convierte el precio base a cada país; se puede ajustar país por país (P10).
+
+### 12.4 Cuidados al comunicarlo
+
+- **No prometer subidas con fecha** ni usar frases de urgencia («¡compra antes de que suba!»): la política de Familias y las normas de consumo las tratan como presión de venta, y más en una app infantil. Se puede decir, en la Zona de Padres y en la ficha, algo neutro: «Un único pago. Incluye los juegos Premium que lleguen después».
+- Las **notas de la versión** que suban el precio no lo mencionan; el precio nuevo lo muestra Google Play.
+- Antes de cada subida, comprobar que el contenido Premium de verdad ha crecido (el escalón va con los juegos, no con el calendario).
+
+### 12.5 Preguntas
+
+| # | Pregunta | Recomendación | Bloquea |
+|---|---|---|---|
+| P11 | ¿Los escalones de la tabla 12.3? | ✅ Decidido (2026-11-11): los escalones de la tabla 12.3 | — |
+| P12 | ¿Se dice en la app que el precio irá subiendo? | ✅ Decidido (2026-11-11): la app no dice que el precio irá subiendo | — |
+
+## 13. Cuándo se desarrolla (decidido el 2026-11-11)
+
+El dueño prefiere **publicar el tercer juego (HU-025) antes del pago**. Así la primera versión con compras ya ofrece Premium en dos juegos (Sombras y «¿Cuál es diferente?») por 0,99 USD (tabla 12.3). Hasta entonces, lo Premium de cada juego queda oculto o en bucle gratuito, como Sombras hoy.
+

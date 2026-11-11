@@ -5,6 +5,7 @@ library;
 
 import 'dart:math';
 
+import '../progress/round_ladder.dart';
 import '../settings/game_difficulty.dart';
 
 /// Un nivel: cuántos objetos hay en la bandeja, cuántas sombras y si todos son
@@ -129,6 +130,17 @@ abstract final class ShadowLadder {
   ];
 
   static int get maxLevel => levels.last.number;
+
+  /// La escalera en rondas (HU-037): el nivel 1 es el tutorial y cada ronda usa
+  /// su serie de la tabla 4.3.
+  static final RoundLadder rounds = RoundLadder(
+    levels: levels.length,
+    timeLimits: {for (final GameDifficulty round in GameDifficulty.values) round: timeLimitsFor(round)},
+  );
+
+  /// Sin Premium, cada ronda termina en el nivel 7 y da su medalla; el nivel 8
+  /// es el extra de Premium (HU-037 P16).
+  static int lastLevelFor({required bool premium}) => premium ? maxLevel : maxLevel - 1;
 
   static const ShadowPosition start = ShadowPosition(level: 1);
 

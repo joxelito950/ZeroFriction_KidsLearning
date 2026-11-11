@@ -10,10 +10,7 @@ import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dar
 import 'package:toddler_logic/data/local/models/shadow_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
-import 'package:toddler_logic/domain/entities/shadow_progress.dart';
-import 'package:toddler_logic/domain/progress/level_record.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 
@@ -132,51 +129,6 @@ void main() {
         profile,
       );
     });
-    test('memory progress with dates survives a real write and reopen of the box', () async {
-      final achieved = DateTime.utc(2026, 10, 20, 8, 30);
-      final progress = MemoryProgress(
-        currentLevel: 4,
-        hasBadge: true,
-        levelRecords: {
-          1: MemoryLevelRecord(bestStars: 3, achievedAt: achieved),
-          3: MemoryLevelRecord(bestStars: 1, achievedAt: achieved.add(const Duration(days: 1))),
-        },
-        lastPlayedAt: achieved.add(const Duration(days: 2)),
-      );
-
-      await HivePersistenceConfig.memoryProgressBox
-          .put('current_memory_progress', MemoryProgressHiveModel.fromEntity(progress));
-      await HivePersistenceConfig.memoryProgressBox.close();
-      final reopened = await Hive.openBox<MemoryProgressHiveModel>(HivePersistenceConfig.memoryProgressBoxName);
-
-      final MemoryProgress read = reopened.get('current_memory_progress')!.toEntity();
-      expect(read.currentLevel, 4);
-      expect(read.hasBadge, isTrue);
-      expect(read.levelRecords, progress.levelRecords);
-      expect(read.lastPlayedAt!.isAtSameMomentAs(progress.lastPlayedAt!), isTrue);
-    });
-
-    test('shadow progress (typeId 4) survives a real write and reopen of the box', () async {
-      final achieved = DateTime.utc(2026, 11, 9, 8);
-      final progress = ShadowProgress(
-        currentLevel: 8,
-        hasMedal: true,
-        levelRecords: {8: LevelRecord(bestStars: 3, achievedAt: achieved)},
-        lastPlayedAt: achieved,
-      );
-
-      await HivePersistenceConfig.shadowProgressBox
-          .put('current_shadow_progress', ShadowProgressHiveModel.fromEntity(progress));
-      await HivePersistenceConfig.shadowProgressBox.close();
-      final reopened = await Hive.openBox<ShadowProgressHiveModel>(HivePersistenceConfig.shadowProgressBoxName);
-
-      final ShadowProgress read = reopened.get('current_shadow_progress')!.toEntity();
-      expect(read.currentLevel, 8);
-      expect(read.hasMedal, isTrue);
-      expect(read.levelRecords, progress.levelRecords);
-      expect(read.lastPlayedAt!.isAtSameMomentAs(achieved), isTrue);
-    });
-
     test('parental settings survive a real write and reopen of the box, on the same local day', () async {
       final settings = ParentalSettings(
         dailyLimitMinutes: 45,

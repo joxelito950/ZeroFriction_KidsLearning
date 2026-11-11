@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (desarrollada el 2026-11-10 en `feature/hu-005-sounds`; faltan oírla en el moto g55 y que el dueño apruebe los sonidos, P5). Refinamiento cerrado el 2026-10-27 |
+| **Estado** | Hecha (2026-11-11): desarrollada el 2026-11-10, vista en el moto g55 y **sonidos aprobados por el dueño** el 2026-11-11. Refinamiento cerrado el 2026-10-27 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (2–3 días) |
@@ -71,7 +71,7 @@
 | P2 | ¿El sonido viene activado o desactivado al instalar? | ✅ Decidido (2026-10-27): **activado**, a volumen moderado; un adulto lo apaga en la Zona de Padres | — |
 | P3 | ¿Música de fondo? | ✅ Asumida la recomendación: **no** en esta historia: distrae, cansa a los padres y aumenta el tamaño. Se puede proponer aparte | — |
 | P4 | ¿Qué paquete de audio? | ✅ Asumida la recomendación: **`audioplayers`**: maduro, mantenido y suficiente para efectos cortos. Se confirma midiendo el tamaño del APK | — |
-| P5 | ¿Quién elige los sonidos? | ✅ Decidido (2026-10-27): **el desarrollo propone** una selección corta de bancos CC0 (Kenney, freesound.org con filtro CC0) y **el dueño del producto aprueba** antes de integrarla. **2026-11-10:** en vez de bancos, el desarrollo propone sonidos **de creación propia**, sintetizados (sin licencias de terceros). ⏳ **Pendiente: que el dueño los apruebe** escuchándolos en el teléfono; si no le gustan, se cambian los parámetros del script o se usan los de un banco CC0 | Sí, para publicar |
+| P5 | ¿Quién elige los sonidos? | ✅ Decidido (2026-10-27): **el desarrollo propone** una selección corta de bancos CC0 (Kenney, freesound.org con filtro CC0) y **el dueño del producto aprueba** antes de integrarla. **2026-11-10:** en vez de bancos, el desarrollo propone sonidos **de creación propia**, sintetizados (sin licencias de terceros). ✅ **Aprobados por el dueño el 2026-11-11** | — |
 | P6 | ¿Narración por voz de las instrucciones (para niños que no leen)? | ✅ Asumida la recomendación: **fuera de esta historia**: es otra necesidad (voz por idioma, grabaciones o TTS) y se propuso como HU-018, **descartada** el 2026-10-28 (D-034: la app es visual y los sonidos solo acompañan logros e interacciones) | — |
 
 ## 8. Fuera de alcance

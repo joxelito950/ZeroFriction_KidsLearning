@@ -4,6 +4,7 @@
 /// (HU-030 R3), ningún nivel tiene límite y nunca se pierde.
 library;
 
+import '../progress/round_ladder.dart';
 import '../settings/game_difficulty.dart';
 
 /// Un nivel de la escalera.
@@ -44,6 +45,9 @@ enum MemoryLoss {
 
   /// Se pierde en el 2×2 cronometrado: «Empecemos de nuevo, sin prisa».
   restart,
+
+  /// Segunda caída al tutorial: se baja a la ronda anterior (HU-037 R10).
+  easierRound,
 }
 
 /// Cómo se juega la escalera: la dificultad y si hay tiempo (HU-030).
@@ -122,6 +126,13 @@ abstract final class MemoryLadder {
       };
 
   static int get maxLevel => levels.last.number;
+
+  /// La escalera en rondas (HU-037): el 2×2 es el tutorial y cada ronda usa
+  /// su serie de HU-030.
+  static final RoundLadder rounds = RoundLadder(
+    levels: levels.length,
+    timeLimits: {for (final GameDifficulty round in GameDifficulty.values) round: timeLimitsFor(round)},
+  );
 
   /// Primera partida y reinicios: nivel 1 sin tiempo (R3, R6, R8).
   static const MemoryLadderPosition start = MemoryLadderPosition(level: 1);

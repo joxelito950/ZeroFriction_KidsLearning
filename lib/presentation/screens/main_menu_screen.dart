@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../brand/brand_assets.dart';
-import '../../domain/entities/memory_progress.dart';
-import '../../domain/entities/shadow_progress.dart';
+import '../../domain/memory/memory_ladder.dart';
+import '../../domain/progress/game_progress.dart';
+import '../../domain/settings/game_difficulty.dart';
+import '../../domain/shadows/shadow_ladder.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
@@ -14,6 +16,7 @@ import '../widgets/game_icon.dart';
 import '../widgets/liquid_gold.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
+import '../widgets/round_style.dart';
 import 'memory_game_screen.dart';
 import 'shadow_game_screen.dart';
 
@@ -131,10 +134,10 @@ class _MenuActions extends StatefulWidget {
 class _MenuActionsState extends State<_MenuActions> {
   /// Progreso del juego de memoria: medalla (HU-001 R9) y dorado (HU-002).
   /// El menú solo lee lo guardado, sin calcular la pérdida (D-037).
-  MemoryProgress _memory = MemoryProgress.initial;
+  GameProgress _memory = GameProgress.initial();
 
   /// Progreso de Sombras (HU-007): medalla y dorado.
-  ShadowProgress _shadows = ShadowProgress.initial;
+  GameProgress _shadows = GameProgress.initial();
 
   @override
   void initState() {
@@ -145,17 +148,17 @@ class _MenuActionsState extends State<_MenuActions> {
   /// Si no se puede leer un progreso, su botón se muestra sin medalla ni dorado.
   Future<void> _loadProgress() async {
     final IPersistenceRepository repository = context.read<IPersistenceRepository>();
-    MemoryProgress memory;
-    ShadowProgress shadows;
+    GameProgress memory;
+    GameProgress shadows;
     try {
-      memory = await repository.readMemoryProgress();
+      memory = await repository.readGameProgress(GameId.memory);
     } catch (_) {
-      memory = MemoryProgress.initial;
+      memory = GameProgress.initial();
     }
     try {
-      shadows = await repository.readShadowProgress();
+      shadows = await repository.readGameProgress(GameId.shadows);
     } catch (_) {
-      shadows = ShadowProgress.initial;
+      shadows = GameProgress.initial();
     }
     if (!mounted || (memory == _memory && shadows == _shadows)) return;
     setState(() {
@@ -173,13 +176,19 @@ class _MenuActionsState extends State<_MenuActions> {
 
   /// La medalla del juego, sobre un círculo blanco: el dorado no contrasta con
   /// el color del botón.
-  Widget _medal(String key, String label) => Semantics(
+  /// Con las rondas (HU-037), la medalla más alta: bronce, plata u oro.
+  Widget _medal(String key, String label, GameDifficulty round) => Semantics(
         label: label,
         excludeSemantics: true,
         child: CircleAvatar(
           radius: 20,
           backgroundColor: AppPalette.white,
-          child: Icon(Icons.military_tech_rounded, key: ValueKey<String>(key), color: AppPalette.gold, size: 30),
+          child: Icon(
+            Icons.military_tech_rounded,
+            key: ValueKey<String>(key),
+            color: RoundStyle.colorOf(round),
+            size: 30,
+          ),
         ),
       );
 
@@ -201,13 +210,16 @@ class _MenuActionsState extends State<_MenuActions> {
           textColor: AppPalette.white,
           icon: const GameIcon.memory(key: ValueKey<String>('menu-memory-icon'), size: 52),
           // Dorado líquido en todo el botón (HU-002 R16) y anunciado (R6).
-          goldFraction: _memory.goldFraction,
+          goldFraction: _memory.goldFraction(MemoryLadder.rounds),
           goldLabel: l10n.menuGameGoldSemantics(
-            (_memory.goldFraction * 100).round(),
+            (_memory.goldFraction(MemoryLadder.rounds) * 100).round(),
             _memory.stars,
-            MemoryProgress.maxStars,
+            MemoryLadder.rounds.maxStars,
           ),
-          badge: _memory.hasBadge ? _medal('menu-memory-badge', l10n.menuBadgeSemantics) : null,
+          badge: switch (_memory.bestMedal) {
+            final GameDifficulty medal => _medal('menu-memory-badge', RoundStyle.medalTitle(l10n, medal), medal),
+            null => null,
+          },
           onTap: () => _open(const MemoryGameScreen()),
         ),
         const SizedBox(height: 16),
@@ -220,13 +232,16 @@ class _MenuActionsState extends State<_MenuActions> {
           backgroundColor: AppPalette.deepTeal,
           textColor: AppPalette.white,
           icon: const GameIcon.shadows(key: ValueKey<String>('menu-shadows-icon'), size: 52),
-          goldFraction: _shadows.goldFraction,
+          goldFraction: _shadows.goldFraction(ShadowLadder.rounds),
           goldLabel: l10n.menuGameGoldSemantics(
-            (_shadows.goldFraction * 100).round(),
+            (_shadows.goldFraction(ShadowLadder.rounds) * 100).round(),
             _shadows.stars,
-            ShadowProgress.maxStars,
+            ShadowLadder.rounds.maxStars,
           ),
-          badge: _shadows.hasMedal ? _medal('menu-shadows-badge', l10n.menuBadgeSemantics) : null,
+          badge: switch (_shadows.bestMedal) {
+            final GameDifficulty medal => _medal('menu-shadows-badge', RoundStyle.medalTitle(l10n, medal), medal),
+            null => null,
+          },
           onTap: () => _open(const ShadowGameScreen()),
         ),
         const SizedBox(height: 40),

@@ -73,7 +73,7 @@
   "restTitle": "Hora de descansar!",
   "restSubtitle": "Voltamos amanhã",
   "parentsZoneGamesTitle": "Jogos",
-  "parentsZoneGamesIntro": "Estes ajustes valem para todos os jogos. As mudanças aparecem no próximo tabuleiro.",
+  "parentsZoneGamesIntro": "As mudanças aparecem na próxima vez que o jogo for aberto.",
   "parentsZoneDifficultyLabel": "Dificuldade",
   "difficultyEasy": "Fácil",
   "difficultyNormal": "Normal",
@@ -105,5 +105,13 @@
   "feedbackEmailWhatExpected": "O que você esperava?",
   "menuShadowsSubtitle": "Encontre cada sombra",
   "parentsZoneSoundTitle": "Som",
-  "parentsZoneSoundHint": "Sons suaves ao virar uma carta, encontrar um par ou completar um tabuleiro. Os erros nunca fazem som."
+  "parentsZoneSoundHint": "Sons suaves ao virar uma carta, encontrar um par ou completar um tabuleiro. Os erros nunca fazem som.",
+  "roundInvitationTitle": "Agora, vamos jogar!",
+  "medalBronzeTitle": "Medalha de bronze!",
+  "medalSilverTitle": "Medalha de prata!",
+  "medalGoldTitle": "Medalha de ouro!",
+  "medalNextRoundMessage": "Rodada completa! Agora, um desafio maior.",
+  "roundEasierMessage": "O tempo acabou! Vamos tentar um desafio mais tranquilo.",
+  "parentsZoneRoundsLabel": "Rodada de cada jogo",
+  "parentsZoneRoundsHint": "Cada jogo sobe de rodada sozinho ao completá-la. Mudar não tira estrelas nem medalhas."
 }

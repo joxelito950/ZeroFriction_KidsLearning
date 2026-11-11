@@ -2,42 +2,54 @@ import 'package:flutter/material.dart';
 
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/memory/memory_stars.dart';
+import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import 'round_style.dart';
 
 /// Celebración al ganar un tablero (HU-001 R14, D-030): sin botones, desaparece
 /// sola. Es igual de alegre con cualquier número de estrellas; las que faltan se
 /// ven como contorno suave. Al conseguir la insignia, la celebración es dorada.
 class MemoryCelebration extends StatelessWidget {
-  const MemoryCelebration({super.key, required this.stars, required this.badgeEarned});
+  const MemoryCelebration({super.key, required this.stars, required this.badgeEarned, this.medal});
 
   final int stars;
   final bool badgeEarned;
 
+  /// Ronda completada (HU-037): bronce, plata u oro. Sin ella, la insignia de
+  /// siempre.
+  final GameDifficulty? medal;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final GameDifficulty? round = medal;
+    final Color medalColor = round == null ? AppPalette.gold : RoundStyle.colorOf(round);
 
     return _OverlayCard(
-      key: ValueKey<String>(badgeEarned ? 'memory-badge-celebration' : 'memory-celebration'),
+      key: ValueKey<String>(
+        round != null ? 'medal-celebration-${round.name}' : (badgeEarned ? 'memory-badge-celebration' : 'memory-celebration'),
+      ),
       color: AppPalette.white,
-      borderColor: badgeEarned ? AppPalette.gold : AppPalette.amber,
+      borderColor: badgeEarned ? medalColor : AppPalette.amber,
       borderWidth: badgeEarned ? 4 : 2,
       children: [
         Icon(
           badgeEarned ? Icons.military_tech_rounded : Icons.emoji_events_rounded,
           size: 56,
-          color: badgeEarned ? AppPalette.gold : AppPalette.softCoral,
+          color: badgeEarned ? medalColor : AppPalette.softCoral,
         ),
         const SizedBox(height: 12),
         Text(
-          badgeEarned ? l10n.memoryBadgeTitle : l10n.victoryTitle,
+          round != null ? RoundStyle.medalTitle(l10n, round) : (badgeEarned ? l10n.memoryBadgeTitle : l10n.victoryTitle),
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 6),
         Text(
-          badgeEarned ? l10n.memoryBadgeMessage : l10n.victoryMessage,
+          round != null
+              ? RoundStyle.medalMessage(l10n, round)
+              : (badgeEarned ? l10n.memoryBadgeMessage : l10n.victoryMessage),
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
@@ -84,9 +96,41 @@ class MemoryTimeUpNotice extends StatelessWidget {
         const Icon(Icons.hourglass_bottom_rounded, size: 48, color: AppPalette.deepTeal),
         const SizedBox(height: 12),
         Text(
-          loss == MemoryLoss.restart ? l10n.memoryTimeUpRestart : fewerMessage ?? l10n.memoryTimeUpFewerCards,
+          switch (loss) {
+            MemoryLoss.restart => l10n.memoryTimeUpRestart,
+            MemoryLoss.easierRound => l10n.roundEasierMessage,
+            MemoryLoss.fewerCards => fewerMessage ?? l10n.memoryTimeUpFewerCards,
+          },
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+        ),
+      ],
+    );
+  }
+}
+
+/// Invitación a jugar tras el tutorial de cada ronda (HU-037 R9): sin
+/// estrellas ni botones, desaparece sola. La mano de HU-022 da el «¡vamos!».
+class PlayInvitation extends StatelessWidget {
+  const PlayInvitation({super.key, required this.round});
+
+  /// Ronda que empieza: da color al aviso (P8).
+  final GameDifficulty round;
+
+  @override
+  Widget build(BuildContext context) {
+    return _OverlayCard(
+      key: const ValueKey<String>('play-invitation'),
+      color: AppPalette.white,
+      borderColor: RoundStyle.colorOf(round),
+      borderWidth: 3,
+      children: [
+        Icon(Icons.touch_app_rounded, size: 56, color: RoundStyle.colorOf(round)),
+        const SizedBox(height: 12),
+        Text(
+          AppLocalizations.of(context).roundInvitationTitle,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
         ),
       ],
     );

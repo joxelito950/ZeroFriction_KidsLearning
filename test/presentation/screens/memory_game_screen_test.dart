@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_state.dart';
@@ -15,6 +14,8 @@ import 'package:toddler_logic/presentation/widgets/memory_board.dart';
 
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 
 /// Abre el juego desde una pantalla previa, para poder comprobar la salida.
 class _Launcher extends StatelessWidget {
@@ -48,8 +49,8 @@ void main() {
       stubPersistenceRepository(repository);
     });
 
-    Future<void> pumpScreen(WidgetTester tester, {int level = 1, Locale locale = testLocale}) async {
-      when(() => repository.readMemoryProgress()).thenAnswer((_) async => MemoryProgress(currentLevel: level));
+    Future<void> pumpScreen(WidgetTester tester, {int level = 1, Locale locale = testLocale, bool keepStub = false}) async {
+      if (!keepStub) when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => progressAt(level));
       await tester.pumpWidget(
         RepositoryProvider<IPersistenceRepository>.value(
           value: repository,
@@ -116,10 +117,10 @@ void main() {
       await tapCard(tester, pairs[0][1]);
       await tapCard(tester, pairs[1][0]);
       await tapCard(tester, pairs[1][1]);
-      expect(cubitOf(tester).state.phase, MemoryRoundPhase.celebrating);
+      expect(cubitOf(tester).state.phase, MemoryRoundPhase.inviting);
       expect(playTime.state.boardInProgress, isTrue);
 
-      await tester.pump(MemoryLadderCubit.celebrationDuration);
+      await tester.pump(MemoryLadderCubit.invitationDuration);
       await tester.pump(const Duration(milliseconds: 600));
       expect(cubitOf(tester).state.phase, MemoryRoundPhase.playing);
       expect(playTime.state.boardInProgress, isFalse);
@@ -190,8 +191,24 @@ void main() {
       expect(cardCount(), 4);
     });
 
-    testWidgets('winning celebrates with stars and deals the next level by itself', (tester) async {
+    testWidgets('winning the tutorial invites to play, without stars, and deals the first timed level (HU-037 R9)',
+        (tester) async {
       await pumpScreen(tester);
+
+      await winPerfectly(tester);
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.byKey(const ValueKey<String>('play-invitation')), findsOneWidget);
+      expect(find.text('¡Ahora, a jugar!'), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('memory-star-0-earned')), findsNothing);
+
+      await tester.pump(MemoryLadderCubit.invitationDuration);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(cardCount(), 6);
+      expect(find.byKey(const ValueKey<String>('memory-time-bar')), findsOneWidget);
+    });
+
+    testWidgets('winning celebrates with stars and deals the next level by itself', (tester) async {
+      await pumpScreen(tester, level: 2);
 
       await winPerfectly(tester);
       await tester.pump(const Duration(milliseconds: 300));
@@ -203,22 +220,22 @@ void main() {
         expect(find.byKey(ValueKey<String>('memory-star-$star-earned')), findsOneWidget);
       }
       // Una al abrir el juego (cuenta como jugar, HU-002 R13) y otra al ganar.
-      verify(() => repository.saveMemoryProgress(any())).called(2);
+      verify(() => repository.saveGameProgress(GameId.memory, any())).called(2);
 
       await tester.pump(MemoryLadderCubit.celebrationDuration);
       await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.byKey(const ValueKey<String>('memory-celebration')), findsNothing);
-      expect(cardCount(), 6);
+      expect(cardCount(), 8);
       expect(find.byKey(const ValueKey<String>('memory-time-bar')), findsOneWidget);
-      expect(find.byKey(const ValueKey<String>('memory-level-dot-2-reached')), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('memory-level-dot-3-reached')), findsOneWidget);
     });
 
     testWidgets('a clumsy win still celebrates, showing the missing stars as outlines', (tester) async {
-      await pumpScreen(tester);
+      await pumpScreen(tester, level: 2);
       final pairs = pairsOf(tester);
 
-      for (var miss = 0; miss < 4; miss++) {
+      for (var miss = 0; miss < 3; miss++) {
         await tapCard(tester, pairs[0][0]);
         await tapCard(tester, pairs[1][0]);
         await tester.pump(MemoryLadderCubit.mismatchDelay);
@@ -232,14 +249,16 @@ void main() {
       expect(find.byKey(const ValueKey<String>('memory-star-2-empty')), findsOneWidget);
     });
 
-    testWidgets('beating the last level shows the golden badge celebration', (tester) async {
+    testWidgets('beating the last level of Normal gives the silver medal and moves to Impossible (HU-037 R2)',
+        (tester) async {
       await pumpScreen(tester, level: 5);
 
       await winPerfectly(tester);
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.byKey(const ValueKey<String>('memory-badge-celebration')), findsOneWidget);
-      expect(find.text('¡Insignia dorada!'), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('medal-celebration-normal')), findsOneWidget);
+      expect(find.text('¡Medalla de plata!'), findsOneWidget);
+      expect(find.text('¡Ronda completada! Ahora, un reto más grande.'), findsOneWidget);
 
       await tester.pump(MemoryLadderCubit.celebrationDuration);
       await tester.pump(const Duration(milliseconds: 500));
@@ -247,15 +266,15 @@ void main() {
     });
 
     testWidgets('time up shows a kind notice and deals an easier board', (tester) async {
-      await pumpScreen(tester, level: 2);
+      await pumpScreen(tester, level: 3);
 
       await tapCard(tester, 0);
       final fill = find.byKey(const ValueKey<String>('memory-time-bar-fill'));
       final double fullWidth = tester.getSize(fill).width;
-      await tester.pump(const Duration(seconds: 45));
+      await tester.pump(const Duration(seconds: 30));
       expect(tester.getSize(fill).width, lessThan(fullWidth));
 
-      await tester.pump(const Duration(seconds: 46));
+      await tester.pump(const Duration(seconds: 31));
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.byKey(const ValueKey<String>('memory-time-up')), findsOneWidget);
       expect(find.text('¡Se acabó el tiempo! Probemos de nuevo con menos cartas.'), findsOneWidget);
@@ -263,7 +282,22 @@ void main() {
       await tester.pump(MemoryLadderCubit.timeUpDuration);
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.byKey(const ValueKey<String>('memory-time-up')), findsNothing);
-      expect(cardCount(), 4);
+      expect(cardCount(), 6);
+    });
+
+    testWidgets('falling to the tutorial twice moves to the easier round (HU-037 R10)', (tester) async {
+      when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => progressAt(2, tutorialFalls: 1));
+      await pumpScreen(tester, level: 2, keepStub: true);
+
+      await tapCard(tester, 0);
+      await tester.pump(const Duration(seconds: 91));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('¡Se acabó el tiempo! Probemos un reto más tranquilo.'), findsOneWidget);
+
+      await tester.pump(MemoryLadderCubit.timeUpDuration);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(cubitOf(tester).state.gameRound, GameDifficulty.easy);
+      expect(cardCount(), 6, reason: 'first timed level of Easy (P14)');
     });
 
     testWidgets('the timer pauses while the app is in the background', (tester) async {

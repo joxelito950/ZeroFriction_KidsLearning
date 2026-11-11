@@ -20,6 +20,7 @@ import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
 import '../widgets/memory_time_bar.dart';
 import '../widgets/protected_exit.dart';
+import '../widgets/round_style.dart';
 import '../widgets/shadow_board.dart';
 
 /// Juego Sombras (HU-007): arrastrar cada objeto hasta su sombra. Sin botones
@@ -36,7 +37,7 @@ class ShadowGameScreen extends StatelessWidget {
   static bool boardInProgress(ShadowGameState state) {
     return switch (state.phase) {
       ShadowRoundPhase.playing => state.placed.isNotEmpty || state.fails > 0 || state.timerStarted,
-      ShadowRoundPhase.celebrating || ShadowRoundPhase.timeUp => true,
+      ShadowRoundPhase.celebrating || ShadowRoundPhase.timeUp || ShadowRoundPhase.inviting => true,
       _ => false,
     };
   }
@@ -182,9 +183,15 @@ class _ShadowGameViewState extends State<_ShadowGameView> with WidgetsBindingObs
 
   Widget _overlayFor(BuildContext context, ShadowGameState state) {
     return switch (state.phase) {
-      ShadowRoundPhase.celebrating => MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.medalEarned),
+      ShadowRoundPhase.celebrating =>
+        MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.medalEarned, medal: state.medal),
+      ShadowRoundPhase.inviting => PlayInvitation(round: state.gameRound),
       ShadowRoundPhase.timeUp => MemoryTimeUpNotice(
-          loss: state.level == 1 ? MemoryLoss.restart : MemoryLoss.fewerCards,
+          loss: switch (state.lossKind) {
+            ShadowLoss.restart => MemoryLoss.restart,
+            ShadowLoss.easierRound => MemoryLoss.easierRound,
+            _ => MemoryLoss.fewerCards,
+          },
           fewerMessage: AppLocalizations.of(context).shadowsTimeUpFewerObjects,
         ),
       _ => const SizedBox.shrink(),
@@ -238,7 +245,9 @@ class _Header extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppPalette.white,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))],
+        boxShadow: [
+          BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -268,6 +277,7 @@ class _Header extends StatelessWidget {
             MemoryLevelIndicator(
               level: state.level,
               total: state.premium ? ShadowLadder.maxLevel : ShadowLadder.maxLevel - 1,
+              color: RoundStyle.colorOf(state.gameRound),
             ),
           ],
         ),
