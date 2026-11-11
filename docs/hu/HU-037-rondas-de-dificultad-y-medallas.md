@@ -239,3 +239,12 @@ Memoria en Normal: tutorial → 2×3 → 2×4 → pierde → 2×3 → pierde →
 | P16 | En Sombras gratis, ¿una ronda se completa (y da su medalla) al superar el nivel 7, y el nivel 8 es el extra de Premium? | **Sí.** Así lo gratis tiene las tres medallas (el juego completo de verdad, ≈ 86 %), y Premium suma el nivel más difícil de cada ronda y sus estrellas. Con Premium, la ronda termina en el nivel 8 | Sí |
 | P11 a P13 | (sección 10.5) Aviso tras la actualización, ayudas en Normal, absorber HU-010 | Las recomendaciones de la sección 10.5 | No |
 
+## 12. Desarrollo
+
+| # | Entrega | Estado | Contenido |
+|---|---|---|---|
+| 1 | Dominio común | ✅ 2026-11-11, rama `feature/hu-037-1-domain` | `domain/progress/round_ladder.dart`: las rondas sobre `GameDifficulty` (siguiente y anterior), `RoundLadder` (niveles y series de tiempo por ronda, tutorial sin tiempo, ganar con invitación a jugar tras el tutorial y medalla al completar la ronda, perder conservando el límite, caídas al tutorial y bajada de ronda en el primer nivel con tiempo de la anterior; R2, R3, R9, R10, P14, P15). `domain/progress/game_progress.dart`: `GameProgress` común (posición, medallas, récords por ronda y nivel, dorado sobre las tres rondas, cambio de ronda sin perder logros, pérdida de estrellas y migración de lo guardado a Normal, P7). `MemoryLadder.rounds` (36★) y `ShadowLadder.rounds` (63★) con `lastLevelFor` (7 sin Premium, P16). Los juegos todavía no lo usan: llega en las entregas 2 y 3 |
+| 2 | Guardado y migración | Pendiente | Campos 5–8 en los dos modelos de progreso y lectura de lo antiguo con *fixtures* |
+| 3 | Juegos | Pendiente | Memoria y Sombras sobre el modelo común, invitación a jugar, celebración de la medalla, color de los puntos por ronda |
+| 4 | Menú y Zona de Padres | Pendiente | Medalla más alta en el menú, ronda por juego en la Zona de Padres, textos en 9 idiomas y moto g55 |
+
