@@ -105,5 +105,11 @@
   "feedbackEmailWhatExpected": "À quoi vous attendiez-vous ?",
   "menuShadowsSubtitle": "Trouve chaque ombre",
   "parentsZoneSoundTitle": "Son",
-  "parentsZoneSoundHint": "Des sons doux quand une carte se retourne, qu'une paire est trouvée ou qu'un plateau est terminé. Les erreurs ne font jamais de bruit."
+  "parentsZoneSoundHint": "Des sons doux quand une carte se retourne, qu'une paire est trouvée ou qu'un plateau est terminé. Les erreurs ne font jamais de bruit.",
+  "roundInvitationTitle": "Maintenant, on joue !",
+  "medalBronzeTitle": "Médaille de bronze !",
+  "medalSilverTitle": "Médaille d'argent !",
+  "medalGoldTitle": "Médaille d'or !",
+  "medalNextRoundMessage": "Manche terminée ! Maintenant, un plus grand défi.",
+  "roundEasierMessage": "Le temps est écoulé ! Essayons un défi plus calme."
 }

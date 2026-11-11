@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../../domain/settings/game_difficulty.dart';
 import '../../../domain/shadows/shadow_ladder.dart';
 
 /// Fase de un tablero de Sombras (HU-007).
@@ -17,8 +18,23 @@ enum ShadowRoundPhase {
   /// Tablero completado: celebración automática con las estrellas (R8).
   celebrating,
 
-  /// Se acabó el tiempo (solo con Premium): aviso antes de bajar de nivel.
+  /// Se acabó el tiempo: aviso antes de bajar de nivel.
   timeUp,
+
+  /// Tutorial superado (HU-037 R9): invitación a jugar, sin estrellas.
+  inviting,
+}
+
+/// Qué pasa tras perder por tiempo (HU-037).
+enum ShadowLoss {
+  /// Se baja un nivel: «Probemos con menos dibujos».
+  fewerObjects,
+
+  /// Se vuelve al tutorial: «Empecemos de nuevo, sin prisa».
+  restart,
+
+  /// Segunda caída al tutorial: se baja a la ronda anterior (R10).
+  easierRound,
 }
 
 /// Estado inmutable de la pantalla de Sombras.
@@ -40,6 +56,9 @@ class ShadowGameState {
     this.medalEarned = false,
     this.hasMedal = false,
     this.goldFraction = 0,
+    this.gameRound = GameDifficulty.easy,
+    this.medal,
+    this.lossKind,
   });
 
   final ShadowRoundPhase phase;
@@ -85,6 +104,15 @@ class ShadowGameState {
   /// Dorado del juego, de 0 a 1 (HU-002).
   final double goldFraction;
 
+  /// Ronda en juego (HU-037): da color a los puntos de nivel (P8).
+  final GameDifficulty gameRound;
+
+  /// Medalla de la ronda recién completada (fase [ShadowRoundPhase.celebrating]).
+  final GameDifficulty? medal;
+
+  /// Qué pasa tras perder (fase [ShadowRoundPhase.timeUp]), para el mensaje.
+  final ShadowLoss? lossKind;
+
   int get level => position.level;
 
   /// Objetos que quedan en la bandeja.
@@ -120,6 +148,8 @@ class ShadowGameState {
     bool? medalEarned,
     bool? hasMedal,
     double? goldFraction,
+    GameDifficulty? medal,
+    ShadowLoss? lossKind,
   }) {
     return ShadowGameState(
       phase: phase ?? this.phase,
@@ -137,6 +167,9 @@ class ShadowGameState {
       medalEarned: medalEarned ?? this.medalEarned,
       hasMedal: hasMedal ?? this.hasMedal,
       goldFraction: goldFraction ?? this.goldFraction,
+      gameRound: gameRound,
+      medal: medal ?? this.medal,
+      lossKind: lossKind ?? this.lossKind,
     );
   }
 }

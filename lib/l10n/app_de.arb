@@ -105,5 +105,11 @@
   "feedbackEmailWhatExpected": "Was hast du erwartet?",
   "menuShadowsSubtitle": "Finde jeden Schatten",
   "parentsZoneSoundTitle": "Ton",
-  "parentsZoneSoundHint": "Sanfte Töne beim Umdrehen einer Karte, bei einem Paar oder einem fertigen Spielbrett. Fehler machen nie einen Ton."
+  "parentsZoneSoundHint": "Sanfte Töne beim Umdrehen einer Karte, bei einem Paar oder einem fertigen Spielbrett. Fehler machen nie einen Ton.",
+  "roundInvitationTitle": "Jetzt geht es los!",
+  "medalBronzeTitle": "Bronzemedaille!",
+  "medalSilverTitle": "Silbermedaille!",
+  "medalGoldTitle": "Goldmedaille!",
+  "medalNextRoundMessage": "Runde geschafft! Jetzt eine größere Herausforderung.",
+  "roundEasierMessage": "Die Zeit ist um! Versuchen wir eine ruhigere Herausforderung."
 }

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
@@ -13,8 +13,8 @@ import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_state
 
 import '../../memory_game_test_support.dart';
 
-/// HU-030 en el juego de memoria: dificultad, «Jugar sin tiempo» (Premium) y
-/// vista previa de las cartas.
+/// HU-030 en el juego de memoria con las rondas de HU-037: la dificultad es la
+/// ronda del progreso, «Jugar sin tiempo» (Premium) y la vista previa.
 void main() {
   setUpAll(registerMemoryGameFallbacks);
 
@@ -36,8 +36,13 @@ void main() {
         .thenAnswer((_) async => UserProfile(isPremium: value, isSoundEnabled: true));
   }
 
-  MemoryLadderCubit started(FakeAsync async, {int level = 1, Duration? preview = Duration.zero}) {
-    when(() => repository.readMemoryProgress()).thenAnswer((_) async => MemoryProgress(currentLevel: level));
+  MemoryLadderCubit started(
+    FakeAsync async, {
+    int level = 1,
+    GameDifficulty round = GameDifficulty.normal,
+    Duration? preview = Duration.zero,
+  }) {
+    when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => progressAt(level, round: round));
     final cubit = MemoryLadderCubit(repository: repository, random: Random(5), preview: preview);
     cubit.start();
     async.flushMicrotasks();
@@ -75,9 +80,8 @@ void main() {
     });
 
     test('Impossible deals face down, without preview (criterion 12)', () {
-      stored = ParentalSettings(difficulty: GameDifficulty.impossible);
       fakeAsync((async) {
-        final cubit = started(async, preview: null);
+        final cubit = started(async, round: GameDifficulty.impossible, preview: null);
 
         expect(cubit.state.phase, MemoryRoundPhase.playing);
         expect(cubit.state.cards.any((card) => card.isFaceUp), isFalse);
@@ -97,31 +101,38 @@ void main() {
 
   group('difficulty', () {
     test('Easy arrives at 2x3 with 270 s (criterion 2)', () {
-      stored = ParentalSettings(difficulty: GameDifficulty.easy);
       fakeAsync((async) {
-        final cubit = started(async, level: 2);
+        final cubit = started(async, level: 2, round: GameDifficulty.easy);
         expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 270)));
         cubit.close();
       });
     });
 
-    test('a change made during a board is applied on the next one, at the same level (R6, criterion 5)', () {
+    test('the general difficulty setting no longer changes the game: the round does (HU-037, D-038)', () {
+      stored = ParentalSettings(difficulty: GameDifficulty.impossible);
       fakeAsync((async) {
-        final cubit = started(async);
-        expect(cubit.state.position, MemoryLadder.start);
-
-        stored = ParentalSettings(difficulty: GameDifficulty.impossible);
-        // El tablero en curso no cambia.
-        expect(cubit.state.position, MemoryLadder.start);
-        winPerfectly(async, cubit);
-        async.elapse(MemoryLadderCubit.celebrationDuration);
-
-        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 45)));
+        final cubit = started(async, level: 2);
+        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 90)));
         cubit.close();
       });
     });
 
-    test('settings that cannot be read leave the game in Normal with time', () {
+    test('turning «Play without time» on during a board applies on the next one, at the same level (R6)', () {
+      premium(true);
+      fakeAsync((async) {
+        final cubit = started(async, level: 2);
+        expect(cubit.state.position.isTimed, isTrue);
+
+        stored = ParentalSettings(timerDisabled: true);
+        winPerfectly(async, cubit);
+        async.elapse(MemoryLadderCubit.celebrationDuration);
+
+        expect(cubit.state.position, const MemoryLadderPosition(level: 3));
+        cubit.close();
+      });
+    });
+
+    test('settings that cannot be read leave the game with time', () {
       when(() => repository.readParentalSettings()).thenThrow(StateError('disk'));
       fakeAsync((async) {
         final cubit = started(async, level: 3);

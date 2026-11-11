@@ -105,5 +105,11 @@
   "feedbackEmailWhatExpected": "어떻게 될 거라고 생각했나요?",
   "menuShadowsSubtitle": "그림자를 찾아요",
   "parentsZoneSoundTitle": "소리",
-  "parentsZoneSoundHint": "카드를 뒤집거나 짝을 찾거나 판을 완성하면 부드러운 소리가 나요. 실수했을 때는 소리가 나지 않아요."
+  "parentsZoneSoundHint": "카드를 뒤집거나 짝을 찾거나 판을 완성하면 부드러운 소리가 나요. 실수했을 때는 소리가 나지 않아요.",
+  "roundInvitationTitle": "이제 놀아 볼까요!",
+  "medalBronzeTitle": "동메달!",
+  "medalSilverTitle": "은메달!",
+  "medalGoldTitle": "금메달!",
+  "medalNextRoundMessage": "라운드 완료! 이제 더 큰 도전이에요.",
+  "roundEasierMessage": "시간이 다 됐어요! 더 쉬운 도전을 해 봐요."
 }

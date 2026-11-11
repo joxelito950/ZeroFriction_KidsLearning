@@ -3,18 +3,20 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 
-import '../../../domain/entities/memory_progress.dart';
 import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/memory/memory_ladder.dart';
 import '../../../domain/memory/memory_stars.dart';
 import '../../../domain/memory/memory_themes.dart';
+import '../../../domain/progress/game_progress.dart';
+import '../../../domain/progress/round_ladder.dart';
 import '../../../domain/progress/star_decay.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
 import 'memory_card_model.dart';
 import 'memory_ladder_state.dart';
 
-/// Juego de memoria progresivo (HU-001): escalera de niveles, cronómetro,
-/// estrellas, guardado del progreso y transiciones automáticas.
+/// Juego de memoria progresivo (HU-001) con rondas de dificultad (HU-037):
+/// tutorial sin tiempo, niveles con el tiempo de la ronda, medallas, bajada de
+/// ronda, estrellas, guardado del progreso y transiciones automáticas.
 class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   MemoryLadderCubit({
     required IPersistenceRepository repository,
@@ -39,19 +41,27 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   /// Celebración tras ganar (R14).
   static const Duration celebrationDuration = Duration(seconds: 2);
 
+  /// Invitación a jugar tras el tutorial (HU-037 R9).
+  static const Duration invitationDuration = Duration(milliseconds: 1500);
+
   /// Aviso de «se acabó el tiempo» (R15).
   static const Duration timeUpDuration = Duration(milliseconds: 2500);
+
+  static final RoundLadder _ladder = MemoryLadder.rounds;
 
   final IPersistenceRepository _repository;
   final Random _random;
   final DateTime Function() _now;
   final Duration _preview;
 
-  MemoryProgress _progress = MemoryProgress.initial;
+  GameProgress _progress = GameProgress.initial();
 
-  /// Reglas con las que se repartió el tablero en juego (HU-030). Un cambio en
-  /// la Zona de Padres se aplica en el siguiente tablero (R6).
-  MemoryLadderRules _rules = MemoryLadderRules.standard;
+  /// Posición del tablero en juego, con su ronda y sus caídas al tutorial.
+  RoundPosition _position = GameProgress.initial().position;
+
+  /// «Jugar sin tiempo» con Premium (HU-030 R4). Se vuelve a leer antes de
+  /// cada tablero: un cambio en la Zona de Padres se aplica en el siguiente.
+  bool _timed = true;
   Timer? _ticker;
   Timer? _transition;
   Timer? _previewTimer;
@@ -60,24 +70,29 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   /// Identifica la ronda en juego; los temporizadores de rondas anteriores se ignoran.
   int _round = 0;
 
-  /// Lee el progreso y reparte el tablero del nivel guardado, con su límite de llegada (R12).
+  /// Lee el progreso y reparte el tablero guardado, con su límite de llegada.
   Future<void> start() async {
     try {
-      _progress = await _repository.readMemoryProgress();
+      _progress = await _repository.readGameProgress(GameId.memory);
       await _settleStars();
     } catch (error, stackTrace) {
       addError(error, stackTrace);
     }
-    final MemoryLadderRules rules = await _readRules();
+    _timed = await _readTimed();
     if (isClosed) return;
-    _rules = rules;
-    _deal(MemoryLadder.arrivalPosition(_progress.currentLevel, rules));
+    final RoundPosition saved = _progress.position;
+    _deal(RoundPosition(
+      round: saved.round,
+      level: saved.level,
+      timeLimit: _ladder.limitFor(saved.round, saved.level, timed: _timed),
+      tutorialFalls: saved.tutorialFalls,
+    ));
   }
 
   /// Al empezar el juego se aplica la pérdida de estrellas acumulada y se guarda
   /// (D-037), salvo con «Mantener las estrellas» (HU-016). Abrir el juego cuenta
-  /// como jugar: la pérdida se detiene desde ahora (HU-002 R9, R13). Si no se
-  /// pudo leer el progreso, no se llega aquí y no se pisa nada.
+  /// como jugar (HU-002 R9, R13). Si no se pudo leer el progreso, no se llega
+  /// aquí y no se pisa nada.
   Future<void> _settleStars() async {
     ParentalSettings settings = ParentalSettings.initial;
     try {
@@ -89,20 +104,20 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
     await _saveProgress();
   }
 
-  /// La dificultad y «Jugar sin tiempo» de la Zona de Padres. Sin tiempo solo
-  /// con Premium (HU-030 R4); si se perdió Premium, el ajuste vuelve a su valor
-  /// por defecto y se guarda así (R11). Si no se pueden leer, Normal con tiempo.
-  Future<MemoryLadderRules> _readRules() async {
+  /// «Jugar sin tiempo» solo con Premium (HU-030 R4); si se perdió Premium, el
+  /// ajuste vuelve a su valor por defecto y se guarda así (R11). Si no se puede
+  /// leer, hay tiempo.
+  Future<bool> _readTimed() async {
     try {
       final ParentalSettings settings = await _repository.readParentalSettings();
       final bool premium = (await _repository.readUserProfile())?.isPremium ?? false;
       if (settings.timerDisabled && !premium) {
         await _repository.updateParentalSettings((current) => current.withTimerDisabled(false));
       }
-      return MemoryLadderRules(difficulty: settings.difficulty, timed: !(settings.timerDisabled && premium));
+      return !(settings.timerDisabled && premium);
     } catch (error, stackTrace) {
       if (!isClosed) addError(error, stackTrace);
-      return MemoryLadderRules.standard;
+      return true;
     }
   }
 
@@ -147,10 +162,11 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   /// La app vuelve: el cronómetro sigue desde donde estaba (criterio 11).
   void resume() => _paused = false;
 
-  void _deal(MemoryLadderPosition position) {
+  void _deal(RoundPosition position) {
     _stopTimer();
     _previewTimer?.cancel();
     _round++;
+    _position = position;
     final MemoryLevel level = MemoryLadder.levelAt(position.level);
     final MemoryBoardContent content = MemoryThemes.pick(_random, pairs: level.pairs);
     var id = 0;
@@ -160,14 +176,16 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
         MemoryCard(id: id++, assetPath: symbol),
       ],
     ]..shuffle(_random);
-    final bool preview = _rules.preview && _preview > Duration.zero;
+    // La vista previa es una ayuda: solo en Fácil y Normal (HU-030 R10).
+    final bool preview = position.round.showsHelps && _preview > Duration.zero;
     emit(MemoryLadderState(
       phase: preview ? MemoryRoundPhase.previewing : MemoryRoundPhase.playing,
       round: _round,
-      position: position,
+      position: MemoryLadderPosition(level: position.level, timeLimit: position.timeLimit),
       cards: preview ? [for (final card in cards) card.copyWith(isFaceUp: true)] : cards,
-      hasBadge: _progress.hasBadge,
-      goldFraction: _progress.goldFraction,
+      hasBadge: _progress.bestMedal != null,
+      goldFraction: _progress.goldFraction(_ladder),
+      gameRound: position.round,
     ));
     if (!preview) return;
     // Pasado el momento, se voltean todas a la vez y empieza el juego (V2).
@@ -199,17 +217,24 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
 
   void _win() {
     _stopTimer();
-    final int level = state.level;
-    final int stars = MemoryStars.forWin(level: level, moves: state.moves);
-    final MemoryLadderStep step = MemoryLadder.afterWin(state.position, _rules);
-    _progress = _progress.recordWin(level: level, stars: stars, step: step, at: _now());
+    final RoundPosition won = _position;
+    // El tutorial no da estrellas (HU-037 P2).
+    final int stars = won.isTutorial ? 0 : MemoryStars.forWin(level: won.level, moves: state.moves);
+    final RoundStep step = _ladder.afterWin(won, timed: _timed);
+    _progress = _progress.recordWin(won: won, stars: stars, step: step, at: _now());
     unawaited(_saveProgress());
+    if (step.fromTutorial) {
+      emit(state.copyWith(phase: MemoryRoundPhase.inviting, isProcessing: true));
+      _scheduleNextRound(invitationDuration, step.next);
+      return;
+    }
     emit(state.copyWith(
       phase: MemoryRoundPhase.celebrating,
       stars: stars,
-      badgeEarned: step.badgeEarned,
-      hasBadge: _progress.hasBadge,
-      goldFraction: _progress.goldFraction,
+      badgeEarned: step.medal != null,
+      medal: step.medal,
+      hasBadge: _progress.bestMedal != null,
+      goldFraction: _progress.goldFraction(_ladder),
       isProcessing: true,
     ));
     _scheduleNextRound(celebrationDuration, step.next);
@@ -217,29 +242,39 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
 
   void _timeUp() {
     _stopTimer();
-    final MemoryLadderStep step = MemoryLadder.afterLoss(state.position);
+    final RoundStep step = _ladder.afterLoss(_position, timed: _timed);
     _progress = _progress.recordLoss(step: step, at: _now());
     unawaited(_saveProgress());
     emit(state.copyWith(
       phase: MemoryRoundPhase.timeUp,
       elapsed: state.position.timeLimit,
-      loss: step.loss,
+      loss: step.droppedRound
+          ? MemoryLoss.easierRound
+          : step.next.isTutorial
+              ? MemoryLoss.restart
+              : MemoryLoss.fewerCards,
       isProcessing: true,
     ));
     _scheduleNextRound(timeUpDuration, step.next);
   }
 
-  /// Antes del tablero siguiente se vuelven a leer los ajustes: si cambiaron,
-  /// se sigue en el mismo nivel con el límite de llegada de las reglas nuevas
-  /// (HU-030 R6).
-  void _scheduleNextRound(Duration delay, MemoryLadderPosition next) {
+  /// Antes del tablero siguiente se vuelve a leer «Jugar sin tiempo»: si
+  /// cambió, se sigue en el mismo nivel con el límite de llegada (HU-030 R6).
+  void _scheduleNextRound(Duration delay, RoundPosition next) {
     _transition?.cancel();
     _transition = Timer(delay, () async {
       if (isClosed) return;
-      final MemoryLadderRules rules = await _readRules();
+      final bool timed = await _readTimed();
       if (isClosed) return;
-      final MemoryLadderPosition position = rules == _rules ? next : MemoryLadder.arrivalPosition(next.level, rules);
-      _rules = rules;
+      final RoundPosition position = timed == _timed
+          ? next
+          : RoundPosition(
+              round: next.round,
+              level: next.level,
+              timeLimit: _ladder.limitFor(next.round, next.level, timed: timed),
+              tutorialFalls: next.tutorialFalls,
+            );
+      _timed = timed;
       _deal(position);
     });
   }
@@ -247,7 +282,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   /// Un fallo al guardar no interrumpe el juego; se reporta (D-010).
   Future<void> _saveProgress() async {
     try {
-      await _repository.saveMemoryProgress(_progress);
+      await _repository.saveGameProgress(GameId.memory, _progress);
     } catch (error, stackTrace) {
       if (!isClosed) addError(error, stackTrace);
     }
@@ -266,3 +301,4 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
     return super.close();
   }
 }
+

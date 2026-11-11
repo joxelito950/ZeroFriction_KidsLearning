@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:toddler_logic/domain/entities/memory_progress.dart';
+import 'package:toddler_logic/domain/memory/memory_ladder.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/progress/level_record.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
 
@@ -22,71 +25,72 @@ void main() {
     stubPersistenceRepository(repository);
   });
 
-  MemoryProgress fullProgress({required DateTime lastPlayedAt}) => MemoryProgress(
-        currentLevel: 2,
-        hasBadge: true,
-        levelRecords: {
-          for (var level = 1; level <= 5; level++)
-            level: MemoryLevelRecord(bestStars: 3, achievedAt: DateTime(2026, 10, level)),
+  // Normal completa (niveles 2 a 5, 12★) y las medallas de bronce y plata.
+  GameProgress fullProgress({required DateTime lastPlayedAt}) => progressAt(
+        2,
+        medals: const {GameDifficulty.easy, GameDifficulty.normal},
+        records: {
+          for (var level = 2; level <= 5; level++)
+            RoundLevel(GameDifficulty.normal, level): LevelRecord(bestStars: 3, achievedAt: DateTime(2026, 10, level)),
         },
         lastPlayedAt: lastPlayedAt,
       );
 
-  MemoryProgress startAndRead(ParentalSettings settings, MemoryProgress saved) {
-    when(() => repository.readMemoryProgress()).thenAnswer((_) async => saved);
+  GameProgress startAndRead(ParentalSettings settings, GameProgress saved) {
+    when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => saved);
     when(() => repository.readParentalSettings()).thenAnswer((_) async => settings);
-    late MemoryProgress written;
+    late GameProgress written;
     fakeAsync((async) {
       final cubit =
           MemoryLadderCubit(repository: repository, random: Random(1), now: () => now, preview: Duration.zero);
       cubit.start();
       async.flushMicrotasks();
-      written = verify(() => repository.saveMemoryProgress(captureAny())).captured.last as MemoryProgress;
-      expect(cubit.state.goldFraction, written.goldFraction);
+      written = verify(() => repository.saveGameProgress(GameId.memory, captureAny())).captured.last as GameProgress;
+      expect(cubit.state.goldFraction, written.goldFraction(MemoryLadder.rounds));
       cubit.close();
     });
     return written;
   }
 
   test('after 20 days without playing, 4 stars are lost from the oldest level and saved (criterion 12)', () {
-    final MemoryProgress written =
+    final GameProgress written =
         startAndRead(ParentalSettings.initial, fullProgress(lastPlayedAt: now.subtract(const Duration(days: 20))));
 
-    expect(written.stars, 11);
-    expect(written.levelRecords[1]!.bestStars, 0);
-    expect(written.levelRecords[2]!.bestStars, 2);
-    expect(written.hasBadge, isTrue);
+    expect(written.stars, 8);
+    expect(written.records[const RoundLevel(GameDifficulty.normal, 2)]!.bestStars, 0);
+    expect(written.records[const RoundLevel(GameDifficulty.normal, 3)]!.bestStars, 2);
+    expect(written.medals, {GameDifficulty.easy, GameDifficulty.normal}, reason: 'medals are never lost');
     expect(written.lastPlayedAt, now);
   });
 
   test('keeping the stars loses nothing, even after 30 days (HU-016 criterion 1)', () {
-    final MemoryProgress written = startAndRead(
+    final GameProgress written = startAndRead(
       ParentalSettings(keepStars: true),
       fullProgress(lastPlayedAt: now.subtract(const Duration(days: 30))),
     );
 
-    expect(written.stars, 15);
+    expect(written.stars, 12);
     expect(written.lastPlayedAt, now);
   });
 
   test('turning the loss back on restarts the 7-day grace (HU-016 criterion 2)', () {
-    final MemoryProgress written = startAndRead(
+    final GameProgress written = startAndRead(
       ParentalSettings(starDecayResumedAt: now.subtract(const Duration(days: 6))),
       fullProgress(lastPlayedAt: now.subtract(const Duration(days: 40))),
     );
 
-    expect(written.stars, 15);
+    expect(written.stars, 12);
   });
 
   test('a child who never played loses nothing', () {
-    final MemoryProgress written = startAndRead(ParentalSettings.initial, MemoryProgress.initial);
+    final GameProgress written = startAndRead(ParentalSettings.initial, GameProgress.initial());
 
     expect(written.stars, 0);
     expect(written.lastPlayedAt, now);
   });
 
   test('unreadable settings apply the default loss', () {
-    when(() => repository.readMemoryProgress())
+    when(() => repository.readGameProgress(GameId.memory))
         .thenAnswer((_) async => fullProgress(lastPlayedAt: now.subtract(const Duration(days: 10))));
     when(() => repository.readParentalSettings()).thenThrow(StateError('disk'));
     fakeAsync((async) {
@@ -94,20 +98,20 @@ void main() {
           MemoryLadderCubit(repository: repository, random: Random(1), now: () => now, preview: Duration.zero);
       cubit.start();
       async.flushMicrotasks();
-      final saved = verify(() => repository.saveMemoryProgress(captureAny())).captured.last as MemoryProgress;
-      expect(saved.stars, 14);
+      final saved = verify(() => repository.saveGameProgress(GameId.memory, captureAny())).captured.last as GameProgress;
+      expect(saved.stars, 11);
       cubit.close();
     });
   });
 
   test('an unreadable progress is never overwritten', () {
-    when(() => repository.readMemoryProgress()).thenThrow(StateError('disk'));
+    when(() => repository.readGameProgress(GameId.memory)).thenThrow(StateError('disk'));
     fakeAsync((async) {
       final cubit =
           MemoryLadderCubit(repository: repository, random: Random(1), now: () => now, preview: Duration.zero);
       cubit.start();
       async.flushMicrotasks();
-      verifyNever(() => repository.saveMemoryProgress(any()));
+      verifyNever(() => repository.saveGameProgress(any(), any()));
       cubit.close();
     });
   });

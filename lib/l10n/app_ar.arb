@@ -105,5 +105,11 @@
   "feedbackEmailWhatExpected": "ماذا كنت تتوقع؟",
   "menuShadowsSubtitle": "ابحث عن كل ظل",
   "parentsZoneSoundTitle": "الصوت",
-  "parentsZoneSoundHint": "أصوات هادئة عند قلب بطاقة أو العثور على زوج أو إكمال لوحة. الأخطاء لا تُصدر أي صوت أبدًا."
+  "parentsZoneSoundHint": "أصوات هادئة عند قلب بطاقة أو العثور على زوج أو إكمال لوحة. الأخطاء لا تُصدر أي صوت أبدًا.",
+  "roundInvitationTitle": "هيا نلعب الآن!",
+  "medalBronzeTitle": "ميدالية برونزية!",
+  "medalSilverTitle": "ميدالية فضية!",
+  "medalGoldTitle": "ميدالية ذهبية!",
+  "medalNextRoundMessage": "اكتملت الجولة! الآن تحدٍّ أكبر.",
+  "roundEasierMessage": "انتهى الوقت! لنجرب تحديًا أهدأ."
 }

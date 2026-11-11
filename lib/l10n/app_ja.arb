@@ -105,5 +105,11 @@
   "feedbackEmailWhatExpected": "どうなると思っていましたか？",
   "menuShadowsSubtitle": "かげを みつけよう",
   "parentsZoneSoundTitle": "おと",
-  "parentsZoneSoundHint": "カードをめくったとき、ペアを見つけたとき、ボードをクリアしたときにやさしい音が鳴ります。まちがえても音は鳴りません。"
+  "parentsZoneSoundHint": "カードをめくったとき、ペアを見つけたとき、ボードをクリアしたときにやさしい音が鳴ります。まちがえても音は鳴りません。",
+  "roundInvitationTitle": "さあ、あそぼう！",
+  "medalBronzeTitle": "どうメダル！",
+  "medalSilverTitle": "ぎんメダル！",
+  "medalGoldTitle": "きんメダル！",
+  "medalNextRoundMessage": "ラウンドクリア！ つぎは もっと むずかしいよ。",
+  "roundEasierMessage": "じかんぎれ！ もっと やさしい チャレンジに しよう。"
 }

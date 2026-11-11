@@ -105,5 +105,11 @@
   "feedbackEmailWhatExpected": "Che cosa ti aspettavi?",
   "menuShadowsSubtitle": "Trova ogni ombra",
   "parentsZoneSoundTitle": "Suono",
-  "parentsZoneSoundHint": "Suoni delicati quando si gira una carta, si trova una coppia o si completa un tabellone. Gli errori non suonano mai."
+  "parentsZoneSoundHint": "Suoni delicati quando si gira una carta, si trova una coppia o si completa un tabellone. Gli errori non suonano mai.",
+  "roundInvitationTitle": "Ora si gioca!",
+  "medalBronzeTitle": "Medaglia di bronzo!",
+  "medalSilverTitle": "Medaglia d'argento!",
+  "medalGoldTitle": "Medaglia d'oro!",
+  "medalNextRoundMessage": "Round completato! Ora una sfida più grande.",
+  "roundEasierMessage": "Tempo scaduto! Proviamo una sfida più tranquilla."
 }

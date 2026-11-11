@@ -105,5 +105,11 @@
   "feedbackEmailWhatExpected": "¿Qué esperabas?",
   "menuShadowsSubtitle": "Encuentra cada sombra",
   "parentsZoneSoundTitle": "Sonido",
-  "parentsZoneSoundHint": "Sonidos suaves al voltear una carta, encontrar una pareja o completar un tablero. Los errores nunca suenan."
+  "parentsZoneSoundHint": "Sonidos suaves al voltear una carta, encontrar una pareja o completar un tablero. Los errores nunca suenan.",
+  "roundInvitationTitle": "¡Ahora, a jugar!",
+  "medalBronzeTitle": "¡Medalla de bronce!",
+  "medalSilverTitle": "¡Medalla de plata!",
+  "medalGoldTitle": "¡Medalla de oro!",
+  "medalNextRoundMessage": "¡Ronda completada! Ahora, un reto más grande.",
+  "roundEasierMessage": "¡Se acabó el tiempo! Probemos un reto más tranquilo."
 }

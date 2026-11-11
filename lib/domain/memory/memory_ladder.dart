@@ -45,6 +45,9 @@ enum MemoryLoss {
 
   /// Se pierde en el 2×2 cronometrado: «Empecemos de nuevo, sin prisa».
   restart,
+
+  /// Segunda caída al tutorial: se baja a la ronda anterior (HU-037 R10).
+  easierRound,
 }
 
 /// Cómo se juega la escalera: la dificultad y si hay tiempo (HU-030).

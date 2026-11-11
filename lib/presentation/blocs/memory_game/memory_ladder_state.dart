@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../domain/memory/memory_ladder.dart';
+import '../../../domain/settings/game_difficulty.dart';
 import 'memory_card_model.dart';
 
 /// Fase de una ronda del juego de memoria progresivo (HU-001).
@@ -20,6 +21,9 @@ enum MemoryRoundPhase {
 
   /// Se acabó el tiempo: aviso automático antes de bajar de nivel (R15).
   timeUp,
+
+  /// Tutorial superado (HU-037 R9): invitación a jugar, sin estrellas.
+  inviting,
 }
 
 /// Estado inmutable de la pantalla del juego de memoria progresivo.
@@ -40,6 +44,8 @@ class MemoryLadderState {
     this.loss,
     this.hasBadge = false,
     this.goldFraction = 0,
+    this.gameRound = GameDifficulty.easy,
+    this.medal,
   });
 
   final MemoryRoundPhase phase;
@@ -73,6 +79,12 @@ class MemoryLadderState {
   /// Dorado del juego, de 0 a 1 (HU-002 R2): el icono de la cabecera.
   final double goldFraction;
 
+  /// Ronda en juego (HU-037): da color a los puntos de nivel (P8).
+  final GameDifficulty gameRound;
+
+  /// Medalla de la ronda recién completada (fase [MemoryRoundPhase.celebrating]).
+  final GameDifficulty? medal;
+
   int get level => position.level;
 
   /// Tiempo restante, o `null` si el nivel no tiene tiempo.
@@ -105,11 +117,14 @@ class MemoryLadderState {
     MemoryLoss? loss,
     bool? hasBadge,
     double? goldFraction,
+    GameDifficulty? medal,
   }) {
     return MemoryLadderState(
       phase: phase ?? this.phase,
       round: round,
       position: position,
+      gameRound: gameRound,
+      medal: medal ?? this.medal,
       cards: cards ?? this.cards,
       firstSelectedCardIndex:
           clearSelection ? null : (firstSelectedCardIndex ?? this.firstSelectedCardIndex),
