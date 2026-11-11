@@ -5,6 +5,7 @@ import '../../domain/entities/memory_progress.dart';
 import '../../domain/entities/parental_settings.dart';
 import '../../domain/entities/shadow_progress.dart';
 import '../../domain/entities/user_profile.dart';
+import '../../domain/progress/game_progress.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import 'models/level_state_hive_model.dart';
 import 'models/memory_progress_hive_model.dart';
@@ -106,6 +107,25 @@ class HivePersistenceRepository implements IPersistenceRepository {
   @override
   Future<void> saveShadowProgress(ShadowProgress progress) async {
     await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromEntity(progress));
+  }
+
+  @override
+  Future<GameProgress> readGameProgress(GameId game) async {
+    return switch (game) {
+          GameId.memory => _memoryProgressBox.get(_memoryProgressKey)?.toGameProgress(),
+          GameId.shadows => _shadowProgressBox.get(_shadowProgressKey)?.toGameProgress(),
+        } ??
+        GameProgress.initial();
+  }
+
+  @override
+  Future<void> saveGameProgress(GameId game, GameProgress progress) async {
+    switch (game) {
+      case GameId.memory:
+        await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromGameProgress(progress));
+      case GameId.shadows:
+        await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromGameProgress(progress));
+    }
   }
 
   @override

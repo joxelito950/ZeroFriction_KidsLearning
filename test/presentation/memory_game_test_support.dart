@@ -4,6 +4,7 @@ import 'package:toddler_logic/domain/entities/memory_progress.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/entities/shadow_progress.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 
 class MockPersistenceRepository extends Mock implements IPersistenceRepository {}
@@ -18,6 +19,8 @@ void registerMemoryGameFallbacks() {
   registerFallbackValue(MemoryProgress.initial);
   registerFallbackValue(ParentalSettings.initial);
   registerFallbackValue(ShadowProgress.initial);
+  registerFallbackValue(GameProgress.initial());
+  registerFallbackValue(GameId.memory);
   registerFallbackValue((ParentalSettings current) => current);
 }
 
@@ -34,6 +37,8 @@ void stubPersistenceRepository(MockPersistenceRepository repository) {
   when(() => repository.saveMemoryProgress(any())).thenAnswer((_) async {});
   when(() => repository.readShadowProgress()).thenAnswer((_) async => ShadowProgress.initial);
   when(() => repository.saveShadowProgress(any())).thenAnswer((_) async {});
+  when(() => repository.readGameProgress(any())).thenAnswer((_) async => GameProgress.initial());
+  when(() => repository.saveGameProgress(any(), any())).thenAnswer((_) async {});
   when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings.initial);
   when(() => repository.saveParentalSettings(any())).thenAnswer((_) async {});
   // Como el repositorio real: lee lo guardado, aplica el cambio y lo guarda.
