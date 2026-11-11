@@ -101,3 +101,39 @@ Google Play solo deja probar compras con una versión subida a un canal (la prue
 - Pagos fuera de Google Play (HU-015).
 - Un servidor propio para verificar compras.
 - Compartir Premium con la familia (Google Play Family Library) — se puede valorar después.
+
+## 10. Avance del refinamiento (2026-11-10, sin respuestas del dueño)
+
+### 10.1 Depende de HU-037
+
+HU-037 (rondas de dificultad y medallas) cambia **qué es Premium** (su P6): la recomendación allí es gratis la ronda Fácil completa, con su bronce, y Premium las rondas Normal e Imposible, con plata y oro. Esto sustituiría lo de P3 («tiempo, nivel 8, 3.ª estrella y medalla de Sombras»). **Propuesta:** cerrar HU-037 P6 antes que P3 de esta historia.
+
+### 10.2 Lo que hay que preparar en Play Console (lo hace el dueño, una vez)
+
+1. **Perfil de pagos** (cuenta de comerciante) en *Configuración › Perfil de pagos*: datos fiscales y cuenta bancaria. Sin él no se pueden crear productos de pago.
+2. Cambiar en *Contenido de la app* y en la ficha: «Contiene compras en la aplicación» (Google lo marca solo al crear el producto) y repetir la **clasificación del contenido** (pregunta de compras digitales).
+3. Crear el **producto** `premium` en *Monetizar › Productos › Productos de compra única* con su precio base (P1). El identificador no se puede cambiar después (P2).
+4. Dar de alta a los **probadores de licencias** (los correos de los testers) en *Configuración › Prueba de licencias*: compran sin cobro real.
+
+### 10.3 Lo que hay que comprobar al desarrollar
+
+- **Permisos:** `in_app_purchase` añade `com.android.vending.BILLING`. Se mide en el PR si añade alguno más; `check_release_permissions` admitirá solo ese.
+- **Seguridad de los datos:** la biblioteca de Google Play Billing comunica la compra a Google Play. Hay que revisar la guía de Google para esa biblioteca y, si lo pide, declarar «Historial de compras» como dato recogido para «Funcionalidad de la app». La app sigue sin servidor (P8).
+- **Política de privacidad:** sección «Compras» con el texto definitivo (hoy dice que no hay compras).
+- **Familias:** la compra solo tras el desafío de adultos (R2), sin mensajes que inviten al niño a comprar.
+
+### 10.4 Entregas propuestas
+
+| # | Entrega | Contenido |
+|---|---|---|
+| 1 | Dominio y tienda falsa | `IPremiumStore`, `PremiumState`, `FakePremiumStore`, `PremiumCubit` (compra, pendiente, cancelación, restauración, reembolso, sin conexión) y el interruptor de depuración (R11) con su test de arquitectura |
+| 2 | Google Play | `GooglePlayPremiumStore` sobre `in_app_purchase`, confirmación (`acknowledge`), restauración al arrancar, permisos |
+| 3 | Zona de Padres y textos | Sección «Premium» (R3), precio de Google Play, mensajes de error amables, 9 idiomas, política, ficha y formulario de datos |
+| 4 | Prueba real | Versión en la prueba interna con probadores de licencias: comprar, cancelar, reembolsar y restaurar en el moto g55 |
+
+### 10.5 Preguntas nuevas
+
+| # | Pregunta | Recomendación | Bloquea |
+|---|---|---|---|
+| P9 | ¿Se permite compartir Premium con la familia (Google Play Family Library)? | **Sí, más adelante:** es un interruptor en Play Console y encaja con hermanos (HU-033). No en la primera versión | No |
+| P10 | ¿El precio se ajusta por país o se deja la conversión automática de Google? | **Automática** al principio; revisar después con los datos de la consola | No |

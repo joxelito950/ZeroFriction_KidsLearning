@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (desarrollada el 2026-11-05 en `feature/hu-030-difficulty`, las 3 entregas en un PR; falta verla en el moto g55). Refinamiento cerrado el 2026-11-04 |
+| **Estado** | Hecha (vista en el moto g55 y publicada en `1.0.0-rc.2`; «Jugar sin tiempo» sigue oculto sin Premium hasta HU-006). Antes: en curso (desarrollada el 2026-11-05 en `feature/hu-030-difficulty`, las 3 entregas en un PR; falta verla en el moto g55). Refinamiento cerrado el 2026-11-04 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2: Sombras (HU-007) nace con sus tres niveles |
 | **Tamaño** | M (3 entregas, unos 3 días) |

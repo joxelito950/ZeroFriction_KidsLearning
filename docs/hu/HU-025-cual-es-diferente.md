@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-09; preguntas en la sección 8) |
+| **Estado** | En refinamiento (iniciado el 2026-11-09; avanzado el 2026-11-10 sin respuestas del dueño, sección 10) |
 | **Épica** | E4 · Nuevos juegos |
 | **Prioridad** | P2: candidato a tercer juego, el más barato de hacer después de Sombras |
 | **Tamaño** | M (estimación: 3–4 días) |
@@ -85,3 +85,36 @@ El tiempo, como en la memoria: el nivel 1 sin tiempo y después una serie por di
 
 - Narración que diga el nombre de los objetos (D-034).
 - Grupos con imágenes propias (solo emojis).
+
+## 10. Avance del refinamiento (2026-11-10, sin respuestas del dueño)
+
+### 10.1 Encaje con HU-037 y HU-023
+
+- **HU-037** (rondas de dificultad y medallas) cambia P1 y P5: si se acepta, este juego tiene las tres rondas, su tutorial (el nivel 1 de la tabla 4) y el **modelo común de progreso**, sin typeId propio. P1 pasaría a ser la misma regla de Premium que decida HU-037 P6.
+- **HU-023** (menú para varios juegos) va antes: con tres juegos, los botones anchos ya no caben en el teléfono compacto en horizontal.
+
+### 10.2 Catálogo de grupos propuesto
+
+Solo emojis de Emoji 5.0 o anterior y sin ZWJ (D-024, D-026); un test lo comprueba como en la memoria y Sombras.
+
+| Grupo | Emojis | Para niveles |
+|---|---|---|
+| Animales de granja | 🐮 🐷 🐔 🐑 🐴 🐰 | 3 (frente a salvajes) |
+| Animales salvajes | 🦁 🐯 🐘 🦒 🐻 🐵 | 3 |
+| Animales del agua | 🐟 🐳 🐙 🐢 🦀 | 1, 2 (frente a vehículos o comida) |
+| Frutas | 🍎 🍌 🍐 🍇 🍓 🍉 🍒 | 1, 2 |
+| Vehículos de tierra | 🚗 🚌 🚲 🚂 🚜 🚒 | 4 (frente a aire) |
+| Vehículos de aire | ✈️ 🚁 🚀 🎈 | 4 |
+| Ropa | 👕 👖 👗 👟 🎩 👒 | 1, 2 |
+| Juguetes y pelotas | ⚽ 🏀 🎈 🎁 | 1, 2 |
+| Rojos (rasgo visible) | 🍓 🍎 🍒 🍅 🌶️ 🚒 | 5 (frente a uno amarillo: 🍋 🍌 🌽) |
+
+Notas: se descartaron 🧸 (Emoji 11.0) y 🧦 (Emoji 10.0) por D-026. 🎈 está en dos grupos: el generador nunca los junta en el mismo tablero. La lista final se valida viendo los emojis en el moto g55.
+
+### 10.3 Tableros por nivel (P3)
+
+Con 3 tableros por nivel, un nivel dura unos 30–60 s a los 3 años: lo mismo que un tablero 2×4 de la memoria.
+
+### 10.4 Preguntas que quedan
+
+P1 (modelo de acceso, ahora ligado a HU-037 P6) y P2 (escalera) siguen abiertas y bloquean. P5 se cierra con HU-037.
