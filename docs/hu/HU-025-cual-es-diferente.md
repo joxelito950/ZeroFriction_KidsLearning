@@ -201,3 +201,14 @@ Grupos de color (solo Fácil): rojos 🍎🍓🍒🍅🌶️, amarillos 🍌🍋
 | P10 | En Reto máximo, ¿«tierra o aire» es tan claro para un niño como «selva o granja»? | **Probarlo con niños:** si «tierra o aire» confunde (por ejemplo, el cohete 🚀), cambiarlo por «agua o tierra» (🐟🐳🐙 frente a 🐮) | No |
 | P11 | ¿Se avisa al adulto, en la Zona de Padres, de qué compara cada ronda? | **Sí, una línea por ronda** en la ayuda de la ronda («Fácil: formas y colores», «Normal: grupos», «Reto máximo: categorías») | No |
 
+### 13.5 Más variedad en Reto máximo y sin repeticiones (decidido el 2026-11-12)
+
+El dueño, jugando tras borrar los datos, vio **el helicóptero tres veces seguidas**. Causas: en Reto máximo solo había dos comparaciones, y el grupo «aire» tenía 3 objetos; nada impedía repetir el diferente del tablero anterior.
+
+| Cambio | Qué hace |
+|---|---|
+| **Cuatro comparaciones en Reto máximo** | Selva o granja; tierra o aire; **tierra o agua** (coches frente a un barco ⛵🚤🚢, o animales de tierra frente a uno del mar 🐟🐳🐙🐢🦀, en los dos sentidos); **ruedas o alas** (coches frente a 🦋🐦🐝🦆🦅✈️). Cada tablero elige una al azar, **nunca la del tablero anterior** |
+| **Sin repeticiones** en todas las rondas | El juego recuerda los **6 últimos objetos** diferentes (y la figura repetida de «idénticos») y no los vuelve a sacar mientras haya otra opción; si no la hay, al menos evita los dos últimos |
+
+Un test genera 90 tableros seguidos en cada ronda y comprueba que el diferente nunca repite el de los dos tableros anteriores, y que Reto máximo nunca repite la comparación seguida y usa las cuatro.
+

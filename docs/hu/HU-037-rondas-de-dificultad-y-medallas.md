@@ -198,7 +198,7 @@ Con la migración, quien hoy tiene la memoria al 100 % (15★, de las que 3 son 
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P11 | ¿Se avisa al niño o al adulto del cambio de dorado tras la actualización? | **Sí:** una celebración única al abrir cada juego por primera vez tras la actualización, con las medallas que ya tiene, y una línea en la Zona de Padres que explique las rondas | No |
+| P11 | ¿Se avisa al niño o al adulto del cambio de dorado tras la actualización? | ✅ Decidido (2026-11-11): **no hace falta el aviso.** Durante la prueba cerrada se avisa a los testers y se les pide borrar los datos de la app para probarla desde cero | — |
 | P12 | ¿Las ayudas de Fácil (vista previa de 1 s, animación de inicio) siguen en Normal? | **Sí**, como hoy (HU-030 R10): solo Imposible va sin ayudas | No |
 | P13 | ¿HU-010 (punto de partida) se absorbe aquí? | **Sí**, si se acepta P1: cambiar de ronda cubre «saltarse lo que ya domina» (HU-010 sección 10) | No |
 

@@ -36,11 +36,51 @@ void main() {
   });
 
   group('what each round compares (section 13, 2026-11-12)', () {
-    test('Easy: identical shapes, then colours; Normal: very different; Reto máximo: fine categories', () {
-      List<OddKind> of(GameDifficulty round) => [for (var level = 1; level <= 5; level++) OddOneOut.kindFor(round, level)];
-      expect(of(easy), [OddKind.identical, OddKind.identical, OddKind.colour, OddKind.colour, OddKind.colour]);
-      expect(of(normal), everyElement(OddKind.veryDifferent));
-      expect(of(impossible), everyElement(isIn([OddKind.farmOrWild, OddKind.landOrAir])));
+    test('Easy: identical shapes, then colours; Normal: very different; Reto máximo: several fine categories', () {
+      List<List<OddKind>> of(GameDifficulty round) =>
+          [for (var level = 1; level <= 5; level++) OddOneOut.kindsFor(round, level)];
+      expect(of(easy), [
+        [OddKind.identical],
+        [OddKind.identical],
+        [OddKind.colour],
+        [OddKind.colour],
+        [OddKind.colour],
+      ]);
+      expect(of(normal), everyElement([OddKind.veryDifferent]));
+      expect(of(impossible), everyElement(OddOneOut.hardKinds));
+      expect(OddOneOut.hardKinds, hasLength(4));
+      expect(() => OddOneOut.kindsFor(easy, 6), throwsRangeError);
+    });
+
+    test('Reto máximo never repeats the comparison of the previous board, and uses all of them', () {
+      final random = Random(9);
+      final seen = <OddKind>{};
+      OddKind? previous;
+      for (var i = 0; i < 200; i++) {
+        final OddBoard board = OddOneOut.board(random, OddOneOut.levelAt(1 + i % 5), impossible, previousKind: previous);
+        expect(board.kind, isNot(previous));
+        seen.add(board.kind);
+        previous = board.kind;
+      }
+      expect(seen, OddOneOut.hardKinds.toSet());
+    });
+
+    test('the different object does not come back right away, in any round (2026-11-12)', () {
+      for (final round in GameDifficulty.values) {
+        final random = Random(round.index);
+        final recent = <String>[];
+        OddKind? previous;
+        for (var i = 0; i < 90; i++) {
+          // La misma memoria que el juego: los últimos 6 objetos.
+          final List<String> window = recent.sublist(recent.length < 6 ? 0 : recent.length - 6);
+          final OddBoard board =
+              OddOneOut.board(random, OddOneOut.levelAt(1 + (i ~/ 3) % 5), round, previousKind: previous, recent: window);
+          expect(recent.sublist(recent.length < 2 ? 0 : recent.length - 2), isNot(contains(board.odd)),
+              reason: '${round.name} board $i repeats ${board.odd}');
+          recent.add(board.odd);
+          previous = board.kind;
+        }
+      }
     });
   });
 
@@ -56,7 +96,8 @@ void main() {
     test('each board has exactly one different object, at a random place (R2)', () {
       bool inGroup(String id, String symbol) => OddOneOut.group(id).symbols.contains(symbol);
       String familyOf(String symbol, {required bool colours}) => OddOneOut.groups
-          .firstWhere((group) => (group.family == 'colours') == colours && group.symbols.contains(symbol))
+          .firstWhere((group) =>
+              (group.family == 'colours') == colours && group.family != 'wings' && group.symbols.contains(symbol))
           .family;
       String colourOf(String symbol) =>
           OddOneOut.groups.firstWhere((group) => group.family == 'colours' && group.symbols.contains(symbol)).id;
@@ -68,7 +109,7 @@ void main() {
           for (final level in OddOneOut.levels) {
             final OddBoard board = OddOneOut.board(random, level, round);
             expect(board.objects, hasLength(level.objects));
-            expect(board.kind, OddOneOut.kindFor(round, level.number));
+            expect(OddOneOut.kindsFor(round, level.number), contains(board.kind));
             final List<String> same = [
               for (var i = 0; i < board.objects.length; i++)
                 if (i != board.oddIndex) board.objects[i],
@@ -92,6 +133,14 @@ void main() {
               case OddKind.landOrAir:
                 expect(same.every((symbol) => inGroup('land', symbol)), isTrue);
                 expect(inGroup('air', board.odd), isTrue);
+              case OddKind.landOrWater:
+                bool land(String symbol) => inGroup('land', symbol) || inGroup('farm', symbol) || inGroup('wild', symbol);
+                bool water(String symbol) => inGroup('boats', symbol) || inGroup('water', symbol);
+                expect(same.every(land) && water(board.odd) || same.every(water) && land(board.odd), isTrue,
+                    reason: '$same / ${board.odd}');
+              case OddKind.wheelsOrWings:
+                expect(same.every((symbol) => inGroup('land', symbol)), isTrue);
+                expect(inGroup('wings', board.odd), isTrue);
             }
             if (level.number == 5) places.add(board.oddIndex);
           }

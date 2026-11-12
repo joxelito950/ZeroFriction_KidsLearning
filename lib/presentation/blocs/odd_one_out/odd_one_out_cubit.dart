@@ -43,6 +43,13 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
   Timer? _transition;
   bool _paused = false;
 
+  /// Comparación del tablero anterior y objetos recientes (variedad, 2026-11-12).
+  OddKind? _previousKind;
+  final List<String> _recent = [];
+
+  /// Cuántos objetos recientes se evitan.
+  static const int recentMemory = 6;
+
   Future<void> start() async {
     try {
       _progress = await _repository.readGameProgress(GameId.oddOneOut);
@@ -97,7 +104,22 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
   }
 
   void _deal({required int board, required int fails, required Duration elapsed, required bool timerStarted}) {
-    final OddBoard content = OddOneOut.board(_random, OddOneOut.levelAt(_position.level), _position.round);
+    final OddBoard content = OddOneOut.board(
+      _random,
+      OddOneOut.levelAt(_position.level),
+      _position.round,
+      previousKind: _previousKind,
+      recent: _recent,
+    );
+    _previousKind = content.kind;
+    // Recuerda los últimos objetos diferentes (y la figura repetida) para que
+    // no vuelvan enseguida, en este nivel ni en el siguiente.
+    _recent
+      ..add(content.odd)
+      ..addAll(content.kind == OddKind.identical ? [content.objects[content.oddIndex == 0 ? 1 : 0]] : const []);
+    while (_recent.length > recentMemory) {
+      _recent.removeAt(0);
+    }
     emit(OddOneOutState(
       phase: OddPhase.playing,
       round: state.round + 1,
