@@ -2,7 +2,7 @@ name: toddler_logic
 description: Local-first cognitive development app for toddlers.
 publish_to: 'none'
 
-version: 1.0.0-rc.3+4
+version: 1.0.0-rc.4+5
 
 environment:
   sdk: '>=3.3.0 <4.0.0'

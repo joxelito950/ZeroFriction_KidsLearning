@@ -22,13 +22,15 @@ Límites de Google Play: nombre ≤ 30 caracteres, descripción breve ≤ 80, de
 
 ToddlerLogic reúne juegos de memoria y lógica pensados para los más pequeños, con animales, frutas, vehículos y mucho más.
 
-Dos juegos
-• Memoria: encontrar las parejas de cartas. Empieza con 4 cartas y crece poco a poco hasta 16, al ritmo de cada niño.
-• Sombras: llevar cada dibujo hasta la sombra con su misma forma. Siete niveles, de 2 a 6 dibujos.
+Tres juegos
+• Memoria: encontrar las parejas de cartas, de 4 a 16 cartas.
+• Sombras: llevar cada dibujo hasta la sombra con su misma forma.
+• ¿Cuál es diferente?: tocar el que no es como los demás, de formas y colores a grupos como selva o granja.
 
 Hecho para niños de 2 a 5 años
 • Se entiende mirando: sin textos que leer y una mano animada que enseña a jugar.
-• Celebra cada logro con estrellas, sin sonidos de error ni mensajes negativos.
+• Cada juego empieza fácil y sube solo de reto: rondas Fácil, Normal y Reto máximo, con medallas de bronce, plata y oro.
+• Celebra cada logro con estrellas y sonidos suaves, sin sonidos de error ni mensajes negativos.
 
 Tranquilidad para la familia
 • Sin anuncios.
@@ -50,13 +52,15 @@ En 9 idiomas: español, inglés, portugués, alemán, francés, italiano, japon�
 
 ToddlerLogic brings together memory and logic games made for little ones, with animals, fruit, vehicles and much more.
 
-Two games
-• Memory: find the matching pairs of cards. Starts with 4 cards and slowly grows to 16, at each child's own pace.
-• Shadows: drag each picture onto the shadow with the same shape. Seven levels, from 2 to 6 pictures.
+Three games
+• Memory: find the matching pairs of cards, from 4 to 16 cards.
+• Shadows: drag each picture onto the shadow with the same shape.
+• Odd one out: tap the one that is not like the others, from shapes and colours to groups like jungle or farm.
 
 Made for children aged 2 to 5
 • Easy to understand just by looking: no text to read, and an animated hand shows how to play.
-• Every win is celebrated with stars, with no error sounds or negative messages.
+• Each game starts easy and grows by itself: Easy, Normal and Impossible rounds, with bronze, silver and gold medals.
+• Every win is celebrated with stars and gentle sounds, with no error sounds or negative messages.
 
 Peace of mind for families
 • No ads.
@@ -79,9 +83,23 @@ In 9 languages: English, Spanish, Portuguese, German, French, Italian, Japanese,
 - ✅ URL de la política: `https://joxelito950.github.io/ZeroFriction_KidsLearning/privacy/` (activa; se actualiza al pasar a `main`).
 - Capturas.
 - ✅ Sombras (HU-007) y «Enviar comentarios» (HU-032) ya están en la descripción (2026-11-10, versión `1.0.0-rc.3`). Cuando llegue el pago (HU-006), actualizarla otra vez.
-- Capturas de Sombras: faltan (hacerlas en el moto g55 con la versión `1.0.0-rc.3`).
+- Capturas de Sombras y de «¿Cuál es diferente?»: faltan (hacerlas en el moto g55 con la versión `1.0.0-rc.4`).
 
 ## Novedades de la versión (campo «Notas de la versión» de Play Console, máx. 500 caracteres)
+
+**`1.0.0-rc.4` · es-419:**
+
+> Nuevo juego: ¿Cuál es diferente? Toca el que no es como los demás.
+> Cada juego empieza fácil y sube solo de reto: rondas Fácil, Normal y Reto máximo, con medallas de bronce, plata y oro.
+> Sonidos suaves (se pueden apagar en la Zona de padres). Durante la prueba, todo es gratis.
+> Te pedimos borrar los datos de la app antes de probar esta versión.
+
+**`1.0.0-rc.4` · en-US:**
+
+> New game: Odd one out. Tap the one that is not like the others.
+> Each game starts easy and grows by itself: Easy, Normal and Impossible rounds, with bronze, silver and gold medals.
+> Gentle sounds (can be turned off in the Parents' Zone). During the test, everything is free.
+> Please clear the app's data before testing this version.
 
 **`1.0.0-rc.3` · es-419:**
 
