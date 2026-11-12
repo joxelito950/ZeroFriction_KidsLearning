@@ -13,6 +13,7 @@ import '../../../domain/progress/star_decay.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
 import 'memory_card_model.dart';
 import 'memory_ladder_state.dart';
+import '../../../domain/settings/access_policy.dart';
 
 /// Juego de memoria progresivo (HU-001) con rondas de dificultad (HU-037):
 /// tutorial sin tiempo, niveles con el tiempo de la ronda, medallas, bajada de
@@ -110,7 +111,8 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   Future<bool> _readTimed() async {
     try {
       final ParentalSettings settings = await _repository.readParentalSettings();
-      final bool premium = (await _repository.readUserProfile())?.isPremium ?? false;
+      final bool premium =
+          AccessPolicy.hasPremium(purchased: (await _repository.readUserProfile())?.isPremium ?? false);
       if (settings.timerDisabled && !premium) {
         await _repository.updateParentalSettings((current) => current.withTimerDisabled(false));
       }
@@ -301,4 +303,3 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
     return super.close();
   }
 }
-

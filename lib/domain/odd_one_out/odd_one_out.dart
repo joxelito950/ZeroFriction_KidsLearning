@@ -1,6 +1,10 @@
 /// Juego «¿Cuál es diferente?» (HU-025): en cada tablero, todos los objetos son
 /// de un grupo menos uno. Escalera por rondas (HU-037), 3 tableros por nivel
 /// (P3), estrellas por fallos y contenido de Emoji 5.0 o anterior (D-024, D-026).
+///
+/// **Cada ronda compara cosas distintas** (decidido el 2026-11-12, sección 13):
+/// Fácil, lo que se ve a simple vista; Normal, a qué grupo pertenece cada cosa;
+/// Reto máximo, categorías que piden pensar (selva o granja, tierra o aire).
 library;
 
 import 'dart:math';
@@ -8,28 +12,36 @@ import 'dart:math';
 import '../progress/round_ladder.dart';
 import '../settings/game_difficulty.dart';
 
-/// Qué separa al diferente de los demás en un nivel (sección 4 y 11.1).
+/// Qué separa al diferente de los demás.
 enum OddKind {
-  /// Grupos muy distintos (animal frente a vehículo).
+  /// Fácil: la misma figura repetida y una distinta (🍎🍎🍎🐶).
+  identical,
+
+  /// Fácil: frutas distintas del mismo color y una de otro color (🍎🍓🍒🍌).
+  colour,
+
+  /// Normal: cosas muy relacionadas y una de otro mundo (🐮🐷🐔🚗).
   veryDifferent,
 
-  /// Animales de granja frente a salvajes.
+  /// Reto máximo: animales de la selva y uno de granja, o al revés.
   farmOrWild,
 
-  /// Vehículos de tierra frente a uno de aire.
+  /// Reto máximo: vehículos de tierra y uno de aire.
   landOrAir,
 
-  /// Un rasgo visible: rojos frente a uno amarillo.
-  colour,
+  /// Reto máximo: de tierra y uno de agua (vehículos o animales), o al revés.
+  landOrWater,
+
+  /// Reto máximo: cosas con ruedas y una con alas.
+  wheelsOrWings,
 }
 
-/// Un nivel: cuántos objetos hay en cada tablero y qué los diferencia.
+/// Un nivel: cuántos objetos hay en cada tablero.
 final class OddLevel {
-  const OddLevel({required this.number, required this.objects, required this.kind});
+  const OddLevel({required this.number, required this.objects});
 
   final int number;
   final int objects;
-  final OddKind kind;
 }
 
 /// Un grupo de emojis con su familia (los de familias distintas son «muy
@@ -44,22 +56,43 @@ final class OddGroup {
 
 /// Un tablero: los objetos en su orden y cuál es el diferente.
 final class OddBoard {
-  const OddBoard({required this.objects, required this.oddIndex});
+  const OddBoard({required this.objects, required this.oddIndex, required this.kind});
 
   final List<String> objects;
   final int oddIndex;
+  final OddKind kind;
 
   String get odd => objects[oddIndex];
 }
 
 abstract final class OddOneOut {
   static const List<OddLevel> levels = [
-    OddLevel(number: 1, objects: 3, kind: OddKind.veryDifferent),
-    OddLevel(number: 2, objects: 4, kind: OddKind.veryDifferent),
-    OddLevel(number: 3, objects: 4, kind: OddKind.farmOrWild),
-    OddLevel(number: 4, objects: 5, kind: OddKind.landOrAir),
-    OddLevel(number: 5, objects: 6, kind: OddKind.colour),
+    OddLevel(number: 1, objects: 3),
+    OddLevel(number: 2, objects: 4),
+    OddLevel(number: 3, objects: 4),
+    OddLevel(number: 4, objects: 5),
+    OddLevel(number: 5, objects: 6),
   ];
+
+  /// Comparaciones posibles en Reto máximo: cada tablero elige una, distinta de
+  /// la del tablero anterior (variedad, decidido el 2026-11-12).
+  static const List<OddKind> hardKinds = [
+    OddKind.farmOrWild,
+    OddKind.landOrAir,
+    OddKind.landOrWater,
+    OddKind.wheelsOrWings,
+  ];
+
+  /// Qué puede comparar cada nivel en cada ronda (sección 13): el número de
+  /// objetos sube con el nivel; el tipo de comparación, con la ronda.
+  static List<OddKind> kindsFor(GameDifficulty round, int level) {
+    levelAt(level);
+    return switch (round) {
+      GameDifficulty.easy => [level <= 2 ? OddKind.identical : OddKind.colour],
+      GameDifficulty.normal => const [OddKind.veryDifferent],
+      GameDifficulty.impossible => hardKinds,
+    };
+  }
 
   /// Tableros seguidos en cada nivel (P3); el tiempo es para los tres.
   static const int boardsPerLevel = 3;
@@ -90,42 +123,105 @@ abstract final class OddOneOut {
 
   static const List<OddGroup> groups = [
     OddGroup(id: 'farm', family: 'animals', symbols: ['🐮', '🐷', '🐔', '🐑', '🐴', '🐰']),
-    OddGroup(id: 'wild', family: 'animals', symbols: ['🦁', '🐯', '🐘', '🦒', '🐻', '🐵']),
+    OddGroup(id: 'wild', family: 'animals', symbols: ['🦁', '🐯', '🐘', '🦒', '🐵', '🐊']),
     OddGroup(id: 'water', family: 'animals', symbols: ['🐟', '🐳', '🐙', '🐢', '🦀']),
     OddGroup(id: 'fruits', family: 'food', symbols: ['🍎', '🍌', '🍐', '🍇', '🍓', '🍉', '🍒']),
     OddGroup(id: 'land', family: 'vehicles', symbols: ['🚗', '🚌', '🚲', '🚂', '🚜', '🚒']),
     OddGroup(id: 'air', family: 'vehicles', symbols: ['✈️', '🚁', '🚀']),
+    OddGroup(id: 'boats', family: 'vehicles', symbols: ['⛵', '🚤', '🚢']),
+    // Con alas (Reto máximo): aves, insectos y el avión.
+    OddGroup(id: 'wings', family: 'wings', symbols: ['🦋', '🐦', '🐝', '🦆', '🦅', '✈️']),
     OddGroup(id: 'clothes', family: 'clothes', symbols: ['👕', '👖', '👗', '👟', '🎩', '👒']),
     OddGroup(id: 'toys', family: 'toys', symbols: ['⚽', '🏀', '🎈', '🎁']),
-    OddGroup(id: 'reds', family: 'colours', symbols: ['🍓', '🍎', '🍒', '🍅', '🚒', '🌶️']),
-    OddGroup(id: 'yellows', family: 'colours', symbols: ['🍋', '🍌', '🌽']),
+    // Colores (Fácil): comida del mismo color.
+    OddGroup(id: 'reds', family: 'colours', symbols: ['🍎', '🍓', '🍒', '🍅', '🌶️']),
+    OddGroup(id: 'yellows', family: 'colours', symbols: ['🍌', '🍋', '🍍', '🌽']),
+    OddGroup(id: 'greens', family: 'colours', symbols: ['🍏', '🥝', '🍐', '🥑', '🥒']),
   ];
 
   static OddGroup group(String id) => groups.firstWhere((group) => group.id == id);
 
-  /// Reparte un tablero de [level]: N−1 objetos distintos de un grupo y uno de
-  /// otro, en una posición al azar (R2).
-  static OddBoard board(Random random, OddLevel level) {
-    final (OddGroup many, OddGroup odd) = switch (level.kind) {
-      OddKind.veryDifferent => _differentFamilies(random, level.objects - 1),
-      OddKind.farmOrWild => random.nextBool() ? (group('farm'), group('wild')) : (group('wild'), group('farm')),
-      OddKind.landOrAir => (group('land'), group('air')),
-      OddKind.colour => (group('reds'), group('yellows')),
+  static List<OddGroup> _byFamily(bool Function(String family) test) =>
+      groups.where((group) => test(group.family)).toList();
+
+  /// Reparte un tablero del [level] en la [round]: N−1 objetos de un grupo y
+  /// uno de otro, en una posición al azar (R2). Para que no se repita, evita la
+  /// comparación del tablero anterior ([previousKind]) y los objetos que
+  /// salieron hace poco ([recent]) siempre que haya otra opción.
+  static OddBoard board(
+    Random random,
+    OddLevel level,
+    GameDifficulty round, {
+    OddKind? previousKind,
+    Iterable<String> recent = const [],
+  }) {
+    final List<OddKind> pool = kindsFor(round, level.number);
+    final List<OddKind> fresh = pool.where((kind) => kind != previousKind).toList();
+    final List<OddKind> choices = fresh.isEmpty ? pool : fresh;
+    final OddKind kind = choices[random.nextInt(choices.length)];
+    final int many = level.objects - 1;
+    final (List<String> same, OddGroup odd) = switch (kind) {
+      OddKind.identical => _identical(random, many, recent),
+      OddKind.colour => _colour(random, many),
+      OddKind.veryDifferent => _differentFamilies(random, many),
+      OddKind.farmOrWild => _either(random, group('wild'), group('farm'), many),
+      OddKind.landOrAir => (_take(random, group('land'), many), group('air')),
+      OddKind.landOrWater => random.nextBool()
+          ? (_take(random, group('land'), many), group('boats'))
+          : _either(random, group(random.nextBool() ? 'farm' : 'wild'), group('water'), many),
+      OddKind.wheelsOrWings => (_take(random, group('land'), many), group('wings')),
     };
-    final List<String> same = (List.of(many.symbols)..shuffle(random)).take(level.objects - 1).toList();
-    final List<String> others = odd.symbols.where((symbol) => !same.contains(symbol)).toList();
-    final String different = others[random.nextInt(others.length)];
+    final List<String> candidates = odd.symbols.where((symbol) => !same.contains(symbol)).toList();
+    // Primero, uno que no haya salido hace poco; si no hay, al menos distinto
+    // de los dos últimos; si tampoco, cualquiera.
+    final List<String> last = recent.toList();
+    final List<String> lastTwo = last.sublist(last.length < 2 ? 0 : last.length - 2);
+    List<String> pick = candidates.where((symbol) => !recent.contains(symbol)).toList();
+    if (pick.isEmpty) pick = candidates.where((symbol) => !lastTwo.contains(symbol)).toList();
+    if (pick.isEmpty) pick = candidates;
+    final String different = pick[random.nextInt(pick.length)];
     final int oddIndex = random.nextInt(level.objects);
-    return OddBoard(objects: [...same]..insert(oddIndex, different), oddIndex: oddIndex);
+    return OddBoard(objects: [...same]..insert(oddIndex, different), oddIndex: oddIndex, kind: kind);
+  }
+
+  /// La mayoría de uno de los dos grupos y el diferente del otro; si un grupo no
+  /// tiene objetos de sobra, la mayoría es el otro.
+  static (List<String>, OddGroup) _either(Random random, OddGroup a, OddGroup b, int count) {
+    final bool aFirst = b.symbols.length < count || (a.symbols.length >= count && random.nextBool());
+    return aFirst ? (_take(random, a, count), b) : (_take(random, b, count), a);
+  }
+
+  static List<String> _take(Random random, OddGroup group, int count) =>
+      (List.of(group.symbols)..shuffle(random)).take(count).toList();
+
+  /// La misma figura repetida y una de otra familia; la repetida tampoco es una
+  /// de las de hace poco.
+  static (List<String>, OddGroup) _identical(Random random, int count, Iterable<String> recent) {
+    final List<OddGroup> shapes = _byFamily((family) => family != 'colours' && family != 'wings');
+    final OddGroup from = shapes[random.nextInt(shapes.length)];
+    final List<String> fresh = from.symbols.where((symbol) => !recent.contains(symbol)).toList();
+    final List<String> options = fresh.isEmpty ? from.symbols : fresh;
+    final String symbol = options[random.nextInt(options.length)];
+    final List<OddGroup> others = shapes.where((group) => group.family != from.family).toList();
+    return (List.filled(count, symbol), others[random.nextInt(others.length)]);
+  }
+
+  /// Comida de un color y una de otro color.
+  static (List<String>, OddGroup) _colour(Random random, int count) {
+    final List<OddGroup> colours =
+        _byFamily((family) => family == 'colours').where((group) => group.symbols.length >= count).toList();
+    final OddGroup from = colours[random.nextInt(colours.length)];
+    final List<OddGroup> others = _byFamily((family) => family == 'colours').where((group) => group != from).toList();
+    return (_take(random, from, count), others[random.nextInt(others.length)]);
   }
 
   /// Dos grupos de familias distintas; el de la mayoría tiene objetos de sobra.
-  static (OddGroup, OddGroup) _differentFamilies(Random random, int needed) {
-    final List<OddGroup> candidates =
-        groups.where((group) => group.family != 'colours' && group.symbols.length >= needed).toList();
+  static (List<String>, OddGroup) _differentFamilies(Random random, int count) {
+    bool plain(String family) => family != 'colours' && family != 'wings';
+    final List<OddGroup> candidates = _byFamily(plain).where((group) => group.symbols.length >= count).toList();
     final OddGroup many = candidates[random.nextInt(candidates.length)];
-    final List<OddGroup> others = groups.where((group) => group.family != many.family && group.family != 'colours').toList();
-    return (many, others[random.nextInt(others.length)]);
+    final List<OddGroup> others = _byFamily((family) => plain(family) && family != many.family).toList();
+    return (_take(random, many, count), others[random.nextInt(others.length)]);
   }
 }
 

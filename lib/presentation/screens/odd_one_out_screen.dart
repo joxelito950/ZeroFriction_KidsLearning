@@ -276,8 +276,12 @@ class _Board extends StatelessWidget {
                         label: l10n.oddOneOutObjectSemantics(state.objects[index]),
                         solved: state.phase == OddPhase.solved && index == state.oddIndex,
                         shake: index == state.wrongIndex ? state.wrongCount : 0,
-                        // La ayuda del saltito solo en Fácil y Normal (HU-030 R10).
-                        hop: index == state.oddIndex && state.gameRound.showsHelps && !reduceMotion,
+                        // La ayuda del saltito solo en el tutorial de cada ronda (P8, decidido el
+                        // 2026-11-12) y nunca en Reto máximo (HU-030 R10).
+                        hop: index == state.oddIndex &&
+                            state.level == 1 &&
+                            state.gameRound.showsHelps &&
+                            !reduceMotion,
                         reduceMotion: reduceMotion,
                         onTap: () => cubit.tap(index),
                       ),

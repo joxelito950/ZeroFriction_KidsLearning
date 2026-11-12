@@ -13,6 +13,7 @@ import '../../../domain/shadows/shadow_drop.dart';
 import '../../../domain/shadows/shadow_ladder.dart';
 import '../../../domain/shadows/shadow_themes.dart';
 import 'shadow_game_state.dart';
+import '../../../domain/settings/access_policy.dart';
 
 /// Juego Sombras (HU-007): tableros por nivel, colocación por cobertura, fallos,
 /// estrellas, tiempo con Premium, guardado del progreso y paso automático.
@@ -98,7 +99,8 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
   Future<ShadowRules> _readRules() async {
     try {
       final ParentalSettings settings = await _repository.readParentalSettings();
-      final bool premium = (await _repository.readUserProfile())?.isPremium ?? false;
+      final bool premium =
+          AccessPolicy.hasPremium(purchased: (await _repository.readUserProfile())?.isPremium ?? false);
       if (settings.timerDisabled && !premium) {
         await _repository.updateParentalSettings((current) => current.withTimerDisabled(false));
       }
