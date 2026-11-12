@@ -4,7 +4,7 @@ import 'round_ladder.dart';
 import 'star_decay.dart';
 
 /// Los juegos con progreso guardado.
-enum GameId { memory, shadows }
+enum GameId { memory, shadows, oddOneOut }
 
 /// Progreso común de cualquier juego con rondas (HU-037, sección 10.1): dónde
 /// se sigue, las medallas y el mejor resultado de cada ronda y nivel.

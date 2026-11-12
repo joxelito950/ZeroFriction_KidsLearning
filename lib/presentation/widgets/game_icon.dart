@@ -28,6 +28,10 @@ class GameIcon extends StatefulWidget {
   const GameIcon.shadows({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
       : this(key: key, asset: BrandAssets.shadowsIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
 
+  /// Icono de «¿Cuál es diferente?» (HU-025).
+  const GameIcon.oddOneOut({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
+      : this(key: key, asset: BrandAssets.oddOneOutIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
+
   final String asset;
   final double size;
   final double goldFraction;

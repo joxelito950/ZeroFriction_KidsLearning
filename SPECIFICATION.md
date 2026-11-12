@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Versión de la app** | `1.0.0-rc.3+4` (2026-11-10: Sombras sin pago, HU-007, y enviar comentarios, HU-032). La `1.0.0-rc.2+3` fue la primera que se subió a Google Play (prueba interna, HU-014, el 2026-11-09; la `rc.1+2` no llegó a subirse). La línea base de la sección 1 es la `0.0.1-beta+1` |
+| **Versión de la app** | `1.0.0-rc.4+5` (2026-11-12: «¿Cuál es diferente?», HU-025; rondas y medallas, HU-037; sonidos, HU-005; todo gratis durante la prueba, D-040). La `1.0.0-rc.3+4` (2026-11-10) trajo Sombras sin pago y enviar comentarios. La `1.0.0-rc.2+3` fue la primera que se subió a Google Play (prueba interna, HU-014, el 2026-11-09; la `rc.1+2` no llegó a subirse). La línea base de la sección 1 es la `0.0.1-beta+1` |
 | **Fecha de la línea base** | 2026-10-13 |
 | **Estado** | Beta interna · solo Android · sin publicar |
 | **Documentos relacionados** | [README.md](README.md) (visión de producto y alcance MVP) · [DOCUMENTATION.md](DOCUMENTATION.md) (detalle de persistencia Hive) · [BACKLOG.md](BACKLOG.md) (trabajo pendiente y refinamientos en `docs/hu/`) |
@@ -137,9 +137,10 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 |---|---|---|---|
 | `level_states` | `LevelStateHiveModel` → `LevelState` | `levelId` | 0 |
 | `user_profile` | `UserProfileHiveModel` → `UserProfile` | `current_user_profile` | 1 |
-| `memory_progress` | `MemoryProgressHiveModel` → `MemoryProgress` | `current_memory_progress` | 2 |
+| `memory_progress` | `MemoryProgressHiveModel` → progreso con rondas | `current_memory_progress` | 2 |
 | `parental_settings` | `ParentalSettingsHiveModel` → `ParentalSettings` | `current_parental_settings` | 3 |
-| `shadow_progress` | `ShadowProgressHiveModel` → `ShadowProgress` | `current_shadow_progress` | 4 |
+| `shadow_progress` | `ShadowProgressHiveModel` → progreso con rondas | `current_shadow_progress` | 4 |
+| `game_progress` | `GameProgressHiveModel` → progreso con rondas (juegos que nacen con las rondas) | nombre del juego (`oddOneOut`) | 5 |
 
 - Las cajas guardan **modelos de guardado** (`data/local/models/`), nunca entidades de dominio. El repositorio convierte con `fromEntity`/`toEntity`; las reglas de negocio (por ejemplo, estrellas entre 0 y 3) las valida la entidad al convertir.
 - `test/data/local/hive_v2_compatibility_test.dart` y los fixtures de `test/fixtures/hive_v2/` garantizan que el formato en disco no cambia. Si cambia, el test falla.
@@ -148,7 +149,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - Campos de `MemoryProgressHiveModel` (HU-001): 0 `currentLevel`, 1 `hasBadge`, 2 `bestStarsByLevel` (nivel → estrellas), 3 `achievedAtByLevel` (nivel → fecha), 4 `lastPlayedAt`. **Desde HU-037 (rondas):** 5 `round` (nombre de la ronda), 6 `medals` (rondas con medalla), 7 `bestStarsByRoundLevel` y 8 `achievedAtByRoundLevel` (clave `ronda × 10 + nivel`), 9 `tutorialFalls`. Con el progreso con rondas, 0 es el nivel dentro de la ronda, 1 dice si hay alguna medalla y 2 y 3 ya no se escriben (índices reservados). Sin el campo 5, lo guardado es de antes de las rondas y se migra a Normal al leerlo (`test/fixtures/progress_rc3/`). El próximo índice libre es 10.
 - Campos de `ShadowProgressHiveModel` (HU-007, mismo formato que la memoria): 0 `currentLevel`, 1 `hasMedal`, 2 `bestStarsByLevel`, 3 `achievedAtByLevel`, 4 `lastPlayedAt` y, desde HU-037, los mismos 5 a 9 que la memoria. El próximo índice libre es 10. El récord por nivel (`LevelRecord`) y la pérdida de logros (`StarDecay.settle`) son comunes a los dos juegos.
 - Campos de `ParentalSettingsHiveModel` (HU-009): 0 `dailyLimitMinutes` (`null` es «sin límite»), 1 `playDay` (medianoche local del último día jugado), 2 `playedSeconds`, 3 `extraMinutes` (los «15 minutos más» de ese día). Desde HU-030: 4 `difficulty` (nombre de `GameDifficulty`; `null` es Normal) y 5 `timerDisabled`. Desde HU-016: 6 `keepStars` y 7 `starDecayResumedAt` (cuándo se volvió a activar la pérdida). El próximo índice libre es 8 (HU-031). Los cambios se guardan con `updateParentalSettings`, que lee y escribe sin `await` en medio para que el tiempo de hoy (HU-009) y los ajustes de los juegos no se pisen.
-- Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **5** (el 4 es el progreso de Sombras, HU-007). `LevelState` (typeId 0) dejará de usarse cuando el juego pase a `MemoryProgress` (HU-001, entrega 3); su typeId queda reservado.
+- Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **6** (el 4 es el progreso de Sombras y el 5 el progreso común de los juegos nuevos, HU-025). Los juegos nuevos no necesitan typeId propio: usan la caja `game_progress` con su clave. `LevelState` (typeId 0) dejará de usarse cuando el juego pase a `MemoryProgress` (HU-001, entrega 3); su typeId queda reservado.
 - Identificadores de nivel en uso: `farm_easy`, `wild_medium`. Un `levelId` ya publicado NO DEBE renombrarse.
 
 ### 3.5 Estado (Cubit)
@@ -313,6 +314,7 @@ Verificado en Windows 11 con Flutter 3.47.5 en el PATH, Android Studio, el Andro
 | D-037 | **La pérdida de logros se aplica al empezar cada juego, nunca en el menú:** al abrir un juego se calcula la pérdida acumulada (D-031) con el reloj del teléfono y se guarda; el menú solo lee lo guardado | Que el menú no haga cálculos por cada juego: evita lentitud y errores en teléfonos de gama baja cuando haya muchos juegos. Consecuencia aceptada: el menú puede mostrar el dorado de antes de la pérdida hasta que se abre ese juego | Decidida el 2026-11-05 al revisar HU-002; aplica a todos los juegos |
 | D-038 | **Rondas de dificultad (decidido el 2026-11-10, se implementa con HU-037):** cada juego tiene tres rondas (Fácil, Normal, Imposible) que empiezan por un tutorial sin tiempo ni estrellas. Todos empiezan en Fácil; completar una ronda da su medalla (bronce, plata, oro) y pasa a la siguiente; caer dos veces al tutorial de una ronda baja a la anterior. La ronda se cambia por juego en la Zona de Padres sin perder logros. El dorado se completa con las tres rondas | Reto a la medida de cada niño sin que el adulto tenga que vigilarlo, y medallas que marcan etapas | Sustituirá a D-035 (dificultad general) y cambia D-030 al desarrollarse HU-037 |
 | D-039 | **Un solo producto Premium, para siempre (decidido el 2026-11-11, HU-006):** Premium es una compra única (`premium`) que incluye todo lo Premium presente y futuro. El precio empieza en 0,99 USD y sube por escalones con el contenido, hasta 2,99 USD; quien ya compró nunca paga más. Nunca se crea un segundo producto que quite algo a quien ya tiene `premium` | Premiar a quien apoya pronto y que el precio siga al valor del contenido | Se implementa con HU-006 |
+| D-040 | **Todo gratis durante la prueba cerrada (decidido el 2026-11-12):** mientras dure la prueba cerrada y hasta que se desarrolle el pago (HU-006), todos los juegos son 100 % gratis: todo lo Premium (nivel 8 de Sombras, ronda Reto máximo de «¿Cuál es diferente?», «Jugar sin tiempo») está abierto. Al desarrollar HU-006 y/o terminar la prueba cerrada, los juegos pasan a las reglas de pago ya definidas (D-028, HU-037 P6). En el código es un solo interruptor, `AccessPolicy.everythingFree`, vigilado por un test | Que los testers prueben todo y den su opinión de todo, y no enseñar lo que aún no se puede comprar | Vigente durante la prueba cerrada. Se apaga con HU-006 |
 
 ---
 

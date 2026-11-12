@@ -116,7 +116,10 @@ class ShadowGameState {
   int get level => position.level;
 
   /// Objetos que quedan en la bandeja.
-  List<String> get trayObjects => [for (final object in objects) if (!placed.contains(object)) object];
+  List<String> get trayObjects => [
+        for (final object in objects)
+          if (!placed.contains(object)) object
+      ];
 
   /// Si el objeto se puede arrastrar ahora.
   bool canDrag(String symbol) =>

@@ -113,5 +113,9 @@
   "medalNextRoundMessage": "Manche terminée ! Maintenant, un plus grand défi.",
   "roundEasierMessage": "Le temps est écoulé ! Essayons un défi plus calme.",
   "parentsZoneRoundsLabel": "Manche de chaque jeu",
-  "parentsZoneRoundsHint": "Chaque jeu passe seul à la manche suivante quand elle est terminée. La changer n'enlève ni étoiles ni médailles."
+  "parentsZoneRoundsHint": "Chaque jeu passe seul à la manche suivante quand elle est terminée. La changer n'enlève ni étoiles ni médailles.",
+  "oddOneOutTitle": "Lequel est différent ?",
+  "oddOneOutInstructions": "Touche celui qui n'est pas comme les autres.",
+  "menuOddOneOutSubtitle": "Trouve l'intrus",
+  "oddOneOutObjectSemantics": "Image {symbol}"
 }

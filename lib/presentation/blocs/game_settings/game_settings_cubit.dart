@@ -4,13 +4,18 @@ import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/progress/game_progress.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
 import '../../../domain/settings/game_difficulty.dart';
+import '../../../domain/settings/access_policy.dart';
 
 /// Ajustes de la sección «Juegos» de la Zona de Padres (HU-030), con la ronda
 /// de cada juego (HU-037 P1) en lugar de la dificultad general.
 final class GameSettingsState {
   const GameSettingsState({
     this.loaded = false,
-    this.rounds = const {GameId.memory: GameDifficulty.easy, GameId.shadows: GameDifficulty.easy},
+    this.rounds = const {
+      GameId.memory: GameDifficulty.easy,
+      GameId.shadows: GameDifficulty.easy,
+      GameId.oddOneOut: GameDifficulty.easy,
+    },
     this.timerDisabled = false,
     this.isPremium = false,
     this.keepStars = false,
@@ -70,7 +75,8 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
   Future<void> load() async {
     try {
       ParentalSettings settings = await _repository.readParentalSettings();
-      final bool premium = (await _repository.readUserProfile())?.isPremium ?? false;
+      final bool premium =
+          AccessPolicy.hasPremium(purchased: (await _repository.readUserProfile())?.isPremium ?? false);
       // Sin Premium, «Jugar sin tiempo» vuelve a su valor por defecto (R11).
       if (settings.timerDisabled && !premium) {
         settings = await _repository.updateParentalSettings((current) => current.withTimerDisabled(false));

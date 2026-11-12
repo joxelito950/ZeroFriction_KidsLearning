@@ -12,6 +12,7 @@ Genera:
 - assets/brand/logo.png                         logo del menú
 - assets/brand/memory_icon.png                  icono del juego de memoria
 - assets/brand/shadows_icon.png                 icono del juego Sombras (HU-007)
+- assets/brand/odd_one_out_icon.png             icono del juego ¿Cuál es diferente? (HU-025)
 Después: dart run flutter_launcher_icons
 """
 import math
@@ -115,6 +116,9 @@ def main() -> None:
     )
     fit_box(Image.open(SRC / 'icono-sombras-elefante.png'), 256).save(
         ROOT / 'assets/brand/shadows_icon.png', optimize=True
+    )
+    fit_box(Image.open(SRC / 'icono-cual-es-diferente.png'), 256).save(
+        ROOT / 'assets/brand/odd_one_out_icon.png', optimize=True
     )
 
 

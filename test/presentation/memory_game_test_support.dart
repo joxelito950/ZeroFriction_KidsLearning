@@ -7,6 +7,7 @@ import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart'
 import 'package:toddler_logic/domain/progress/round_ladder.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/progress/level_record.dart';
+import 'package:toddler_logic/domain/settings/access_policy.dart';
 
 class MockPersistenceRepository extends Mock implements IPersistenceRepository {}
 
@@ -15,6 +16,9 @@ class FakeLevelState extends Fake implements LevelState {}
 class FakeUserProfile extends Fake implements UserProfile {}
 
 void registerMemoryGameFallbacks() {
+  // Los tests prueban las reglas de pago tal como serán (D-040 las abre todas
+  // durante la prueba cerrada; access_policy_test lo comprueba).
+  AccessPolicy.everythingFree = false;
   registerFallbackValue(FakeLevelState());
   registerFallbackValue(FakeUserProfile());
   registerFallbackValue(ParentalSettings.initial);

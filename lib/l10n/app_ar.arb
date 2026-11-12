@@ -113,5 +113,9 @@
   "medalNextRoundMessage": "اكتملت الجولة! الآن تحدٍّ أكبر.",
   "roundEasierMessage": "انتهى الوقت! لنجرب تحديًا أهدأ.",
   "parentsZoneRoundsLabel": "جولة كل لعبة",
-  "parentsZoneRoundsHint": "تنتقل كل لعبة إلى الجولة التالية وحدها عند إكمالها. تغييرها لا يزيل النجوم ولا الميداليات."
+  "parentsZoneRoundsHint": "تنتقل كل لعبة إلى الجولة التالية وحدها عند إكمالها. تغييرها لا يزيل النجوم ولا الميداليات.",
+  "oddOneOutTitle": "أيها مختلف؟",
+  "oddOneOutInstructions": "المس الشيء الذي لا يشبه البقية.",
+  "menuOddOneOutSubtitle": "ابحث عن المختلف",
+  "oddOneOutObjectSemantics": "صورة {symbol}"
 }

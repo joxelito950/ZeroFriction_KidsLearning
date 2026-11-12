@@ -67,11 +67,22 @@ Si sale una sombra proyectada en el suelo o difuminada, pedir: «La sombra no es
 > [Bloque común]
 > **Tres manzanas iguales** de plastilina en coral suave #D9735F, con su hojita en teal profundo #00454D, en fila y un poco solapadas, y **una pera** en ámbar #ECA463 un poco más adelantada y ligeramente inclinada, como si saludara: es la diferente. Contentas, sin caras exageradas. **Sin el niño.** Fondo totalmente transparente. El conjunto forma **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes, centrada y ocupando el 80 % del lienzo. Que a 48 px se lea «tres iguales y una distinta».
 
+## 10. Mano guía del tutorial (HU-022, sustituye al icono del sistema)
+
+Hoy la mano que enseña los gestos es el icono `touch_app` de Material, plano y fuera del estilo de la app.
+
+> [Bloque común]
+> **Una mano de niño** de plastilina, sola, sin brazo largo (se corta a la altura de la muñeca con un borde redondeado), con la piel del mismo tono que el niño de la referencia y una **manga corta en coral suave #D9735F** asomando en la muñeca. El **dedo índice extendido**, apuntando hacia **arriba y un poco a la izquierda**, y los demás dedos recogidos, como quien va a tocar una pantalla. La **punta del índice** bien visible y redondeada. Contorno suave en teal profundo #00454D para que se vea sobre crema y sobre blanco. **Sin el niño, sin pantalla, sin sombra proyectada.** Fondo totalmente transparente. Centrada, ocupando el 80 % del lienzo.
+
+Variante opcional, para el arrastre de Sombras: la misma mano **con los dedos juntos en pinza**, como si llevara algo.
+
+Al integrarla, el desarrollo necesita saber dónde está la **punta del índice** en la imagen (para que toque exactamente el objeto): conviene que el dedo apunte siempre en la misma dirección.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2, 4, 5, 6, 7, 8 y 9 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2, 4, 5, 6, 7, 8, 9 y 10 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 

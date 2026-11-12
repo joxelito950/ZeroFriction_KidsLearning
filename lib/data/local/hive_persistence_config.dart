@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:hive_ce/hive.dart';
 
+import 'models/game_progress_hive_model.dart';
 import 'models/level_state_hive_model.dart';
 import 'models/memory_progress_hive_model.dart';
 import 'models/parental_settings_hive_model.dart';
@@ -16,6 +17,7 @@ final class HivePersistenceConfig {
   static const String memoryProgressBoxName = 'memory_progress';
   static const String parentalSettingsBoxName = 'parental_settings';
   static const String shadowProgressBoxName = 'shadow_progress';
+  static const String gameProgressBoxName = 'game_progress';
 
   static bool _initialized = false;
   static Completer<void>? _initializationCompleter;
@@ -54,6 +56,10 @@ final class HivePersistenceConfig {
         Hive.registerAdapter(ShadowProgressHiveModelAdapter());
       }
 
+      if (!Hive.isAdapterRegistered(5)) {
+        Hive.registerAdapter(GameProgressHiveModelAdapter());
+      }
+
       if (!Hive.isBoxOpen(levelStateBoxName)) {
         await Hive.openBox<LevelStateHiveModel>(levelStateBoxName);
       }
@@ -68,6 +74,9 @@ final class HivePersistenceConfig {
       }
       if (!Hive.isBoxOpen(shadowProgressBoxName)) {
         await Hive.openBox<ShadowProgressHiveModel>(shadowProgressBoxName);
+      }
+      if (!Hive.isBoxOpen(gameProgressBoxName)) {
+        await Hive.openBox<GameProgressHiveModel>(gameProgressBoxName);
       }
       _initialized = true;
       completer.complete();
@@ -86,6 +95,9 @@ final class HivePersistenceConfig {
       }
       if (Hive.isBoxOpen(shadowProgressBoxName)) {
         await Hive.box<ShadowProgressHiveModel>(shadowProgressBoxName).close();
+      }
+      if (Hive.isBoxOpen(gameProgressBoxName)) {
+        await Hive.box<GameProgressHiveModel>(gameProgressBoxName).close();
       }
       // El llamador original recibe el error vía `rethrow`; si no hubo llamadas
       // concurrentes nadie escucha este future, así que evitamos un error no capturado.
@@ -111,6 +123,8 @@ final class HivePersistenceConfig {
 
   static Box<ShadowProgressHiveModel> get shadowProgressBox =>
       _getOpenBox<ShadowProgressHiveModel>(shadowProgressBoxName);
+
+  static Box<GameProgressHiveModel> get gameProgressBox => _getOpenBox<GameProgressHiveModel>(gameProgressBoxName);
 
   static Box<T> _getOpenBox<T>(String boxName) {
     if (!_initialized || !Hive.isBoxOpen(boxName)) {
