@@ -126,8 +126,7 @@ class MemoryLadderState {
       gameRound: gameRound,
       medal: medal ?? this.medal,
       cards: cards ?? this.cards,
-      firstSelectedCardIndex:
-          clearSelection ? null : (firstSelectedCardIndex ?? this.firstSelectedCardIndex),
+      firstSelectedCardIndex: clearSelection ? null : (firstSelectedCardIndex ?? this.firstSelectedCardIndex),
       isProcessing: isProcessing ?? this.isProcessing,
       moves: moves ?? this.moves,
       elapsed: elapsed ?? this.elapsed,

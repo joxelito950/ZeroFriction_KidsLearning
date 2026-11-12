@@ -41,6 +41,5 @@ class MemoryCard {
           isMatched == other.isMatched;
 
   @override
-  int get hashCode =>
-      id.hashCode ^ assetPath.hashCode ^ isFaceUp.hashCode ^ isMatched.hashCode;
+  int get hashCode => id.hashCode ^ assetPath.hashCode ^ isFaceUp.hashCode ^ isMatched.hashCode;
 }

@@ -154,7 +154,7 @@ Texto para generarlo en la sección 9 de [PROMPTS-identidad.md](../brand/PROMPTS
 | P2 | Escalera y tiempos | ✅ Decidido (2026-11-11): la escalera y los tiempos de la tabla 11.1, ajustables jugando | — |
 | P6 | Mientras no exista el pago, ¿qué pasa al superar la parte gratis de Normal? | ✅ Decidido (2026-11-11): sin Premium, al completar Normal se sigue en Normal desde su tutorial, como tras el oro (sección 11.2) | — |
 | P7 | ¿Nombre del juego? | «¿Cuál es diferente?» en español y «Odd one out» en inglés; los otros 7 idiomas con TD-011 | No |
-| P8 | ¿Ayuda del saltito también en Normal? | **Sí**, como el resto de ayudas (HU-030 R10, HU-037 P12) | No |
+| P8 | ¿Ayuda del saltito también en Normal? | ✅ Decidido (2026-11-12), **distinto de la recomendación:** el saltito de ayuda solo en el **tutorial** (nivel 1) de cada ronda, no en todos los niveles; en Reto máximo, nunca (HU-030 R10) | — |
 
 ## 12. Desarrollo
 
@@ -163,4 +163,41 @@ Texto para generarlo en la sección 9 de [PROMPTS-identidad.md](../brand/PROMPTS
 | 1 | Dominio | ✅ 2026-11-11 | `domain/odd_one_out/odd_one_out.dart`: 10 grupos de emojis (Emoji 5.0, test), generador de tableros con un solo diferente en una posición al azar (R2), escalera por rondas con la tabla 11.1, 3 tableros por nivel (P3), estrellas por fallos (11.2) y la ronda Imposible solo con Premium (P1, P6). Icono del dueño (`docs/brand/fuentes/icono-cual-es-diferente.png`) |
 | 2 | Guardado y estado | ✅ 2026-11-11 | **Modelo común de progreso** para los juegos que nacen con las rondas: `GameProgressHiveModel` (typeId 5) en la caja `game_progress`, una clave por juego (P5); la memoria y Sombras siguen en sus modelos por los datos que ya existen. `OddOneOutCubit`: tableros, fallos, el tiempo del nivel para los 3 tableros (no corre mientras el diferente salta), rondas, medallas, bajada de ronda y, sin Premium, se sigue en Normal tras la plata |
 | 3 | Pantalla, menú y Zona de Padres | ✅ 2026-11-11 | Tarjetas grandes con el emoji (tope de 220 px físicos); el diferente **salta** al acertar y los demás hacen un **«no»** al fallar, sin rojo ni sonido (R3); **ayuda del saltito** al aparecer cada tablero en Fácil y Normal (P8); mano del tutorial; lector de pantalla con el dibujo (R6); sonidos de HU-005; tercer botón en el menú (blanco con texto teal) con su dorado y su medalla; ronda en la Zona de Padres, con Imposible visible solo con Premium. Textos en 9 idiomas. Diseño del nivel 5 comprobado en 9 idiomas, 4 teléfonos y dos escalas de texto |
+
+## 13. Qué compara cada ronda (análisis del 2026-11-12)
+
+### 13.1 Lo que pide el dueño
+
+Las comparaciones más obvias en **Fácil**, una dificultad un poco mayor en **Normal** y las que piden pensar en **Reto máximo**. El juego tiene que entenderse sin explicaciones (D-034): el niño ve que «uno no es como los otros» y lo toca.
+
+### 13.2 Cómo se percibe la diferencia a cada edad
+
+| Tipo de diferencia | Qué tiene que hacer el niño | Edad a la que suele salir | Ronda |
+|---|---|---|---|
+| **Idénticos y uno distinto** (🍎🍎🍎🐶) | Ver que tres son la misma figura | Desde los 2 años: es percepción pura | Fácil |
+| **Mismo color y uno de otro color** (🍎🍓🍒🍌) | Fijarse en el color, aunque las formas cambien | 2,5–3 años | Fácil |
+| **Muy relacionados y uno de otro mundo** (🐮🐷🐔🚗) | Saber que tres son animales y uno un vehículo | 3–4 años | Normal |
+| **Misma familia, otra categoría** (🦁🐯🐊🐮: tres de la selva y uno de granja) | Conocer dónde vive cada animal o por dónde va cada vehículo | 4–5 años | Reto máximo |
+
+### 13.3 La escalera resultante
+
+El número de objetos sube con el nivel (3, 4, 4, 5, 6); el **tipo** de comparación lo pone la ronda:
+
+| Nivel | Fácil | Normal | Reto máximo |
+|---|---|---|---|
+| 1 (tutorial, 3) | Idénticos | Muy distintos | Selva o granja |
+| 2 (4) | Idénticos | Muy distintos | Selva o granja |
+| 3 (4) | Color | Muy distintos | Tierra o aire |
+| 4 (5) | Color | Muy distintos | Selva o granja |
+| 5 (6) | Color | Muy distintos | Tierra o aire |
+
+Grupos de color (solo Fácil): rojos 🍎🍓🍒🍅🌶️, amarillos 🍌🍋🍍🌽 y verdes 🍏🥝🍐🥑🥒. En «idénticos», la figura repetida sale de cualquier grupo y la distinta, de otra familia (nunca dos animales). Selva: 🦁🐯🐘🦒🐵🐊 (se cambia el oso 🐻, que no es de selva, por el cocodrilo 🐊).
+
+### 13.4 Preguntas
+
+| # | Pregunta | Recomendación | Bloquea |
+|---|---|---|---|
+| P9 | ¿Normal solo con «muy distintos», o también mezcla algún «color» en su nivel 5? | **Solo «muy distintos»**: así cada ronda enseña una sola idea y el niño la entiende jugando | No |
+| P10 | En Reto máximo, ¿«tierra o aire» es tan claro para un niño como «selva o granja»? | **Probarlo con niños:** si «tierra o aire» confunde (por ejemplo, el cohete 🚀), cambiarlo por «agua o tierra» (🐟🐳🐙 frente a 🐮) | No |
+| P11 | ¿Se avisa al adulto, en la Zona de Padres, de qué compara cada ronda? | **Sí, una línea por ronda** en la ayuda de la ronda («Fácil: formas y colores», «Normal: grupos», «Reto máximo: categorías») | No |
 

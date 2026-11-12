@@ -186,3 +186,11 @@ Google Play convierte el precio base a cada país; se puede ajustar país por pa
 
 El dueño prefiere **publicar el tercer juego (HU-025) antes del pago**. Así la primera versión con compras ya ofrece Premium en dos juegos (Sombras y «¿Cuál es diferente?») por 0,99 USD (tabla 12.3). Hasta entonces, lo Premium de cada juego queda oculto o en bucle gratuito, como Sombras hoy.
 
+## 14. Todo gratis durante la prueba cerrada (D-040, 2026-11-12)
+
+Mientras dure la prueba cerrada y hasta desarrollar esta historia, **todo lo Premium está abierto para todos** (`AccessPolicy.everythingFree = true`). Al desarrollar HU-006 (o al terminar la prueba, si llega antes) hay que:
+
+1. Poner `AccessPolicy.everythingFree` a `false` y cambiar `test/presentation/access_policy_test.dart`, que vigila el valor.
+2. Revisar la ficha de la tienda y las notas de la versión: lo que hoy se ve gratis pasa a ser Premium.
+3. Contar en la Zona de Padres qué deja de estar abierto, con un texto tranquilo, sin presionar a comprar.
+
