@@ -13,6 +13,7 @@ Genera:
 - assets/brand/memory_icon.png                  icono del juego de memoria
 - assets/brand/shadows_icon.png                 icono del juego Sombras (HU-007)
 - assets/brand/odd_one_out_icon.png             icono del juego ¿Cuál es diferente? (HU-025)
+- assets/brand/hand_guide.png                   mano guía del tutorial (HU-022)
 Después: dart run flutter_launcher_icons
 """
 import math
@@ -120,6 +121,9 @@ def main() -> None:
     fit_box(Image.open(SRC / 'icono-cual-es-diferente.png'), 256).save(
         ROOT / 'assets/brand/odd_one_out_icon.png', optimize=True
     )
+    # La mano se recorta igual que los iconos: la punta del índice queda en el
+    # 12 % del ancho y el 8 % del alto (GestureHint.fingertip).
+    fit_box(Image.open(SRC / 'mano-guia.png'), 256).save(ROOT / 'assets/brand/hand_guide.png', optimize=True)
 
 
 if __name__ == '__main__':

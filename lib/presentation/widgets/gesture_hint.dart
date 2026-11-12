@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../brand/brand_assets.dart';
 import '../theme/app_palette.dart';
 
 /// Gesto que enseña la mano (HU-022 R1).
@@ -40,7 +41,12 @@ class GestureHint extends StatefulWidget {
   static const Duration cycle = Duration(milliseconds: 2000);
 
   static const Duration _fadeOut = Duration(milliseconds: 150);
-  static const double handSize = 56;
+  /// Alto de la mano infantil (HU-013); el ancho sigue la proporción del dibujo.
+  static const double handSize = 72;
+  static const double handWidth = handSize * 208 / 256;
+
+  /// Dónde está la yema del índice dentro del dibujo (fracción de ancho y alto).
+  static const Offset fingertipAnchor = Offset(0.08, 0.07);
 
   /// Cambia con cada tablero: la mano vuelve a estar disponible (R3).
   final Object boardId;
@@ -196,9 +202,9 @@ class _GestureHintState extends State<GestureHint> with SingleTickerProviderStat
             ),
           ),
         Positioned(
-          // La punta del dedo del icono está arriba y algo a la izquierda del centro.
-          left: pose.fingertip.dx - GestureHint.handSize * 0.42,
-          top: pose.fingertip.dy - GestureHint.handSize * 0.12,
+          // La yema del índice (arriba a la izquierda del dibujo) cae en el objetivo.
+          left: pose.fingertip.dx - GestureHint.handWidth * GestureHint.fingertipAnchor.dx,
+          top: pose.fingertip.dy - GestureHint.handSize * GestureHint.fingertipAnchor.dy,
           child: Opacity(
             opacity: pose.opacity,
             child: Transform.scale(
@@ -267,29 +273,20 @@ HandPose handPoseAt(
   }
 }
 
-/// La mano: icono de Material blanco con contorno teal profundo (R8, P4),
-/// hasta que la identidad de HU-013 tenga la suya. Blanca para verse sobre las
-/// cartas en azul petróleo (6,16:1); el contorno la separa del fondo crema.
+/// La mano infantil de la identidad (HU-013, PROMPTS-identidad §10): manga
+/// coral y contorno teal, que la separa tanto de las cartas en azul petróleo
+/// como del fondo crema (R8, P4).
 class _Hand extends StatelessWidget {
   const _Hand({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const double outline = 2;
-    return const Icon(
-      Icons.touch_app,
-      size: GestureHint.handSize,
-      color: AppPalette.white,
-      shadows: [
-        Shadow(color: AppPalette.deepTeal, offset: Offset(outline, 0)),
-        Shadow(color: AppPalette.deepTeal, offset: Offset(-outline, 0)),
-        Shadow(color: AppPalette.deepTeal, offset: Offset(0, outline)),
-        Shadow(color: AppPalette.deepTeal, offset: Offset(0, -outline)),
-        Shadow(color: AppPalette.deepTeal, offset: Offset(outline, outline)),
-        Shadow(color: AppPalette.deepTeal, offset: Offset(-outline, -outline)),
-        Shadow(color: AppPalette.deepTeal, offset: Offset(outline, -outline)),
-        Shadow(color: AppPalette.deepTeal, offset: Offset(-outline, outline)),
-      ],
+    return Image.asset(
+      BrandAssets.handGuide,
+      width: GestureHint.handWidth,
+      height: GestureHint.handSize,
+      fit: BoxFit.contain,
+      excludeFromSemantics: true,
     );
   }
 }
