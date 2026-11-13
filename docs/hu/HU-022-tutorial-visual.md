@@ -70,7 +70,7 @@
 | P1 | ¿Cuánto esperar antes de mostrar la mano y cada cuánto repetirla? | ✅ **4 s y 8 s**; se ajustan viendo jugar al niño en el moto g55 |
 | P2 | ¿Vuelve la mano si el niño se queda quieto **después** de empezar a jugar? | ✅ **No:** a mitad de tablero suele estar pensando; una mano señalando una carta le daría la respuesta en la memoria |
 | P3 | ¿Se recuerda que el tutorial ya se vio, para no mostrarlo nunca más? | ✅ **No:** solo aparece si el niño no toca nada, así que a quien ya sabe jugar no le molesta, y no hay que añadir datos guardados |
-| P4 | ¿La mano es el icono de Material o un dibujo propio? | ✅ **El icono de Material** (`Icons.touch_app`) por ahora; se sustituye por el de la identidad cuando HU-013 tenga su guía de estilo |
+| P4 | ¿La mano es el icono de Material o un dibujo propio? | ✅ **El icono de Material** (`Icons.touch_app`) por ahora; se sustituye por el de la identidad cuando HU-013 tenga su guía de estilo. **Sustituido el 2026-11-12** por la mano infantil (`BrandAssets.handGuide`, PROMPTS-identidad §10) |
 | P5 | ¿Se aplica también al juego de memoria? | ✅ **Sí:** el componente se prueba con un juego que ya existe antes de llegar a Sombras |
 
 ## 8. Resultado (2026-11-03)

@@ -15,5 +15,8 @@ abstract final class BrandAssets {
   /// Icono de «¿Cuál es diferente?» (HU-025): tres manzanas y una pera.
   static const String oddOneOutIcon = 'assets/brand/odd_one_out_icon.png';
 
-  static const List<String> all = [logo, memoryIcon, shadowsIcon, oddOneOutIcon];
+  /// Mano infantil de la ayuda (HU-022): sustituye al icono de Material.
+  static const String handGuide = 'assets/brand/hand_guide.png';
+
+  static const List<String> all = [logo, memoryIcon, shadowsIcon, oddOneOutIcon, handGuide];
 }

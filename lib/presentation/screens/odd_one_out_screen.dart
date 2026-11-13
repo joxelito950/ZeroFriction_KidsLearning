@@ -154,7 +154,12 @@ class _OddOneOutViewState extends State<_OddOneOutView> with WidgetsBindingObser
 
   Widget _overlayFor(BuildContext context, OddOneOutState state) => switch (state.phase) {
         OddPhase.celebrating =>
-          MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.medal != null, medal: state.medal),
+          MemoryCelebration(
+            stars: state.stars ?? 0,
+            badgeEarned: state.medal != null,
+            medal: state.medal,
+            message: AppLocalizations.of(context).oddOneOutVictoryMessage,
+          ),
         OddPhase.inviting => PlayInvitation(round: state.gameRound),
         OddPhase.timeUp => MemoryTimeUpNotice(
             loss: switch (state.loss) {

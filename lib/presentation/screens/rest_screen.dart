@@ -55,6 +55,15 @@ class RestScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
                     const ParentsZoneButton(buttonKey: ValueKey<String>('rest-parents-zone')),
+                    const SizedBox(height: 12),
+                    // Salida directa, como en el menú: al llegar al límite el
+                    // adulto puede cerrar la app sin pasar por la Zona de Padres.
+                    TextButton.icon(
+                      key: const ValueKey<String>('rest-exit'),
+                      onPressed: _closeApp,
+                      icon: const Icon(Icons.logout_rounded),
+                      label: Text(l10n.menuExit),
+                    ),
                   ],
                 ),
               ),

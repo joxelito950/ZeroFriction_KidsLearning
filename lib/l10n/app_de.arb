@@ -117,5 +117,6 @@
   "oddOneOutTitle": "Was passt nicht?",
   "oddOneOutInstructions": "Tippe auf das, was nicht zu den anderen passt.",
   "menuOddOneOutSubtitle": "Finde das andere",
-  "oddOneOutObjectSemantics": "Bild {symbol}"
+  "oddOneOutObjectSemantics": "Bild {symbol}",
+  "oddOneOutVictoryMessage": "Du hast alle gefunden, die anders sind."
 }

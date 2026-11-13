@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/screens/rest_screen.dart';
@@ -26,5 +27,23 @@ void main() {
     ]) {
       expect(tester.getCenter(finder).dx, moreOrLessEquals(centre, epsilon: 1));
     }
+  });
+
+  // Reportado en la prueba cerrada: al acabar el tiempo no había salida directa.
+  testWidgets('offers a direct exit that closes the app, as the menu does', (tester) async {
+    int closeRequests = 0;
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
+      if (call.method == 'SystemNavigator.pop') closeRequests++;
+      return null;
+    });
+    addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null));
+
+    await tester.pumpWidget(localizedApp(home: const RestScreen()));
+    final Finder exit = find.byKey(const ValueKey<String>('rest-exit'));
+    await tester.ensureVisible(exit);
+    expect(find.descendant(of: exit, matching: find.text(l10n.menuExit)), findsOneWidget);
+    await tester.tap(exit);
+    await tester.pump();
+    expect(closeRequests, 1);
   });
 }

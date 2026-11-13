@@ -591,5 +591,9 @@
         "example": "🍐"
       }
     }
+  },
+  "oddOneOutVictoryMessage": "You found every odd one out.",
+  "@oddOneOutVictoryMessage": {
+    "description": "Line under the celebration title when a level of Odd one out is won (the memory game says 'You found all the pairs'). The child found the different object on every board."
   }
 }

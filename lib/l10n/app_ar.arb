@@ -117,5 +117,6 @@
   "oddOneOutTitle": "أيها مختلف؟",
   "oddOneOutInstructions": "المس الشيء الذي لا يشبه البقية.",
   "menuOddOneOutSubtitle": "ابحث عن المختلف",
-  "oddOneOutObjectSemantics": "صورة {symbol}"
+  "oddOneOutObjectSemantics": "صورة {symbol}",
+  "oddOneOutVictoryMessage": "وجدت كل الأشياء المختلفة."
 }
