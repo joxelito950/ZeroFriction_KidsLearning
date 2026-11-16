@@ -110,7 +110,7 @@ void main() {
     }
     expect(find.byKey(const ValueKey<String>('memory-celebration')), findsOneWidget);
     // Su propia frase: aquí no se buscan parejas.
-    expect(find.text('¡Encontraste todos los diferentes!'), findsOneWidget);
+    expect(find.text('¡Encontraste el objeto diferente en cada tablero!'), findsOneWidget);
     expect(find.text('¡Encontraste todas las parejas!'), findsNothing);
     await tester.pump(OddOneOutCubit.celebrationDuration);
     await tester.pump(const Duration(milliseconds: 400));

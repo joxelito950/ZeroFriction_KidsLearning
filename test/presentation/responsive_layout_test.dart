@@ -18,6 +18,8 @@ import 'package:toddler_logic/presentation/screens/parental_gate_screen.dart';
 import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
 import 'package:toddler_logic/presentation/screens/rest_screen.dart';
 import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
+import 'package:toddler_logic/presentation/widgets/memory_round_overlay.dart';
 import 'package:toddler_logic/presentation/widgets/parental_keypad.dart';
 import 'package:toddler_logic/presentation/widgets/shadow_board.dart';
 
@@ -221,6 +223,47 @@ void main() {
             final Rect body = tester.getRect(find.byType(SingleChildScrollView));
             for (final finder in [find.text(l10n.restTitle), find.byKey(const ValueKey<String>('rest-parents-zone'))]) {
               expect(tester.getCenter(finder).dx, moreOrLessEquals(body.center.dx, epsilon: 1));
+            }
+          });
+
+          // Los avisos sobre el tablero (celebración, medallas, tiempo agotado,
+          // invitación) se ven enteros, sin quedar cortados, con el texto limitado
+          // como en el juego (revisión de traducciones v2, 2026-11-16).
+          testWidgets('game overlays fit on screen', (tester) async {
+            _usePhone(tester, phone, textScale);
+            final overlays = <String, Widget>{
+              'celebration': const MemoryCelebration(stars: 2, badgeEarned: false),
+              'odd one out celebration': MemoryCelebration(
+                stars: 3,
+                badgeEarned: false,
+                message: l10n.oddOneOutVictoryMessage,
+              ),
+              for (final round in GameDifficulty.values)
+                'medal ${round.name}': MemoryCelebration(stars: 3, badgeEarned: true, medal: round),
+              for (final loss in MemoryLoss.values) 'time up ${loss.name}': MemoryTimeUpNotice(loss: loss),
+              'time up shadows': MemoryTimeUpNotice(
+                loss: MemoryLoss.fewerCards,
+                fewerMessage: l10n.shadowsTimeUpFewerObjects,
+              ),
+              for (final round in GameDifficulty.values) 'invitation ${round.name}': PlayInvitation(round: round),
+            };
+            for (final MapEntry<String, Widget> overlay in overlays.entries) {
+              await tester.pumpWidget(localizedApp(
+                locale: locale,
+                home: Builder(
+                  builder: (context) => MediaQuery.withClampedTextScaling(
+                    maxScaleFactor: MemoryGameScreen.maxTextScale,
+                    child: Scaffold(body: SafeArea(child: overlay.value)),
+                  ),
+                ),
+              ));
+              await tester.pump();
+              final Rect screen = Offset.zero & tester.view.physicalSize / tester.view.devicePixelRatio;
+              for (final Element element in [...find.byType(Text).evaluate(), ...find.byType(Icon).evaluate()]) {
+                final Rect rect = tester.getRect(find.byWidget(element.widget));
+                expect(screen.contains(rect.topLeft) && screen.contains(rect.bottomRight - const Offset(0.01, 0.01)),
+                    isTrue, reason: '${overlay.key}: $rect outside $screen');
+              }
             }
           });
 
