@@ -1,6 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../brand/brand_assets.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
 import '../widgets/parents_zone_button.dart';
@@ -35,8 +38,17 @@ class RestScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ExcludeSemantics(
-                      child: Icon(Icons.bedtime_rounded, size: 96, color: AppPalette.deepTeal.withValues(alpha: 0.85)),
+                    // El niño descansando con su osito (PROMPTS §11), decorativo:
+                    // el título ya lo dice. Crece con la pantalla sin pasar de
+                    // 200 dp ni dejar sin sitio a los botones en horizontal.
+                    Image.asset(
+                      BrandAssets.childResting,
+                      key: const ValueKey<String>('rest-illustration'),
+                      width: math.min(200, MediaQuery.sizeOf(context).shortestSide * 0.4),
+                      height: math.min(200, MediaQuery.sizeOf(context).shortestSide * 0.4),
+                      excludeFromSemantics: true,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.bedtime_rounded, size: 96, color: AppPalette.deepTeal.withValues(alpha: 0.85)),
                     ),
                     const SizedBox(height: 24),
                     Text(

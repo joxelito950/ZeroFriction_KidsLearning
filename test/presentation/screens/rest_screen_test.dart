@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:toddler_logic/brand/brand_assets.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/screens/rest_screen.dart';
 
@@ -22,11 +23,18 @@ void main() {
     for (final finder in [
       find.text(l10n.restTitle),
       find.text(l10n.restSubtitle),
-      find.byIcon(Icons.bedtime_rounded),
+      find.byKey(const ValueKey<String>('rest-illustration')),
       find.byKey(const ValueKey<String>('rest-parents-zone')),
     ]) {
       expect(tester.getCenter(finder).dx, moreOrLessEquals(centre, epsilon: 1));
     }
+  });
+
+  testWidgets('shows the resting child instead of the system icon', (tester) async {
+    await tester.pumpWidget(localizedApp(home: const RestScreen()));
+    final Image image = tester.widget<Image>(find.byKey(const ValueKey<String>('rest-illustration')));
+    expect((image.image as AssetImage).assetName, BrandAssets.childResting);
+    expect(find.byIcon(Icons.bedtime_rounded), findsNothing);
   });
 
   // Reportado en la prueba cerrada: al acabar el tiempo no había salida directa.

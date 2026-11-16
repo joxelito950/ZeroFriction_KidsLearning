@@ -14,6 +14,10 @@ Genera:
 - assets/brand/shadows_icon.png                 icono del juego Sombras (HU-007)
 - assets/brand/odd_one_out_icon.png             icono del juego ¿Cuál es diferente? (HU-025)
 - assets/brand/hand_guide.png                   mano guía del tutorial (HU-022)
+- assets/brand/child_resting.png                el niño descansando (PROMPTS §11, HU-009)
+- assets/brand/child_sleeping.png               el niño durmiendo (PROMPTS §12, HU-038)
+- assets/brand/child_celebrating.png            el niño celebrando (PROMPTS §13, HU-037)
+- assets/brand/child_inviting.png               el niño invitando (PROMPTS §14, HU-034 y HU-041)
 Después: dart run flutter_launcher_icons
 """
 import math
@@ -124,6 +128,15 @@ def main() -> None:
     # La mano se recorta igual que los iconos: la punta del índice queda en el
     # 12 % del ancho y el 8 % del alto (GestureHint.fingertip).
     fit_box(Image.open(SRC / 'mano-guia.png'), 256).save(ROOT / 'assets/brand/hand_guide.png', optimize=True)
+    # Ilustraciones del niño (PROMPTS §11 a §14): se muestran a unos 200 dp como
+    # mucho; 480 px bastan para 2,4x sin pesar en la descarga (TD-012).
+    for source, target in [
+        ('nino-descansando.png', 'child_resting.png'),
+        ('nino-durmiendo.png', 'child_sleeping.png'),
+        ('nino-celebrando.png', 'child_celebrating.png'),
+        ('nino-invitando.png', 'child_inviting.png'),
+    ]:
+        fit_box(Image.open(SRC / source), 480).save(ROOT / 'assets/brand' / target, optimize=True)
 
 
 if __name__ == '__main__':
