@@ -14,8 +14,14 @@ final class GameProgress implements DecayingProgress<GameProgress> {
     Set<GameDifficulty> medals = const {},
     Map<RoundLevel, LevelRecord> records = const {},
     this.lastPlayedAt,
+    this.stuckLevel,
+    this.stuckFalls = 0,
   })  : medals = Set.unmodifiable(medals),
         records = Map.unmodifiable(records) {
+    RangeError.checkNotNegative(stuckFalls, 'stuckFalls');
+    if ((stuckLevel == null) != (stuckFalls == 0)) {
+      throw ArgumentError('stuckLevel and stuckFalls go together (HU-034 R4)');
+    }
     for (final RoundLevel key in records.keys) {
       if (key.level == RoundLadder.tutorial) {
         throw ArgumentError.value(key, 'records', 'the tutorial gives no stars (HU-037 P2)');
@@ -59,6 +65,20 @@ final class GameProgress implements DecayingProgress<GameProgress> {
   @override
   final DateTime? lastPlayedAt;
 
+  /// Veces que hay que llegar al mismo nivel y volver a bajar sin superarlo
+  /// para sugerir al adulto una ronda más tranquila (HU-034 P7).
+  static const int stuckThreshold = 3;
+
+  /// Nivel de la ronda actual al que el niño llega y del que vuelve a bajar sin
+  /// superarlo (HU-034 R4); `null` si no hay ninguno.
+  final int? stuckLevel;
+
+  /// Veces que ha perdido en [stuckLevel] desde la última vez que lo superó.
+  final int stuckFalls;
+
+  /// El niño está atascado: toca sugerir una ronda más tranquila (§4.5).
+  bool get isStuck => stuckFalls >= stuckThreshold;
+
   /// La medalla más alta, para el menú; `null` si no hay ninguna.
   GameDifficulty? get bestMedal {
     for (final GameDifficulty round in GameDifficulty.values.reversed) {
@@ -82,20 +102,44 @@ final class GameProgress implements DecayingProgress<GameProgress> {
       final LevelRecord? previous = records[key];
       if (previous == null || stars >= previous.bestStars) next[key] = LevelRecord(bestStars: stars, achievedAt: at);
     }
+    // Superar el nivel donde se atascaba, o pasar de ronda, borra la cuenta.
+    final int? stuck = stuckLevel;
+    final bool cleared = stuck == null || won.level >= stuck || step.next.round != won.round;
     return GameProgress(
       position: step.next,
       medals: {...medals, if (step.medal case final GameDifficulty medal) medal},
       records: next,
       lastPlayedAt: at,
+      stuckLevel: cleared ? null : stuck,
+      stuckFalls: cleared ? 0 : stuckFalls,
     );
   }
 
-  /// Registra una derrota por tiempo: solo cambian la posición y la fecha.
-  GameProgress recordLoss({required RoundStep step, required DateTime at}) =>
-      GameProgress(position: step.next, medals: medals, records: records, lastPlayedAt: at);
+  /// Registra una derrota por tiempo en [lost]: cambian la posición y la fecha,
+  /// y la cuenta de «atascado» (HU-034 R4): perder en el mismo nivel suma;
+  /// perder en uno más alto empieza la cuenta allí; en uno más bajo, no cambia.
+  /// Bajar de ronda (HU-037 R10) la borra.
+  GameProgress recordLoss({required RoundPosition lost, required RoundStep step, required DateTime at}) {
+    final int? stuck = stuckLevel;
+    final (int?, int) next = switch (stuck) {
+      _ when step.next.round != lost.round => (null, 0),
+      null => (lost.level, 1),
+      _ when lost.level == stuck => (stuck, stuckFalls + 1),
+      _ when lost.level > stuck => (lost.level, 1),
+      _ => (stuck, stuckFalls),
+    };
+    return GameProgress(
+      position: step.next,
+      medals: medals,
+      records: records,
+      lastPlayedAt: at,
+      stuckLevel: next.$1,
+      stuckFalls: next.$2,
+    );
+  }
 
   /// El adulto cambia la ronda (P1): se empieza por su tutorial, sin perder
-  /// estrellas ni medallas (R5).
+  /// estrellas ni medallas (R5). La cuenta de «atascado» empieza de cero.
   GameProgress withRound(GameDifficulty round) => GameProgress(
         position: RoundPosition(round: round, level: RoundLadder.tutorial),
         medals: medals,
@@ -114,12 +158,20 @@ final class GameProgress implements DecayingProgress<GameProgress> {
       medals: medals,
       records: {for (var i = 0; i < keys.length; i++) keys[i]: left[i]!},
       lastPlayedAt: lastPlayedAt,
+      stuckLevel: stuckLevel,
+      stuckFalls: stuckFalls,
     );
   }
 
   @override
-  GameProgress playedAt(DateTime at) =>
-      GameProgress(position: position, medals: medals, records: records, lastPlayedAt: at);
+  GameProgress playedAt(DateTime at) => GameProgress(
+        position: position,
+        medals: medals,
+        records: records,
+        lastPlayedAt: at,
+        stuckLevel: stuckLevel,
+        stuckFalls: stuckFalls,
+      );
 
   @override
   bool operator ==(Object other) =>
@@ -127,6 +179,8 @@ final class GameProgress implements DecayingProgress<GameProgress> {
       other is GameProgress &&
           other.position == position &&
           other.lastPlayedAt == lastPlayedAt &&
+          other.stuckLevel == stuckLevel &&
+          other.stuckFalls == stuckFalls &&
           other.medals.length == medals.length &&
           other.medals.containsAll(medals) &&
           other.records.length == records.length &&
@@ -136,6 +190,8 @@ final class GameProgress implements DecayingProgress<GameProgress> {
   int get hashCode => Object.hash(
         position,
         lastPlayedAt,
+        stuckLevel,
+        stuckFalls,
         Object.hashAllUnordered(medals),
         Object.hashAllUnordered(records.entries.map((entry) => Object.hash(entry.key, entry.value))),
       );

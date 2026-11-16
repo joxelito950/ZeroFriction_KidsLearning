@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
+import 'package:toddler_logic/domain/parental/play_history.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/presentation/blocs/play_time/play_time_cubit.dart';
 
 import '../../memory_game_test_support.dart';
@@ -247,5 +249,52 @@ void main() {
     expect(PlayTimeState(today: today, limitMinutes: 5), PlayTimeState(today: today, limitMinutes: 5));
     expect(PlayTimeState(today: today).hashCode, PlayTimeState(today: today).hashCode);
     expect(PlayTimeState(today: today), isNot(PlayTimeState(today: today, inAdultArea: true)));
+  });
+
+  group('history by day and by game (HU-034 R3)', () {
+    test('adds the time to the open game, or outside the games in the menu', () {
+      run((async, cubit) {
+        async.elapse(const Duration(seconds: 2));
+        cubit.setCurrentGame(GameId.shadows);
+        async.elapse(const Duration(seconds: 5));
+        cubit.setCurrentGame(null);
+        async.elapse(const Duration(seconds: 1));
+
+        final PlayDay today = cubit.state.history!.dayAt(startTime);
+        expect(today.playedIn(GameId.shadows), const Duration(seconds: 5));
+        expect(today.outsideGames, const Duration(seconds: 3));
+        expect(today.total, cubit.state.today.played, reason: 'the same time the daily limit counts');
+      });
+    });
+
+    test('starts from what was saved and saves the day with the play time', () {
+      when(() => repository.readPlayHistory(any())).thenAnswer((_) async => PlayHistory([
+            PlayDay(day: startTime, byGame: {GameId.memory: const Duration(minutes: 4)}),
+          ]));
+      run((async, cubit) {
+        cubit.setCurrentGame(GameId.memory);
+        async.elapse(PlayTimeCubit.saveEvery);
+        final PlayDay saved = verify(() => repository.savePlayDay(captureAny())).captured.last as PlayDay;
+        expect(saved.playedIn(GameId.memory), const Duration(minutes: 4) + PlayTimeCubit.saveEvery);
+      });
+    });
+
+    test('nothing played, nothing saved; a failed read starts an empty history', () {
+      when(() => repository.readPlayHistory(any())).thenThrow(StateError('disk'));
+      run((async, cubit) {
+        expect(cubit.state.history, PlayHistory(const []));
+        cubit.setForeground(false);
+        async.flushMicrotasks();
+      });
+      verifyNever(() => repository.savePlayDay(any()));
+    });
+
+    test('a new day starts its own entry', () {
+      run((async, cubit) {
+        async.elapse(const Duration(hours: 14, seconds: 1));
+        final PlayHistory history = cubit.state.history!;
+        expect(history.days.map((day) => day.day), [DateTime(2026, 11, 4), DateTime(2026, 11, 5)]);
+      });
+    });
   });
 }

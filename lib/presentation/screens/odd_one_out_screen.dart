@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/progress/game_progress.dart';
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
@@ -71,12 +72,15 @@ class _OddOneOutViewState extends State<_OddOneOutView> with WidgetsBindingObser
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _playTime = context.read<PlayTimeCubit?>();
+    // El tiempo de esta pantalla cuenta para este juego (HU-034 R3).
+    _playTime?.setCurrentGame(GameId.oddOneOut);
     _sound = context.read<SoundCubit?>();
   }
 
   @override
   void dispose() {
     _playTime?.setBoardInProgress(false);
+    _playTime?.setCurrentGame(null);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
