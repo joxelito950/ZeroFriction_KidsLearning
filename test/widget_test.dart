@@ -266,7 +266,10 @@ void main() {
         await tester.pumpAndSettle();
       }
 
+      /// Fila «Idioma» → su pantalla → el idioma, que se aplica y vuelve (HU-046 P2).
       Future<void> chooseLanguage(WidgetTester tester, String code) async {
+        await tester.tap(find.byKey(const ValueKey<String>('parents-row-language')));
+        await tester.pumpAndSettle();
         final tile = find.byKey(ValueKey<String>('language-$code'));
         await tester.ensureVisible(tile);
         await tester.pump();

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/domain/feedback/feedback_email.dart';
+import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/widgets/parents_feedback_section.dart';
 
 import '../l10n_test_support.dart';
@@ -45,7 +46,8 @@ void main() {
   testWidgets('opens the email app with the prepared email in the app language (criterion 2)', (tester) async {
     final channel = _FakeChannel(opens: true);
     await pump(tester, channel: channel);
-    expect(find.text('Ayuda y comentarios'), findsOneWidget);
+    // El título está en la barra de su pantalla (HU-046); aquí, la explicación.
+    expect(find.text(lookupAppLocalizations(testLocale).parentsFeedbackIntro), findsOneWidget);
 
     await send(tester);
 
@@ -86,7 +88,7 @@ void main() {
   testWidgets('reads well in Arabic', (tester) async {
     await pump(tester, channel: _FakeChannel(opens: false), locale: const Locale('ar'));
     await send(tester);
-    expect(find.text('المساعدة والملاحظات'), findsOneWidget);
+    expect(find.text(lookupAppLocalizations(const Locale('ar')).parentsFeedbackIntro), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

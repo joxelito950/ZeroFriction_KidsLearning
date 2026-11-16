@@ -54,7 +54,19 @@ class _AdultSessionGuardState extends State<AdultSessionGuard> with WidgetsBindi
 
   void _restartIdle() {
     _idle?.cancel();
-    _idle = Timer(widget.inactivity, _close);
+    _idle = Timer(widget.inactivity, _closeIfIdle);
+  }
+
+  /// Con una pantalla de configuración abierta encima (HU-046), los toques van
+  /// a ella y la vigila su propio guardián: esta espera a que vuelva a estar
+  /// delante en lugar de cerrar la sesión mientras el adulto trabaja.
+  void _closeIfIdle() {
+    if (!mounted) return;
+    if (ModalRoute.of(context)?.isCurrent == false) {
+      _restartIdle();
+      return;
+    }
+    _close();
   }
 
   void _close() {

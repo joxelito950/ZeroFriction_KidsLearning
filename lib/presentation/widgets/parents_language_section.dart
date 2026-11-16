@@ -5,11 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/app_language.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/app_locale/app_locale_cubit.dart';
+import 'parents_setting_page.dart';
 
-/// Sección «Idioma» de la Zona de Padres (HU-012): los 9 idiomas con su nombre
-/// propio, sin banderas, en orden fijo y con el actual marcado (R1, R2, P4).
-class ParentsLanguageSection extends StatelessWidget {
-  const ParentsLanguageSection({super.key});
+/// Pantalla «Idioma» (HU-012, HU-046): los 9 idiomas con su nombre propio,
+/// sin banderas, en orden fijo y con el actual marcado (R1, R2, P4). Elegir uno
+/// lo aplica y vuelve a la Zona de Padres, sin «Guardar» (HU-046 P2): es la
+/// única forma de leer la pantalla si se eligió uno por error.
+class ParentsLanguagePage extends StatelessWidget {
+  const ParentsLanguagePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,36 +20,23 @@ class ParentsLanguageSection extends StatelessWidget {
     final theme = Theme.of(context);
     final String current = context.watch<AppLocaleCubit>().state.languageCode;
 
-    return Card(
+    return ParentsSettingPage(
       key: const ValueKey<String>('parents-zone-language'),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  const Icon(Icons.translate_rounded),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      l10n.parentsZoneLanguageTitle,
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
+      title: l10n.parentsZoneLanguageTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.parentsZoneLanguageIntro, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: 8),
+          Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                for (final code in AppLanguage.supported) _LanguageTile(code: code, selected: code == current),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: Text(l10n.parentsZoneLanguageIntro, style: theme.textTheme.bodyMedium),
-            ),
-            for (final code in AppLanguage.supported)
-              _LanguageTile(code: code, selected: code == current),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -66,7 +56,10 @@ class _LanguageTile extends StatelessWidget {
     return ListTile(
       key: ValueKey<String>('language-$code'),
       selected: selected,
-      onTap: () => context.read<AppLocaleCubit>().select(code),
+      onTap: () {
+        context.read<AppLocaleCubit>().select(code);
+        Navigator.of(context).maybePop();
+      },
       // El lector de pantalla pronuncia cada nombre en su idioma (criterio 7).
       title: Semantics(
         attributedLabel: AttributedString(

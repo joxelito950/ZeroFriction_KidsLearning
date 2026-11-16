@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/entities/app_language.dart';
+import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
+import '../blocs/app_locale/app_locale_cubit.dart';
+import '../blocs/game_settings/game_settings_cubit.dart';
+import '../blocs/play_time/play_time_cubit.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
 import '../widgets/parents_feedback_section.dart';
@@ -8,65 +14,153 @@ import '../widgets/parents_games_section.dart';
 import '../widgets/parents_language_section.dart';
 import '../widgets/parents_play_time_section.dart';
 import '../widgets/parents_privacy_section.dart';
+import '../widgets/parents_setting_page.dart';
 import '../widgets/parents_sound_section.dart';
 
-/// Zona de Padres (HU-004), a la que solo se llega superando el desafío. Cada
-/// sección llega con su historia (P4); el «atrás» del sistema vuelve al menú (P5).
-/// Se cierra sola al pasar a segundo plano o tras 1 minuto sin tocarla (R7).
+/// Zona de Padres (HU-004), a la que solo se llega superando el desafío. Desde
+/// HU-046 es una lista de filas con lo elegido en cada opción; las que tienen
+/// más de un control abren su pantalla, un solo nivel por debajo. El «atrás»
+/// del sistema vuelve al menú (P5). Se cierra sola al pasar a segundo plano o
+/// tras 1 minuto sin tocarla (R7).
 class ParentsZoneScreen extends StatelessWidget {
   const ParentsZoneScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final IPersistenceRepository? repository = context.read<IPersistenceRepository?>();
+    final Widget zone = AdultSessionGuard(child: const _ParentsZoneList());
+    if (repository == null) return zone;
+    // Los ajustes de los juegos se leen una vez: dan el resumen de la fila y
+    // los usa su pantalla.
+    return BlocProvider<GameSettingsCubit>(
+      create: (_) => GameSettingsCubit(repository: repository)..load(),
+      child: zone,
+    );
+  }
+}
 
-    return AdultSessionGuard(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(l10n.parentsZoneTitle),
-        ),
-        body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: FilledButton.tonalIcon(
-                  key: const ValueKey<String>('parents-zone-back-to-menu'),
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.home_rounded),
-                  label: Text(l10n.parentsZoneBackToMenu),
+class _ParentsZoneList extends StatelessWidget {
+  const _ParentsZoneList();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final GameSettingsCubit? games = context.read<GameSettingsCubit?>();
+    final PlayTimeCubit? playTime = context.read<PlayTimeCubit?>();
+    final String language = context.watch<AppLocaleCubit>().state.languageCode;
+
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.parentsZoneTitle),
+      ),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: FilledButton.tonalIcon(
+                key: const ValueKey<String>('parents-zone-back-to-menu'),
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.home_rounded),
+                label: Text(l10n.parentsZoneBackToMenu),
+              ),
+            ),
+            if (playTime != null) _ExtraTime(cubit: playTime),
+            const SizedBox(height: 16),
+            ParentsSettingRow(
+              key: const ValueKey<String>('parents-row-language'),
+              icon: Icons.translate_rounded,
+              title: l10n.parentsZoneLanguageTitle,
+              summary: AppLanguage.nativeNames[language] ?? language,
+              onTap: () => ParentsSettingPage.open(context, const ParentsLanguagePage()),
+            ),
+            // Sonido (HU-005): un solo interruptor, se cambia en la fila (HU-046 R1).
+            const ParentsSoundSection(),
+            if (games != null)
+              BlocBuilder<GameSettingsCubit, GameSettingsState>(
+                bloc: games,
+                builder: (context, state) => ParentsSettingRow(
+                  key: const ValueKey<String>('parents-row-games'),
+                  icon: Icons.extension_outlined,
+                  title: l10n.parentsZoneGamesTitle,
+                  summary: ParentsGamesTexts.summary(l10n, state),
+                  onTap: () => ParentsSettingPage.open(
+                    context,
+                    BlocProvider<GameSettingsCubit>.value(value: games, child: const ParentsGamesPage()),
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
-              const ParentsLanguageSection(),
-              const SizedBox(height: 16),
-              // Sonido (HU-005): junto al idioma, lo que se oye y lo que se lee.
-              const ParentsSoundSection(),
-              const SizedBox(height: 16),
-              const ParentsGamesSection(),
-              const SizedBox(height: 16),
-              const ParentsPlayTimeSection(),
-              const SizedBox(height: 16),
-              const _ScreenPinningSection(),
-              const SizedBox(height: 16),
-              // Ayuda y comentarios (HU-032), antes de la privacidad (P3).
-              const ParentsFeedbackSection(),
-              const SizedBox(height: 16),
-              const ParentsPrivacySection(),
-            ],
-          ),
+            if (playTime != null)
+              BlocBuilder<PlayTimeCubit, PlayTimeState>(
+                bloc: playTime,
+                buildWhen: (previous, current) => previous.limitMinutes != current.limitMinutes,
+                builder: (context, state) => ParentsSettingRow(
+                  key: const ValueKey<String>('parents-row-play-time'),
+                  icon: Icons.timer_outlined,
+                  title: l10n.parentsZonePlayTimeTitle,
+                  summary: parentsPlayTimeSummary(l10n, state.limitMinutes),
+                  onTap: () => ParentsSettingPage.open(context, const ParentsPlayTimePage()),
+                ),
+              ),
+            ParentsSettingRow(
+              key: const ValueKey<String>('parents-row-pin'),
+              icon: Icons.push_pin_outlined,
+              title: l10n.parentsZonePinTitle,
+              summary: l10n.parentsZonePinSummary,
+              onTap: () => ParentsSettingPage.open(context, const _ScreenPinningPage()),
+            ),
+            // Ayuda y comentarios (HU-032), antes de la privacidad (P3).
+            ParentsSettingRow(
+              key: const ValueKey<String>('parents-row-feedback'),
+              icon: Icons.mail_outline_rounded,
+              title: l10n.parentsFeedbackTitle,
+              summary: l10n.parentsFeedbackSummary,
+              onTap: () => ParentsSettingPage.open(context, const ParentsFeedbackPage()),
+            ),
+            // Se despliega aquí mismo: leerla cuenta como actividad (HU-014 R5).
+            const ParentsPrivacySection(),
+          ],
         ),
       ),
     );
   }
 }
 
+/// «15 minutos más» (HU-009 R6): arriba de la Zona de Padres, solo cuando el
+/// niño ya no puede jugar hoy, que es cuando el adulto lo busca (HU-046 §4.1).
+class _ExtraTime extends StatelessWidget {
+  const _ExtraTime({required this.cubit});
+
+  final PlayTimeCubit cubit;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return BlocBuilder<PlayTimeCubit, PlayTimeState>(
+      bloc: cubit,
+      builder: (context, state) {
+        if (state.limitMinutes == null || !state.limitReached) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: FilledButton.icon(
+            key: const ValueKey<String>('play-time-extra'),
+            onPressed: cubit.grantExtra,
+            icon: const Icon(Icons.more_time_rounded),
+            label: Text(l10n.parentsZonePlayTimeExtra),
+          ),
+        );
+      },
+    );
+  }
+}
+
 /// «Fijar pantalla» de Android (parte informativa de HU-009; el botón es HU-020): mantiene el
 /// teléfono en la app, porque inicio y recientes no se pueden bloquear (HU-001 T5).
-class _ScreenPinningSection extends StatelessWidget {
-  const _ScreenPinningSection();
+/// Pantalla de solo lectura (HU-046 R6).
+class _ScreenPinningPage extends StatelessWidget {
+  const _ScreenPinningPage();
 
   @override
   Widget build(BuildContext context) {
@@ -74,55 +168,40 @@ class _ScreenPinningSection extends StatelessWidget {
     final theme = Theme.of(context);
     final steps = [l10n.parentsZonePinStep1, l10n.parentsZonePinStep2, l10n.parentsZonePinStep3];
 
-    return Card(
+    return ParentsSettingPage(
       key: const ValueKey<String>('parents-zone-screen-pinning'),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.push_pin_outlined),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    l10n.parentsZonePinTitle,
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(l10n.parentsZonePinIntro, style: theme.textTheme.bodyMedium),
-            const SizedBox(height: 12),
-            for (final (index, step) in steps.indexed)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Número blanco sobre azul petróleo (6,16:1): sobre el color por
-                    // defecto del tema apenas se leía (visto en el moto g55).
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: AppPalette.petrolBlue,
-                      child: Text(
-                        '${index + 1}',
-                        style: theme.textTheme.labelMedium?.copyWith(color: AppPalette.white, fontWeight: FontWeight.bold),
-                      ),
+      title: l10n.parentsZonePinTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.parentsZonePinIntro, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: 12),
+          for (final (index, step) in steps.indexed)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Número blanco sobre azul petróleo (6,16:1): sobre el color por
+                  // defecto del tema apenas se leía (visto en el moto g55).
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: AppPalette.petrolBlue,
+                    child: Text(
+                      '${index + 1}',
+                      style: theme.textTheme.labelMedium?.copyWith(color: AppPalette.white, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(child: Text(step, style: theme.textTheme.bodyMedium)),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(step, style: theme.textTheme.bodyMedium)),
+                ],
               ),
-            Text(
-              l10n.parentsZonePinNote,
-              style: theme.textTheme.bodySmall?.copyWith(color: AppPalette.deepTeal),
             ),
-          ],
-        ),
+          Text(
+            l10n.parentsZonePinNote,
+            style: theme.textTheme.bodySmall?.copyWith(color: AppPalette.deepTeal),
+          ),
+        ],
       ),
     );
   }

@@ -118,5 +118,11 @@
   "oddOneOutInstructions": "المس الشيء الذي لا يشبه البقية.",
   "menuOddOneOutSubtitle": "ابحث عن المختلف",
   "oddOneOutObjectSemantics": "صورة {symbol}",
-  "oddOneOutVictoryMessage": "وجدت كل الأشياء المختلفة."
+  "oddOneOutVictoryMessage": "وجدت كل الأشياء المختلفة.",
+  "parentsSave": "حفظ",
+  "parentsDiscard": "تجاهل",
+  "parentsUnsavedTitle": "هل تريد حفظ التغييرات؟",
+  "parentsZonePlayTimePerDay": "{minutes} دقيقة يوميًا",
+  "parentsZonePinSummary": "إبقاء طفلك داخل التطبيق",
+  "parentsFeedbackSummary": "راسلنا عبر البريد الإلكتروني"
 }
