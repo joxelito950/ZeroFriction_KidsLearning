@@ -137,7 +137,7 @@ void main() {
       expect(progress.medals, {easy, normal});
       expect(progress.bestMedal, normal);
 
-      final GameProgress lost = progress.recordLoss(step: memory.afterLoss(memory.arrival(impossible, 3)), at: day);
+      final GameProgress lost = progress.recordLoss(lost: memory.arrival(impossible, 3), step: memory.afterLoss(memory.arrival(impossible, 3)), at: day);
       expect(lost.position.level, 2);
       expect(lost.medals, progress.medals);
       expect(lost.stars, progress.stars);
