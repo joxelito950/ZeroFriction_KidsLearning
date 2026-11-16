@@ -8,6 +8,7 @@ import 'package:toddler_logic/data/local/models/game_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
+import 'package:toddler_logic/data/local/models/play_day_hive_model.dart';
 import 'package:toddler_logic/data/local/models/shadow_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
@@ -106,6 +107,7 @@ void main() {
       expect(HivePersistenceConfig.shadowProgressBox, isA<Box<ShadowProgressHiveModel>>());
       expect(Hive.isAdapterRegistered(4), isTrue);
       expect(HivePersistenceConfig.gameProgressBox, isA<Box<GameProgressHiveModel>>());
+      expect(HivePersistenceConfig.playHistoryBox, isA<Box<PlayDayHiveModel>>());
       expect(Hive.isAdapterRegistered(5), isTrue);
     });
 

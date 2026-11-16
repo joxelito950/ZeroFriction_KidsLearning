@@ -204,7 +204,7 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
   void _timeUp() {
     _stopTimer();
     final RoundStep step = _ladder.afterLoss(_position, timed: _timed);
-    _progress = _progress.recordLoss(step: step, at: _now());
+    _progress = _progress.recordLoss(lost: _position, step: step, at: _now());
     unawaited(_saveProgress());
     emit(state.copyWith(
       phase: OddPhase.timeUp,

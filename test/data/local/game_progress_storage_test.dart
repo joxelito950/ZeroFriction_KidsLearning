@@ -115,6 +115,7 @@ void main() {
           parentalSettingsBox: _SettingsBox(),
           shadowProgressBox: HivePersistenceConfig.shadowProgressBox,
           gameProgressBox: HivePersistenceConfig.gameProgressBox,
+          playHistoryBox: HivePersistenceConfig.playHistoryBox,
         );
 
     test('data saved by version 1.0.0-rc.3 is read and migrated without losing anything', () async {

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-13): P1 a P9 decididas. La entrega 2 es HU-046, que sigue en refinamiento |
+| **Estado** | **En curso** (2026-11-16): entrega 1 desarrollada. P1 a P9 decididas; la entrega 2 es HU-046, lista |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | **P1: es lo próximo que se desarrolla** (P6, 2026-11-12) |
 | **Tamaño** | L (4 entregas, unos 5 días; la entrega 2 es HU-046) |
@@ -137,6 +137,10 @@ Si el niño **llega una y otra vez al mismo nivel y no consigue superarlo**, la 
 2. **HU-046:** la Zona de Padres por filas, con «Su progreso» como primera fila.
 3. **La pantalla:** frase, tarjetas, diálogo de estrellas y gráfico.
 4. **La sugerencia** (§4.5).
+
+| Entrega | Estado | Qué se hizo |
+|---|---|---|
+| 1 | ✅ 2026-11-16, rama `feature/hu-034-1-play-history` | `PlayHistory` y `PlayDay` (dominio): tiempo por día y por juego, y aparte el del menú, de hoy y los 5 días anteriores, contando días del calendario (sin fallar con el cambio de hora). `PlayTimeCubit` suma cada segundo al juego abierto (las pantallas de juego avisan con `setCurrentGame`) y guarda el día con el tiempo de hoy; el historial está en su estado para la pantalla. Caja `play_history` con `PlayDayHiveModel` (**typeId 6**), que borra al leer los días que salen de la ventana. R4: `GameProgress.stuckLevel` y `stuckFalls`, con `isStuck` (3 caídas en el mismo nivel, P7); se borra al superar el nivel, al cambiar de ronda o al bajar de ronda (HU-037 R10). Campos nuevos 10 y 11 en la memoria y Sombras, y 7 y 8 en el progreso común. No se ve nada todavía |
 
 ## 8. Preguntas
 
