@@ -4,6 +4,7 @@ import '../../../domain/progress/game_progress.dart';
 import '../../../domain/progress/level_record.dart';
 import '../../../domain/progress/round_ladder.dart';
 import '../../../domain/settings/game_difficulty.dart';
+import 'stuck_fields.dart';
 
 part 'game_progress_hive_model.g.dart';
 
@@ -22,6 +23,8 @@ class GameProgressHiveModel {
     required this.achievedAtByRoundLevel,
     this.lastPlayedAt,
     this.tutorialFalls = 0,
+    this.stuckLevel,
+    this.stuckFalls,
   });
 
   factory GameProgressHiveModel.fromGameProgress(GameProgress progress) => GameProgressHiveModel(
@@ -32,6 +35,8 @@ class GameProgressHiveModel {
         achievedAtByRoundLevel: {for (final entry in progress.records.entries) entry.key.key: entry.value.achievedAt},
         lastPlayedAt: progress.lastPlayedAt,
         tutorialFalls: progress.position.tutorialFalls,
+        stuckLevel: progress.stuckLevel,
+        stuckFalls: progress.stuckFalls,
       );
 
   @HiveField(0)
@@ -51,6 +56,12 @@ class GameProgressHiveModel {
   @HiveField(6)
   final int tutorialFalls;
 
+  // HU-034 R4: nivel donde se atasca y veces que ha vuelto a bajar de él.
+  @HiveField(7)
+  final int? stuckLevel;
+  @HiveField(8)
+  final int? stuckFalls;
+
   /// Un récord sin su fecha se ignora en vez de inventarla.
   GameProgress toGameProgress() => GameProgress(
         position: RoundPosition(round: GameDifficulty.fromName(round), level: level, tutorialFalls: tutorialFalls),
@@ -61,5 +72,7 @@ class GameProgressHiveModel {
               RoundLevel.fromKey(entry.key): LevelRecord(bestStars: entry.value, achievedAt: achievedAt),
         },
         lastPlayedAt: lastPlayedAt,
+        stuckLevel: stuckFallsOrZero(stuckLevel, stuckFalls) == 0 ? null : stuckLevel,
+        stuckFalls: stuckFallsOrZero(stuckLevel, stuckFalls),
       );
 }

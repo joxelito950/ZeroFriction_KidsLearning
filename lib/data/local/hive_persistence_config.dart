@@ -6,6 +6,7 @@ import 'models/game_progress_hive_model.dart';
 import 'models/level_state_hive_model.dart';
 import 'models/memory_progress_hive_model.dart';
 import 'models/parental_settings_hive_model.dart';
+import 'models/play_day_hive_model.dart';
 import 'models/shadow_progress_hive_model.dart';
 import 'models/user_profile_hive_model.dart';
 
@@ -18,6 +19,7 @@ final class HivePersistenceConfig {
   static const String parentalSettingsBoxName = 'parental_settings';
   static const String shadowProgressBoxName = 'shadow_progress';
   static const String gameProgressBoxName = 'game_progress';
+  static const String playHistoryBoxName = 'play_history';
 
   static bool _initialized = false;
   static Completer<void>? _initializationCompleter;
@@ -60,6 +62,10 @@ final class HivePersistenceConfig {
         Hive.registerAdapter(GameProgressHiveModelAdapter());
       }
 
+      if (!Hive.isAdapterRegistered(6)) {
+        Hive.registerAdapter(PlayDayHiveModelAdapter());
+      }
+
       if (!Hive.isBoxOpen(levelStateBoxName)) {
         await Hive.openBox<LevelStateHiveModel>(levelStateBoxName);
       }
@@ -77,6 +83,9 @@ final class HivePersistenceConfig {
       }
       if (!Hive.isBoxOpen(gameProgressBoxName)) {
         await Hive.openBox<GameProgressHiveModel>(gameProgressBoxName);
+      }
+      if (!Hive.isBoxOpen(playHistoryBoxName)) {
+        await Hive.openBox<PlayDayHiveModel>(playHistoryBoxName);
       }
       _initialized = true;
       completer.complete();
@@ -98,6 +107,9 @@ final class HivePersistenceConfig {
       }
       if (Hive.isBoxOpen(gameProgressBoxName)) {
         await Hive.box<GameProgressHiveModel>(gameProgressBoxName).close();
+      }
+      if (Hive.isBoxOpen(playHistoryBoxName)) {
+        await Hive.box<PlayDayHiveModel>(playHistoryBoxName).close();
       }
       // El llamador original recibe el error vía `rethrow`; si no hubo llamadas
       // concurrentes nadie escucha este future, así que evitamos un error no capturado.
@@ -125,6 +137,8 @@ final class HivePersistenceConfig {
       _getOpenBox<ShadowProgressHiveModel>(shadowProgressBoxName);
 
   static Box<GameProgressHiveModel> get gameProgressBox => _getOpenBox<GameProgressHiveModel>(gameProgressBoxName);
+
+  static Box<PlayDayHiveModel> get playHistoryBox => _getOpenBox<PlayDayHiveModel>(playHistoryBoxName);
 
   static Box<T> _getOpenBox<T>(String boxName) {
     if (!_initialized || !Hive.isBoxOpen(boxName)) {

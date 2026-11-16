@@ -1,6 +1,7 @@
 import '../entities/level_state.dart';
 import '../entities/parental_settings.dart';
 import '../entities/user_profile.dart';
+import '../parental/play_history.dart';
 import '../progress/game_progress.dart';
 
 abstract interface class IPersistenceRepository {
@@ -31,4 +32,11 @@ abstract interface class IPersistenceRepository {
   /// cambia un ajuste no pise los que cambia otro (el tiempo de hoy, HU-009, y
   /// la dificultad, HU-030, se guardan desde sitios distintos).
   Future<ParentalSettings> updateParentalSettings(ParentalSettings Function(ParentalSettings current) update);
+
+  /// Tiempo jugado por día y por juego de hoy y los 5 días anteriores a [now]
+  /// (HU-034 R3). Lo más antiguo se borra al leer.
+  Future<PlayHistory> readPlayHistory(DateTime now);
+
+  /// Guarda (o sustituye) el tiempo de un día.
+  Future<void> savePlayDay(PlayDay day);
 }

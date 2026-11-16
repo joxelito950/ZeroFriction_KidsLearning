@@ -27,6 +27,7 @@ Future<HivePersistenceRepository> createRepository({required String hivePath}) a
     parentalSettingsBox: HivePersistenceConfig.parentalSettingsBox,
     shadowProgressBox: HivePersistenceConfig.shadowProgressBox,
     gameProgressBox: HivePersistenceConfig.gameProgressBox,
+    playHistoryBox: HivePersistenceConfig.playHistoryBox,
   );
 }
 

@@ -6,6 +6,7 @@ import 'package:toddler_logic/data/local/models/game_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/memory_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/parental_settings_hive_model.dart';
+import 'package:toddler_logic/data/local/models/play_day_hive_model.dart';
 import 'package:toddler_logic/data/local/models/shadow_progress_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
@@ -31,6 +32,8 @@ class _MockShadowProgressBox extends Mock implements Box<ShadowProgressHiveModel
 class _FakeShadowProgressHiveModel extends Fake implements ShadowProgressHiveModel {}
 
 class _MockGameProgressBox extends Mock implements Box<GameProgressHiveModel> {}
+
+class _MockPlayDayBox extends Mock implements Box<PlayDayHiveModel> {}
 
 class _FakeLevelStateHiveModel extends Fake implements LevelStateHiveModel {}
 
@@ -73,6 +76,7 @@ void main() {
         parentalSettingsBox: parentalSettingsBox,
         shadowProgressBox: shadowProgressBox,
         gameProgressBox: _MockGameProgressBox(),
+        playHistoryBox: _MockPlayDayBox(),
       );
     });
 
