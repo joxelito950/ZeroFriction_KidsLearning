@@ -238,6 +238,28 @@ void main() {
     expect(tester.element(find.text('open setting page')).read<PlayTimeCubit>().state.limitMinutes, isNull);
   });
 
+  // Visto en el moto g55 (2026-11-16): al volver de una pantalla usada durante
+  // casi un minuto, la Zona de Padres se cerraba enseguida.
+  testWidgets('coming back from a page in use gives the zone a full minute again', (tester) async {
+    await pumpZone(tester);
+    await open(tester, 'play-time'); // el minuto de la Zona de Padres empieza aquí
+    // Unos 50 s usando la pantalla, sin cambiar nada, y se vuelve poco antes de
+    // que venza el minuto de la Zona de Padres, que no ve estos toques.
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(seconds: 10));
+      await tester.tap(find.byKey(const ValueKey<String>('play-time-limit-none')));
+      await tester.pump();
+    }
+    await back(tester);
+
+    await tester.pump(const Duration(seconds: 20));
+    await tester.pump(const Duration(milliseconds: 500)); // por si se estuviera cerrando
+    expect(find.byType(ParentsZoneScreen), findsOneWidget, reason: 'the last touch was 20 s ago');
+    await tester.pump(const Duration(seconds: 45));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(ParentsZoneScreen), findsNothing, reason: 'one minute without touching anything');
+  });
+
   testWidgets('without a repository there is no games row', (tester) async {
     await tester.pumpWidget(localizedApp(home: const ParentsZoneScreen()));
     expect(row('games'), findsNothing);
