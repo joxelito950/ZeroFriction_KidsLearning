@@ -292,7 +292,7 @@ void main() {
       await tapCard(tester, 0);
       await tester.pump(const Duration(seconds: 91));
       await tester.pump(const Duration(milliseconds: 300));
-      expect(find.text('¡Se acabó el tiempo! Probemos un reto más tranquilo.'), findsOneWidget);
+      expect(find.text('¡Se acabó el tiempo! Probemos un reto más sencillo.'), findsOneWidget);
 
       await tester.pump(MemoryLadderCubit.timeUpDuration);
       await tester.pump(const Duration(milliseconds: 500));

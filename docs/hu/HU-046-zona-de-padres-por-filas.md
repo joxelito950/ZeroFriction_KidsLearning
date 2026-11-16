@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (2026-11-12). Nace de HU-034 P1 |
+| **Estado** | **Lista** (2026-11-16). Nace de HU-034 P1 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P1 (es la entrega 2 de HU-034) |
 | **Tamaño** | M (unos 2 días) |
@@ -82,5 +82,5 @@ Al cerrarla se registra la decisión (Zona de Padres en un nivel, con Guardar) e
 | # | Pregunta | Recomendación |
 |---|---|---|
 | P1 | ¿Filas o acordeón? | ✅ Decidido por el dueño en HU-034 P1 (2026-11-12): **filas que abren su configuración, un nivel como máximo**, con Guardar |
-| P2 | ¿El idioma también con «Guardar»? | **No:** elegir un idioma de la lista lo aplica y vuelve, porque cambiar el idioma es la única forma de leer la pantalla si se eligió uno por error. Es la excepción a R2 |
+| P2 | ¿El idioma también con «Guardar»? | ✅ Decidido (2026-11-16), como la recomendación. **No:** elegir un idioma de la lista lo aplica y vuelve, porque cambiar el idioma es la única forma de leer la pantalla si se eligió uno por error. Es la excepción a R2 |
 | P3 | ¿Orden de las filas? | El de la tabla 4.1: primero lo que se mira (progreso), después lo que más se cambia, y al final la ayuda y la privacidad |

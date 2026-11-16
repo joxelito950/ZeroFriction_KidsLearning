@@ -394,11 +394,11 @@
   "@difficultyImpossibleHint": {
     "description": "Shown under the options when Impossible is selected: less time and no helps. Read by parents."
   },
-  "parentsZoneNoTimeTitle": "Play without time",
+  "parentsZoneNoTimeTitle": "Play without a time limit",
   "@parentsZoneNoTimeTitle": {
     "description": "Switch title: play every game without a time limit. Read by parents."
   },
-  "parentsZoneNoTimeHint": "No timer and no dropping down a level. The same stars are still available.",
+  "parentsZoneNoTimeHint": "No timer and no moving down a level. The same stars are still available.",
   "@parentsZoneNoTimeHint": {
     "description": "Explanation under the switch: no time bar, the child never goes down a level, and the same stars can be earned. Read by parents."
   },
@@ -558,7 +558,7 @@
   "@medalNextRoundMessage": {
     "description": "One line under the bronze or silver medal title: the next round is a bigger challenge."
   },
-  "roundEasierMessage": "Time's up! Let's try a calmer challenge.",
+  "roundEasierMessage": "Time's up! Let's try an easier challenge.",
   "@roundEasierMessage": {
     "description": "Shown when time runs out and the game moves back to the previous, easier round (HU-037 R10). Helpful, never a punishment."
   },
@@ -566,7 +566,7 @@
   "@parentsZoneRoundsLabel": {
     "description": "Label above the per-game round choice in the Parents zone (HU-037): each game has three rounds (Easy, Normal, Impossible)."
   },
-  "parentsZoneRoundsHint": "Each game moves up a round by itself when it is completed. Changing it keeps stars and medals.",
+  "parentsZoneRoundsHint": "Each game automatically moves to the next round when you complete it. Changing the round keeps your stars and medals.",
   "@parentsZoneRoundsHint": {
     "description": "One line under the label: games move up a round by themselves; changing it keeps stars and medals."
   },

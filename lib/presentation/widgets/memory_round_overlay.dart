@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../domain/memory/memory_ladder.dart';
@@ -155,21 +157,34 @@ class _OverlayCard extends StatelessWidget {
   final double borderWidth;
   final List<Widget> children;
 
+  static const double _margin = 24;
+  static const double _maxWidth = 420;
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 420),
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32),
-            color: color,
-            border: Border.all(color: borderColor, width: borderWidth),
-            boxShadow: [BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.2), blurRadius: 24, offset: const Offset(0, 12))],
+    // Si no cabe (teléfono en horizontal, textos largos), el aviso se reduce
+    // en lugar de desplazarse: desaparece solo y el niño no lo va a mover, así
+    // que las estrellas nunca deben quedar fuera de la pantalla.
+    return LayoutBuilder(
+      builder: (context, constraints) => Padding(
+        padding: const EdgeInsets.all(_margin),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Container(
+              width: math.min(_maxWidth, constraints.maxWidth - 2 * _margin),
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(32),
+                color: color,
+                border: Border.all(color: borderColor, width: borderWidth),
+                boxShadow: [
+                  BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.2), blurRadius: 24, offset: const Offset(0, 12)),
+                ],
+              ),
+              child: Column(mainAxisSize: MainAxisSize.min, children: children),
+            ),
           ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: children),
         ),
       ),
     );
