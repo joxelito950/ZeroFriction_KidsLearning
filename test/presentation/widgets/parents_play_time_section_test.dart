@@ -113,6 +113,20 @@ void main() {
     expect(cubit.state.limitMinutes, 25);
   });
 
+  // Visto en el moto g55 (2026-11-16): el teclado tapaba «Guardar».
+  testWidgets('Save stays above the keyboard', (tester) async {
+    await pumpPage(tester);
+    await tap(tester, 'play-time-limit-custom');
+    await tester.enterText(custom(), '25');
+    tester.view.viewInsets = const FakeViewPadding(bottom: 900);
+    addTearDown(tester.view.resetViewInsets);
+    await tester.pump();
+
+    final double keyboardTop = tester.view.physicalSize.height / tester.view.devicePixelRatio - 900 / tester.view.devicePixelRatio;
+    expect(tester.getBottomLeft(saveButton()).dy, lessThanOrEqualTo(keyboardTop));
+    expect(saveButton().hitTestable(), findsOneWidget);
+  });
+
   testWidgets('only digits can be typed', (tester) async {
     await pumpPage(tester);
     await tap(tester, 'play-time-limit-custom');

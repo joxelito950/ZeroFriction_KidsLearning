@@ -112,9 +112,11 @@ class ParentsSettingPage extends StatelessWidget {
             child: ListView(padding: const EdgeInsets.all(16), children: [child]),
           ),
           bottomNavigationBar: editable
+              // Por encima del teclado: al escribir un límite propio, «Guardar»
+              // quedaba tapado (visto en el moto g55 el 2026-11-16).
               ? SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + MediaQuery.viewInsetsOf(context).bottom),
                     child: FilledButton.icon(
                       key: const ValueKey<String>('parents-setting-save'),
                       onPressed: dirty ? () => _save(context) : null,

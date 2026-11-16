@@ -26,6 +26,12 @@ class AdultSessionGuard extends StatefulWidget {
 }
 
 class _AdultSessionGuardState extends State<AdultSessionGuard> with WidgetsBindingObserver {
+  /// Los guardianes abiertos: la Zona de Padres y la pantalla de configuración
+  /// que haya encima (HU-046). Un toque en cualquiera reinicia el minuto de
+  /// todos; si no, al volver de una pantalla la Zona de Padres se cerraba con
+  /// el tiempo que le quedaba (visto en el moto g55 el 2026-11-16).
+  static final Set<_AdultSessionGuardState> _open = {};
+
   Timer? _idle;
   bool _closed = false;
   PlayTimeCubit? _playTime;
@@ -35,11 +41,13 @@ class _AdultSessionGuardState extends State<AdultSessionGuard> with WidgetsBindi
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _playTime = context.read<PlayTimeCubit?>()?..enterAdultArea();
+    _open.add(this);
     _restartIdle();
   }
 
   @override
   void dispose() {
+    _open.remove(this);
     _playTime?.leaveAdultArea();
     _idle?.cancel();
     WidgetsBinding.instance.removeObserver(this);
@@ -54,19 +62,13 @@ class _AdultSessionGuardState extends State<AdultSessionGuard> with WidgetsBindi
 
   void _restartIdle() {
     _idle?.cancel();
-    _idle = Timer(widget.inactivity, _closeIfIdle);
+    _idle = Timer(widget.inactivity, _close);
   }
 
-  /// Con una pantalla de configuración abierta encima (HU-046), los toques van
-  /// a ella y la vigila su propio guardián: esta espera a que vuelva a estar
-  /// delante en lugar de cerrar la sesión mientras el adulto trabaja.
-  void _closeIfIdle() {
-    if (!mounted) return;
-    if (ModalRoute.of(context)?.isCurrent == false) {
-      _restartIdle();
-      return;
+  static void _onActivity() {
+    for (final _AdultSessionGuardState guard in _open) {
+      guard._restartIdle();
     }
-    _close();
   }
 
   void _close() {
@@ -81,7 +83,7 @@ class _AdultSessionGuardState extends State<AdultSessionGuard> with WidgetsBindi
     // Cualquier toque en la pantalla cuenta como actividad.
     return Listener(
       behavior: HitTestBehavior.translucent,
-      onPointerDown: (_) => _restartIdle(),
+      onPointerDown: (_) => _onActivity(),
       child: widget.child,
     );
   }
