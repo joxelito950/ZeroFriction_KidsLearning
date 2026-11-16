@@ -117,5 +117,6 @@
   "oddOneOutTitle": "무엇이 다를까요?",
   "oddOneOutInstructions": "다른 것과 다른 하나를 눌러요.",
   "menuOddOneOutSubtitle": "다른 하나를 찾아요",
-  "oddOneOutObjectSemantics": "그림 {symbol}"
+  "oddOneOutObjectSemantics": "그림 {symbol}",
+  "oddOneOutVictoryMessage": "다른 하나를 모두 찾았어요."
 }

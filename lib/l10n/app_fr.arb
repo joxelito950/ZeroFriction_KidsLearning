@@ -117,5 +117,6 @@
   "oddOneOutTitle": "Lequel est différent ?",
   "oddOneOutInstructions": "Touche celui qui n'est pas comme les autres.",
   "menuOddOneOutSubtitle": "Trouve l'intrus",
-  "oddOneOutObjectSemantics": "Image {symbol}"
+  "oddOneOutObjectSemantics": "Image {symbol}",
+  "oddOneOutVictoryMessage": "Tu as trouvé tous les intrus."
 }

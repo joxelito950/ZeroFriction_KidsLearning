@@ -117,5 +117,6 @@
   "oddOneOutTitle": "どれが ちがう？",
   "oddOneOutInstructions": "ほかと ちがう ものを タッチしよう。",
   "menuOddOneOutSubtitle": "ちがうものを さがそう",
-  "oddOneOutObjectSemantics": "え {symbol}"
+  "oddOneOutObjectSemantics": "え {symbol}",
+  "oddOneOutVictoryMessage": "ちがうものを ぜんぶ みつけたよ。"
 }

@@ -11,10 +11,14 @@ import 'round_style.dart';
 /// sola. Es igual de alegre con cualquier número de estrellas; las que faltan se
 /// ven como contorno suave. Al conseguir la insignia, la celebración es dorada.
 class MemoryCelebration extends StatelessWidget {
-  const MemoryCelebration({super.key, required this.stars, required this.badgeEarned, this.medal});
+  const MemoryCelebration({super.key, required this.stars, required this.badgeEarned, this.medal, this.message});
 
   final int stars;
   final bool badgeEarned;
+
+  /// Frase propia del juego al ganar un nivel (¿Cuál es diferente? no busca
+  /// parejas). Sin ella, la de la memoria.
+  final String? message;
 
   /// Ronda completada (HU-037): bronce, plata u oro. Sin ella, la insignia de
   /// siempre.
@@ -49,7 +53,7 @@ class MemoryCelebration extends StatelessWidget {
         Text(
           round != null
               ? RoundStyle.medalMessage(l10n, round)
-              : (badgeEarned ? l10n.memoryBadgeMessage : l10n.victoryMessage),
+              : (badgeEarned ? l10n.memoryBadgeMessage : message ?? l10n.victoryMessage),
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),

@@ -117,5 +117,6 @@
   "oddOneOutTitle": "Qual é diferente?",
   "oddOneOutInstructions": "Toque no que não é como os outros.",
   "menuOddOneOutSubtitle": "Encontre o diferente",
-  "oddOneOutObjectSemantics": "Desenho {symbol}"
+  "oddOneOutObjectSemantics": "Desenho {symbol}",
+  "oddOneOutVictoryMessage": "Você encontrou todos os diferentes."
 }
