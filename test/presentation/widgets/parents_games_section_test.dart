@@ -13,7 +13,7 @@ import 'package:toddler_logic/presentation/widgets/parents_games_section.dart';
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
 
-/// Sección «Juegos» de la Zona de Padres (HU-030, HU-016 y la ronda de cada juego de HU-037).
+/// Pantalla «Juegos» de la Zona de Padres (HU-046) (HU-030, HU-016 y la ronda de cada juego de HU-037).
 void main() {
   setUpAll(registerMemoryGameFallbacks);
 
@@ -36,12 +36,22 @@ void main() {
         .thenAnswer((_) async => UserProfile(isPremium: value, isSoundEnabled: true));
   }
 
+  /// La pantalla «Juegos» (HU-046) con el cubit que le da la Zona de Padres.
   Future<void> pumpSection(WidgetTester tester) async {
-    await tester.pumpWidget(localizedApp(
+    final cubit = GameSettingsCubit(repository: repository);
+    addTearDown(cubit.close);
+    await cubit.load();
+    await pumpSettingPage(
+      tester,
+      BlocProvider<GameSettingsCubit>.value(value: cubit, child: const ParentsGamesPage()),
       repository: repository,
-      home: const Scaffold(body: SingleChildScrollView(child: ParentsGamesSection())),
-    ));
+    );
+  }
+
+  Future<void> save(WidgetTester tester) async {
+    await tester.tap(find.byKey(const ValueKey<String>('parents-setting-save')));
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
   }
 
   ChoiceChip chip(WidgetTester tester, GameId game, GameDifficulty round) =>
@@ -72,6 +82,9 @@ void main() {
     await tester.pump();
 
     expect(chip(tester, GameId.memory, GameDifficulty.easy).selected, isTrue);
+    // HU-046 R2: nada se aplica hasta «Guardar».
+    verifyNever(() => repository.saveGameProgress(any(), any()));
+    await save(tester);
     final GameProgress saved =
         verify(() => repository.saveGameProgress(GameId.memory, captureAny())).captured.single as GameProgress;
     expect(saved.position.round, GameDifficulty.easy);
@@ -106,10 +119,14 @@ void main() {
     await pumpSection(tester);
 
     expect(find.textContaining(l10n.parentsZonePremiumOnly), findsNothing);
+    await tester.ensureVisible(find.byKey(const ValueKey<String>('games-no-time')));
+    await tester.pump();
     await tester.tap(find.byKey(const ValueKey<String>('games-no-time')));
     await tester.pump();
 
     expect(noTime(tester).value, isTrue);
+    expect(stored.timerDisabled, isFalse);
+    await save(tester);
     expect(stored.timerDisabled, isTrue);
   });
 
@@ -129,20 +146,44 @@ void main() {
     expect(tester.widget<SwitchListTile>(keep).onChanged, isNotNull);
     expect(find.text(l10n.parentsZoneKeepStarsHint), findsOneWidget);
 
+    await tester.ensureVisible(keep);
+    await tester.pump();
     await tester.tap(keep);
     await tester.pump();
+    await save(tester);
     expect(stored.keepStars, isTrue);
     expect(stored.starDecayResumedAt, isNull);
 
+    await pumpSection(tester);
+    await tester.ensureVisible(keep);
+    await tester.pump();
     await tester.tap(keep);
     await tester.pump();
+    await save(tester);
     expect(stored.keepStars, isFalse);
     expect(stored.starDecayResumedAt, isNotNull);
   });
 
-  testWidgets('shows nothing without a repository', (tester) async {
-    await tester.pumpWidget(localizedApp(home: const Scaffold(body: ParentsGamesSection())));
-    expect(find.byKey(const ValueKey<String>('parents-zone-games')), findsNothing);
+  testWidgets('Save is off until something changes, and going back to the same value turns it off again', (tester) async {
+    await pumpSection(tester);
+    FilledButton button() => tester.widget<FilledButton>(find.byKey(const ValueKey<String>('parents-setting-save')));
+    expect(button().onPressed, isNull);
+
+    await tester.tap(find.byKey(const ValueKey<String>('round-memory-normal')));
+    await tester.pump();
+    expect(button().onPressed, isNotNull);
+
+    await tester.tap(find.byKey(const ValueKey<String>('round-memory-easy')));
+    await tester.pump();
+    expect(button().onPressed, isNull);
+  });
+
+  testWidgets('the summary of the row lists the round of each game', (tester) async {
+    expect(
+      ParentsGamesTexts.summary(l10n, const GameSettingsState()),
+      '${l10n.menuMemoryTitle}: ${l10n.difficultyEasy} · ${l10n.shadowsGameTitle}: ${l10n.difficultyEasy} · '
+      '${l10n.oddOneOutTitle}: ${l10n.difficultyEasy}',
+    );
   });
 
   group('GameSettingsCubit', () {
@@ -182,9 +223,19 @@ void main() {
     });
   });
 
-  testWidgets('the section uses its own cubit from the repository', (tester) async {
-    await pumpSection(tester);
-    expect(tester.element(find.byKey(const ValueKey<String>('parents-zone-games'))).read<GameSettingsCubit>(),
-        isA<GameSettingsCubit>());
+  testWidgets('settings read after the page opened become the starting draft', (tester) async {
+    when(() => repository.readGameProgress(GameId.shadows))
+        .thenAnswer((_) async => progressAt(3, round: GameDifficulty.normal));
+    final cubit = GameSettingsCubit(repository: repository);
+    await pumpSettingPage(
+      tester,
+      BlocProvider<GameSettingsCubit>.value(value: cubit, child: const ParentsGamesPage()),
+      repository: repository,
+    );
+    expect(chip(tester, GameId.shadows, GameDifficulty.easy).selected, isTrue);
+    await cubit.load();
+    await tester.pump();
+    expect(chip(tester, GameId.shadows, GameDifficulty.normal).selected, isTrue);
+    await cubit.close();
   });
 }

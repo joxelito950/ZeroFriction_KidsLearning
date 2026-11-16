@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-16). Nace de HU-034 P1 |
+| **Estado** | **Desarrollada** (2026-11-16, rama `feature/hu-046-parents-rows`); falta verla en el moto g55. Nace de HU-034 P1 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P1 (es la entrega 2 de HU-034) |
 | **Tamaño** | M (unos 2 días) |
@@ -75,7 +75,16 @@ Una lista de filas. Cada fila tiene icono, título y **la opción elegida** en u
 | Dominio y datos | Sin cambios |
 | Tests | Los de widget de cada sección cambian para abrir su pantalla; nuevos para Guardar, Descartar y el cierre por inactividad |
 
-Al cerrarla se registra la decisión (Zona de Padres en un nivel, con Guardar) en la sección 8 de la especificación.
+Decisión registrada como **D-041** en la sección 8 de la especificación.
+
+## 6.1 Desarrollo (2026-11-16)
+
+- `ParentsSettingRow` y `ParentsSettingPage` (`widgets/parents_setting_page.dart`): la fila con resumen y la pantalla con «Guardar» (activo solo con cambios), la pregunta al salir con cambios (Guardar · Descartar) y su propio `AdultSessionGuard`. El guardián de la Zona de Padres ya no cierra la sesión por inactividad mientras hay una pantalla encima (la vigila la suya).
+- Filas: Idioma (nombre propio del idioma), Sonido (interruptor en la fila), Juegos (ronda de cada juego), Tiempo de juego («60 min al día» o «Sin límite»), Fijar pantalla, Ayuda y comentarios, y Privacidad, que se sigue desplegando en la lista. «Su progreso» llega con la entrega 3 de HU-034.
+- Juegos y Tiempo de juego trabajan sobre un borrador; un límite personalizado fuera de rango no se guarda y la pantalla sigue abierta. El borrador sigue al valor guardado mientras el adulto no haya tocado nada.
+- «15 minutos más» arriba de la Zona de Padres, solo con el límite de hoy alcanzado.
+- 6 textos nuevos en 9 idiomas (Guardar, Descartar, ¿Guardar los cambios?, «{minutes} min al día» y los resúmenes de Fijar pantalla y Comentarios).
+- Tests: filas y orden, navegación de un nivel, borrador y «Guardar», salir con cambios, sesión que no se cierra mientras se usa una pantalla y se cierra al minuto sin tocar, y diseño de la lista y de cada pantalla en 9 idiomas × 4 teléfonos × texto 1,0 y 2,0.
 
 ## 7. Preguntas
 

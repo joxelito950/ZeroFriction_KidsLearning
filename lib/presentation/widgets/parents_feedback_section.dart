@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/feedback/feedback_email.dart';
 import '../../l10n/app_localizations.dart';
+import 'parents_setting_page.dart';
 
-/// Tarjeta «Ayuda y comentarios» de la Zona de Padres (HU-032): abre la app de
+/// Tarjeta «Ayuda y comentarios» (HU-032), en su pantalla de la Zona de Padres
+/// (HU-046): abre la app de
 /// correo con un correo preparado y sin enviar. Si no hay app de correo, o el
 /// canal no está disponible, muestra la dirección para copiarla (R6).
 class ParentsFeedbackSection extends StatefulWidget {
@@ -68,19 +70,6 @@ class _ParentsFeedbackSectionState extends State<ParentsFeedbackSection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const Icon(Icons.mail_outline_rounded),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    l10n.parentsFeedbackTitle,
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
             Text(l10n.parentsFeedbackIntro, style: theme.textTheme.bodyMedium),
             const SizedBox(height: 12),
             FilledButton.icon(
@@ -116,4 +105,15 @@ class _ParentsFeedbackSectionState extends State<ParentsFeedbackSection> {
       ),
     );
   }
+}
+
+/// Pantalla «Ayuda y comentarios» (HU-046): sin «Guardar»; el botón abre el correo.
+class ParentsFeedbackPage extends StatelessWidget {
+  const ParentsFeedbackPage({super.key});
+
+  @override
+  Widget build(BuildContext context) => ParentsSettingPage(
+        title: AppLocalizations.of(context).parentsFeedbackTitle,
+        child: const ParentsFeedbackSection(),
+      );
 }

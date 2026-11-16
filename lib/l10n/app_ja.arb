@@ -118,5 +118,11 @@
   "oddOneOutInstructions": "ほかと ちがう ものを タッチしよう。",
   "menuOddOneOutSubtitle": "ちがうものを さがそう",
   "oddOneOutObjectSemantics": "え {symbol}",
-  "oddOneOutVictoryMessage": "どのボードでも、ちがうものを見つけたね！"
+  "oddOneOutVictoryMessage": "どのボードでも、ちがうものを見つけたね！",
+  "parentsSave": "保存",
+  "parentsDiscard": "破棄",
+  "parentsUnsavedTitle": "変更を保存しますか？",
+  "parentsZonePlayTimePerDay": "1日{minutes}分",
+  "parentsZonePinSummary": "子どもがアプリから出ないようにする",
+  "parentsFeedbackSummary": "メールでお知らせください"
 }

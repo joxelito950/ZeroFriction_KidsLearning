@@ -595,5 +595,35 @@
   "oddOneOutVictoryMessage": "You found every odd one out.",
   "@oddOneOutVictoryMessage": {
     "description": "Line under the celebration title when a level of Odd one out is won (the memory game says 'You found all the pairs'). The child found the different object on every board."
+  },
+  "parentsSave": "Save",
+  "@parentsSave": {
+    "description": "Button of a parents zone settings screen (HU-046): applies the changes and goes back to the parents zone. Also in the unsaved-changes dialog."
+  },
+  "parentsDiscard": "Discard",
+  "@parentsDiscard": {
+    "description": "Button of the unsaved-changes dialog (HU-046): leaves the settings screen without applying the changes."
+  },
+  "parentsUnsavedTitle": "Save the changes?",
+  "@parentsUnsavedTitle": {
+    "description": "Dialog shown when the adult leaves a parents zone settings screen with changes that were not saved (HU-046 R3)."
+  },
+  "parentsZonePlayTimePerDay": "{minutes} min a day",
+  "@parentsZonePlayTimePerDay": {
+    "description": "Summary of the daily limit in the \"Play time\" row of the parents zone (HU-046), for example \"60 min a day\".",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "parentsZonePinSummary": "Keep your child inside the app",
+  "@parentsZonePinSummary": {
+    "description": "Summary under \"Keep the app open\" (screen pinning) in the parents zone list (HU-046). Short."
+  },
+  "parentsFeedbackSummary": "Write to us by email",
+  "@parentsFeedbackSummary": {
+    "description": "Summary under \"Help and feedback\" in the parents zone list (HU-046). Short."
   }
 }

@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/app_language.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
+import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/parental/parental_gate.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
@@ -267,35 +268,83 @@ void main() {
             }
           });
 
-          testWidgets('parents zone fits', (tester) async {
+          // HU-046: la lista de filas y cada pantalla de configuración caben, con
+          // «Guardar» siempre al alcance.
+          testWidgets('parents zone rows and pages fit', (tester) async {
             _usePhone(tester, phone, textScale);
-            when(() => repository.readParentalSettings())
-                .thenAnswer((_) async => ParentalSettings(dailyLimitMinutes: 25));
-            await tester.pumpWidget(
-              localizedApp(locale: locale, repository: repository, home: const ParentsZoneScreen()),
-            );
+            when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings(
+                  dailyLimitMinutes: 25,
+                  playTime: DailyPlayTime(day: DateTime.now(), played: const Duration(minutes: 25)),
+                ));
+            await tester.pumpWidget(localizedApp(
+              locale: locale,
+              repository: repository,
+              home: Builder(
+                builder: (context) => TextButton(
+                  onPressed: () => Navigator.of(context)
+                      .push(MaterialPageRoute<void>(builder: (_) => const ParentsZoneScreen())),
+                  child: const Text('open zone'),
+                ),
+              ),
+            ));
+            await tester.tap(find.text('open zone'));
             await tester.pump();
-            // El campo de minutos tiene su propio Scrollable: se desplaza la lista.
-            final Finder list = find.byType(Scrollable).first;
+            await tester.pump(const Duration(milliseconds: 500));
 
             expect(find.text(l10n.parentsZoneTitle).hitTestable(), findsOneWidget);
             expect(find.byKey(const ValueKey<String>('parents-zone-back-to-menu')).hitTestable(), findsOneWidget);
-            // La lista solo construye lo que se ve: se desplaza hasta el final.
-            for (final code in AppLanguage.supported) {
-              await tester.scrollUntilVisible(find.byKey(ValueKey<String>('language-$code')), 100, scrollable: list);
-            }
-            // Tiempo de juego (HU-009) con un límite propio: campo y tiempo extra a la vista.
-            for (final key in ['play-time-limit-custom', 'play-time-custom-apply', 'play-time-extra']) {
-              await tester.scrollUntilVisible(find.byKey(ValueKey<String>(key)), 100, scrollable: list);
+            // Límite alcanzado: «15 minutos más» arriba.
+            expect(find.byKey(const ValueKey<String>('play-time-extra')).hitTestable(), findsOneWidget);
+
+            Future<void> reach(Finder target) async {
+              await tester.scrollUntilVisible(target, 100, scrollable: find.byType(Scrollable).first);
+              await tester.ensureVisible(target);
               await tester.pump();
-              expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget);
+              expect(target.hitTestable(), findsOneWidget, reason: '$target');
             }
-            await tester.scrollUntilVisible(find.text(l10n.parentsZonePinNote), 200, scrollable: list);
-            await tester.pump(); // ensureVisible necesita un fotograma más para verse
-            expect(find.text(l10n.parentsZonePinNote).hitTestable(), findsOneWidget);
-            await tester.scrollUntilVisible(find.text(l10n.parentsZonePrivacyIntro), 200, scrollable: list);
-            await tester.pump();
-            expect(find.text(l10n.parentsZonePrivacyTitle).hitTestable(), findsOneWidget);
+
+            Future<void> openRow(String name) async {
+              final Finder row = find.byKey(ValueKey<String>('parents-row-$name'));
+              await reach(row);
+              await tester.tap(row);
+              await tester.pump();
+              await tester.pump(const Duration(milliseconds: 500));
+            }
+
+            Future<void> back() async {
+              tester.state<NavigatorState>(find.byType(Navigator)).maybePop();
+              await tester.pump();
+              await tester.pump(const Duration(milliseconds: 500));
+            }
+
+            await openRow('language');
+            for (final code in AppLanguage.supported) {
+              await reach(find.byKey(ValueKey<String>('language-$code')));
+            }
+            await back();
+
+            await openRow('games');
+            await reach(find.byKey(const ValueKey<String>('games-keep-stars')));
+            expect(find.byKey(const ValueKey<String>('parents-setting-save')).hitTestable(), findsOneWidget);
+            await back();
+
+            // Tiempo de juego con un límite propio: el campo, el rango y «Guardar».
+            await openRow('play-time');
+            for (final key in ['play-time-custom-field', 'play-time-custom-range', 'play-time-today']) {
+              await reach(find.byKey(ValueKey<String>(key)));
+            }
+            expect(find.byKey(const ValueKey<String>('parents-setting-save')).hitTestable(), findsOneWidget);
+            await back();
+
+            await openRow('pin');
+            await reach(find.text(l10n.parentsZonePinNote));
+            await back();
+
+            await openRow('feedback');
+            await reach(find.byKey(const ValueKey<String>('parents-zone-feedback-send')));
+            await back();
+
+            await reach(find.byKey(const ValueKey<String>('parents-zone-privacy-toggle')));
           });
 
           // HU-007 criterio 12: el nivel 7 (el más grande sin pago) entra entero

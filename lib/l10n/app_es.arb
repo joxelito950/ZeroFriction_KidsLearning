@@ -118,5 +118,11 @@
   "oddOneOutInstructions": "Toca el que no es como los demás.",
   "menuOddOneOutSubtitle": "Busca el diferente",
   "oddOneOutObjectSemantics": "Dibujo {symbol}",
-  "oddOneOutVictoryMessage": "¡Encontraste el objeto diferente en cada tablero!"
+  "oddOneOutVictoryMessage": "¡Encontraste el objeto diferente en cada tablero!",
+  "parentsSave": "Guardar",
+  "parentsDiscard": "Descartar",
+  "parentsUnsavedTitle": "¿Guardar los cambios?",
+  "parentsZonePlayTimePerDay": "{minutes} min al día",
+  "parentsZonePinSummary": "Que el niño no salga de la app",
+  "parentsFeedbackSummary": "Escríbenos por correo"
 }

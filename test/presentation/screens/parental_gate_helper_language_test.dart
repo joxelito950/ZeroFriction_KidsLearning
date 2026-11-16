@@ -218,6 +218,8 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('parental-key-accept')));
     await tester.pumpAndSettle();
 
+    await tester.tap(find.byKey(const ValueKey<String>('parents-row-language')));
+    await tester.pumpAndSettle();
     final Finder spanish = find.byKey(const ValueKey<String>('language-es'));
     await tester.ensureVisible(spanish);
     await tester.tap(spanish);
