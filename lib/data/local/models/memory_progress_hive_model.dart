@@ -5,6 +5,7 @@ import '../../../domain/progress/game_progress.dart';
 import '../../../domain/progress/level_record.dart';
 import '../../../domain/progress/round_ladder.dart';
 import '../../../domain/settings/game_difficulty.dart';
+import 'stuck_fields.dart';
 
 part 'memory_progress_hive_model.g.dart';
 
@@ -24,6 +25,8 @@ class MemoryProgressHiveModel {
     this.bestStarsByRoundLevel,
     this.achievedAtByRoundLevel,
     this.tutorialFalls,
+    this.stuckLevel,
+    this.stuckFalls,
   });
 
   /// Guarda el progreso con rondas (HU-037). [currentLevel] es el nivel dentro
@@ -41,6 +44,8 @@ class MemoryProgressHiveModel {
       bestStarsByRoundLevel: {for (final entry in progress.records.entries) entry.key.key: entry.value.bestStars},
       achievedAtByRoundLevel: {for (final entry in progress.records.entries) entry.key.key: entry.value.achievedAt},
       tutorialFalls: progress.position.tutorialFalls,
+      stuckLevel: progress.stuckLevel,
+      stuckFalls: progress.stuckFalls,
     );
   }
 
@@ -67,6 +72,12 @@ class MemoryProgressHiveModel {
   final Map<int, DateTime>? achievedAtByRoundLevel;
   @HiveField(9)
   final int? tutorialFalls;
+
+  // HU-034 R4: nivel donde se atasca y veces que ha vuelto a bajar de él.
+  @HiveField(10)
+  final int? stuckLevel;
+  @HiveField(11)
+  final int? stuckFalls;
 
   /// El progreso con rondas (HU-037). Lo guardado antes se migra a Normal.
   GameProgress toGameProgress() {
@@ -97,6 +108,8 @@ class MemoryProgressHiveModel {
             RoundLevel.fromKey(entry.key): LevelRecord(bestStars: entry.value, achievedAt: achievedAt),
       },
       lastPlayedAt: lastPlayedAt,
+      stuckLevel: stuckFallsOrZero(stuckLevel, stuckFalls) == 0 ? null : stuckLevel,
+      stuckFalls: stuckFallsOrZero(stuckLevel, stuckFalls),
     );
   }
 

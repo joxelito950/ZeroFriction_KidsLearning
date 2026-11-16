@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 
 import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/parental/daily_play_time.dart';
+import '../../../domain/parental/play_history.dart';
+import '../../../domain/progress/game_progress.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
 
 /// Estado del tiempo de juego diario (HU-009).
@@ -13,6 +15,7 @@ final class PlayTimeState {
     this.limitMinutes,
     this.boardInProgress = false,
     this.inAdultArea = false,
+    this.history,
   });
 
   /// Lo jugado hoy y el tiempo extra dado.
@@ -27,6 +30,10 @@ final class PlayTimeState {
   /// Un adulto está en el desafío o en la Zona de Padres: no cuenta (R2).
   final bool inAdultArea;
 
+  /// Tiempo por día y por juego de hoy y los 5 días anteriores (HU-034 R3);
+  /// `null` hasta que se lee. Cuenta lo mismo que [today].
+  final PlayHistory? history;
+
   /// Ya se jugó todo lo permitido hoy.
   bool get limitReached => today.isOver(limitMinutes);
 
@@ -39,12 +46,14 @@ final class PlayTimeState {
     int? Function()? limitMinutes,
     bool? boardInProgress,
     bool? inAdultArea,
+    PlayHistory? history,
   }) {
     return PlayTimeState(
       today: today ?? this.today,
       limitMinutes: limitMinutes == null ? this.limitMinutes : limitMinutes(),
       boardInProgress: boardInProgress ?? this.boardInProgress,
       inAdultArea: inAdultArea ?? this.inAdultArea,
+      history: history ?? this.history,
     );
   }
 
@@ -54,10 +63,11 @@ final class PlayTimeState {
       other.today == today &&
       other.limitMinutes == limitMinutes &&
       other.boardInProgress == boardInProgress &&
-      other.inAdultArea == inAdultArea;
+      other.inAdultArea == inAdultArea &&
+      other.history == history;
 
   @override
-  int get hashCode => Object.hash(today, limitMinutes, boardInProgress, inAdultArea);
+  int get hashCode => Object.hash(today, limitMinutes, boardInProgress, inAdultArea, history);
 }
 
 /// Mide el tiempo con la app en primer plano, fuera de las pantallas de
@@ -86,6 +96,9 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
   int _adultScreens = 0;
   Duration _unsaved = Duration.zero;
 
+  /// Juego abierto, al que se suma el tiempo (HU-034 R3); `null` en el menú.
+  GameId? _currentGame;
+
   /// Lee el límite y lo jugado hoy, y empieza a contar.
   Future<void> start() async {
     try {
@@ -94,10 +107,18 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
       addError(error, stackTrace);
     }
     if (isClosed) return;
+    PlayHistory history = PlayHistory(const []);
+    try {
+      history = await _repository.readPlayHistory(_now());
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+    }
+    if (isClosed) return;
     final DateTime now = _now();
     emit(state.copyWith(
       today: _settings.playTime?.on(now) ?? DailyPlayTime.startOf(now),
       limitMinutes: () => _settings.dailyLimitMinutes,
+      history: history,
     ));
     _started = true;
     _updateTicker();
@@ -127,6 +148,10 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
     _adultScreens--;
     if (_adultScreens == 0) _emitAndUpdate(state.copyWith(inAdultArea: false));
   }
+
+  /// El juego que se abre (o `null` al volver al menú): su tiempo se guarda
+  /// aparte en el historial (HU-034 R3).
+  void setCurrentGame(GameId? game) => _currentGame = game;
 
   /// El juego avisa de si hay un tablero empezado (R4).
   void setBoardInProgress(bool inProgress) {
@@ -180,7 +205,10 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
       return;
     }
     _unsaved += tick;
-    emit(state.copyWith(today: state.today.add(tick, now)));
+    emit(state.copyWith(
+      today: state.today.add(tick, now),
+      history: state.history?.add(_currentGame, tick, now),
+    ));
     if (_unsaved >= saveEvery) unawaited(_save());
   }
 
@@ -189,7 +217,9 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
     _unsaved = Duration.zero;
     final int? limit = state.limitMinutes;
     final DailyPlayTime today = state.today;
+    final PlayDay? day = state.history?.dayAt(today.day);
     try {
+      if (day != null && day.total > Duration.zero) await _repository.savePlayDay(day);
       // Solo sus dos campos: la dificultad y «Jugar sin tiempo» los guarda la
       // sección «Juegos» (HU-030) y no se deben pisar.
       _settings = await _repository.updateParentalSettings(

@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:toddler_logic/domain/parental/play_history.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
@@ -25,6 +26,8 @@ void registerMemoryGameFallbacks() {
   registerFallbackValue(GameProgress.initial());
   registerFallbackValue(GameId.memory);
   registerFallbackValue((ParentalSettings current) => current);
+  registerFallbackValue(DateTime(2026));
+  registerFallbackValue(PlayDay(day: DateTime(2026)));
 }
 
 void stubPersistenceRepository(MockPersistenceRepository repository) {
@@ -40,6 +43,8 @@ void stubPersistenceRepository(MockPersistenceRepository repository) {
   when(() => repository.saveGameProgress(any(), any())).thenAnswer((_) async {});
   when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings.initial);
   when(() => repository.saveParentalSettings(any())).thenAnswer((_) async {});
+  when(() => repository.readPlayHistory(any())).thenAnswer((_) async => PlayHistory(const []));
+  when(() => repository.savePlayDay(any())).thenAnswer((_) async {});
   // Como el repositorio real: lee lo guardado, aplica el cambio y lo guarda.
   when(() => repository.updateParentalSettings(any())).thenAnswer((invocation) async {
     final update = invocation.positionalArguments.single as ParentalSettings Function(ParentalSettings);
