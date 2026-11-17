@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (2026-11-17). Corrección reportada por el dueño en el moto g55 |
+| **Estado** | **Lista** (2026-11-17): recomendaciones aceptadas. Se diseña ya para las **8 medallas** de HU-051 |
 | **Épica** | E1 · Juegos (progresión y recompensas) |
 | **Prioridad** | **P1** (corrección visible en la prueba cerrada) |
 | **Tamaño** | S (1 día) |
@@ -35,7 +35,8 @@ Una **medalla propia** (`MedalBadge`), dibujada por la app, que se distingue por
 - El oro pasa a ser **claro y luminoso** (ámbar con borde dorado) y el bronce **oscuro y rojizo**: la diferencia de luminosidad hace que se distingan incluso en gris.
 - El número de estrellas es la señal que no depende del color (accesibilidad) y prepara HU-051.
 - La misma `MedalBadge` en el menú, la celebración (sobre el pecho del niño, HU-049), los chips de la Zona de Padres y «Su progreso» (HU-034).
-- Solo colores de la paleta y sus transparencias (C2): no hace falta un color nuevo.
+- Solo colores de la paleta y sus transparencias (C2): no hace falta un color nuevo para bronce, plata y oro.
+- **Con HU-051 (8 medallas):** `MedalBadge` recibe la medalla (no la ronda de 3) y admite las 8: bronce, plata y oro como metales con 1, 2 y 3 estrellas; rubí, esmeralda, zafiro, obsidiana y diamante como **gemas facetadas** (forma distinta del disco), cada una con su color (sección 3.4 de HU-051). Se desarrolla junto con HU-051, o antes con las 3 medallas y el parámetro ya preparado.
 
 ## 4. Criterios de aceptación
 
@@ -56,6 +57,6 @@ Una **medalla propia** (`MedalBadge`), dibujada por la app, que se distingue por
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿Medalla dibujada por la app o ilustración PNG como el resto de la identidad? | **Dibujada por la app**: escala a cualquier tamaño, admite las medallas futuras (HU-051) sin pedir una ilustración por cada una y pesa nada |
-| P2 | ¿Estrellas grabadas (1, 2, 3) o letras (B, P, O)? | **Estrellas**: sin texto (los niños no leen y no hay que traducir) |
-| P3 | ¿Se cambia también el color de la ronda en los puntos de nivel? | **Sí**, el oro de los puntos pasa al ámbar con borde dorado, para que ronda y medalla coincidan |
+| P1 | ¿Medalla dibujada por la app o ilustración PNG como el resto de la identidad? | ✅ Decidido (2026-11-17): **dibujada por la app**: escala a cualquier tamaño, admite las medallas futuras (HU-051) sin pedir una ilustración por cada una y pesa nada |
+| P2 | ¿Estrellas grabadas (1, 2, 3) o letras (B, P, O)? | ✅ Decidido (2026-11-17): **estrellas**: sin texto (los niños no leen y no hay que traducir) |
+| P3 | ¿Se cambia también el color de la ronda en los puntos de nivel? | ✅ Decidido (2026-11-17): **sí**, el oro de los puntos pasa al ámbar con borde dorado, para que ronda y medalla coincidan |
