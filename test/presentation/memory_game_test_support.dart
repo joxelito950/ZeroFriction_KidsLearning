@@ -58,7 +58,7 @@ void stubPersistenceRepository(MockPersistenceRepository repository) {
 /// ronda que equivale al juego de antes de las rondas.
 GameProgress progressAt(
   int level, {
-  GameDifficulty round = GameDifficulty.normal,
+  GameDifficulty round = GameDifficulty.gold,
   Set<GameDifficulty> medals = const {},
   Map<RoundLevel, LevelRecord> records = const {},
   DateTime? lastPlayedAt,

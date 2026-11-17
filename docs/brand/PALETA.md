@@ -21,6 +21,8 @@ Fuente de verdad de los colores de la app (decisión **D-032**, 2026-10-27). La 
 | Blanco | `#FFFFFF` | `AppPalette.white` | Texto sobre el azul petróleo y superficies de tarjetas (como en la referencia) |
 | Bronce | `#B0603C` | `AppPalette.medalBronze` | Solo medallas y ronda Fácil (HU-037): cobre rojizo entre el coral y el dorado, para que no se confunda con el oro. 4,58:1 sobre blanco y 4,16:1 sobre crema |
 | Plata | `#748A8E` | `AppPalette.medalSilver` | Solo medallas y ronda Normal (HU-037): gris con el matiz del teal. 3,64:1 sobre blanco y 3,30:1 sobre crema (elemento no textual) |
+| Rubí | `#8E1F3B` | `AppPalette.medalRuby` | **Exclusivo de las medallas** (HU-051, decisión del dueño del 2026-11-17): la medalla de rubí. Nunca en textos, mensajes, botones ni secciones; rubí oscuro, lejos del rojo de un error (C7). Lo comprueba `palette_test` |
+| Esmeralda | `#1E7F5C` | `AppPalette.medalEmerald` | **Exclusivo de las medallas** (HU-051): la medalla de esmeralda. Las mismas restricciones que el rubí |
 
 El teal profundo sigue para marca y texto; el azul petróleo se reserva a acciones, para diferenciar función y color.
 

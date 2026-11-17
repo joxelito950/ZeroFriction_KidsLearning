@@ -65,7 +65,7 @@ void main() {
   Future<void> pumpScreen(
     WidgetTester tester, {
     int level = 1,
-    GameDifficulty round = GameDifficulty.normal,
+    GameDifficulty round = GameDifficulty.gold,
     bool premium = false,
     ParentalSettings? settings,
     Size size = portrait,
@@ -145,7 +145,7 @@ void main() {
     });
 
     testWidgets('Impossible starts without the animation', (tester) async {
-      await pumpScreen(tester, round: GameDifficulty.impossible, waitIntro: false);
+      await pumpScreen(tester, round: GameDifficulty.diamond, waitIntro: false);
       expect(stateOf(tester).phase, ShadowRoundPhase.playing);
     });
   });
@@ -189,10 +189,10 @@ void main() {
       await tester.pump(ShadowBoard.flightDuration + const Duration(milliseconds: 50));
     });
 
-    for (final round in [GameDifficulty.easy, GameDifficulty.impossible]) {
+    for (final round in [GameDifficulty.bronze, GameDifficulty.diamond]) {
       testWidgets('the shadow outline lights up only when the object would snap, in ${round.name} (HU-050 P2)',
           (tester) async {
-        await pumpScreen(tester, round: round, waitIntro: round != GameDifficulty.impossible);
+        await pumpScreen(tester, round: round, waitIntro: round != GameDifficulty.diamond);
         final String object = stateOf(tester).objects.first;
         final Finder almost = find.byKey(ValueKey<String>('shadow-almost-$object'));
 
@@ -293,7 +293,7 @@ void main() {
       await tester.pump(const Duration(seconds: 5));
       expect(stateOf(tester).elapsed, Duration.zero, reason: 'paused in the background');
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      await tester.pump(const Duration(seconds: 51));
+      await tester.pump(const Duration(seconds: 64)); // 63 s del nivel 3 del oro (HU-051 3.2)
 
       expect(find.text('¡Se acabó el tiempo! Probemos con menos dibujos.'), findsOneWidget);
       await tester.pump(ShadowGameCubit.timeUpDuration);
@@ -301,10 +301,10 @@ void main() {
       expect(stateOf(tester).level, 2);
     });
 
-    testWidgets('losing the first timed level goes back to the tutorial calmly (HU-037)', (tester) async {
+    testWidgets('losing the first timed level plays it again, calmly (HU-051 P5)', (tester) async {
       await pumpScreen(tester, level: 2);
       cubitOf(tester).grab(stateOf(tester).objects.first);
-      await tester.pump(const Duration(seconds: 61));
+      await tester.pump(const Duration(seconds: 71));
       expect(find.text('¡Se acabó el tiempo! Empecemos de nuevo, sin prisa.'), findsOneWidget);
       await tester.pump(ShadowGameCubit.timeUpDuration);
       await tester.pump(const Duration(seconds: 2));

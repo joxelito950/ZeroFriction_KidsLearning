@@ -39,7 +39,7 @@ enum ShadowLayout {
 
 /// Cómo se juega la escalera: dificultad, Premium y si hay tiempo (HU-030).
 final class ShadowRules {
-  const ShadowRules({this.difficulty = GameDifficulty.normal, this.premium = false, this.timerDisabled = false});
+  const ShadowRules({this.difficulty = GameDifficulty.gold, this.premium = false, this.timerDisabled = false});
 
   final GameDifficulty difficulty;
   final bool premium;
@@ -54,13 +54,13 @@ final class ShadowRules {
   int get lastLevel => premium ? ShadowLadder.maxLevel : ShadowLadder.maxLevel - 1;
 
   /// En Fácil no hay sombras libres (HU-030 3.2).
-  bool get freeShadows => difficulty != GameDifficulty.easy;
+  bool get freeShadows => difficulty.index >= GameDifficulty.gold.index;
 
   /// La animación de inicio es una ayuda: no va en Imposible (R19, HU-030 R10).
-  bool get startAnimation => difficulty.showsHelps;
+  bool get startAnimation => difficulty.index <= GameDifficulty.ruby.index;
 
   /// En Imposible, la disposición cambia al azar en cada tablero (P14).
-  bool get randomLayout => difficulty == GameDifficulty.impossible;
+  bool get randomLayout => difficulty.index >= GameDifficulty.obsidian.index;
 
   /// Disposición de un tablero nuevo: en Imposible, al azar (P14).
   ShadowLayout layoutFor(Random random) => randomLayout
@@ -69,9 +69,14 @@ final class ShadowRules {
 
   /// Parte de su sombra que el objeto tiene que cubrir para colocarse (P4).
   double get coverageToSnap => switch (difficulty) {
-        GameDifficulty.easy => 0.4,
-        GameDifficulty.normal => 0.6,
-        GameDifficulty.impossible => 0.9,
+        GameDifficulty.bronze => 0.4,
+        GameDifficulty.silver => 0.45,
+        GameDifficulty.gold => 0.5,
+        GameDifficulty.ruby => 0.6,
+        GameDifficulty.emerald => 0.65,
+        GameDifficulty.sapphire => 0.7,
+        GameDifficulty.obsidian => 0.8,
+        GameDifficulty.diamond => 0.9,
       };
 
   @override
@@ -146,9 +151,14 @@ abstract final class ShadowLadder {
 
   /// Límites con los que se llega a los niveles 2 a 8 (tabla 4.3).
   static List<Duration> timeLimitsFor(GameDifficulty difficulty) => switch (difficulty) {
-        GameDifficulty.easy => _seconds(const [90, 80, 70, 60, 50, 40, 30]),
-        GameDifficulty.normal => _seconds(const [60, 50, 45, 40, 35, 30, 25]),
-        GameDifficulty.impossible => _seconds(const [50, 45, 40, 35, 30, 25, 20]),
+        GameDifficulty.bronze => _seconds(const [90, 80, 70, 60, 50, 40, 30]),
+        GameDifficulty.silver => _seconds(const [80, 72, 63, 55, 46, 38, 29]),
+        GameDifficulty.gold => _seconds(const [70, 63, 56, 49, 41, 34, 27]),
+        GameDifficulty.ruby => _seconds(const [65, 58, 52, 45, 38, 32, 25]),
+        GameDifficulty.emerald => _seconds(const [60, 54, 48, 42, 36, 30, 24]),
+        GameDifficulty.sapphire => _seconds(const [55, 50, 44, 39, 33, 28, 22]),
+        GameDifficulty.obsidian => _seconds(const [52, 47, 42, 37, 31, 26, 21]),
+        GameDifficulty.diamond => _seconds(const [50, 45, 40, 35, 30, 25, 20]),
       };
 
   static List<Duration> _seconds(List<int> values) => [for (final value in values) Duration(seconds: value)];

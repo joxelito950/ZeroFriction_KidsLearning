@@ -249,20 +249,20 @@ void main() {
       expect(find.byKey(const ValueKey<String>('memory-star-2-empty')), findsOneWidget);
     });
 
-    testWidgets('beating the last level of Normal gives the silver medal and moves to Impossible (HU-037 R2)',
+    testWidgets('beating the last level of gold gives its medal and moves to ruby, without tutorial (HU-051 R3b)',
         (tester) async {
       await pumpScreen(tester, level: 5);
 
       await winPerfectly(tester);
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.byKey(const ValueKey<String>('medal-celebration-normal')), findsOneWidget);
-      expect(find.text('¡Medalla de plata!'), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('medal-celebration-gold')), findsOneWidget);
+      expect(find.text('¡Medalla de oro!'), findsOneWidget);
       expect(find.text('¡Ronda completada! Ahora, un reto más grande.'), findsOneWidget);
 
       await tester.pump(MemoryLadderCubit.celebrationDuration);
       await tester.pump(const Duration(milliseconds: 500));
-      expect(cardCount(), 4);
+      expect(cardCount(), 6, reason: 'the 2×3 of ruby');
     });
 
     testWidgets('time up shows a kind notice and deals an easier board', (tester) async {
@@ -274,7 +274,7 @@ void main() {
       await tester.pump(const Duration(seconds: 30));
       expect(tester.getSize(fill).width, lessThan(fullWidth));
 
-      await tester.pump(const Duration(seconds: 31));
+      await tester.pump(const Duration(seconds: 76)); // 105 s del nivel 3 del oro
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.byKey(const ValueKey<String>('memory-time-up')), findsOneWidget);
       expect(find.text('¡Se acabó el tiempo! Probemos de nuevo con menos cartas.'), findsOneWidget);
@@ -285,19 +285,19 @@ void main() {
       expect(cardCount(), 6);
     });
 
-    testWidgets('falling to the tutorial twice moves to the easier round (HU-037 R10)', (tester) async {
+    testWidgets('losing the first level twice moves one round down (HU-051 P7)', (tester) async {
       when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => progressAt(2, tutorialFalls: 1));
       await pumpScreen(tester, level: 2, keepStub: true);
 
       await tapCard(tester, 0);
-      await tester.pump(const Duration(seconds: 91));
+      await tester.pump(const Duration(seconds: 161));
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('¡Se acabó el tiempo! Probemos un reto más sencillo.'), findsOneWidget);
 
       await tester.pump(MemoryLadderCubit.timeUpDuration);
       await tester.pump(const Duration(milliseconds: 500));
-      expect(cubitOf(tester).state.gameRound, GameDifficulty.easy);
-      expect(cardCount(), 6, reason: 'first timed level of Easy (P14)');
+      expect(cubitOf(tester).state.gameRound, GameDifficulty.silver);
+      expect(cardCount(), 6, reason: 'first timed level of silver (P14)');
     });
 
     testWidgets('the timer pauses while the app is in the background', (tester) async {
@@ -313,7 +313,7 @@ void main() {
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      await tester.pump(const Duration(seconds: 91));
+      await tester.pump(const Duration(seconds: 161));
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.byKey(const ValueKey<String>('memory-time-up')), findsOneWidget);
     });

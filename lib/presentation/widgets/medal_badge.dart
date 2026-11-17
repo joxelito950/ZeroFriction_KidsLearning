@@ -4,20 +4,34 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_palette.dart';
 
-/// Cómo se ve una medalla (HU-048): relleno, borde y estrellas grabadas. Se
-/// distinguen por tres señales a la vez, no solo por el color: el oro es claro
-/// y el bronce oscuro (luminosidad), y llevan 1, 2 o 3 estrellas (sin color).
-/// Preparado para las medallas de gema de HU-051.
+/// Forma de la medalla: los metales son un disco con estrellas; las gemas, una
+/// piedra facetada; el diamante, además, con destellos (HU-051 3.4).
+enum MedalShape { disc, gem, diamond }
+
+/// Cómo se ve una medalla (HU-048, HU-051): forma, relleno, borde y estrellas
+/// o facetas. Se distinguen por varias señales a la vez, no solo por el color:
+/// el oro es claro y el bronce oscuro (luminosidad), los metales llevan 1, 2 o
+/// 3 estrellas y las gemas tienen otra forma.
 @immutable
 final class MedalStyle {
-  const MedalStyle({required this.fill, required this.rim, required this.stars, required this.starColor});
+  const MedalStyle({
+    required this.fill,
+    required this.rim,
+    required this.stars,
+    required this.starColor,
+    this.shape = MedalShape.disc,
+  });
 
   final Color fill;
   final Color rim;
 
-  /// Estrellas grabadas: 1 bronce, 2 plata, 3 oro.
+  /// Estrellas grabadas en los metales: 1 bronce, 2 plata, 3 oro. Las gemas no
+  /// llevan (0).
   final int stars;
+
+  /// Color de las estrellas, o de las facetas en las gemas.
   final Color starColor;
+  final MedalShape shape;
 
   /// Borde de bronce y plata: teal profundo al 45 %, más oscuro que el relleno
   /// usando solo transparencia (C2).
@@ -45,16 +59,60 @@ final class MedalStyle {
     starColor: AppPalette.gold,
   );
 
+  /// Rubí y esmeralda: los dos colores exclusivos de las medallas (HU-051).
+  static final MedalStyle ruby = MedalStyle(
+    fill: AppPalette.medalRuby,
+    rim: _darkRim,
+    stars: 0,
+    starColor: AppPalette.warmCream,
+    shape: MedalShape.gem,
+  );
+
+  static final MedalStyle emerald = MedalStyle(
+    fill: AppPalette.medalEmerald,
+    rim: _darkRim,
+    stars: 0,
+    starColor: AppPalette.warmCream,
+    shape: MedalShape.gem,
+  );
+
+  static final MedalStyle sapphire = MedalStyle(
+    fill: AppPalette.petrolBlue,
+    rim: _darkRim,
+    stars: 0,
+    starColor: AppPalette.warmCream,
+    shape: MedalShape.gem,
+  );
+
+  /// Casi negra, con reflejos crema.
+  static const MedalStyle obsidian = MedalStyle(
+    fill: AppPalette.deepTeal,
+    rim: AppPalette.deepTeal,
+    stars: 0,
+    starColor: AppPalette.warmCream,
+    shape: MedalShape.gem,
+  );
+
+  /// Blanco y crema con destellos ámbar; el borde teal la separa del fondo.
+  static final MedalStyle diamond = MedalStyle(
+    fill: AppPalette.white,
+    rim: AppPalette.deepTeal.withValues(alpha: 0.35),
+    stars: 0,
+    starColor: AppPalette.amber,
+    shape: MedalShape.diamond,
+  );
+
   @override
   bool operator ==(Object other) =>
       other is MedalStyle &&
       other.fill == fill &&
       other.rim == rim &&
       other.stars == stars &&
-      other.starColor == starColor;
+      other.starColor == starColor &&
+      other.shape == shape;
 
   @override
-  int get hashCode => Object.hash(fill, rim, stars, starColor);
+  int get hashCode => Object.hash(fill, rim, stars, starColor, shape);
 }
 
 /// La medalla dibujada por la app (HU-048 P1): una cinta y un disco con sus
@@ -99,6 +157,11 @@ class MedalPainter extends CustomPainter {
     canvas.drawPath(_strip(s, from: 0.30, to: 0.46), ribbon);
     canvas.drawPath(_strip(s, from: 0.70, to: 0.54), ribbonShade);
 
+    if (style.shape != MedalShape.disc) {
+      _paintGem(canvas, s, center, radius);
+      return;
+    }
+
     // Disco con su borde.
     canvas.drawCircle(center, radius, Paint()..color = style.fill);
     canvas.drawCircle(
@@ -118,6 +181,50 @@ class MedalPainter extends CustomPainter {
     for (var index = 0; index < count; index++) {
       final double dx = (index - (count - 1) / 2) * step;
       canvas.drawPath(_star(center + Offset(dx, 0), starRadius), star);
+    }
+  }
+
+  /// Una gema facetada (HU-051 3.4): un poco más grande que el disco, para
+  /// tapar igual el pecho del niño (HU-049). El diamante lleva destellos.
+  void _paintGem(Canvas canvas, double s, Offset center, double radius) {
+    final double r = radius * 1.2;
+    // Corona plana arriba, pabellón en punta abajo.
+    final List<Offset> outline = [
+      center + Offset(-r * 0.55, -r * 0.75),
+      center + Offset(r * 0.55, -r * 0.75),
+      center + Offset(r, -r * 0.2),
+      center + Offset(0, r),
+      center + Offset(-r, -r * 0.2),
+    ];
+    final Path gem = Path()..addPolygon(outline, true);
+    canvas.drawPath(gem, Paint()..color = style.fill);
+
+    // Facetas: la línea de la cintura y los cortes hacia la punta.
+    final Paint facet = Paint()
+      ..color = style.starColor.withValues(alpha: 0.6)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = s * 0.025;
+    final Offset waistLeft = outline[4];
+    final Offset waistRight = outline[2];
+    canvas.drawLine(waistLeft, waistRight, facet);
+    canvas.drawLine(outline[0], center + Offset(-r * 0.25, -r * 0.2), facet);
+    canvas.drawLine(outline[1], center + Offset(r * 0.25, -r * 0.2), facet);
+    canvas.drawLine(center + Offset(-r * 0.25, -r * 0.2), outline[3], facet);
+    canvas.drawLine(center + Offset(r * 0.25, -r * 0.2), outline[3], facet);
+
+    canvas.drawPath(
+      gem,
+      Paint()
+        ..color = style.rim
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = s * 0.05
+        ..strokeJoin = StrokeJoin.round,
+    );
+
+    if (style.shape == MedalShape.diamond) {
+      final Paint sparkle = Paint()..color = style.starColor;
+      canvas.drawPath(_star(center + Offset(-r * 0.95, -r * 0.95), s * 0.07), sparkle);
+      canvas.drawPath(_star(center + Offset(r * 0.95, -r * 0.7), s * 0.05), sparkle);
     }
   }
 

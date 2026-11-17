@@ -57,16 +57,16 @@ void main() {
         [for (var level = 1; level <= 8; level++) ShadowLadder.arrivalPosition(level, rules).timeLimit?.inSeconds];
 
     test('time per difficulty from level 2', () {
-      expect(arrivals(const ShadowRules(premium: true, difficulty: GameDifficulty.easy)),
+      expect(arrivals(const ShadowRules(premium: true, difficulty: GameDifficulty.bronze)),
           [null, 90, 80, 70, 60, 50, 40, 30]);
-      expect(arrivals(premium), [null, 60, 50, 45, 40, 35, 30, 25]);
-      expect(arrivals(const ShadowRules(premium: true, difficulty: GameDifficulty.impossible)),
+      expect(arrivals(premium), [null, 70, 63, 56, 49, 41, 34, 27], reason: 'gold (HU-051 3.2)');
+      expect(arrivals(const ShadowRules(premium: true, difficulty: GameDifficulty.diamond)),
           [null, 50, 45, 40, 35, 30, 25, 20]);
     });
 
     test('winning goes up with the next limit, and level 8 gives the medal', () {
       expect(ShadowLadder.afterWin(ShadowLadder.start, premium).next,
-          const ShadowPosition(level: 2, timeLimit: Duration(seconds: 60)));
+          const ShadowPosition(level: 2, timeLimit: Duration(seconds: 70)));
       final ShadowStep last = ShadowLadder.afterWin(const ShadowPosition(level: 8), premium);
       expect(last.medalEarned, isTrue);
       expect(last.next, ShadowLadder.start);
@@ -91,9 +91,11 @@ void main() {
 
   group('rules per difficulty (HU-030 3.2, P4, P14, R19)', () {
     test('Easy has no free shadows and the lowest coverage; Impossible, random layout and no start animation', () {
-      const easy = ShadowRules(difficulty: GameDifficulty.easy);
-      const impossible = ShadowRules(difficulty: GameDifficulty.impossible);
-      expect([easy.coverageToSnap, free.coverageToSnap, impossible.coverageToSnap], [0.4, 0.6, 0.9]);
+      const easy = ShadowRules(difficulty: GameDifficulty.bronze);
+      const impossible = ShadowRules(difficulty: GameDifficulty.diamond);
+      expect([easy.coverageToSnap, free.coverageToSnap, impossible.coverageToSnap], [0.4, 0.5, 0.9]);
+      expect([for (final round in GameDifficulty.values) ShadowRules(difficulty: round).coverageToSnap],
+          [0.4, 0.45, 0.5, 0.6, 0.65, 0.7, 0.8, 0.9], reason: 'HU-051 3.2');
       expect([easy.freeShadows, free.freeShadows], [false, true]);
       expect([free.randomLayout, impossible.randomLayout], [false, true]);
       expect([easy.startAnimation, free.startAnimation, impossible.startAnimation], [true, true, false]);

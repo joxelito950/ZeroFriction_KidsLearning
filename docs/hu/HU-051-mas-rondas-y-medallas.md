@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Casi lista** (2026-11-17): P1 a P6 decididas y colores nuevos aprobados. Falta confirmar P7 (cómo se baja de ronda sin tutorial en cada ronda) |
+| **Estado** | **Desarrollada** (2026-11-17, rama `feature/hu-051-eight-rounds`, D-042); falta verla en el moto g55 y la celebración única de «¡Nuevas medallas!» (sección 6) |
 | **Épica** | E1 · Juegos (progresión) |
 | **Prioridad** | **P1** (cambia el modelo de rondas: conviene antes de la pantalla «Su progreso» y de más juegos) |
 | **Tamaño** | L (4 entregas, más de una semana) |
@@ -175,5 +175,22 @@ El dorado **baja** (hay más estrellas posibles). Hace falta una celebración ú
 | P4 | ¿Qué es Premium con 8 rondas? | ✅ Decidido (2026-11-17). Memoria: **todo gratis** (HU-037 P6). Sombras: **todo gratis salvo el nivel 8** (como hoy). ¿Cuál es diferente?: **bronce a rubí gratis** (4 de 8, el 50 % que se buscaba en HU-025), **esmeralda a diamante Premium**. Mientras dure la prueba, todo gratis (D-040) |
 | P5 | ¿Cada ronda sigue empezando por el tutorial? | ✅ Decidido (2026-11-17), distinto de la recomendación: **no**. El tutorial es el **nivel 0, solo al principio del juego**, sin tiempo ni estrellas (R1, R3b) |
 | P6 | ¿Se mantiene la celebración con el niño (HU-049) para las 8 medallas? | ✅ Decidido (2026-11-17): **sí** |
-| P7 | Sin tutorial en cada ronda, ¿cuándo se baja de ronda? | **Recomendación:** al **perder dos veces en el primer nivel** de la ronda (el equivalente de las dos caídas al tutorial de hoy), y se sigue en el primer nivel de la anterior. La cuenta vuelve a cero al cambiar de ronda (como HU-037 P15) |
+| P7 | Sin tutorial en cada ronda, ¿cuándo se baja de ronda? | ✅ Decidido (2026-11-17), como la recomendación: al **perder dos veces en el primer nivel** de la ronda (el equivalente de las dos caídas al tutorial de hoy), y se sigue en el primer nivel de la anterior. La cuenta vuelve a cero al cambiar de ronda (como HU-037 P15) |
 | P8 | ¿Qué pasa con quien ya jugó? ¿Vuelve a ver el tutorial? | **No**: el tutorial se da por hecho si ya tiene alguna estrella o medalla en ese juego |
+
+## 10. Desarrollo (2026-11-17)
+
+Las cuatro entregas en una rama, con las decisiones P1 a P7.
+
+| Entrega | Qué se hizo |
+|---|---|
+| 1 · Dominio | `GameDifficulty` pasa a 8 valores (bronze … diamond). `nextRound` y `previousRound` por posición (un escalón, R3). `RoundLadder`: completar una ronda lleva al **primer nivel con tiempo** de la siguiente (R3b); perder en el primer nivel lo **repite** (`RoundStep.retry`) y la segunda vez **baja un escalón** (P7). `GameProgress.withRound` empieza en el primer nivel con tiempo. Tablas de la sección 3: memoria (8 series y vista previa de 2 s a 0), Sombras (8 series, solape del 40 % al 90 %, sombras libres desde el oro, animación de inicio hasta el rubí, disposición al azar en obsidiana y diamante) y ¿Cuál es diferente? (8 series y comparaciones de una en una; gratis de bronce a rubí) |
+| 2 · Guardado y migración | Sin typeId nuevo. Al leer, los nombres antiguos (`easy`, `normal`, `impossible`) pasan a bronce, oro y diamante; las medallas antiguas valen todas las de su ronda hacia abajo; las claves de los récords se traducen (`RoundLevel.fromLegacyKey`). `GameProgress.restored` salta el tutorial a quien ya jugó (P8). Probado con modelos de `1.0.0-rc.4` y con las cajas reales de `1.0.0-rc.3` |
+| 3 · Medallas | `MedalBadge` con las 5 gemas (forma facetada; el diamante con destellos). **Rubí `#8E1F3B` y esmeralda `#1E7F5C`** en la paleta como colores **exclusivos de las medallas**: `palette_test` falla si aparecen fuera de `medal_badge.dart`, y sus rondas usan el dorado en los puntos de nivel. Celebración con el niño para las 8 (HU-049) |
+| 4 · Zona de Padres y textos | Los 8 chips de ronda con su medalla (se reparten en filas); las rondas se llaman por su medalla (R4); en ¿Cuál es diferente?, de esmeralda a diamante solo con Premium. 13 textos nuevos en 9 idiomas (8 nombres de ronda y 5 títulos de medalla) |
+
+**Pendiente:**
+- La celebración única de «¡Nuevas medallas!» tras actualizar (sección 6), que encaja con HU-041.
+- Verlo en el moto g55: las gemas pequeñas en el menú, los 8 chips y el paso entre rondas.
+- La medalla de zafiro usa el azul petróleo, que la regla C6 reserva para lo que se toca. Es decorativa y no se toca, pero conviene confirmarlo al verla.
+

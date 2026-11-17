@@ -63,13 +63,15 @@ class GameProgressHiveModel {
   final int? stuckFalls;
 
   /// Un récord sin su fecha se ignora en vez de inventarla.
-  GameProgress toGameProgress() => GameProgress(
+  /// Con nombres de ronda de antes de HU-051, se traducen a las ocho rondas.
+  GameProgress toGameProgress() => GameProgress.restored(
         position: RoundPosition(round: GameDifficulty.fromName(round), level: level, tutorialFalls: tutorialFalls),
-        medals: {for (final String name in medals) GameDifficulty.fromName(name)},
+        medals: {for (final String name in medals) ...GameDifficulty.medalsFromSaved(name)},
         records: {
           for (final entry in bestStarsByRoundLevel.entries)
             if (achievedAtByRoundLevel[entry.key] case final DateTime achievedAt)
-              RoundLevel.fromKey(entry.key): LevelRecord(bestStars: entry.value, achievedAt: achievedAt),
+              RoundLevel.fromSaved(entry.key, legacy: GameDifficulty.isLegacyName(round)):
+                  LevelRecord(bestStars: entry.value, achievedAt: achievedAt),
         },
         lastPlayedAt: lastPlayedAt,
         stuckLevel: stuckFallsOrZero(stuckLevel, stuckFalls) == 0 ? null : stuckLevel,

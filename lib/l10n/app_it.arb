@@ -124,5 +124,18 @@
   "parentsUnsavedTitle": "Salvare le modifiche?",
   "parentsZonePlayTimePerDay": "{minutes} min al giorno",
   "parentsZonePinSummary": "Tenere il bambino nell’app",
-  "parentsFeedbackSummary": "Scrivici via email"
+  "parentsFeedbackSummary": "Scrivici via email",
+  "roundBronze": "Bronzo",
+  "roundSilver": "Argento",
+  "roundGold": "Oro",
+  "roundRuby": "Rubino",
+  "roundEmerald": "Smeraldo",
+  "roundSapphire": "Zaffiro",
+  "roundObsidian": "Ossidiana",
+  "roundDiamond": "Diamante",
+  "medalRubyTitle": "Medaglia di rubino!",
+  "medalEmeraldTitle": "Medaglia di smeraldo!",
+  "medalSapphireTitle": "Medaglia di zaffiro!",
+  "medalObsidianTitle": "Medaglia di ossidiana!",
+  "medalDiamondTitle": "Medaglia di diamante!"
 }

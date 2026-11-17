@@ -98,7 +98,7 @@ void main() {
 
     test('Impossible has no start animation; Easy has no free shadows', () {
       fakeAsync((async) {
-        givenProgress(progressAt(4, round: GameDifficulty.impossible));
+        givenProgress(progressAt(4, round: GameDifficulty.diamond));
         final cubit = ShadowGameCubit(repository: repository, random: Random(1), now: () => now);
         cubit.start();
         async.flushMicrotasks();
@@ -106,7 +106,7 @@ void main() {
         expect(cubit.state.shadows, hasLength(5));
         cubit.close();
 
-        givenProgress(progressAt(4, round: GameDifficulty.easy));
+        givenProgress(progressAt(4, round: GameDifficulty.bronze));
         final easy = started(async);
         expect(easy.state.shadows, hasLength(4));
         easy.close();
@@ -127,7 +127,7 @@ void main() {
         givenProgress(progressAt(
           1,
           records: {
-            const RoundLevel(GameDifficulty.normal, 2): LevelRecord(bestStars: 2, achievedAt: DateTime(2026, 10, 1)),
+            const RoundLevel(GameDifficulty.gold, 2): LevelRecord(bestStars: 2, achievedAt: DateTime(2026, 10, 1)),
           },
           lastPlayedAt: now.subtract(const Duration(days: 13)),
         ));
@@ -159,8 +159,8 @@ void main() {
         final String other = otherShadow(cubit.state, object);
         final shadows = {object: box, other: shifted(300)};
 
-        // 50 % cubierto: no llega al 60 % de Normal.
-        expect(cubit.drop(object, object: shifted(50), shadowBoxes: shadows), ShadowDropOutcome.missed);
+        // 45 % cubierto: no llega al 50 % del oro (HU-051 3.2).
+        expect(cubit.drop(object, object: shifted(55), shadowBoxes: shadows), ShadowDropOutcome.missed);
         expect(cubit.state.fails, 0);
         expect(cubit.drop(object, object: shifted(300), shadowBoxes: shadows), ShadowDropOutcome.wrongShadow);
         expect(cubit.state.fails, 1);
@@ -175,7 +175,7 @@ void main() {
 
     test('Easy snaps at 40 %, and an occupied shadow no longer counts as a mistake', () {
       fakeAsync((async) {
-        givenProgress(progressAt(1, round: GameDifficulty.easy));
+        givenProgress(progressAt(1, round: GameDifficulty.bronze));
         final cubit = started(async);
         final [String first, String second] = cubit.state.objects;
         final shadows = {first: box, second: shifted(300)};
@@ -223,8 +223,8 @@ void main() {
 
         expect(cubit.state.phase, ShadowRoundPhase.celebrating);
         expect(cubit.state.stars, 3);
-        expect(cubit.state.goldFraction, 3 / 63);
-        expect(lastSaved().records[const RoundLevel(GameDifficulty.normal, 2)]!.bestStars, 3);
+        expect(cubit.state.goldFraction, 3 / 168, reason: '7 levels × 3 stars × 8 rounds');
+        expect(lastSaved().records[const RoundLevel(GameDifficulty.gold, 2)]!.bestStars, 3);
         expect(cubit.match(cubit.state.objects.first, cubit.state.objects.first), ShadowDropOutcome.missed);
 
         async.elapse(ShadowGameCubit.celebrationDuration);
@@ -255,10 +255,10 @@ void main() {
         final cubit = started(async);
         placeAll(cubit);
         expect(cubit.state.medalEarned, isTrue);
-        expect(cubit.state.medal, GameDifficulty.normal);
+        expect(cubit.state.medal, GameDifficulty.gold);
         async.elapse(ShadowGameCubit.celebrationDuration);
-        expect(cubit.state.level, 1);
-        expect(cubit.state.gameRound, GameDifficulty.impossible);
+        expect(cubit.state.level, 2, reason: 'the first timed level of the next round (HU-051 R3b)');
+        expect(cubit.state.gameRound, GameDifficulty.ruby);
         cubit.close();
       });
     });
@@ -273,7 +273,7 @@ void main() {
         expect(cubit.state.stars, 3);
         expect(cubit.state.medalEarned, isTrue);
         expect(cubit.state.hasMedal, isTrue);
-        expect(lastSaved().medals, {GameDifficulty.normal});
+        expect(lastSaved().medals, {GameDifficulty.gold});
         cubit.close();
       });
     });
@@ -286,7 +286,7 @@ void main() {
         givenPremium(true);
         placeAll(cubit);
         async.elapse(ShadowGameCubit.celebrationDuration);
-        expect(cubit.state.position, const ShadowPosition(level: 3, timeLimit: Duration(seconds: 50)));
+        expect(cubit.state.position, const ShadowPosition(level: 3, timeLimit: Duration(seconds: 63)));
         expect(cubit.state.premium, isTrue);
         cubit.close();
       });
@@ -298,7 +298,7 @@ void main() {
       fakeAsync((async) {
         givenProgress(progressAt(2));
         final cubit = started(async);
-        expect(cubit.state.position.timeLimit, const Duration(seconds: 60), reason: 'with rounds, free has time too');
+        expect(cubit.state.position.timeLimit, const Duration(seconds: 70), reason: 'gold, level 2 (HU-051 3.2)');
         expect(cubit.state.remainingFraction, 1);
 
         async.elapse(const Duration(seconds: 5));
@@ -306,20 +306,20 @@ void main() {
         cubit.grab(cubit.state.objects.first);
         expect(cubit.state.timerStarted, isTrue);
         async.elapse(const Duration(seconds: 10));
-        expect(cubit.state.remaining, const Duration(seconds: 50));
+        expect(cubit.state.remaining, const Duration(seconds: 60));
 
         cubit.pause();
         async.elapse(const Duration(seconds: 30));
-        expect(cubit.state.remaining, const Duration(seconds: 50));
+        expect(cubit.state.remaining, const Duration(seconds: 60));
         cubit.resume();
-        async.elapse(const Duration(seconds: 50));
+        async.elapse(const Duration(seconds: 60));
 
         expect(cubit.state.phase, ShadowRoundPhase.timeUp);
         expect(cubit.state.remaining, Duration.zero);
         expect(cubit.state.lossKind, ShadowLoss.restart);
-        expect(lastSaved().position.level, 1);
+        expect(lastSaved().position.level, 2, reason: 'the first level is played again (HU-051 P5)');
         async.elapse(ShadowGameCubit.timeUpDuration);
-        expect(cubit.state.position, const ShadowPosition(level: 1), reason: 'the tutorial has no time');
+        expect(cubit.state.position, const ShadowPosition(level: 2, timeLimit: Duration(seconds: 70)));
         cubit.close();
       });
     });

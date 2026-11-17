@@ -85,7 +85,7 @@ void main() {
         expect(cubit.state.position, MemoryLadder.start);
         expect(cubit.state.cards, hasLength(4));
         expect(cubit.state.remainingFraction, isNull);
-        expect(cubit.state.gameRound, GameDifficulty.easy);
+        expect(cubit.state.gameRound, GameDifficulty.bronze);
       });
     });
 
@@ -142,10 +142,10 @@ void main() {
         expect(cubit.state.elapsed, Duration.zero);
 
         cubit.flipCard(0);
-        async.elapse(const Duration(seconds: 9));
+        async.elapse(const Duration(seconds: 16));
 
         expect(cubit.state.timerStarted, isTrue);
-        expect(cubit.state.elapsed, const Duration(seconds: 9));
+        expect(cubit.state.elapsed, const Duration(seconds: 16), reason: 'of the 160 s of gold');
         expect(cubit.state.remainingFraction, closeTo(0.9, 0.001));
       });
     });
@@ -177,12 +177,12 @@ void main() {
         expect(cubit.state.stars, 3);
         final saved = lastSavedProgress();
         expect(saved.position.level, 3);
-        expect(saved.records[const RoundLevel(GameDifficulty.normal, 2)], LevelRecord(bestStars: 3, achievedAt: _now));
+        expect(saved.records[const RoundLevel(GameDifficulty.gold, 2)], LevelRecord(bestStars: 3, achievedAt: _now));
         expect(saved.lastPlayedAt, _now);
 
         async.elapse(MemoryLadderCubit.celebrationDuration);
         expect(cubit.state.phase, MemoryRoundPhase.playing);
-        expect(cubit.state.position, const MemoryLadderPosition(level: 3, timeLimit: Duration(seconds: 60)));
+        expect(cubit.state.position, const MemoryLadderPosition(level: 3, timeLimit: Duration(seconds: 105)));
         expect(cubit.state.moves, 0);
         expect(cubit.state.timerStarted, isFalse);
       });
@@ -213,19 +213,19 @@ void main() {
       });
     });
 
-    test('winning the 4x4 earns the round medal and goes to the next round tutorial (criterion 8, HU-037 R2)', () {
+    test('winning the 4x4 earns the round medal and goes to the first timed level of the next round (HU-051 R3b)', () {
       fakeAsync((async) {
         final cubit = startedCubit(async, saved: progressAt(5));
         _winPerfectly(async, cubit);
 
         expect(cubit.state.badgeEarned, isTrue);
-        expect(cubit.state.medal, GameDifficulty.normal);
+        expect(cubit.state.medal, GameDifficulty.gold);
         expect(cubit.state.hasBadge, isTrue);
-        expect(lastSavedProgress().medals, {GameDifficulty.normal});
+        expect(lastSavedProgress().medals, {GameDifficulty.gold});
 
         async.elapse(MemoryLadderCubit.celebrationDuration);
-        expect(cubit.state.position, MemoryLadder.start);
-        expect(cubit.state.gameRound, GameDifficulty.impossible);
+        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 125)));
+        expect(cubit.state.gameRound, GameDifficulty.ruby);
         expect(cubit.state.hasBadge, isTrue);
         expect(cubit.state.badgeEarned, isFalse);
       });
@@ -237,7 +237,7 @@ void main() {
       fakeAsync((async) {
         final cubit = startedCubit(async, saved: progressAt(4));
         cubit.flipCard(0);
-        async.elapse(const Duration(seconds: 45));
+        async.elapse(const Duration(seconds: 80));
 
         expect(cubit.state.phase, MemoryRoundPhase.timeUp);
         expect(cubit.state.loss, MemoryLoss.fewerCards);
@@ -246,33 +246,33 @@ void main() {
 
         async.elapse(MemoryLadderCubit.timeUpDuration);
         expect(cubit.state.phase, MemoryRoundPhase.playing);
-        expect(cubit.state.position, const MemoryLadderPosition(level: 3, timeLimit: Duration(seconds: 45)));
+        expect(cubit.state.position, const MemoryLadderPosition(level: 3, timeLimit: Duration(seconds: 80)));
       });
     });
 
-    test('losing the first timed level goes back to the tutorial, without time (criterion 7, HU-037 R3)', () {
+    test('losing the first timed level plays it again, with its time (HU-051 P5: the tutorial is only at the start)', () {
       fakeAsync((async) {
         final cubit = startedCubit(async, saved: progressAt(2));
         cubit.flipCard(0);
-        async.elapse(const Duration(seconds: 90));
+        async.elapse(const Duration(seconds: 160));
         expect(cubit.state.loss, MemoryLoss.restart);
 
         async.elapse(MemoryLadderCubit.timeUpDuration);
-        expect(cubit.state.position, MemoryLadder.start);
+        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 160)));
         expect(lastSavedProgress().position.tutorialFalls, 1);
       });
     });
 
-    test('a second fall to the tutorial moves to the easier round, at its first timed level (HU-037 R10)', () {
+    test('losing the first level a second time drops one round, at its first timed level (HU-051 P7)', () {
       fakeAsync((async) {
         final cubit = startedCubit(async, saved: progressAt(2, tutorialFalls: 1));
         cubit.flipCard(0);
-        async.elapse(const Duration(seconds: 90));
+        async.elapse(const Duration(seconds: 160));
         expect(cubit.state.loss, MemoryLoss.easierRound);
 
         async.elapse(MemoryLadderCubit.timeUpDuration);
-        expect(cubit.state.gameRound, GameDifficulty.easy);
-        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 270)));
+        expect(cubit.state.gameRound, GameDifficulty.silver);
+        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 210)));
       });
     });
 
@@ -280,7 +280,7 @@ void main() {
       fakeAsync((async) {
         final cubit = startedCubit(async, saved: progressAt(5));
         cubit.flipCard(0);
-        async.elapse(const Duration(seconds: 29, milliseconds: 500));
+        async.elapse(const Duration(seconds: 54, milliseconds: 500));
         final pairs = _pairs(cubit.state);
         final second = pairs.firstWhere((pair) => !pair.contains(0))[0];
         cubit.flipCard(second);

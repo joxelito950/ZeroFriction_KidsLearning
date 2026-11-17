@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
@@ -12,11 +13,8 @@ import 'round_style.dart';
 
 /// Nombre de cada juego y de cada ronda, para la pantalla y el resumen.
 abstract final class ParentsGamesTexts {
-  static String round(AppLocalizations l10n, GameDifficulty difficulty) => switch (difficulty) {
-        GameDifficulty.easy => l10n.difficultyEasy,
-        GameDifficulty.normal => l10n.difficultyNormal,
-        GameDifficulty.impossible => l10n.difficultyImpossible,
-      };
+  /// Las rondas se llaman por su medalla (HU-051 R4).
+  static String round(AppLocalizations l10n, GameDifficulty difficulty) => RoundStyle.roundName(l10n, difficulty);
 
   static String game(AppLocalizations l10n, GameId game) => switch (game) {
         GameId.memory => l10n.menuMemoryTitle,
@@ -114,9 +112,11 @@ class _ParentsGamesPageState extends State<ParentsGamesPage> {
                 runSpacing: 8,
                 children: [
                   for (final round in GameDifficulty.values)
-                    // En «¿Cuál es diferente?», Imposible es de Premium (HU-025 P1): sin
-                    // Premium no se muestra, como todo lo que aún no se puede comprar.
-                    if (game != GameId.oddOneOut || round != GameDifficulty.impossible || state.isPremium)
+                    // En «¿Cuál es diferente?», de esmeralda a diamante es Premium (HU-051
+                    // P4): sin Premium no se muestra, como todo lo que aún no se puede comprar.
+                    if (game != GameId.oddOneOut ||
+                        round.index <= OddOneOut.lastFreeRound.index ||
+                        state.isPremium)
                       ChoiceChip(
                         key: ValueKey<String>('round-${game.name}-${round.name}'),
                         avatar: MedalBadge(style: RoundStyle.medalStyleOf(round), size: 22),

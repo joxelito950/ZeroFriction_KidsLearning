@@ -24,11 +24,29 @@ void main() {
     });
 
     test('each round has its medal; the round colour is the medal fill and the rim its border (P3)', () {
-      expect(RoundStyle.medalStyleOf(GameDifficulty.easy), MedalStyle.bronze);
-      expect(RoundStyle.medalStyleOf(GameDifficulty.normal), MedalStyle.silver);
-      expect(RoundStyle.medalStyleOf(GameDifficulty.impossible), MedalStyle.gold);
-      expect(RoundStyle.colorOf(GameDifficulty.impossible), AppPalette.amber);
-      expect(RoundStyle.rimOf(GameDifficulty.impossible), AppPalette.gold);
+      expect(RoundStyle.medalStyleOf(GameDifficulty.bronze), MedalStyle.bronze);
+      expect(RoundStyle.medalStyleOf(GameDifficulty.silver), MedalStyle.silver);
+      expect(RoundStyle.medalStyleOf(GameDifficulty.gold), MedalStyle.gold);
+      expect(RoundStyle.colorOf(GameDifficulty.gold), AppPalette.amber);
+      expect(RoundStyle.rimOf(GameDifficulty.gold), AppPalette.gold);
+    });
+
+    test('the five new medals are gems, each its own colour; diamond with sparkles (HU-051 3.4)', () {
+      final List<MedalStyle> gems = [
+        for (final round in GameDifficulty.values.skip(3)) RoundStyle.medalStyleOf(round),
+      ];
+      expect(gems.map((style) => style.shape),
+          [MedalShape.gem, MedalShape.gem, MedalShape.gem, MedalShape.gem, MedalShape.diamond]);
+      expect(gems.map((style) => style.fill).toSet(), hasLength(5));
+      expect(gems.map((style) => style.stars), everyElement(0));
+      expect(MedalStyle.ruby.fill, AppPalette.medalRuby);
+      expect(MedalStyle.emerald.fill, AppPalette.medalEmerald);
+    });
+
+    test('ruby and emerald stay inside the medal: their rounds use the progress gold elsewhere', () {
+      expect(RoundStyle.colorOf(GameDifficulty.ruby), AppPalette.gold);
+      expect(RoundStyle.colorOf(GameDifficulty.emerald), AppPalette.gold);
+      expect(RoundStyle.colorOf(GameDifficulty.sapphire), AppPalette.petrolBlue);
     });
 
     test('styles compare by value', () {
@@ -50,6 +68,8 @@ void main() {
             children: [
               for (final MedalStyle style in [MedalStyle.bronze, MedalStyle.silver, MedalStyle.gold])
                 MedalBadge(style: style, size: 40, semanticLabel: 'medal ${style.stars}'),
+              for (final MedalStyle style in [MedalStyle.ruby, MedalStyle.obsidian, MedalStyle.diamond])
+                MedalBadge(style: style, size: 40),
               MedalBadge(style: MedalStyle.gold, size: 20),
             ],
           ),
@@ -96,7 +116,7 @@ void main() {
     });
 
     testWidgets('the invitation to play shows the inviting child, not the system hand (criterion 2)', (tester) async {
-      await pumpOverlay(tester, const PlayInvitation(round: GameDifficulty.easy));
+      await pumpOverlay(tester, const PlayInvitation(round: GameDifficulty.bronze));
       final Image image = tester.widget<Image>(find.byKey(const ValueKey<String>('play-invitation-child')));
       expect((image.image as AssetImage).assetName, BrandAssets.childInviting);
       expect(find.byIcon(Icons.touch_app_rounded), findsNothing);
@@ -107,7 +127,7 @@ void main() {
     });
 
     testWidgets('in Arabic the inviting child is mirrored to point at the content', (tester) async {
-      await pumpOverlay(tester, const PlayInvitation(round: GameDifficulty.easy), locale: const Locale('ar'));
+      await pumpOverlay(tester, const PlayInvitation(round: GameDifficulty.bronze), locale: const Locale('ar'));
       final Transform flip = tester.widget<Transform>(
         find.ancestor(of: find.byKey(const ValueKey<String>('play-invitation-child')), matching: find.byType(Transform)).first,
       );
@@ -121,8 +141,8 @@ void main() {
         body: MemoryLevelIndicator(
           level: 2,
           total: 3,
-          color: RoundStyle.colorOf(GameDifficulty.impossible),
-          rim: RoundStyle.rimOf(GameDifficulty.impossible),
+          color: RoundStyle.colorOf(GameDifficulty.gold),
+          rim: RoundStyle.rimOf(GameDifficulty.gold),
         ),
       ),
     ));

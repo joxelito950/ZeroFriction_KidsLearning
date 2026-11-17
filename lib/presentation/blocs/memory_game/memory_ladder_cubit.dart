@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 
 import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/memory/memory_ladder.dart';
+import '../../../domain/settings/game_difficulty.dart';
 import '../../../domain/memory/memory_stars.dart';
 import '../../../domain/memory/memory_themes.dart';
 import '../../../domain/progress/game_progress.dart';
@@ -27,11 +28,12 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   })  : _repository = repository,
         _random = random ?? Random(),
         _now = now ?? DateTime.now,
-        _preview = preview ?? previewDuration,
+        _previewOverride = preview,
         super(const MemoryLadderState());
 
-  /// Vista previa de las cartas en Fácil y Normal (HU-030 3.4, P8).
-  static const Duration previewDuration = Duration(seconds: 1);
+  /// Vista previa de las cartas en la ronda de oro (HU-030 3.4); cada ronda
+  /// tiene la suya (`MemoryLadder.previewFor`, HU-051 3.1).
+  static final Duration previewDuration = MemoryLadder.previewFor(GameDifficulty.gold);
 
   /// Paso del cronómetro (la barra se actualiza 10 veces por segundo).
   static const Duration tick = Duration(milliseconds: 100);
@@ -53,7 +55,8 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
   final IPersistenceRepository _repository;
   final Random _random;
   final DateTime Function() _now;
-  final Duration _preview;
+  /// Duración fija para los tests; sin ella, la de cada ronda.
+  final Duration? _previewOverride;
 
   GameProgress _progress = GameProgress.initial();
 
@@ -178,8 +181,9 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
         MemoryCard(id: id++, assetPath: symbol),
       ],
     ]..shuffle(_random);
-    // La vista previa es una ayuda: solo en Fácil y Normal (HU-030 R10).
-    final bool preview = position.round.showsHelps && _preview > Duration.zero;
+    // La vista previa es una ayuda que se acorta ronda a ronda (HU-051 3.1).
+    final Duration show = _previewOverride ?? MemoryLadder.previewFor(position.round);
+    final bool preview = MemoryLadder.previewFor(position.round) > Duration.zero && show > Duration.zero;
     emit(MemoryLadderState(
       phase: preview ? MemoryRoundPhase.previewing : MemoryRoundPhase.playing,
       round: _round,
@@ -192,7 +196,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
     if (!preview) return;
     // Pasado el momento, se voltean todas a la vez y empieza el juego (V2).
     final int round = _round;
-    _previewTimer = Timer(_preview, () {
+    _previewTimer = Timer(show, () {
       if (isClosed || round != _round) return;
       emit(state.copyWith(
         phase: MemoryRoundPhase.playing,
@@ -252,7 +256,7 @@ class MemoryLadderCubit extends Cubit<MemoryLadderState> {
       elapsed: state.position.timeLimit,
       loss: step.droppedRound
           ? MemoryLoss.easierRound
-          : step.next.isTutorial
+          : step.retry
               ? MemoryLoss.restart
               : MemoryLoss.fewerCards,
       isProcessing: true,

@@ -6,6 +6,8 @@ import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/main.dart';
+import 'package:toddler_logic/domain/memory/memory_ladder.dart';
+import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
 import 'package:toddler_logic/presentation/blocs/play_time/play_time_cubit.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
@@ -75,7 +77,7 @@ void main() {
     await tester.tap(menuGame());
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
-    await tester.pump(MemoryLadderCubit.previewDuration); // vista previa de las cartas (HU-030)
+    await tester.pump(MemoryLadder.previewFor(GameDifficulty.bronze)); // vista previa del bronce (HU-051)
 
     final MemoryLadderCubit game = tester.element(find.byType(MemoryBoard)).read<MemoryLadderCubit>();
     final cards = game.state.cards;

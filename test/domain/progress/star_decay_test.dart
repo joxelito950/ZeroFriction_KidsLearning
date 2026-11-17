@@ -37,22 +37,22 @@ void main() {
 
   group('gold with rounds (HU-002 with HU-037)', () {
     GameProgress progress(Map<int, (int, int)> starsAndDay) => GameProgress(
-          position: const RoundPosition(round: GameDifficulty.normal, level: 2),
-          medals: const {GameDifficulty.easy},
+          position: const RoundPosition(round: GameDifficulty.gold, level: 2),
+          medals: const {GameDifficulty.bronze},
           records: {
             for (final entry in starsAndDay.entries)
-              RoundLevel(GameDifficulty.normal, entry.key):
+              RoundLevel(GameDifficulty.gold, entry.key):
                   LevelRecord(bestStars: entry.value.$1, achievedAt: DateTime(2026, 10, entry.value.$2)),
           },
           lastPlayedAt: played,
         );
 
-    test('is the best stars of each round and level over 36 in memory (R2)', () {
-      expect(MemoryLadder.rounds.maxStars, 36);
+    test('is the best stars of each round and level over 96 in memory (R2, HU-051 R5)', () {
+      expect(MemoryLadder.rounds.maxStars, 96);
       expect(GameProgress.initial().goldFraction(MemoryLadder.rounds), 0);
       final nine = progress({2: (3, 1), 3: (3, 2), 4: (3, 3)});
       expect(nine.stars, 9);
-      expect(nine.goldFraction(MemoryLadder.rounds), closeTo(0.25, 1e-9));
+      expect(nine.goldFraction(MemoryLadder.rounds), closeTo(9 / 96, 1e-9));
     });
 
     test('losing empties the oldest achievement first, keeping dates and medals (R8, R10, R14, criterion 13)', () {
@@ -60,12 +60,12 @@ void main() {
 
       final after = before.loseStars(3);
 
-      const RoundLevel oldest = RoundLevel(GameDifficulty.normal, 3);
+      const RoundLevel oldest = RoundLevel(GameDifficulty.gold, 3);
       expect(after.records[oldest]!.bestStars, 0);
       expect(after.records[oldest]!.achievedAt, DateTime(2026, 10, 1));
-      expect(after.records[const RoundLevel(GameDifficulty.normal, 2)]!.bestStars, 2);
-      expect(after.records[const RoundLevel(GameDifficulty.normal, 4)]!.bestStars, 3);
-      expect(after.medals, {GameDifficulty.easy});
+      expect(after.records[const RoundLevel(GameDifficulty.gold, 2)]!.bestStars, 2);
+      expect(after.records[const RoundLevel(GameDifficulty.gold, 4)]!.bestStars, 3);
+      expect(after.medals, {GameDifficulty.bronze});
       expect(after.lastPlayedAt, played);
     });
 
