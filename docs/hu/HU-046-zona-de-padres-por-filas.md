@@ -84,6 +84,7 @@ Decisión registrada como **D-041** en la sección 8 de la especificación.
 - Juegos y Tiempo de juego trabajan sobre un borrador; un límite personalizado fuera de rango no se guarda y la pantalla sigue abierta. El borrador sigue al valor guardado mientras el adulto no haya tocado nada.
 - «15 minutos más» arriba de la Zona de Padres, solo con el límite de hoy alcanzado.
 - 6 textos nuevos en 9 idiomas (Guardar, Descartar, ¿Guardar los cambios?, «{minutes} min al día» y los resúmenes de Fijar pantalla y Comentarios).
+- **Moto g55 (2026-11-16):** filas, «Juegos» y «Tiempo de juego» con borrador, «Guardar», «¿Guardar los cambios?» y «Descartar» funcionan, y un límite fuera de rango no se guarda. Dos fallos encontrados y corregidos: (1) al volver de una pantalla usada casi un minuto, la Zona de Padres se cerraba a los pocos segundos, porque su minuto no veía los toques de la pantalla de encima; ahora un toque en cualquier pantalla de adultos reinicia el minuto de todas (test que reproduce el caso); (2) el teclado tapaba «Guardar» al escribir un límite propio; ahora el botón sube por encima del teclado.
 - Tests: filas y orden, navegación de un nivel, borrador y «Guardar», salir con cambios, sesión que no se cierra mientras se usa una pantalla y se cierra al minuto sin tocar, y diseño de la lista y de cada pantalla en 9 idiomas × 4 teléfonos × texto 1,0 y 2,0.
 
 ## 7. Preguntas
