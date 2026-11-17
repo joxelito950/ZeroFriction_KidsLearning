@@ -6,6 +6,7 @@ import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/game_settings/game_settings_cubit.dart';
 import '../theme/app_palette.dart';
+import 'medal_badge.dart';
 import 'parents_setting_page.dart';
 import 'round_style.dart';
 
@@ -118,7 +119,7 @@ class _ParentsGamesPageState extends State<ParentsGamesPage> {
                     if (game != GameId.oddOneOut || round != GameDifficulty.impossible || state.isPremium)
                       ChoiceChip(
                         key: ValueKey<String>('round-${game.name}-${round.name}'),
-                        avatar: Icon(Icons.military_tech_rounded, color: RoundStyle.colorOf(round), size: 18),
+                        avatar: MedalBadge(style: RoundStyle.medalStyleOf(round), size: 22),
                         label: Text(ParentsGamesTexts.round(l10n, round)),
                         selected: _rounds[game] == round,
                         onSelected: state.loaded ? (_) => setState(() => _rounds[game] = round) : null,

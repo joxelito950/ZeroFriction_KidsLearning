@@ -17,6 +17,7 @@ import '../widgets/game_icon.dart';
 import '../widgets/liquid_gold.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
+import '../widgets/medal_badge.dart';
 import '../widgets/round_style.dart';
 import 'memory_game_screen.dart';
 import 'odd_one_out_screen.dart';
@@ -195,12 +196,8 @@ class _MenuActionsState extends State<_MenuActions> {
         child: CircleAvatar(
           radius: 20,
           backgroundColor: AppPalette.white,
-          child: Icon(
-            Icons.military_tech_rounded,
-            key: ValueKey<String>(key),
-            color: RoundStyle.colorOf(round),
-            size: 30,
-          ),
+          // La medalla propia (HU-048): bronce y oro ya no se confunden.
+          child: MedalBadge(key: ValueKey<String>(key), style: RoundStyle.medalStyleOf(round), size: 32),
         ),
       );
 

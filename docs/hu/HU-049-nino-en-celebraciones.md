@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-17): recomendaciones aceptadas (P1 y P2) |
+| **Estado** | **Desarrollada** (2026-11-17, rama `feature/hu-048-049-medals-and-child`); falta verla en el moto g55 |
 | **Épica** | E6 · Identidad (HU-013, HU-017) |
 | **Prioridad** | **P1** |
 | **Tamaño** | S (1 día) |
@@ -60,3 +60,11 @@ Las ilustraciones de PROMPTS §13 (celebrando) y §14 (invitando) **se añadiero
 |---|---|---|
 | P1 | ¿El niño también en las celebraciones de nivel (sin medalla)? | ✅ Decidido (2026-11-17): **no**: se reserva para las medallas, que así se sienten más especiales |
 | P2 | ¿Se usa al niño durmiendo (§12) ya, en la pantalla de descanso de noche? | ✅ Decidido (2026-11-17): **no**: llega con HU-038 (hora de dormir) |
+
+## 7. Desarrollo (2026-11-17)
+
+- `CelebratingChild`: la ilustración del niño celebrando (180 dp de alto) con la `MedalBadge` de la ronda colocada sobre el hueco del pecho. El hueco se midió en la imagen (centro en el 53,9 % del ancho y el 53,4 % del alto; radio del 9,5 % del ancho) y el disco de la medalla lo tapa con un 15 % de margen.
+- Solo en las celebraciones de medalla; las de nivel siguen con la copa (P1). Sin la animación de entrada de la sección 3.1, que queda para cuando se vea en el teléfono.
+- `PlayInvitation` muestra al niño invitando en lugar de `touch_app`, reflejado en árabe.
+- Tests: imagen y medalla por ronda, la medalla cubre el hueco, la copa en las celebraciones de nivel, el niño en la invitación y su reflejo en RTL.
+
