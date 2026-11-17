@@ -45,7 +45,7 @@ void main() {
 
   group('stuck count in the progress models (R4)', () {
     final GameProgress stuck = GameProgress(
-      position: const RoundPosition(round: GameDifficulty.normal, level: 4),
+      position: const RoundPosition(round: GameDifficulty.gold, level: 4),
       stuckLevel: 4,
       stuckFalls: 2,
     );

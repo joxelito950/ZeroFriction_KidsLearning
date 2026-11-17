@@ -215,9 +215,9 @@ void main() {
       when(() => parentalSettingsBox.put(any(), any())).thenAnswer((_) async {});
 
       final ParentalSettings next =
-          await repository.updateParentalSettings((current) => current.withDifficulty(GameDifficulty.easy));
+          await repository.updateParentalSettings((current) => current.withDifficulty(GameDifficulty.bronze));
 
-      expect(next, ParentalSettings(dailyLimitMinutes: 30, difficulty: GameDifficulty.easy));
+      expect(next, ParentalSettings(dailyLimitMinutes: 30, difficulty: GameDifficulty.bronze));
       final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny()))
           .captured
           .single as ParentalSettingsHiveModel;

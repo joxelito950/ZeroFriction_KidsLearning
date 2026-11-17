@@ -7,8 +7,8 @@ import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 /// HU-034 R4 y P7: el niño está atascado si llega 3 veces al mismo nivel y las
 /// 3 veces vuelve a bajar sin superarlo.
 void main() {
-  const easy = GameDifficulty.easy;
-  const normal = GameDifficulty.normal;
+  const easy = GameDifficulty.bronze;
+  const normal = GameDifficulty.gold;
   final RoundLadder memory = MemoryLadder.rounds;
   final DateTime day = DateTime(2026, 11, 16, 10);
 
@@ -76,14 +76,14 @@ void main() {
       tutorialFalls: 1,
     );
     final GameProgress dropped = lose(stuck, firstTimed);
-    expect(dropped.position.round, easy, reason: 'HU-037 R10');
+    expect(dropped.position.round, GameDifficulty.silver, reason: 'one step down (HU-051 P7)');
     expect(dropped.stuckLevel, isNull);
   });
 
   test('completing the round clears it too', () {
     final RoundPosition last = memory.arrival(normal, memory.levels);
     final GameProgress progress = win(GameProgress(position: last, stuckLevel: 5, stuckFalls: 2), last);
-    expect(progress.position.round, GameDifficulty.impossible);
+    expect(progress.position.round, GameDifficulty.ruby, reason: 'the round after gold');
     expect(progress.stuckFalls, 0);
   });
 

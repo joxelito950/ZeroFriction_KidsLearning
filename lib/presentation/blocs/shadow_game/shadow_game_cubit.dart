@@ -261,7 +261,7 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
       elapsed: state.position.timeLimit,
       lossKind: step.droppedRound
           ? ShadowLoss.easierRound
-          : step.next.isTutorial
+          : step.retry
               ? ShadowLoss.restart
               : ShadowLoss.fewerObjects,
     ));

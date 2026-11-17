@@ -54,7 +54,7 @@ void main() {
     effects = _FakeEffects();
   });
 
-  Future<void> pumpScreen(WidgetTester tester, {int level = 1, GameDifficulty round = GameDifficulty.normal}) async {
+  Future<void> pumpScreen(WidgetTester tester, {int level = 1, GameDifficulty round = GameDifficulty.gold}) async {
     when(() => repository.readGameProgress(GameId.oddOneOut))
         .thenAnswer((_) async => progressAt(level, round: round));
     await tester.pumpWidget(RepositoryProvider<IPersistenceRepository>.value(
@@ -154,16 +154,16 @@ void main() {
     await tester.pump(const Duration(seconds: 5));
     expect(stateOf(tester).elapsed, Duration.zero);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-    await tester.pump(const Duration(seconds: 36));
+    await tester.pump(const Duration(seconds: 41)); // 40 s del nivel 3 del oro (HU-051 3.3)
     expect(find.text('¡Se acabó el tiempo! Probemos con menos dibujos.'), findsOneWidget);
     await tester.pump(OddOneOutCubit.timeUpDuration);
     await tester.pump(const Duration(milliseconds: 400));
   });
 
-  testWidgets('the help hop only in Easy and Normal; Premium removes nothing for the child', (tester) async {
+  testWidgets('diamond keeps its time with Premium; Premium removes nothing for the child', (tester) async {
     when(() => repository.readUserProfile()).thenAnswer((_) async => const UserProfile(isPremium: true, isSoundEnabled: true));
-    await pumpScreen(tester, level: 2, round: GameDifficulty.impossible);
-    expect(stateOf(tester).gameRound, GameDifficulty.impossible);
+    await pumpScreen(tester, level: 2, round: GameDifficulty.diamond);
+    expect(stateOf(tester).gameRound, GameDifficulty.diamond);
     expect(stateOf(tester).timeLimit, const Duration(seconds: 25));
   });
 
@@ -173,7 +173,7 @@ void main() {
     expect(OddOneOutScreen.boardInProgress(const OddOneOutState(phase: OddPhase.solved)), isTrue);
     expect(OddOneOutScreen.boardInProgress(const OddOneOutState()), isFalse);
     expect(GameSoundEvents.oddOneOut(const OddOneOutState(phase: OddPhase.playing),
-        const OddOneOutState(phase: OddPhase.celebrating, medal: GameDifficulty.easy)), GameSound.badge);
+        const OddOneOutState(phase: OddPhase.celebrating, medal: GameDifficulty.bronze)), GameSound.badge);
     expect(GameSoundEvents.oddOneOut(const OddOneOutState(phase: OddPhase.solved),
         const OddOneOutState(phase: OddPhase.celebrating)), GameSound.complete);
   });

@@ -625,5 +625,57 @@
   "parentsFeedbackSummary": "Write to us by email",
   "@parentsFeedbackSummary": {
     "description": "Summary under \"Help and feedback\" in the parents zone list (HU-046). Short."
+  },
+  "roundBronze": "Bronze",
+  "@roundBronze": {
+    "description": "Name of the bronze round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundSilver": "Silver",
+  "@roundSilver": {
+    "description": "Name of the silver round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundGold": "Gold",
+  "@roundGold": {
+    "description": "Name of the gold round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundRuby": "Ruby",
+  "@roundRuby": {
+    "description": "Name of the ruby round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundEmerald": "Emerald",
+  "@roundEmerald": {
+    "description": "Name of the emerald round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundSapphire": "Sapphire",
+  "@roundSapphire": {
+    "description": "Name of the sapphire round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundObsidian": "Obsidian",
+  "@roundObsidian": {
+    "description": "Name of the obsidian round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundDiamond": "Diamond",
+  "@roundDiamond": {
+    "description": "Name of the diamond round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "medalRubyTitle": "Ruby medal!",
+  "@medalRubyTitle": {
+    "description": "Celebration title when the child completes the ruby round (HU-051), like \"Gold medal!\"."
+  },
+  "medalEmeraldTitle": "Emerald medal!",
+  "@medalEmeraldTitle": {
+    "description": "Celebration title when the child completes the emerald round (HU-051), like \"Gold medal!\"."
+  },
+  "medalSapphireTitle": "Sapphire medal!",
+  "@medalSapphireTitle": {
+    "description": "Celebration title when the child completes the sapphire round (HU-051), like \"Gold medal!\"."
+  },
+  "medalObsidianTitle": "Obsidian medal!",
+  "@medalObsidianTitle": {
+    "description": "Celebration title when the child completes the obsidian round (HU-051), like \"Gold medal!\"."
+  },
+  "medalDiamondTitle": "Diamond medal!",
+  "@medalDiamondTitle": {
+    "description": "Celebration title when the child completes the diamond round (HU-051), like \"Gold medal!\"."
   }
 }

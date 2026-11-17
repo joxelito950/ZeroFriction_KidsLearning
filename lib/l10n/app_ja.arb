@@ -124,5 +124,18 @@
   "parentsUnsavedTitle": "変更を保存しますか？",
   "parentsZonePlayTimePerDay": "1日{minutes}分",
   "parentsZonePinSummary": "子どもがアプリから出ないようにする",
-  "parentsFeedbackSummary": "メールでお知らせください"
+  "parentsFeedbackSummary": "メールでお知らせください",
+  "roundBronze": "銅",
+  "roundSilver": "銀",
+  "roundGold": "金",
+  "roundRuby": "ルビー",
+  "roundEmerald": "エメラルド",
+  "roundSapphire": "サファイア",
+  "roundObsidian": "黒曜石",
+  "roundDiamond": "ダイヤモンド",
+  "medalRubyTitle": "ルビーのメダル！",
+  "medalEmeraldTitle": "エメラルドのメダル！",
+  "medalSapphireTitle": "サファイアのメダル！",
+  "medalObsidianTitle": "黒曜石のメダル！",
+  "medalDiamondTitle": "ダイヤモンドのメダル！"
 }

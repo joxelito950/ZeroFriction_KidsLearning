@@ -52,7 +52,7 @@ enum MemoryLoss {
 
 /// Cómo se juega la escalera: la dificultad y si hay tiempo (HU-030).
 final class MemoryLadderRules {
-  const MemoryLadderRules({this.difficulty = GameDifficulty.normal, this.timed = true});
+  const MemoryLadderRules({this.difficulty = GameDifficulty.gold, this.timed = true});
 
   final GameDifficulty difficulty;
   final bool timed;
@@ -62,8 +62,9 @@ final class MemoryLadderRules {
   /// Límites con los que se llega a los niveles 2 a 5.
   List<Duration> get timeLimits => MemoryLadder.timeLimitsFor(difficulty);
 
-  /// La vista previa de las cartas (HU-030 3.4) es una ayuda: no va en Imposible.
-  bool get preview => difficulty.showsHelps;
+  /// La vista previa de las cartas (HU-030 3.4) es una ayuda: se acorta ronda
+  /// a ronda y desaparece en obsidiana y diamante (HU-051 3.1).
+  bool get preview => MemoryLadder.previewFor(difficulty) > Duration.zero;
 
   @override
   bool operator ==(Object other) =>
@@ -95,40 +96,38 @@ abstract final class MemoryLadder {
     MemoryLevel(number: 5, pairs: 8),
   ];
 
-  /// Serie de Normal (HU-001).
-  static const List<Duration> timeLimits = [
-    Duration(seconds: 90),
-    Duration(seconds: 60),
-    Duration(seconds: 45),
-    Duration(seconds: 30),
-  ];
+  /// Segundos con los que se llega a los niveles 2 a 5 en cada ronda (HU-051
+  /// 3.1): bajan un 22–25 % por ronda, del bronce (el Fácil de HU-030) al
+  /// diamante (el antiguo Reto máximo). Se revisan en la prueba cerrada.
+  static const Map<GameDifficulty, List<int>> _seconds = {
+    GameDifficulty.bronze: [270, 180, 135, 90],
+    GameDifficulty.silver: [210, 140, 105, 70],
+    GameDifficulty.gold: [160, 105, 80, 55],
+    GameDifficulty.ruby: [125, 83, 63, 42],
+    GameDifficulty.emerald: [95, 63, 48, 32],
+    GameDifficulty.sapphire: [75, 50, 37, 25],
+    GameDifficulty.obsidian: [58, 38, 29, 20],
+    GameDifficulty.diamond: [45, 30, 22, 15],
+  };
 
-  /// Fácil: el triple de Normal (HU-030 3.2).
-  static const List<Duration> easyTimeLimits = [
-    Duration(seconds: 270),
-    Duration(seconds: 180),
-    Duration(seconds: 135),
-    Duration(seconds: 90),
-  ];
+  static List<Duration> timeLimitsFor(GameDifficulty difficulty) =>
+      [for (final int value in _seconds[difficulty]!) Duration(seconds: value)];
 
-  /// Imposible: la mitad de Normal, con 22,5 s redondeado a 22 s (HU-030 3.2).
-  static const List<Duration> impossibleTimeLimits = [
-    Duration(seconds: 45),
-    Duration(seconds: 30),
-    Duration(seconds: 22),
-    Duration(seconds: 15),
-  ];
-
-  static List<Duration> timeLimitsFor(GameDifficulty difficulty) => switch (difficulty) {
-        GameDifficulty.easy => easyTimeLimits,
-        GameDifficulty.normal => timeLimits,
-        GameDifficulty.impossible => impossibleTimeLimits,
+  /// Cuánto se ven las cartas antes de voltearse (HU-030 3.4): una ayuda que
+  /// se acorta ronda a ronda y desaparece en obsidiana y diamante (HU-051 3.1).
+  static Duration previewFor(GameDifficulty difficulty) => switch (difficulty) {
+        GameDifficulty.bronze => const Duration(milliseconds: 2000),
+        GameDifficulty.silver => const Duration(milliseconds: 1500),
+        GameDifficulty.gold || GameDifficulty.ruby => const Duration(milliseconds: 1000),
+        GameDifficulty.emerald => const Duration(milliseconds: 700),
+        GameDifficulty.sapphire => const Duration(milliseconds: 500),
+        GameDifficulty.obsidian || GameDifficulty.diamond => Duration.zero,
       };
 
   static int get maxLevel => levels.last.number;
 
-  /// La escalera en rondas (HU-037): el 2×2 es el tutorial y cada ronda usa
-  /// su serie de HU-030.
+  /// La escalera en rondas (HU-037, HU-051): el 2×2 es el tutorial y cada
+  /// ronda usa su serie.
   static final RoundLadder rounds = RoundLadder(
     levels: levels.length,
     timeLimits: {for (final GameDifficulty round in GameDifficulty.values) round: timeLimitsFor(round)},

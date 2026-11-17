@@ -124,5 +124,18 @@
   "parentsUnsavedTitle": "변경 사항을 저장할까요?",
   "parentsZonePlayTimePerDay": "하루 {minutes}분",
   "parentsZonePinSummary": "아이가 앱 밖으로 나가지 않게 하기",
-  "parentsFeedbackSummary": "이메일로 알려 주세요"
+  "parentsFeedbackSummary": "이메일로 알려 주세요",
+  "roundBronze": "동",
+  "roundSilver": "은",
+  "roundGold": "금",
+  "roundRuby": "루비",
+  "roundEmerald": "에메랄드",
+  "roundSapphire": "사파이어",
+  "roundObsidian": "흑요석",
+  "roundDiamond": "다이아몬드",
+  "medalRubyTitle": "루비 메달!",
+  "medalEmeraldTitle": "에메랄드 메달!",
+  "medalSapphireTitle": "사파이어 메달!",
+  "medalObsidianTitle": "흑요석 메달!",
+  "medalDiamondTitle": "다이아몬드 메달!"
 }

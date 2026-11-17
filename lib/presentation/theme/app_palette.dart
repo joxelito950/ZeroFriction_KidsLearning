@@ -1,6 +1,6 @@
 import 'package:flutter/painting.dart';
 
-/// Los 9 colores de la app (D-032, docs/brand/PALETA.md). Es el **único** sitio
+/// Los 11 colores de la app (D-032, docs/brand/PALETA.md). Es el **único** sitio
 /// de `lib/` donde se escribe un color: el resto usa estas constantes o sus
 /// transparencias (`withValues(alpha: …)`). Lo comprueba
 /// test/architecture/palette_test.dart.
@@ -32,6 +32,14 @@ abstract final class AppPalette {
   /// Medalla de plata (HU-037): un gris con el matiz del teal de la marca.
   static const Color medalSilver = Color(0xFF748A8E);
 
+  /// Medalla de rubí (HU-051): un rubí oscuro, lejos del rojo de un error (C7).
+  /// **Exclusivo de las medallas**: nunca en textos, mensajes, botones ni
+  /// secciones (decisión del dueño, 2026-11-17). Lo comprueba palette_test.
+  static const Color medalRuby = Color(0xFF8E1F3B);
+
+  /// Medalla de esmeralda (HU-051). **Exclusivo de las medallas**, como el rubí.
+  static const Color medalEmerald = Color(0xFF1E7F5C);
+
   /// Todos, en el orden de PALETA.md.
   static const List<Color> all = [
     deepTeal,
@@ -43,5 +51,7 @@ abstract final class AppPalette {
     white,
     medalBronze,
     medalSilver,
+    medalRuby,
+    medalEmerald,
   ];
 }

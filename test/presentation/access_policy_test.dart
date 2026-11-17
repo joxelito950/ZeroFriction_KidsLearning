@@ -46,11 +46,11 @@ void main() {
   test('the Reto máximo round of Odd one out is playable without buying', () {
     fakeAsync((async) {
       when(() => repository.readGameProgress(GameId.oddOneOut))
-          .thenAnswer((_) async => progressAt(2, round: GameDifficulty.impossible));
+          .thenAnswer((_) async => progressAt(2, round: GameDifficulty.diamond));
       final cubit = OddOneOutCubit(repository: repository, random: Random(1));
       cubit.start();
       async.flushMicrotasks();
-      expect(cubit.state.gameRound, GameDifficulty.impossible);
+      expect(cubit.state.gameRound, GameDifficulty.diamond);
       cubit.close();
     });
   });

@@ -64,7 +64,7 @@ void main() {
     fakeAsync((async) {
       final cubit = started(async);
       expect(cubit.state.phase, OddPhase.playing);
-      expect(cubit.state.gameRound, GameDifficulty.easy);
+      expect(cubit.state.gameRound, GameDifficulty.bronze);
       expect(cubit.state.level, 1);
       expect(cubit.state.objects, hasLength(3));
       expect(cubit.state.remainingFraction, isNull);
@@ -134,7 +134,7 @@ void main() {
     fakeAsync((async) {
       givenProgress(progressAt(3));
       final cubit = started(async);
-      expect(cubit.state.timeLimit, const Duration(seconds: 35));
+      expect(cubit.state.timeLimit, const Duration(seconds: 40), reason: 'gold, level 3 (HU-051 3.3)');
       async.elapse(const Duration(seconds: 5));
       expect(cubit.state.elapsed, Duration.zero, reason: 'waits for the first touch');
 
@@ -147,64 +147,64 @@ void main() {
       async.elapse(const Duration(seconds: 30));
       expect(cubit.state.elapsed, const Duration(seconds: 10));
       cubit.resume();
-      async.elapse(const Duration(seconds: 25));
+      async.elapse(const Duration(seconds: 30));
 
       expect(cubit.state.phase, OddPhase.timeUp);
       expect(cubit.state.loss, OddLoss.fewerObjects);
       async.elapse(OddOneOutCubit.timeUpDuration);
       expect(cubit.state.level, 2);
-      expect(cubit.state.timeLimit, const Duration(seconds: 35), reason: 'keeps the limit');
+      expect(cubit.state.timeLimit, const Duration(seconds: 40), reason: 'keeps the limit');
       cubit.close();
     });
   });
 
-  test('losing the first timed level goes to the tutorial; a second fall drops a round (HU-037 R10)', () {
+  test('a second loss on the first level drops one round; there a first loss plays it again (HU-051 P5, P7)', () {
     fakeAsync((async) {
       givenProgress(progressAt(2, tutorialFalls: 1));
       final cubit = started(async);
       cubit.tap(wrongIndex(cubit.state));
-      async.elapse(const Duration(seconds: 41));
+      async.elapse(const Duration(seconds: 46));
       expect(cubit.state.loss, OddLoss.easierRound);
       async.elapse(OddOneOutCubit.timeUpDuration);
-      expect(cubit.state.gameRound, GameDifficulty.easy);
+      expect(cubit.state.gameRound, GameDifficulty.silver);
       expect(cubit.state.level, 2);
 
       cubit.tap(wrongIndex(cubit.state));
-      async.elapse(const Duration(seconds: 61));
+      async.elapse(const Duration(seconds: 53));
       expect(cubit.state.loss, OddLoss.restart);
       cubit.close();
     });
   });
 
-  test('without Premium, completing Normal gives silver and stays in Normal (P1, P6)', () {
+  test('without Premium, completing ruby gives its medal and stays in ruby (HU-051 P4)', () {
     fakeAsync((async) {
-      givenProgress(progressAt(5));
+      givenProgress(progressAt(5, round: GameDifficulty.ruby));
       final cubit = started(async);
       solveLevel(async, cubit);
-      expect(cubit.state.medal, GameDifficulty.normal);
+      expect(cubit.state.medal, GameDifficulty.ruby);
       expect(cubit.state.hasMedal, isTrue);
       async.elapse(OddOneOutCubit.celebrationDuration);
-      expect(cubit.state.gameRound, GameDifficulty.normal);
-      expect(cubit.state.level, 1);
+      expect(cubit.state.gameRound, GameDifficulty.ruby);
+      expect(cubit.state.level, 2, reason: 'its first timed level, no tutorial');
       cubit.close();
     });
   });
 
-  test('with Premium, Normal leads to Impossible; a saved Impossible without Premium plays Normal', () {
+  test('with Premium, ruby leads to emerald; a saved diamond without Premium plays ruby (HU-051 P4)', () {
     fakeAsync((async) {
       givenPremium(true);
-      givenProgress(progressAt(5));
+      givenProgress(progressAt(5, round: GameDifficulty.ruby));
       final cubit = started(async);
       solveLevel(async, cubit);
       async.elapse(OddOneOutCubit.celebrationDuration);
-      expect(cubit.state.gameRound, GameDifficulty.impossible);
+      expect(cubit.state.gameRound, GameDifficulty.emerald);
       cubit.close();
 
       givenPremium(false);
-      givenProgress(progressAt(3, round: GameDifficulty.impossible));
+      givenProgress(progressAt(3, round: GameDifficulty.diamond));
       final free = started(async);
-      expect(free.state.gameRound, GameDifficulty.normal);
-      expect(free.state.level, 1);
+      expect(free.state.gameRound, GameDifficulty.ruby);
+      expect(free.state.level, 2);
       free.close();
     });
   });
@@ -220,7 +220,7 @@ void main() {
 
       givenPremium(false);
       final free = started(async);
-      expect(free.state.timeLimit, const Duration(seconds: 30));
+      expect(free.state.timeLimit, const Duration(seconds: 35), reason: 'gold, level 4');
       verify(() => repository.updateParentalSettings(any())).called(greaterThan(0));
       free.close();
     });

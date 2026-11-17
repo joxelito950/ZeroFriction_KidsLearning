@@ -52,13 +52,13 @@ void main() {
 
   testWidgets('one row per option with what is chosen, in the order of HU-046 §4.1', (tester) async {
     when(() => repository.readGameProgress(GameId.shadows))
-        .thenAnswer((_) async => progressAt(2, round: GameDifficulty.normal));
+        .thenAnswer((_) async => progressAt(2, round: GameDifficulty.gold));
     await pumpZone(tester, settings: ParentalSettings(dailyLimitMinutes: 60));
 
     expect(find.text(l10n.parentsZoneTitle), findsOneWidget);
     expect(find.text(l10n.parentsZoneBackToMenu), findsOneWidget);
     expect(find.descendant(of: row('language'), matching: find.text('Español')), findsOneWidget);
-    expect(find.textContaining('${l10n.shadowsGameTitle}: ${l10n.difficultyNormal}'), findsOneWidget);
+    expect(find.textContaining('${l10n.shadowsGameTitle}: ${l10n.roundGold}'), findsOneWidget);
     expect(find.descendant(of: row('play-time'), matching: find.text(l10n.parentsZonePlayTimePerDay(60))),
         findsOneWidget);
     await tester.scrollUntilVisible(find.byKey(const ValueKey<String>('parents-zone-privacy')), 200);
@@ -133,13 +133,13 @@ void main() {
   testWidgets('a round saved in the games page shows in the row summary', (tester) async {
     await pumpZone(tester);
     await open(tester, 'games');
-    await tester.tap(find.byKey(const ValueKey<String>('round-memory-normal')));
+    await tester.tap(find.byKey(const ValueKey<String>('round-memory-gold')));
     await tester.pump();
     await tester.tap(find.byKey(const ValueKey<String>('parents-setting-save')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.textContaining('${l10n.menuMemoryTitle}: ${l10n.difficultyNormal}'), findsOneWidget);
+    expect(find.textContaining('${l10n.menuMemoryTitle}: ${l10n.roundGold}'), findsOneWidget);
   });
 
   group('15 more minutes at the top (HU-046 §4.1)', () {

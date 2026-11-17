@@ -29,25 +29,52 @@ final class GameProgress implements DecayingProgress<GameProgress> {
     }
   }
 
-  /// Quien nunca ha jugado: el tutorial de Fácil (R1), sin medallas.
+  /// Quien nunca ha jugado: el tutorial, al principio del bronce (R1; HU-051
+  /// R1), sin medallas.
   factory GameProgress.initial() =>
-      GameProgress(position: const RoundPosition(round: GameDifficulty.easy, level: RoundLadder.tutorial));
+      GameProgress(position: const RoundPosition(round: GameDifficulty.bronze, level: RoundLadder.tutorial));
 
-  /// Lo guardado antes de HU-037 (P7): se sigue en **Normal**, en el mismo
-  /// nivel; la insignia o medalla única pasa a bronce y plata, y las estrellas,
-  /// a la ronda Normal, salvo las del nivel 1, que ahora es el tutorial (P2).
+  /// Lo leído del teléfono. El tutorial solo se juega al empezar el juego
+  /// (HU-051 P5, P8): quien está en él pero ya jugó (tiene estrellas o
+  /// medallas), o está en otra ronda, sigue en el primer nivel con tiempo.
+  factory GameProgress.restored({
+    required RoundPosition position,
+    Set<GameDifficulty> medals = const {},
+    Map<RoundLevel, LevelRecord> records = const {},
+    DateTime? lastPlayedAt,
+    int? stuckLevel,
+    int stuckFalls = 0,
+  }) {
+    final bool skipTutorial = position.isTutorial &&
+        (position.round != GameDifficulty.bronze || medals.isNotEmpty || records.isNotEmpty);
+    return GameProgress(
+      position: skipTutorial
+          ? RoundPosition(round: position.round, level: RoundLadder.firstTimedLevel, tutorialFalls: position.tutorialFalls)
+          : position,
+      medals: medals,
+      records: records,
+      lastPlayedAt: lastPlayedAt,
+      stuckLevel: stuckLevel,
+      stuckFalls: stuckFalls,
+    );
+  }
+
+  /// Lo guardado antes de HU-037 (P7): se sigue en la antigua **Normal**, que
+  /// con HU-051 es el **oro**, en el mismo nivel; la insignia única vale las
+  /// medallas hasta el oro, y las estrellas pasan al oro, salvo las del nivel 1,
+  /// que ahora es el tutorial (P2).
   factory GameProgress.migrate({
     required int currentLevel,
     required bool hadBadge,
     required Map<int, LevelRecord> levelRecords,
     DateTime? lastPlayedAt,
   }) =>
-      GameProgress(
-        position: RoundPosition(round: GameDifficulty.normal, level: currentLevel),
-        medals: hadBadge ? const {GameDifficulty.easy, GameDifficulty.normal} : const {},
+      GameProgress.restored(
+        position: RoundPosition(round: GameDifficulty.gold, level: currentLevel),
+        medals: hadBadge ? GameDifficulty.medalsFromSaved('normal') : const {},
         records: {
           for (final MapEntry<int, LevelRecord> entry in levelRecords.entries)
-            if (entry.key != RoundLadder.tutorial) RoundLevel(GameDifficulty.normal, entry.key): entry.value,
+            if (entry.key != RoundLadder.tutorial) RoundLevel(GameDifficulty.gold, entry.key): entry.value,
         },
         lastPlayedAt: lastPlayedAt,
       );
@@ -56,7 +83,7 @@ final class GameProgress implements DecayingProgress<GameProgress> {
   /// escalera al volver (como HU-001 R12).
   final RoundPosition position;
 
-  /// Rondas completadas: bronce (Fácil), plata (Normal) y oro (Imposible).
+  /// Rondas completadas, cada una con su medalla (de bronce a diamante, HU-051).
   /// No se pierden nunca (P5).
   final Set<GameDifficulty> medals;
 
@@ -138,10 +165,11 @@ final class GameProgress implements DecayingProgress<GameProgress> {
     );
   }
 
-  /// El adulto cambia la ronda (P1): se empieza por su tutorial, sin perder
-  /// estrellas ni medallas (R5). La cuenta de «atascado» empieza de cero.
+  /// El adulto cambia la ronda (P1): se empieza por su primer nivel con tiempo
+  /// (HU-051 R3b), sin perder estrellas ni medallas (R5). La cuenta de
+  /// «atascado» empieza de cero.
   GameProgress withRound(GameDifficulty round) => GameProgress(
-        position: RoundPosition(round: round, level: RoundLadder.tutorial),
+        position: RoundPosition(round: round, level: RoundLadder.firstTimedLevel),
         medals: medals,
         records: records,
         lastPlayedAt: lastPlayedAt,
@@ -203,6 +231,13 @@ final class RoundLevel {
   const RoundLevel(this.round, this.level);
 
   factory RoundLevel.fromKey(int key) => RoundLevel(GameDifficulty.values[key ~/ 10], key % 10);
+
+  /// Clave guardada antes de HU-051, con las tres rondas antiguas.
+  factory RoundLevel.fromLegacyKey(int key) => RoundLevel(GameDifficulty.fromLegacyIndex(key ~/ 10), key % 10);
+
+  /// Lee una clave guardada: [legacy] si es de antes de HU-051.
+  factory RoundLevel.fromSaved(int key, {required bool legacy}) =>
+      legacy ? RoundLevel.fromLegacyKey(key) : RoundLevel.fromKey(key);
 
   final GameDifficulty round;
   final int level;

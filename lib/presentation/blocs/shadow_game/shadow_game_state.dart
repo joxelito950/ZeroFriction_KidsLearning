@@ -57,7 +57,7 @@ class ShadowGameState {
     this.medalEarned = false,
     this.hasMedal = false,
     this.goldFraction = 0,
-    this.gameRound = GameDifficulty.easy,
+    this.gameRound = GameDifficulty.bronze,
     this.medal,
     this.lossKind,
   });

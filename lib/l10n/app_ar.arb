@@ -124,5 +124,18 @@
   "parentsUnsavedTitle": "هل تريد حفظ التغييرات؟",
   "parentsZonePlayTimePerDay": "{minutes} دقيقة يوميًا",
   "parentsZonePinSummary": "إبقاء طفلك داخل التطبيق",
-  "parentsFeedbackSummary": "راسلنا عبر البريد الإلكتروني"
+  "parentsFeedbackSummary": "راسلنا عبر البريد الإلكتروني",
+  "roundBronze": "برونزي",
+  "roundSilver": "فضي",
+  "roundGold": "ذهبي",
+  "roundRuby": "ياقوت",
+  "roundEmerald": "زمرد",
+  "roundSapphire": "ياقوت أزرق",
+  "roundObsidian": "سبج",
+  "roundDiamond": "ألماس",
+  "medalRubyTitle": "ميدالية ياقوتية!",
+  "medalEmeraldTitle": "ميدالية زمردية!",
+  "medalSapphireTitle": "ميدالية الياقوت الأزرق!",
+  "medalObsidianTitle": "ميدالية السبج!",
+  "medalDiamondTitle": "ميدالية ماسية!"
 }
