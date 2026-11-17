@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-17): P1 a P3 decididas por el dueño |
+| **Estado** | **Desarrollada** (2026-11-17, rama `feature/hu-050-shadows-drag`); falta verla en el moto g55 |
 | **Épica** | E4 · Juegos (HU-007 Sombras) |
 | **Prioridad** | **P1** |
 | **Tamaño** | S (medio día) |
@@ -50,3 +50,10 @@ En el Reto máximo (el objeto debe cubrir el 90 % de su sombra, HU-007 P4) **es 
 | P1 | ¿Tamaño real al arrastrar, o se mantiene más grande y se mide igual de grande? | ✅ Decidido (2026-11-17), con un ajuste: en la bandeja la tarjeta es **un poco más pequeña** que la sombra y, al seleccionarla, **crece a su tamaño real**, el de la sombra, para no perder el efecto de crecer |
 | P2 | ¿Aviso de «casi» (contorno ámbar) al acercarse? | ✅ Decidido (2026-11-17), distinto de la recomendación: **sí, en todas las rondas**, por consistencia |
 | P3 | ¿Se baja el 90 % del Reto máximo? | ✅ Decidido (2026-11-17): **se mantiene en 90 %** y se revisa en la prueba cerrada. Con HU-051, el 90 % pasa a ser el del diamante y las rondas intermedias tienen solapes intermedios. Recomendación original: primero se prueba con la sombra visible; si sigue siendo muy difícil, bajar a 80 % tras la prueba cerrada |
+
+## 7. Desarrollo (2026-11-17)
+
+- `ShadowBoard.trayScale = 0,85`: en la bandeja, la tarjeta mide el 85 % de la celda; elegida con el lector de pantalla crece al 100 % (animación de 150 ms).
+- Mientras se arrastra, el objeto se dibuja **a tamaño de celda** (el mismo rectángulo con el que se mide el solape) y **sin tarjeta**, con una sombra suave en el emoji. Desaparece `dragScale`.
+- `ShadowGameState.coverageToSnap` lleva al tablero el solape de la ronda; el contorno ámbar de la sombra se enciende cuando el objeto **encajaría si se soltara ahora**, con la misma regla que decide el encaje, en todas las rondas.
+- Tests: tamaños de la tarjeta y del objeto arrastrado, sin tarjeta al arrastrar, y el contorno en Fácil y en el Reto máximo.

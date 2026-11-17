@@ -169,6 +169,46 @@ void main() {
       expect(find.byKey(ValueKey<String>('shadow-object-$object')), findsNothing);
     });
 
+    // HU-050 (visto en el moto g55): la tarjeta blanca tapaba la sombra en el
+    // Reto máximo y el objeto se veía más grande de lo que se medía.
+    testWidgets('the tray sticker is smaller than the shadow; dragged, it has the shadow size and no card',
+        (tester) async {
+      await pumpScreen(tester);
+      final String object = stateOf(tester).objects.first;
+      final Size shadow = tester.getSize(find.byKey(ValueKey<String>('shadow-target-$object')));
+      final Size sticker = tester.getSize(find.byKey(ValueKey<String>('shadow-tray-card-$object')));
+      expect(sticker.width, closeTo(shadow.width * ShadowBoard.trayScale, 0.5));
+
+      final TestGesture gesture = await tester.startGesture(centerOf(tester, 'shadow-object-$object'));
+      await gesture.moveBy(const Offset(0, -40));
+      await tester.pump();
+      final Finder dragged = find.byKey(const ValueKey<String>('shadow-dragged'));
+      expect(tester.getSize(dragged).width, closeTo(shadow.width, 0.5), reason: 'the size that is measured');
+      expect(find.descendant(of: dragged, matching: find.byType(DecoratedBox)), findsNothing, reason: 'no white card');
+      await gesture.up();
+      await tester.pump(ShadowBoard.flightDuration + const Duration(milliseconds: 50));
+    });
+
+    for (final round in [GameDifficulty.easy, GameDifficulty.impossible]) {
+      testWidgets('the shadow outline lights up only when the object would snap, in ${round.name} (HU-050 P2)',
+          (tester) async {
+        await pumpScreen(tester, round: round, waitIntro: round != GameDifficulty.impossible);
+        final String object = stateOf(tester).objects.first;
+        final Finder almost = find.byKey(ValueKey<String>('shadow-almost-$object'));
+
+        final TestGesture gesture = await tester.startGesture(centerOf(tester, 'shadow-object-$object'));
+        await gesture.moveBy(const Offset(0, -20));
+        await tester.pump();
+        expect(almost, findsNothing, reason: '${round.name}: far from its shadow');
+
+        await gesture.moveTo(centerOf(tester, 'shadow-target-$object'));
+        await tester.pump();
+        expect(almost, findsOneWidget, reason: '${round.name}: right on its shadow');
+        await gesture.up();
+        await tester.pump(ShadowBoard.flightDuration + const Duration(milliseconds: 50));
+      });
+    }
+
     testWidgets('an object dropped on another shadow goes back to the tray and counts a mistake', (tester) async {
       await pumpScreen(tester);
       final String object = stateOf(tester).objects.first;

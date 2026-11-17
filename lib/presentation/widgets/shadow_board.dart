@@ -159,8 +159,11 @@ class ShadowBoard extends StatefulWidget {
   /// Vuelo del objeto al soltarlo: hasta su sombra o de vuelta a la bandeja.
   static const Duration flightDuration = Duration(milliseconds: 280);
 
-  /// Mientras se arrastra, el objeto se ve un poco más grande (R3).
-  static const double dragScale = 1.15;
+  /// En la bandeja, la tarjeta («sticker») es un poco más pequeña que la
+  /// sombra; al elegirla o arrastrarla crece a su tamaño real, el de la sombra,
+  /// que es también el que se mide para encajar (HU-050 P1). Así se conserva el
+  /// efecto de «levantar» el objeto y lo que se ve es lo que cuenta.
+  static const double trayScale = 0.85;
 
   @override
   State<ShadowBoard> createState() => _ShadowBoardState();
@@ -277,6 +280,17 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
     if (!_reduceMotion) _flight.forward(from: 0);
   }
 
+  /// El objeto arrastrado encajaría si se soltara ahora: el contorno de su
+  /// sombra se ilumina (HU-050 P2, en todas las rondas). Usa la misma regla y
+  /// el mismo rectángulo que [_onPanEnd].
+  bool _wouldSnap(ShadowBoardGeometry geometry, String symbol) {
+    final Rect? target = geometry.shadowRects[symbol];
+    if (target == null) return false;
+    final Rect object = Rect.fromCenter(center: _dragCenter, width: geometry.cell, height: geometry.cell);
+    return ShadowDrop.coverage(ShadowBoardGeometry.boxOf(object), ShadowBoardGeometry.boxOf(target)) >=
+        widget.state.coverageToSnap;
+  }
+
   void _onShadowActivated(String shadow) {
     final String? selected = _selected;
     if (selected == null) return;
@@ -317,6 +331,7 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
                     symbol: shadow,
                     emojiSize: geometry.emojiSize,
                     filled: state.placed.contains(shadow) && !(_flying == shadow && _flyingToShadow),
+                    almost: _dragged == shadow && _wouldSnap(geometry, shadow),
                     semanticLabel: state.placed.contains(shadow)
                         ? l10n.shadowsPlacedSemantics(shadow)
                         : l10n.shadowsShadowSemantics(shadow),
@@ -349,7 +364,12 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
                         onPanCancel: () => _onPanEnd(object),
                         child: Opacity(
                           opacity: _dragged == object ? 0 : 1,
-                          child: _ObjectCard(symbol: object, emojiSize: geometry.emojiSize, selected: _selected == object),
+                          child: _TrayObject(
+                            symbol: object,
+                            cell: geometry.cell,
+                            emojiSize: geometry.emojiSize,
+                            selected: _selected == object,
+                          ),
                         ),
                       ),
                     ),
@@ -358,16 +378,15 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
             if (introducing) ..._introObjects(geometry),
             if (_dragged case final String dragged)
               Positioned.fromRect(
-                rect: Rect.fromCenter(
-                  center: _dragCenter,
-                  width: geometry.cell * ShadowBoard.dragScale,
-                  height: geometry.cell * ShadowBoard.dragScale,
-                ),
+                // A tamaño real y sin tarjeta: la sombra de debajo se ve
+                // alrededor del dibujo (HU-050, visto en el moto g55).
+                rect: Rect.fromCenter(center: _dragCenter, width: geometry.cell, height: geometry.cell),
                 child: IgnorePointer(
                   child: _ObjectCard(
                     key: const ValueKey<String>('shadow-dragged'),
                     symbol: dragged,
-                    emojiSize: geometry.emojiSize * ShadowBoard.dragScale,
+                    emojiSize: geometry.emojiSize,
+                    bare: true,
                     lifted: true,
                   ),
                 ),
@@ -459,11 +478,15 @@ class _ShadowCell extends StatelessWidget {
     required this.filled,
     required this.semanticLabel,
     required this.onActivate,
+    this.almost = false,
   });
 
   final String symbol;
   final double emojiSize;
   final bool filled;
+
+  /// El objeto arrastrado encajaría aquí si se soltara (HU-050 P2).
+  final bool almost;
   final String semanticLabel;
   final VoidCallback? onActivate;
 
@@ -474,13 +497,45 @@ class _ShadowCell extends StatelessWidget {
       label: semanticLabel,
       onTap: onActivate,
       excludeSemantics: true,
-      child: Center(
-        child: _Emoji(
-          key: ValueKey<String>(filled ? 'shadow-placed-$symbol' : 'shadow-silhouette-$symbol'),
-          symbol: symbol,
-          size: emojiSize,
-          silhouette: !filled,
+      child: DecoratedBox(
+        key: almost ? ValueKey<String>('shadow-almost-$symbol') : null,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: AppPalette.amber.withValues(alpha: almost ? 1 : 0), width: 4),
         ),
+        child: Center(
+          child: _Emoji(
+            key: ValueKey<String>(filled ? 'shadow-placed-$symbol' : 'shadow-silhouette-$symbol'),
+            symbol: symbol,
+            size: emojiSize,
+            silhouette: !filled,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Un objeto en la bandeja: su tarjeta es un poco más pequeña que la celda y,
+/// elegido (con el lector de pantalla), crece a su tamaño real (HU-050 P1).
+class _TrayObject extends StatelessWidget {
+  const _TrayObject({required this.symbol, required this.cell, required this.emojiSize, required this.selected});
+
+  final String symbol;
+  final double cell;
+  final double emojiSize;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final double scale = selected ? 1 : ShadowBoard.trayScale;
+    return Center(
+      child: AnimatedContainer(
+        key: ValueKey<String>('shadow-tray-card-$symbol'),
+        duration: const Duration(milliseconds: 150),
+        width: cell * scale,
+        height: cell * scale,
+        child: _ObjectCard(symbol: symbol, emojiSize: emojiSize * scale, selected: selected),
       ),
     );
   }
@@ -509,7 +564,7 @@ class _ObjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget emoji = Center(child: _Emoji(symbol: symbol, size: emojiSize));
+    final Widget emoji = Center(child: _Emoji(symbol: symbol, size: emojiSize, lifted: lifted && bare));
     if (bare) return emoji;
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -532,11 +587,14 @@ class _ObjectCard extends StatelessWidget {
 /// El emoji, en color o como silueta de un solo color (`srcIn`, comprobado en
 /// el spike de HU-007).
 class _Emoji extends StatelessWidget {
-  const _Emoji({super.key, required this.symbol, required this.size, this.silhouette = false});
+  const _Emoji({super.key, required this.symbol, required this.size, this.silhouette = false, this.lifted = false});
 
   final String symbol;
   final double size;
   final bool silhouette;
+
+  /// Sin tarjeta mientras se arrastra: una sombra suave lo hace «flotar».
+  final bool lifted;
 
   @override
   Widget build(BuildContext context) {
@@ -544,7 +602,13 @@ class _Emoji extends StatelessWidget {
       symbol,
       textAlign: TextAlign.center,
       textScaler: TextScaler.noScaling,
-      style: TextStyle(fontSize: size, height: 1.15),
+      style: TextStyle(
+        fontSize: size,
+        height: 1.15,
+        shadows: lifted
+            ? [Shadow(color: AppPalette.deepTeal.withValues(alpha: 0.35), blurRadius: 14, offset: const Offset(0, 6))]
+            : null,
+      ),
     );
     if (!silhouette) return text;
     return ColorFiltered(colorFilter: const ColorFilter.mode(AppPalette.deepTeal, BlendMode.srcIn), child: text);

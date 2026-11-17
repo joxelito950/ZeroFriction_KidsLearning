@@ -197,6 +197,7 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
       objects: List.of(content.objects)..shuffle(_random),
       shadows: content.shadows,
       premium: _rules.premium,
+      coverageToSnap: _rules.coverageToSnap,
       hasMedal: _progress.bestMedal != null,
       goldFraction: _progress.goldFraction(_ladder),
       gameRound: position.round,
