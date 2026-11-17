@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-17): recomendaciones aceptadas. Se diseña ya para las **8 medallas** de HU-051 |
+| **Estado** | **Desarrollada para 3 medallas** (2026-11-17, rama `feature/hu-048-049-medals-and-child`); las 5 gemas llegan con HU-051. Falta verla en el moto g55 |
 | **Épica** | E1 · Juegos (progresión y recompensas) |
 | **Prioridad** | **P1** (corrección visible en la prueba cerrada) |
 | **Tamaño** | S (1 día) |
@@ -60,3 +60,11 @@ Una **medalla propia** (`MedalBadge`), dibujada por la app, que se distingue por
 | P1 | ¿Medalla dibujada por la app o ilustración PNG como el resto de la identidad? | ✅ Decidido (2026-11-17): **dibujada por la app**: escala a cualquier tamaño, admite las medallas futuras (HU-051) sin pedir una ilustración por cada una y pesa nada |
 | P2 | ¿Estrellas grabadas (1, 2, 3) o letras (B, P, O)? | ✅ Decidido (2026-11-17): **estrellas**: sin texto (los niños no leen y no hay que traducir) |
 | P3 | ¿Se cambia también el color de la ronda en los puntos de nivel? | ✅ Decidido (2026-11-17): **sí**, el oro de los puntos pasa al ámbar con borde dorado, para que ronda y medalla coincidan |
+
+## 7. Desarrollo (2026-11-17)
+
+- `MedalBadge` y `MedalStyle` (`widgets/medal_badge.dart`): cinta en coral y teal, disco con borde y 1, 2 o 3 estrellas. Bronce y plata con borde de teal profundo al 45 % y estrellas crema; **oro en ámbar con borde y estrellas doradas**. Sin colores nuevos ni literales (C1, C2).
+- `RoundStyle.medalStyleOf`, `colorOf` (relleno de la medalla) y `rimOf` (su borde). Los puntos de nivel alcanzados llevan el borde de la medalla de la ronda (P3); los de la ronda de oro, en ámbar con borde dorado.
+- Sustituye el icono del sistema en el menú, en la celebración (HU-049) y en los chips de la Zona de Padres.
+- Tests: luminancia del oro ≥ 1,8 veces la del bronce (es unas 2,5), estrellas, estilos por ronda, semántica, sin iconos del sistema y bordes de los puntos.
+

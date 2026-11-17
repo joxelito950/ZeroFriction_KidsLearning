@@ -218,6 +218,7 @@ class _Header extends StatelessWidget {
               level: state.level,
               total: OddOneOut.maxLevel,
               color: RoundStyle.colorOf(state.gameRound),
+              rim: RoundStyle.rimOf(state.gameRound),
             ),
           ],
         ),
