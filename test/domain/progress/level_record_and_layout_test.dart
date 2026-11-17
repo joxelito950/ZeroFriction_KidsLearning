@@ -31,10 +31,10 @@ void main() {
   group('layout (P13, P14)', () {
     test('Easy and Normal always put the shadows first; Impossible picks both at random', () {
       for (var seed = 0; seed < 10; seed++) {
-        expect(const ShadowRules(difficulty: GameDifficulty.easy).layoutFor(Random(seed)), ShadowLayout.shadowsFirst);
+        expect(const ShadowRules(difficulty: GameDifficulty.bronze).layoutFor(Random(seed)), ShadowLayout.shadowsFirst);
         expect(const ShadowRules().layoutFor(Random(seed)), ShadowLayout.shadowsFirst);
       }
-      const impossible = ShadowRules(difficulty: GameDifficulty.impossible);
+      const impossible = ShadowRules(difficulty: GameDifficulty.diamond);
       final Random random = Random(3);
       expect({for (var i = 0; i < 30; i++) impossible.layoutFor(random)}, ShadowLayout.values.toSet());
     });

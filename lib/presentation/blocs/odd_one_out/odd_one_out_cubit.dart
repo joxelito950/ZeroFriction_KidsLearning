@@ -86,12 +86,13 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
     }
   }
 
-  /// Empieza [next] desde su primer tablero. Sin Premium, la ronda Imposible
-  /// se juega como Normal desde su tutorial (P6): el final natural tras la plata.
+  /// Empieza [next] desde su primer tablero. Sin Premium, las rondas de
+  /// esmeralda a diamante se juegan como rubí desde su primer nivel con tiempo
+  /// (HU-051 P4): el final natural de la parte gratis.
   void _startLevel(RoundPosition next) {
     final playable = OddOneOut.playableRound(next.round, premium: _premium);
     final RoundPosition position =
-        playable == next.round ? next : RoundPosition(round: playable, level: RoundLadder.tutorial);
+        playable == next.round ? next : RoundPosition(round: playable, level: RoundLadder.firstTimedLevel);
     // Tras perder se conserva el límite (como HU-001 R5); si no lo trae, o si
     // cambió «Jugar sin tiempo», el de llegada al nivel.
     _position = RoundPosition(
@@ -211,7 +212,7 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
       elapsed: state.timeLimit,
       loss: step.droppedRound
           ? OddLoss.easierRound
-          : step.next.isTutorial
+          : step.retry
               ? OddLoss.restart
               : OddLoss.fewerObjects,
     ));

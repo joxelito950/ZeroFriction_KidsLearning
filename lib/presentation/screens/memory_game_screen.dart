@@ -269,7 +269,12 @@ class _Header extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                MemoryLevelIndicator(level: level, total: MemoryLadder.maxLevel, color: RoundStyle.colorOf(round)),
+                MemoryLevelIndicator(
+                  level: level,
+                  total: MemoryLadder.maxLevel,
+                  color: RoundStyle.colorOf(round),
+                  rim: RoundStyle.rimOf(round),
+                ),
                 const SizedBox(width: 12),
                 // Se encoge antes que desbordarse con textos largos (árabe).
                 Expanded(

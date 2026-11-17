@@ -25,12 +25,12 @@ class _SettingsBox extends Mock implements Box<ParentalSettingsHiveModel> {}
 /// HU-037, entrega 2: el progreso con rondas se guarda en los modelos de
 /// siempre (typeId 2 y 4) con campos nuevos, y lo de antes se migra (P7).
 void main() {
-  const easy = GameDifficulty.easy;
-  const normal = GameDifficulty.normal;
+  const easy = GameDifficulty.bronze;
+  const normal = GameDifficulty.gold;
   final DateTime day = DateTime.utc(2026, 11, 11, 9);
 
   final progress = GameProgress(
-    position: const RoundPosition(round: GameDifficulty.impossible, level: 3, tutorialFalls: 1),
+    position: const RoundPosition(round: GameDifficulty.diamond, level: 3, tutorialFalls: 1),
     medals: const {easy, normal},
     records: {
       const RoundLevel(easy, 2): LevelRecord(bestStars: 3, achievedAt: day),
@@ -46,7 +46,7 @@ void main() {
       final model = MemoryProgressHiveModel.fromGameProgress(progress);
       expect(model.hasBadge, isTrue, reason: 'old readers still see a badge');
       expect(model.bestStarsByLevel, isEmpty, reason: 'old maps are no longer written');
-      expect(model.bestStarsByRoundLevel, {2: 3, 15: 1});
+      expect(model.bestStarsByRoundLevel, {2: 3, 25: 1}, reason: 'key = round index × 10 + level; gold is 2');
       expect(ShadowProgressHiveModel.fromGameProgress(GameProgress.initial()).hasMedal, isFalse);
     });
 
@@ -121,7 +121,7 @@ void main() {
     test('data saved by version 1.0.0-rc.3 is read and migrated without losing anything', () async {
       final GameProgress memory = await repository().readGameProgress(GameId.memory);
       expect(memory.position, const RoundPosition(round: normal, level: 4));
-      expect(memory.medals, {easy, normal}, reason: 'the old badge becomes bronze and silver');
+      expect(memory.medals, {easy, GameDifficulty.silver, normal}, reason: 'the old badge is worth the medals up to gold');
       expect(memory.records.keys.toSet(),
           {const RoundLevel(normal, 2), const RoundLevel(normal, 3), const RoundLevel(normal, 5)});
       expect(memory.stars, 3 + 2 + 1);
@@ -131,6 +131,46 @@ void main() {
       expect(shadows.position, const RoundPosition(round: normal, level: 6));
       expect(shadows.medals, isEmpty);
       expect(shadows.records.keys, [const RoundLevel(normal, 4)]);
+    });
+
+    // HU-051 (sección 6): lo guardado con las tres rondas de HU-037 (versión
+    // 1.0.0-rc.4) se lee con las ocho: Fácil → bronce, Normal → oro, Reto
+    // máximo → diamante, también las claves de los récords y las medallas.
+    test('data saved with the three rounds of 1.0.0-rc.4 is read with the eight rounds', () {
+      final DateTime day = DateTime(2026, 11, 12);
+      final model = MemoryProgressHiveModel(
+        currentLevel: 3,
+        hasBadge: true,
+        bestStarsByLevel: const {},
+        achievedAtByLevel: const {},
+        round: 'normal',
+        medals: const ['easy', 'normal'],
+        bestStarsByRoundLevel: const {2: 3, 12: 2, 24: 1},
+        achievedAtByRoundLevel: {2: day, 12: day, 24: day},
+        tutorialFalls: 1,
+      );
+      final GameProgress read = model.toGameProgress();
+      expect(read.position, const RoundPosition(round: normal, level: 3, tutorialFalls: 1));
+      expect(read.medals, {easy, GameDifficulty.silver, normal});
+      expect(read.records.keys.toSet(), {
+        const RoundLevel(easy, 2),
+        const RoundLevel(normal, 2),
+        const RoundLevel(GameDifficulty.diamond, 4),
+      });
+      // Una vez guardado, ya con los nombres nuevos, se lee igual.
+      expect(MemoryProgressHiveModel.fromGameProgress(read).toGameProgress(), read);
+
+      final common = GameProgressHiveModel(
+        round: 'impossible',
+        level: 1,
+        medals: const ['impossible'],
+        bestStarsByRoundLevel: const {22: 3},
+        achievedAtByRoundLevel: {22: day},
+      );
+      final GameProgress odd = common.toGameProgress();
+      expect(odd.position, const RoundPosition(round: GameDifficulty.diamond, level: 2), reason: 'no tutorial again');
+      expect(odd.medals, GameDifficulty.values.toSet());
+      expect(odd.records.keys, [const RoundLevel(GameDifficulty.diamond, 2)]);
     });
 
     test('progress with rounds survives a write and a reopen of the box', () async {

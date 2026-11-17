@@ -5,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
-import 'package:toddler_logic/presentation/blocs/memory_game/memory_ladder_cubit.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import 'package:toddler_logic/presentation/screens/parents_zone_screen.dart';
 
@@ -13,6 +12,7 @@ import 'presentation/memory_game_test_support.dart';
 import 'presentation/l10n_test_support.dart';
 import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/memory/memory_ladder.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/presentation/screens/odd_one_out_screen.dart';
 
@@ -119,8 +119,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
 
       expect(find.byType(MemoryGameScreen), findsOneWidget);
-      // Vista previa de 1 s (HU-030): las cartas se ven y después se voltean.
-      await tester.pump(MemoryLadderCubit.previewDuration);
+      // Vista previa del bronce, 2 s (HU-051 3.1): las cartas se ven y se voltean.
+      await tester.pump(MemoryLadder.previewFor(GameDifficulty.bronze));
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.byIcon(Icons.question_mark_rounded), findsNWidgets(4));
     });
@@ -134,14 +134,14 @@ void main() {
 
     testWidgets('shows the medal next to Memoria once the badge is earned', (tester) async {
       when(() => repository.readGameProgress(GameId.memory))
-          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy, GameDifficulty.normal}));
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.bronze, GameDifficulty.gold}));
 
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
 
       expect(badgeFinder, findsOneWidget);
       expect(
-        find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.label == '¡Medalla de plata!'),
+        find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.label == '¡Medalla de oro!'),
         findsOneWidget,
       );
     });
@@ -153,7 +153,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
 
       when(() => repository.readGameProgress(GameId.memory))
-          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy, GameDifficulty.normal}));
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.bronze, GameDifficulty.gold}));
       await tester.binding.handlePopRoute();
       await tester.pump();
       await tester.binding.handlePopRoute();
@@ -191,7 +191,7 @@ void main() {
 
     testWidgets('shows the Sombras medal, and the menu still works if its progress cannot be read', (tester) async {
       when(() => repository.readGameProgress(GameId.shadows))
-          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy}));
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.bronze}));
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
       expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsOneWidget);
@@ -222,7 +222,7 @@ void main() {
 
     testWidgets('shows the medal of the third game, and the menu works if its progress cannot be read', (tester) async {
       when(() => repository.readGameProgress(GameId.oddOneOut))
-          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.easy}));
+          .thenAnswer((_) async => progressAt(1, medals: const {GameDifficulty.bronze}));
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
       expect(find.byKey(const ValueKey<String>('menu-odd-one-out-badge')), findsOneWidget);
@@ -266,7 +266,10 @@ void main() {
         await tester.pumpAndSettle();
       }
 
+      /// Fila «Idioma» → su pantalla → el idioma, que se aplica y vuelve (HU-046 P2).
       Future<void> chooseLanguage(WidgetTester tester, String code) async {
+        await tester.tap(find.byKey(const ValueKey<String>('parents-row-language')));
+        await tester.pumpAndSettle();
         final tile = find.byKey(ValueKey<String>('language-$code'));
         await tester.ensureVisible(tile);
         await tester.pump();

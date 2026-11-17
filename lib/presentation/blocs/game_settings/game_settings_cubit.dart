@@ -12,9 +12,9 @@ final class GameSettingsState {
   const GameSettingsState({
     this.loaded = false,
     this.rounds = const {
-      GameId.memory: GameDifficulty.easy,
-      GameId.shadows: GameDifficulty.easy,
-      GameId.oddOneOut: GameDifficulty.easy,
+      GameId.memory: GameDifficulty.bronze,
+      GameId.shadows: GameDifficulty.bronze,
+      GameId.oddOneOut: GameDifficulty.bronze,
     },
     this.timerDisabled = false,
     this.isPremium = false,

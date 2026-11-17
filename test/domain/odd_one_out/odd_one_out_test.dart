@@ -8,9 +8,9 @@ import '../../support/emoji5.dart';
 
 /// HU-025: escalera, rondas, contenido por ronda (sección 13) y estrellas.
 void main() {
-  const easy = GameDifficulty.easy;
-  const normal = GameDifficulty.normal;
-  const impossible = GameDifficulty.impossible;
+  const easy = GameDifficulty.bronze;
+  const normal = GameDifficulty.gold;
+  const impossible = GameDifficulty.diamond;
 
   group('ladder (11.1)', () {
     test('a tutorial of 3 objects and 4 levels of 4 to 6, each of 3 boards', () {
@@ -23,13 +23,16 @@ void main() {
       List<int?> series(GameDifficulty round) =>
           [for (var level = 1; level <= 5; level++) OddOneOut.rounds.limitFor(round, level)?.inSeconds];
       expect(series(easy), [null, 60, 50, 45, 40]);
-      expect(series(normal), [null, 40, 35, 30, 25]);
+      expect(series(normal), [null, 45, 40, 35, 30], reason: 'gold (HU-051 3.3)');
+      expect(series(GameDifficulty.ruby), [null, 40, 35, 30, 25], reason: 'the old Normal');
       expect(series(impossible), [null, 25, 20, 18, 15]);
-      expect(OddOneOut.rounds.maxStars, 36);
+      expect(OddOneOut.rounds.maxStars, 96);
     });
 
-    test('Impossible is Premium; without it the game stays in Normal (P1, P6)', () {
-      expect(OddOneOut.playableRound(impossible, premium: false), normal);
+    test('emerald to diamond are Premium; without it the game stays in ruby (HU-051 P4)', () {
+      expect(OddOneOut.playableRound(impossible, premium: false), GameDifficulty.ruby);
+      expect(OddOneOut.playableRound(GameDifficulty.emerald, premium: false), GameDifficulty.ruby);
+      expect(OddOneOut.playableRound(GameDifficulty.ruby, premium: false), GameDifficulty.ruby);
       expect(OddOneOut.playableRound(impossible, premium: true), impossible);
       expect(OddOneOut.playableRound(easy, premium: false), easy);
     });

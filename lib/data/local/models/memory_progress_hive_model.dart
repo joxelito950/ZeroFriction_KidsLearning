@@ -95,17 +95,20 @@ class MemoryProgressHiveModel {
       );
     }
     final Map<int, DateTime> dates = achievedAtByRoundLevel ?? const {};
-    return GameProgress(
+    // Con nombres de ronda de antes de HU-051 (tres rondas), las rondas, las
+    // medallas y las claves de los récords se traducen a las ocho (sección 6).
+    final bool legacy = GameDifficulty.isLegacyName(savedRound);
+    return GameProgress.restored(
       position: RoundPosition(
         round: GameDifficulty.fromName(savedRound),
         level: currentLevel,
         tutorialFalls: tutorialFalls ?? 0,
       ),
-      medals: {for (final String name in medals ?? const []) GameDifficulty.fromName(name)},
+      medals: {for (final String name in medals ?? const []) ...GameDifficulty.medalsFromSaved(name)},
       records: {
         for (final entry in (bestStarsByRoundLevel ?? const <int, int>{}).entries)
           if (dates[entry.key] case final DateTime achievedAt)
-            RoundLevel.fromKey(entry.key): LevelRecord(bestStars: entry.value, achievedAt: achievedAt),
+            RoundLevel.fromSaved(entry.key, legacy: legacy): LevelRecord(bestStars: entry.value, achievedAt: achievedAt),
       },
       lastPlayedAt: lastPlayedAt,
       stuckLevel: stuckFallsOrZero(stuckLevel, stuckFalls) == 0 ? null : stuckLevel,

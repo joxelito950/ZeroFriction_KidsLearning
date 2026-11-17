@@ -1,10 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
+import '../../brand/brand_assets.dart';
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/memory/memory_stars.dart';
 import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import 'medal_badge.dart';
 import 'round_style.dart';
 
 /// Celebración al ganar un tablero (HU-001 R14, D-030): sin botones, desaparece
@@ -38,11 +42,16 @@ class MemoryCelebration extends StatelessWidget {
       borderColor: badgeEarned ? medalColor : AppPalette.amber,
       borderWidth: badgeEarned ? 4 : 2,
       children: [
-        Icon(
-          badgeEarned ? Icons.military_tech_rounded : Icons.emoji_events_rounded,
-          size: 56,
-          color: badgeEarned ? medalColor : AppPalette.softCoral,
-        ),
+        // Medalla de ronda: el niño celebrando con ella en el pecho (HU-049).
+        // Celebración de nivel: la copa de siempre (HU-049 P1).
+        if (round != null)
+          CelebratingChild(medal: RoundStyle.medalStyleOf(round))
+        else
+          Icon(
+            Icons.emoji_events_rounded,
+            size: 56,
+            color: badgeEarned ? medalColor : AppPalette.softCoral,
+          ),
         const SizedBox(height: 12),
         Text(
           round != null ? RoundStyle.medalTitle(l10n, round) : (badgeEarned ? l10n.memoryBadgeTitle : l10n.victoryTitle),
@@ -129,7 +138,19 @@ class PlayInvitation extends StatelessWidget {
       borderColor: RoundStyle.colorOf(round),
       borderWidth: 3,
       children: [
-        Icon(Icons.touch_app_rounded, size: 56, color: RoundStyle.colorOf(round)),
+        // El niño invitando (HU-049), en lugar de la mano del sistema. En
+        // árabe se refleja para señalar hacia el lado del contenido.
+        Transform.flip(
+          flipX: Directionality.of(context) == TextDirection.rtl,
+          child: Image.asset(
+            BrandAssets.childInviting,
+            key: const ValueKey<String>('play-invitation-child'),
+            height: CelebratingChild.height,
+            excludeFromSemantics: true,
+            errorBuilder: (context, error, stackTrace) =>
+                Icon(Icons.touch_app_rounded, size: 56, color: RoundStyle.colorOf(round)),
+          ),
+        ),
         const SizedBox(height: 12),
         Text(
           AppLocalizations.of(context).roundInvitationTitle,
@@ -137,6 +158,52 @@ class PlayInvitation extends StatelessWidget {
           style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
         ),
       ],
+    );
+  }
+}
+
+/// El niño celebrando entre confeti con la medalla de la ronda sobre el pecho
+/// (HU-049). La ilustración trae un hueco transparente en el pecho; la medalla
+/// se coloca con su disco centrado en él y un poco más grande, para taparlo.
+class CelebratingChild extends StatelessWidget {
+  const CelebratingChild({super.key, required this.medal});
+
+  final MedalStyle medal;
+
+  /// Alto de la ilustración en la tarjeta: cabe con la tarjeta reducida.
+  static const double height = 180;
+
+  /// Proporción de la ilustración (390 × 480 px).
+  static const double aspect = 390 / 480;
+
+  /// Centro y radio del hueco del pecho, en fracciones del ancho y del alto de
+  /// la ilustración (medidos en `assets/brand/child_celebrating.png`).
+  static const Offset holeCenter = Offset(0.5385, 0.5344);
+  static const double holeRadius = 0.0949;
+
+  /// La medalla tapa el hueco con un 15 % de margen.
+  static double get medalSize => holeRadius * 1.15 / MedalBadge.discRadius * height * aspect;
+
+  @override
+  Widget build(BuildContext context) {
+    const double width = height * aspect;
+    final double size = medalSize;
+    return SizedBox(
+      key: const ValueKey<String>('celebrating-child'),
+      width: width,
+      height: height,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(BrandAssets.childCelebrating, fit: BoxFit.fill, excludeFromSemantics: true),
+          ),
+          Positioned(
+            left: holeCenter.dx * width - MedalBadge.discCenter.dx * size,
+            top: holeCenter.dy * height - MedalBadge.discCenter.dy * size,
+            child: MedalBadge(key: const ValueKey<String>('celebrating-child-medal'), style: medal, size: size),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -155,21 +222,34 @@ class _OverlayCard extends StatelessWidget {
   final double borderWidth;
   final List<Widget> children;
 
+  static const double _margin = 24;
+  static const double _maxWidth = 420;
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 420),
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32),
-            color: color,
-            border: Border.all(color: borderColor, width: borderWidth),
-            boxShadow: [BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.2), blurRadius: 24, offset: const Offset(0, 12))],
+    // Si no cabe (teléfono en horizontal, textos largos), el aviso se reduce
+    // en lugar de desplazarse: desaparece solo y el niño no lo va a mover, así
+    // que las estrellas nunca deben quedar fuera de la pantalla.
+    return LayoutBuilder(
+      builder: (context, constraints) => Padding(
+        padding: const EdgeInsets.all(_margin),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Container(
+              width: math.min(_maxWidth, constraints.maxWidth - 2 * _margin),
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(32),
+                color: color,
+                border: Border.all(color: borderColor, width: borderWidth),
+                boxShadow: [
+                  BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.2), blurRadius: 24, offset: const Offset(0, 12)),
+                ],
+              ),
+              child: Column(mainAxisSize: MainAxisSize.min, children: children),
+            ),
           ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: children),
         ),
       ),
     );

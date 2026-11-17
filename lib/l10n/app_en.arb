@@ -394,11 +394,11 @@
   "@difficultyImpossibleHint": {
     "description": "Shown under the options when Impossible is selected: less time and no helps. Read by parents."
   },
-  "parentsZoneNoTimeTitle": "Play without time",
+  "parentsZoneNoTimeTitle": "Play without a time limit",
   "@parentsZoneNoTimeTitle": {
     "description": "Switch title: play every game without a time limit. Read by parents."
   },
-  "parentsZoneNoTimeHint": "No timer and no dropping down a level. The same stars are still available.",
+  "parentsZoneNoTimeHint": "No timer and no moving down a level. The same stars are still available.",
   "@parentsZoneNoTimeHint": {
     "description": "Explanation under the switch: no time bar, the child never goes down a level, and the same stars can be earned. Read by parents."
   },
@@ -558,7 +558,7 @@
   "@medalNextRoundMessage": {
     "description": "One line under the bronze or silver medal title: the next round is a bigger challenge."
   },
-  "roundEasierMessage": "Time's up! Let's try a calmer challenge.",
+  "roundEasierMessage": "Time's up! Let's try an easier challenge.",
   "@roundEasierMessage": {
     "description": "Shown when time runs out and the game moves back to the previous, easier round (HU-037 R10). Helpful, never a punishment."
   },
@@ -566,7 +566,7 @@
   "@parentsZoneRoundsLabel": {
     "description": "Label above the per-game round choice in the Parents zone (HU-037): each game has three rounds (Easy, Normal, Impossible)."
   },
-  "parentsZoneRoundsHint": "Each game moves up a round by itself when it is completed. Changing it keeps stars and medals.",
+  "parentsZoneRoundsHint": "Each game automatically moves to the next round when you complete it. Changing the round keeps your stars and medals.",
   "@parentsZoneRoundsHint": {
     "description": "One line under the label: games move up a round by themselves; changing it keeps stars and medals."
   },
@@ -595,5 +595,87 @@
   "oddOneOutVictoryMessage": "You found every odd one out.",
   "@oddOneOutVictoryMessage": {
     "description": "Line under the celebration title when a level of Odd one out is won (the memory game says 'You found all the pairs'). The child found the different object on every board."
+  },
+  "parentsSave": "Save",
+  "@parentsSave": {
+    "description": "Button of a parents zone settings screen (HU-046): applies the changes and goes back to the parents zone. Also in the unsaved-changes dialog."
+  },
+  "parentsDiscard": "Discard",
+  "@parentsDiscard": {
+    "description": "Button of the unsaved-changes dialog (HU-046): leaves the settings screen without applying the changes."
+  },
+  "parentsUnsavedTitle": "Save the changes?",
+  "@parentsUnsavedTitle": {
+    "description": "Dialog shown when the adult leaves a parents zone settings screen with changes that were not saved (HU-046 R3)."
+  },
+  "parentsZonePlayTimePerDay": "{minutes} min a day",
+  "@parentsZonePlayTimePerDay": {
+    "description": "Summary of the daily limit in the \"Play time\" row of the parents zone (HU-046), for example \"60 min a day\".",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "parentsZonePinSummary": "Keep your child inside the app",
+  "@parentsZonePinSummary": {
+    "description": "Summary under \"Keep the app open\" (screen pinning) in the parents zone list (HU-046). Short."
+  },
+  "parentsFeedbackSummary": "Write to us by email",
+  "@parentsFeedbackSummary": {
+    "description": "Summary under \"Help and feedback\" in the parents zone list (HU-046). Short."
+  },
+  "roundBronze": "Bronze",
+  "@roundBronze": {
+    "description": "Name of the bronze round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundSilver": "Silver",
+  "@roundSilver": {
+    "description": "Name of the silver round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundGold": "Gold",
+  "@roundGold": {
+    "description": "Name of the gold round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundRuby": "Ruby",
+  "@roundRuby": {
+    "description": "Name of the ruby round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundEmerald": "Emerald",
+  "@roundEmerald": {
+    "description": "Name of the emerald round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundSapphire": "Sapphire",
+  "@roundSapphire": {
+    "description": "Name of the sapphire round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundObsidian": "Obsidian",
+  "@roundObsidian": {
+    "description": "Name of the obsidian round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "roundDiamond": "Diamond",
+  "@roundDiamond": {
+    "description": "Name of the diamond round (HU-051): the eight rounds are named after their medal. Shown on the round chips of the parents zone and in its summary. One or two words."
+  },
+  "medalRubyTitle": "Ruby medal!",
+  "@medalRubyTitle": {
+    "description": "Celebration title when the child completes the ruby round (HU-051), like \"Gold medal!\"."
+  },
+  "medalEmeraldTitle": "Emerald medal!",
+  "@medalEmeraldTitle": {
+    "description": "Celebration title when the child completes the emerald round (HU-051), like \"Gold medal!\"."
+  },
+  "medalSapphireTitle": "Sapphire medal!",
+  "@medalSapphireTitle": {
+    "description": "Celebration title when the child completes the sapphire round (HU-051), like \"Gold medal!\"."
+  },
+  "medalObsidianTitle": "Obsidian medal!",
+  "@medalObsidianTitle": {
+    "description": "Celebration title when the child completes the obsidian round (HU-051), like \"Gold medal!\"."
+  },
+  "medalDiamondTitle": "Diamond medal!",
+  "@medalDiamondTitle": {
+    "description": "Celebration title when the child completes the diamond round (HU-051), like \"Gold medal!\"."
   }
 }

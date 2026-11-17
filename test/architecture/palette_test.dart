@@ -72,6 +72,8 @@ void main() {
       'white': AppPalette.white,
       'medalBronze': AppPalette.medalBronze,
       'medalSilver': AppPalette.medalSilver,
+      'medalRuby': AppPalette.medalRuby,
+      'medalEmerald': AppPalette.medalEmerald,
     };
 
     test('tiene exactamente los colores de la tabla de PALETA.md', () {
@@ -81,14 +83,25 @@ void main() {
           match.group(2)!: Color(0xFF000000 | int.parse(match.group(1)!, radix: 16)),
       };
 
-      expect(inDocs, hasLength(9));
+      expect(inDocs, hasLength(11));
       expect(inCode, equals(inDocs));
       expect(AppPalette.all, unorderedEquals(inDocs.values));
     });
 
-    test('no define más colores que los 9', () {
+    test('no define más colores que los 11', () {
       final String source = File(palettePath).readAsStringSync();
-      expect(RegExp(r'\bColor\(0x').allMatches(source), hasLength(9));
+      expect(RegExp(r'\bColor\(0x').allMatches(source), hasLength(11));
+    });
+
+    // HU-051 (decisión del dueño, 2026-11-17): rubí y esmeralda son exclusivos
+    // de las medallas; nunca en textos, mensajes, botones ni secciones.
+    test('rubí y esmeralda solo se usan en la medalla', () {
+      const medalPath = 'lib/presentation/widgets/medal_badge.dart';
+      final offenders = [
+        for (final path in files)
+          if (path != medalPath && RegExp(r'\bmedal(Ruby|Emerald)\b').hasMatch(File(path).readAsStringSync())) path,
+      ];
+      expect(offenders, isEmpty);
     });
   });
 

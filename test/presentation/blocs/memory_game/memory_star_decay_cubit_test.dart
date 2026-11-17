@@ -28,10 +28,10 @@ void main() {
   // Normal completa (niveles 2 a 5, 12★) y las medallas de bronce y plata.
   GameProgress fullProgress({required DateTime lastPlayedAt}) => progressAt(
         2,
-        medals: const {GameDifficulty.easy, GameDifficulty.normal},
+        medals: const {GameDifficulty.bronze, GameDifficulty.gold},
         records: {
           for (var level = 2; level <= 5; level++)
-            RoundLevel(GameDifficulty.normal, level): LevelRecord(bestStars: 3, achievedAt: DateTime(2026, 10, level)),
+            RoundLevel(GameDifficulty.gold, level): LevelRecord(bestStars: 3, achievedAt: DateTime(2026, 10, level)),
         },
         lastPlayedAt: lastPlayedAt,
       );
@@ -57,9 +57,9 @@ void main() {
         startAndRead(ParentalSettings.initial, fullProgress(lastPlayedAt: now.subtract(const Duration(days: 20))));
 
     expect(written.stars, 8);
-    expect(written.records[const RoundLevel(GameDifficulty.normal, 2)]!.bestStars, 0);
-    expect(written.records[const RoundLevel(GameDifficulty.normal, 3)]!.bestStars, 2);
-    expect(written.medals, {GameDifficulty.easy, GameDifficulty.normal}, reason: 'medals are never lost');
+    expect(written.records[const RoundLevel(GameDifficulty.gold, 2)]!.bestStars, 0);
+    expect(written.records[const RoundLevel(GameDifficulty.gold, 3)]!.bestStars, 2);
+    expect(written.medals, {GameDifficulty.bronze, GameDifficulty.gold}, reason: 'medals are never lost');
     expect(written.lastPlayedAt, now);
   });
 

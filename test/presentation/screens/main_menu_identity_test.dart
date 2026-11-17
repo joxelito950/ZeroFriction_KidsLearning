@@ -47,13 +47,13 @@ void main() {
     final SemanticsHandle semantics = tester.ensureSemantics();
     final repository = MockPersistenceRepository();
     stubPersistenceRepository(repository);
-    // Con las rondas (HU-037) el dorado cubre 36 estrellas: 9 son el 25 %.
+    // Con las ocho rondas (HU-051) el dorado cubre 96 estrellas: 9 son el 9 %.
     when(() => repository.readGameProgress(GameId.memory)).thenAnswer(
       (_) async => progressAt(
         2,
         records: {
           for (var level = 2; level <= 4; level++)
-            RoundLevel(GameDifficulty.normal, level): LevelRecord(bestStars: 3, achievedAt: DateTime(2026)),
+            RoundLevel(GameDifficulty.gold, level): LevelRecord(bestStars: 3, achievedAt: DateTime(2026)),
         },
       ),
     );
@@ -61,9 +61,9 @@ void main() {
     await tester.pump();
 
     final LiquidGold gold = tester.widget<LiquidGold>(find.byType(LiquidGold).first);
-    expect(gold.fraction, closeTo(0.25, 1e-9));
+    expect(gold.fraction, closeTo(9 / 96, 1e-9));
     expect(find.bySemanticsLabel(RegExp(l10n.menuMemoryTitle)), findsWidgets);
-    final String expected = l10n.menuGameGoldSemantics(25, 9, 36);
+    final String expected = l10n.menuGameGoldSemantics(9, 9, 96);
     expect(find.byWidgetPredicate((widget) => widget is Semantics && widget.properties.value == expected),
         findsOneWidget);
     semantics.dispose();

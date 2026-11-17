@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (2026-11-12). Nace de HU-034 P1 |
+| **Estado** | **Desarrollada** (2026-11-16, rama `feature/hu-046-parents-rows`); falta verla en el moto g55. Nace de HU-034 P1 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P1 (es la entrega 2 de HU-034) |
 | **Tamaño** | M (unos 2 días) |
@@ -75,12 +75,22 @@ Una lista de filas. Cada fila tiene icono, título y **la opción elegida** en u
 | Dominio y datos | Sin cambios |
 | Tests | Los de widget de cada sección cambian para abrir su pantalla; nuevos para Guardar, Descartar y el cierre por inactividad |
 
-Al cerrarla se registra la decisión (Zona de Padres en un nivel, con Guardar) en la sección 8 de la especificación.
+Decisión registrada como **D-041** en la sección 8 de la especificación.
+
+## 6.1 Desarrollo (2026-11-16)
+
+- `ParentsSettingRow` y `ParentsSettingPage` (`widgets/parents_setting_page.dart`): la fila con resumen y la pantalla con «Guardar» (activo solo con cambios), la pregunta al salir con cambios (Guardar · Descartar) y su propio `AdultSessionGuard`. El guardián de la Zona de Padres ya no cierra la sesión por inactividad mientras hay una pantalla encima (la vigila la suya).
+- Filas: Idioma (nombre propio del idioma), Sonido (interruptor en la fila), Juegos (ronda de cada juego), Tiempo de juego («60 min al día» o «Sin límite»), Fijar pantalla, Ayuda y comentarios, y Privacidad, que se sigue desplegando en la lista. «Su progreso» llega con la entrega 3 de HU-034.
+- Juegos y Tiempo de juego trabajan sobre un borrador; un límite personalizado fuera de rango no se guarda y la pantalla sigue abierta. El borrador sigue al valor guardado mientras el adulto no haya tocado nada.
+- «15 minutos más» arriba de la Zona de Padres, solo con el límite de hoy alcanzado.
+- 6 textos nuevos en 9 idiomas (Guardar, Descartar, ¿Guardar los cambios?, «{minutes} min al día» y los resúmenes de Fijar pantalla y Comentarios).
+- **Moto g55 (2026-11-16):** filas, «Juegos» y «Tiempo de juego» con borrador, «Guardar», «¿Guardar los cambios?» y «Descartar» funcionan, y un límite fuera de rango no se guarda. Dos fallos encontrados y corregidos: (1) al volver de una pantalla usada casi un minuto, la Zona de Padres se cerraba a los pocos segundos, porque su minuto no veía los toques de la pantalla de encima; ahora un toque en cualquier pantalla de adultos reinicia el minuto de todas (test que reproduce el caso); (2) el teclado tapaba «Guardar» al escribir un límite propio; ahora el botón sube por encima del teclado.
+- Tests: filas y orden, navegación de un nivel, borrador y «Guardar», salir con cambios, sesión que no se cierra mientras se usa una pantalla y se cierra al minuto sin tocar, y diseño de la lista y de cada pantalla en 9 idiomas × 4 teléfonos × texto 1,0 y 2,0.
 
 ## 7. Preguntas
 
 | # | Pregunta | Recomendación |
 |---|---|---|
 | P1 | ¿Filas o acordeón? | ✅ Decidido por el dueño en HU-034 P1 (2026-11-12): **filas que abren su configuración, un nivel como máximo**, con Guardar |
-| P2 | ¿El idioma también con «Guardar»? | **No:** elegir un idioma de la lista lo aplica y vuelve, porque cambiar el idioma es la única forma de leer la pantalla si se eligió uno por error. Es la excepción a R2 |
+| P2 | ¿El idioma también con «Guardar»? | ✅ Decidido (2026-11-16), como la recomendación. **No:** elegir un idioma de la lista lo aplica y vuelve, porque cambiar el idioma es la única forma de leer la pantalla si se eligió uno por error. Es la excepción a R2 |
 | P3 | ¿Orden de las filas? | El de la tabla 4.1: primero lo que se mira (progreso), después lo que más se cambia, y al final la ayuda y la privacidad |

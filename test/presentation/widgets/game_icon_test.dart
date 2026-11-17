@@ -66,4 +66,33 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(tester.getSize(find.byType(GameIcon)), const Size(30, 30));
   });
+
+  // Sin depender de que la imagen termine de decodificarse en el test, que
+  // varía con el tiempo real y hacía oscilar la cobertura.
+  test('the named constructors pick each game image', () {
+    final double size = 40 + 0; // no const: se ejecutan los constructores
+    expect(GameIcon.memory(size: size).asset, BrandAssets.memoryIcon);
+    expect(GameIcon.shadows(size: size).asset, BrandAssets.shadowsIcon);
+    expect(GameIcon.oddOneOut(size: size, goldFraction: 0.5, animateGold: true).asset, BrandAssets.oddOneOutIcon);
+  });
+
+  test('the liquid mask fits the image like BoxFit.contain, centred', () async {
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    Canvas(recorder).drawRect(const Rect.fromLTWH(0, 0, 200, 100), Paint());
+    final ui.Image image = await recorder.endRecording().toImage(200, 100);
+
+    final Matrix4 transform = GameIcon.containTransform(const Size(100, 100), image);
+    expect(MatrixUtils.transformPoint(transform, Offset.zero), const Offset(0, 25));
+    expect(MatrixUtils.transformPoint(transform, const Offset(200, 100)), const Offset(100, 75));
+    // Más ancho el hueco que la imagen: manda el alto.
+    final Matrix4 tall = GameIcon.containTransform(const Size(400, 100), image);
+    expect(MatrixUtils.transformPoint(tall, Offset.zero), const Offset(100, 0));
+    image.dispose();
+  });
+
+  testWidgets('changing the game image resolves the new one', (tester) async {
+    await pump(tester, const GameIcon.memory(size: 48));
+    await pump(tester, const GameIcon.shadows(size: 48));
+    expect((tester.widget<Image>(find.byType(Image)).image as AssetImage).assetName, BrandAssets.shadowsIcon);
+  });
 }

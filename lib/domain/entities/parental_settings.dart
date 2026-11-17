@@ -8,7 +8,7 @@ final class ParentalSettings {
   ParentalSettings({
     this.dailyLimitMinutes,
     this.playTime,
-    this.difficulty = GameDifficulty.normal,
+    this.difficulty = GameDifficulty.gold,
     this.timerDisabled = false,
     this.keepStars = false,
     this.starDecayResumedAt,
@@ -21,7 +21,7 @@ final class ParentalSettings {
   const ParentalSettings._initial()
       : dailyLimitMinutes = null,
         playTime = null,
-        difficulty = GameDifficulty.normal,
+        difficulty = GameDifficulty.gold,
         timerDisabled = false,
         keepStars = false,
         starDecayResumedAt = null;

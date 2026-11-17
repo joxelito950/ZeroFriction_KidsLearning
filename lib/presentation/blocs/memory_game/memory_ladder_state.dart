@@ -44,7 +44,7 @@ class MemoryLadderState {
     this.loss,
     this.hasBadge = false,
     this.goldFraction = 0,
-    this.gameRound = GameDifficulty.easy,
+    this.gameRound = GameDifficulty.bronze,
     this.medal,
   });
 

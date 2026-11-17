@@ -30,7 +30,7 @@ class OddOneOutState {
   const OddOneOutState({
     this.phase = OddPhase.loading,
     this.round = 0,
-    this.gameRound = GameDifficulty.easy,
+    this.gameRound = GameDifficulty.bronze,
     this.level = 1,
     this.timeLimit,
     this.board = 0,

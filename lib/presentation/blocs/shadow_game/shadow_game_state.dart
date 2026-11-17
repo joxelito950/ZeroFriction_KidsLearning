@@ -52,11 +52,12 @@ class ShadowGameState {
     this.elapsed = Duration.zero,
     this.timerStarted = false,
     this.premium = false,
+    this.coverageToSnap = 0.6,
     this.stars,
     this.medalEarned = false,
     this.hasMedal = false,
     this.goldFraction = 0,
-    this.gameRound = GameDifficulty.easy,
+    this.gameRound = GameDifficulty.bronze,
     this.medal,
     this.lossKind,
   });
@@ -91,6 +92,10 @@ class ShadowGameState {
   /// Reglas Premium en este tablero: el indicador muestra el nivel 8 con
   /// candado si es `false` (R11).
   final bool premium;
+
+  /// Parte de su sombra que el objeto tiene que cubrir para encajar en esta
+  /// ronda (HU-007 P4). El tablero la usa para el aviso de «casi» (HU-050 P2).
+  final double coverageToSnap;
 
   /// Estrellas del tablero recién completado (fase [ShadowRoundPhase.celebrating]).
   final int? stars;
@@ -166,6 +171,7 @@ class ShadowGameState {
       elapsed: elapsed ?? this.elapsed,
       timerStarted: timerStarted ?? this.timerStarted,
       premium: premium,
+      coverageToSnap: coverageToSnap,
       stars: stars ?? this.stars,
       medalEarned: medalEarned ?? this.medalEarned,
       hasMedal: hasMedal ?? this.hasMedal,

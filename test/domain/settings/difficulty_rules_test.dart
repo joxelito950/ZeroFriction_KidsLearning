@@ -7,30 +7,29 @@ import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 /// HU-030: dificultad y «Jugar sin tiempo» en la escalera de la memoria y en
 /// los ajustes guardados.
 void main() {
-  const easy = MemoryLadderRules(difficulty: GameDifficulty.easy);
-  const impossible = MemoryLadderRules(difficulty: GameDifficulty.impossible);
+  const easy = MemoryLadderRules(difficulty: GameDifficulty.bronze);
+  const impossible = MemoryLadderRules(difficulty: GameDifficulty.diamond);
   const noTime = MemoryLadderRules(timed: false);
 
   List<int?> arrivalSeconds(MemoryLadderRules rules) =>
       [for (final level in MemoryLadder.levels) MemoryLadder.arrivalPosition(level.number, rules).timeLimit?.inSeconds];
 
   group('GameDifficulty', () {
-    test('only Easy and Normal show helps (R10)', () {
-      expect(GameDifficulty.easy.showsHelps, isTrue);
-      expect(GameDifficulty.normal.showsHelps, isTrue);
-      expect(GameDifficulty.impossible.showsHelps, isFalse);
+    test('the memory preview shortens round by round and is gone in obsidian and diamond (HU-051 3.1)', () {
+      final List<int> ms = [for (final round in GameDifficulty.values) MemoryLadder.previewFor(round).inMilliseconds];
+      expect(ms, [2000, 1500, 1000, 1000, 700, 500, 0, 0]);
     });
 
     test('reads the stored name, and anything else is Normal', () {
-      expect(GameDifficulty.fromName('impossible'), GameDifficulty.impossible);
-      expect(GameDifficulty.fromName(null), GameDifficulty.normal);
-      expect(GameDifficulty.fromName('nightmare'), GameDifficulty.normal);
+      expect(GameDifficulty.fromName('impossible'), GameDifficulty.diamond);
+      expect(GameDifficulty.fromName(null), GameDifficulty.gold);
+      expect(GameDifficulty.fromName('nightmare'), GameDifficulty.gold);
     });
   });
 
   group('memory series per difficulty (3.2, criteria 2 and 3)', () {
-    test('Normal keeps the HU-001 series', () {
-      expect(arrivalSeconds(MemoryLadderRules.standard), [null, 90, 60, 45, 30]);
+    test('by default, the gold series (HU-051 3.1)', () {
+      expect(arrivalSeconds(MemoryLadderRules.standard), [null, 160, 105, 80, 55]);
     });
 
     test('Easy triples it', () {
@@ -88,35 +87,35 @@ void main() {
   test('rules: the preview is a help, equality by value', () {
     expect(MemoryLadderRules.standard.preview, isTrue);
     expect(impossible.preview, isFalse);
-    expect(const MemoryLadderRules(difficulty: GameDifficulty.easy), easy);
-    expect(easy.hashCode, const MemoryLadderRules(difficulty: GameDifficulty.easy).hashCode);
+    expect(const MemoryLadderRules(difficulty: GameDifficulty.bronze), easy);
+    expect(easy.hashCode, const MemoryLadderRules(difficulty: GameDifficulty.bronze).hashCode);
     expect(easy, isNot(noTime));
   });
 
   group('ParentalSettings (criteria 7 and 8)', () {
     test('defaults to Normal with time', () {
-      expect(ParentalSettings.initial.difficulty, GameDifficulty.normal);
+      expect(ParentalSettings.initial.difficulty, GameDifficulty.gold);
       expect(ParentalSettings.initial.timerDisabled, isFalse);
     });
 
     test('each change keeps the other fields', () {
       final settings = ParentalSettings(dailyLimitMinutes: 30)
-          .withDifficulty(GameDifficulty.easy)
+          .withDifficulty(GameDifficulty.bronze)
           .withTimerDisabled(true)
           .withLimit(45);
 
       expect(settings.dailyLimitMinutes, 45);
-      expect(settings.difficulty, GameDifficulty.easy);
+      expect(settings.difficulty, GameDifficulty.bronze);
       expect(settings.timerDisabled, isTrue);
-      expect(settings, isNot(settings.withDifficulty(GameDifficulty.normal)));
+      expect(settings, isNot(settings.withDifficulty(GameDifficulty.gold)));
       expect(settings.hashCode, settings.withLimit(45).hashCode);
     });
 
     test('round-trips through the Hive model', () {
-      final settings = ParentalSettings(difficulty: GameDifficulty.impossible, timerDisabled: true);
+      final settings = ParentalSettings(difficulty: GameDifficulty.diamond, timerDisabled: true);
       final model = ParentalSettingsHiveModel.fromEntity(settings);
 
-      expect(model.difficulty, 'impossible');
+      expect(model.difficulty, 'diamond');
       expect(model.toEntity(), settings);
     });
 

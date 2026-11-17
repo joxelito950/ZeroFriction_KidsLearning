@@ -11,6 +11,8 @@ import 'package:toddler_logic/presentation/widgets/parents_play_time_section.dar
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
 
+/// Pantalla «Tiempo de juego» (HU-009, HU-046): se elige un borrador y se
+/// aplica con «Guardar».
 void main() {
   setUpAll(registerMemoryGameFallbacks);
 
@@ -22,24 +24,38 @@ void main() {
     stubPersistenceRepository(repository);
   });
 
-  Future<PlayTimeCubit> pumpSection(WidgetTester tester, {ParentalSettings? stored}) async {
+  Finder page() => find.byType(ParentsPlayTimePage);
+  Finder custom() => find.byKey(const ValueKey<String>('play-time-custom-field'));
+  Finder saveButton() => find.byKey(const ValueKey<String>('parents-setting-save'));
+
+  Future<PlayTimeCubit> pumpPage(WidgetTester tester, {ParentalSettings? stored}) async {
     if (stored != null) {
       when(() => repository.readParentalSettings()).thenAnswer((_) async => stored);
     }
-    await tester.pumpWidget(localizedApp(
-      repository: repository,
-      home: const Scaffold(body: SingleChildScrollView(child: ParentsPlayTimeSection())),
-    ));
-    await tester.pump();
-    return tester.element(find.byType(ParentsPlayTimeSection)).read<PlayTimeCubit>();
+    await pumpSettingPage(tester, const ParentsPlayTimePage(), repository: repository);
+    return tester.element(page()).read<PlayTimeCubit>();
   }
 
   ChoiceChip chip(WidgetTester tester, String key) => tester.widget<ChoiceChip>(find.byKey(ValueKey<String>(key)));
 
-  Finder custom() => find.byKey(const ValueKey<String>('play-time-custom-field'));
+  Future<void> tap(WidgetTester tester, String key) async {
+    await tester.ensureVisible(find.byKey(ValueKey<String>(key)));
+    await tester.tap(find.byKey(ValueKey<String>(key)));
+    await tester.pump();
+  }
+
+  Future<void> settle(WidgetTester tester) async {
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+  }
+
+  Future<void> save(WidgetTester tester) async {
+    await tester.tap(saveButton());
+    await settle(tester);
+  }
 
   testWidgets('shows the system controls first, then the WHO legend and the options (criterion 1)', (tester) async {
-    await pumpSection(tester);
+    await pumpPage(tester);
 
     final double system = tester.getTopLeft(find.text(l10n.parentsZonePlayTimeSystemFirst)).dy;
     final double who = tester.getTopLeft(find.text(l10n.parentsZonePlayTimeWho)).dy;
@@ -53,108 +69,157 @@ void main() {
     }
     expect(find.text(l10n.parentsZonePlayTimeCustom), findsOneWidget);
     expect(custom(), findsNothing);
-    // Sin límite no hay contador ni tiempo extra.
+    // «15 minutos más» ya no está aquí: va arriba de la Zona de Padres (HU-046).
     expect(find.byKey(const ValueKey<String>('play-time-extra')), findsNothing);
+    expect(tester.widget<FilledButton>(saveButton()).onPressed, isNull, reason: 'nothing changed yet');
   });
 
-  testWidgets('choosing a preset applies and saves it at once (R7)', (tester) async {
-    final PlayTimeCubit cubit = await pumpSection(tester);
+  testWidgets('a preset is applied only with Save, which goes back (HU-046 R2)', (tester) async {
+    final PlayTimeCubit cubit = await pumpPage(tester);
 
-    await tester.tap(find.byKey(const ValueKey<String>('play-time-limit-30')));
-    await tester.pump();
-
-    expect(cubit.state.limitMinutes, 30);
+    await tap(tester, 'play-time-limit-30');
     expect(chip(tester, 'play-time-limit-30').selected, isTrue);
-    expect(chip(tester, 'play-time-limit-none').selected, isFalse);
-    expect(find.text(l10n.parentsZonePlayTimeToday(0, 30)), findsOneWidget);
-    verify(() => repository.saveParentalSettings(any())).called(greaterThanOrEqualTo(1));
-
-    await tester.tap(find.byKey(const ValueKey<String>('play-time-limit-none')));
-    await tester.pump();
     expect(cubit.state.limitMinutes, isNull);
+
+    await save(tester);
+    expect(cubit.state.limitMinutes, 30);
+    expect(page(), findsNothing);
+    verify(() => repository.saveParentalSettings(any())).called(greaterThanOrEqualTo(1));
   });
 
-  testWidgets('a custom value outside 5 minutes to 12 hours is not accepted; 25 is (criterion 2)', (tester) async {
-    final PlayTimeCubit cubit = await pumpSection(tester);
+  testWidgets('a custom value outside 5 minutes to 12 hours is not saved and the page stays; 25 is (criterion 2)',
+      (tester) async {
+    final PlayTimeCubit cubit = await pumpPage(tester);
 
-    await tester.tap(find.byKey(const ValueKey<String>('play-time-limit-custom')));
-    await tester.pump();
+    await tap(tester, 'play-time-limit-custom');
     expect(custom(), findsOneWidget);
     expect(find.text(l10n.parentsZonePlayTimeCustomRange), findsOneWidget);
 
-    Future<void> apply(String text) async {
-      await tester.enterText(custom(), text);
-      await tester.tap(find.byKey(const ValueKey<String>('play-time-custom-apply')));
-      await tester.pump();
-    }
-
     TextStyle rangeStyle() => tester.widget<Text>(find.byKey(const ValueKey<String>('play-time-custom-range'))).style!;
 
-    await apply('3');
-    expect(cubit.state.limitMinutes, isNull);
-    expect(rangeStyle().fontWeight, FontWeight.bold);
+    for (final text in ['3', '800']) {
+      await tester.enterText(custom(), text);
+      await tester.pump();
+      await save(tester);
+      expect(cubit.state.limitMinutes, isNull, reason: text);
+      expect(page(), findsOneWidget);
+      expect(rangeStyle().fontWeight, FontWeight.bold);
+    }
 
-    await apply('800');
-    expect(cubit.state.limitMinutes, isNull);
-
-    await apply('');
-    expect(cubit.state.limitMinutes, isNull);
-
-    await apply('25');
+    await tester.enterText(custom(), '25');
+    await tester.pump();
+    expect(rangeStyle().fontWeight, FontWeight.normal, reason: 'typing again clears the highlight');
+    await save(tester);
     expect(cubit.state.limitMinutes, 25);
-    expect(rangeStyle().fontWeight, FontWeight.normal);
-    expect(chip(tester, 'play-time-limit-custom').selected, isTrue);
   });
 
-  testWidgets('only digits can be typed, and Enter applies the value', (tester) async {
-    final PlayTimeCubit cubit = await pumpSection(tester);
-    await tester.tap(find.byKey(const ValueKey<String>('play-time-limit-custom')));
+  // Visto en el moto g55 (2026-11-16): el teclado tapaba «Guardar».
+  testWidgets('Save stays above the keyboard', (tester) async {
+    await pumpPage(tester);
+    await tap(tester, 'play-time-limit-custom');
+    await tester.enterText(custom(), '25');
+    tester.view.viewInsets = const FakeViewPadding(bottom: 900);
+    addTearDown(tester.view.resetViewInsets);
     await tester.pump();
+
+    final double keyboardTop = tester.view.physicalSize.height / tester.view.devicePixelRatio - 900 / tester.view.devicePixelRatio;
+    expect(tester.getBottomLeft(saveButton()).dy, lessThanOrEqualTo(keyboardTop));
+    expect(saveButton().hitTestable(), findsOneWidget);
+  });
+
+  testWidgets('only digits can be typed', (tester) async {
+    await pumpPage(tester);
+    await tap(tester, 'play-time-limit-custom');
 
     await tester.enterText(custom(), '4a0');
     expect(tester.widget<TextField>(custom()).controller!.text, '40');
-    await tester.testTextInput.receiveAction(TextInputAction.done);
-    await tester.pump();
-
-    expect(cubit.state.limitMinutes, 40);
   });
 
   testWidgets('a stored custom limit shows the custom field filled in', (tester) async {
-    await pumpSection(tester, stored: ParentalSettings(dailyLimitMinutes: 25));
+    await pumpPage(tester, stored: ParentalSettings(dailyLimitMinutes: 25));
 
     expect(chip(tester, 'play-time-limit-custom').selected, isTrue);
-    expect(custom(), findsOneWidget);
+    expect(tester.widget<TextField>(custom()).controller!.text, '25');
+    expect(tester.widget<FilledButton>(saveButton()).onPressed, isNull);
 
-    await tester.tap(find.byKey(const ValueKey<String>('play-time-limit-custom')));
-    await tester.pump();
+    // Volver a una opción fija y otra vez a «Personalizado» conserva lo escrito.
+    await tap(tester, 'play-time-limit-60');
+    await tap(tester, 'play-time-limit-custom');
     expect(tester.widget<TextField>(custom()).controller!.text, '25');
   });
 
-  testWidgets('shows today\'s minutes and gives 15 more (R6)', (tester) async {
-    final PlayTimeCubit cubit = await pumpSection(
+  testWidgets('shows the minutes played today with a limit', (tester) async {
+    await pumpPage(
       tester,
       stored: ParentalSettings(
         dailyLimitMinutes: 30,
-        playTime: DailyPlayTime(day: DateTime.now(), played: const Duration(minutes: 30)),
+        playTime: DailyPlayTime(day: DateTime.now(), played: const Duration(minutes: 12)),
       ),
     );
-    expect(find.text(l10n.parentsZonePlayTimeToday(30, 30)), findsOneWidget);
-    expect(cubit.state.limitReached, isTrue);
-
-    await tester.tap(find.byKey(const ValueKey<String>('play-time-extra')));
-    await tester.pump();
-
-    expect(cubit.state.limitReached, isFalse);
-    expect(find.text(l10n.parentsZonePlayTimeToday(30, 45)), findsOneWidget);
+    expect(find.text(l10n.parentsZonePlayTimeToday(12, 30)), findsOneWidget);
   });
 
-  testWidgets('shows nothing without the play time cubit', (tester) async {
-    await tester.pumpWidget(const MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: ParentsPlayTimeSection()),
-    ));
+  group('leaving with changes (HU-046 R3)', () {
+    Future<void> back(WidgetTester tester) async {
+      final NavigatorState navigator = tester.state(find.byType(Navigator));
+      navigator.maybePop();
+      await settle(tester);
+    }
 
-    expect(find.byKey(const ValueKey<String>('parents-zone-play-time')), findsNothing);
+    testWidgets('without changes it just goes back', (tester) async {
+      await pumpPage(tester);
+      await back(tester);
+      expect(find.byKey(const ValueKey<String>('parents-unsaved-dialog')), findsNothing);
+      expect(page(), findsNothing);
+    });
+
+    testWidgets('Discard leaves without applying', (tester) async {
+      final PlayTimeCubit cubit = await pumpPage(tester);
+      await tap(tester, 'play-time-limit-45');
+      await back(tester);
+
+      expect(find.text(l10n.parentsUnsavedTitle), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey<String>('parents-unsaved-discard')));
+      await settle(tester);
+      expect(page(), findsNothing);
+      expect(cubit.state.limitMinutes, isNull);
+    });
+
+    testWidgets('Save applies and leaves; an invalid value keeps the page open', (tester) async {
+      final PlayTimeCubit cubit = await pumpPage(tester);
+      await tap(tester, 'play-time-limit-custom');
+      await tester.enterText(custom(), '2');
+      await tester.pump();
+      await tester.pump();
+      await back(tester);
+      await tester.tap(find.byKey(const ValueKey<String>('parents-unsaved-save')));
+      await settle(tester);
+      expect(page(), findsOneWidget);
+      expect(cubit.state.limitMinutes, isNull);
+
+      await tester.enterText(custom(), '20');
+      await tester.pump();
+      await tester.pump();
+      await back(tester);
+      await tester.tap(find.byKey(const ValueKey<String>('parents-unsaved-save')));
+      await settle(tester);
+      expect(page(), findsNothing);
+      expect(cubit.state.limitMinutes, 20);
+    });
+
+    testWidgets('closing the dialog without choosing stays on the page', (tester) async {
+      await pumpPage(tester);
+      await tap(tester, 'play-time-limit-45');
+      await back(tester);
+      await tester.tapAt(const Offset(5, 5)); // fuera del diálogo
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(page(), findsOneWidget);
+    });
+  });
+
+  test('the row summary says the daily limit or no limit', () {
+    expect(parentsPlayTimeSummary(l10n, null), l10n.parentsZonePlayTimeNoLimit);
+    expect(parentsPlayTimeSummary(l10n, 60), l10n.parentsZonePlayTimePerDay(60));
   });
 }

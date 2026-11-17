@@ -39,7 +39,7 @@ void main() {
   MemoryLadderCubit started(
     FakeAsync async, {
     int level = 1,
-    GameDifficulty round = GameDifficulty.normal,
+    GameDifficulty round = GameDifficulty.gold,
     Duration? preview = Duration.zero,
   }) {
     when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => progressAt(level, round: round));
@@ -81,7 +81,7 @@ void main() {
 
     test('Impossible deals face down, without preview (criterion 12)', () {
       fakeAsync((async) {
-        final cubit = started(async, round: GameDifficulty.impossible, preview: null);
+        final cubit = started(async, round: GameDifficulty.diamond, preview: null);
 
         expect(cubit.state.phase, MemoryRoundPhase.playing);
         expect(cubit.state.cards.any((card) => card.isFaceUp), isFalse);
@@ -102,17 +102,17 @@ void main() {
   group('difficulty', () {
     test('Easy arrives at 2x3 with 270 s (criterion 2)', () {
       fakeAsync((async) {
-        final cubit = started(async, level: 2, round: GameDifficulty.easy);
+        final cubit = started(async, level: 2, round: GameDifficulty.bronze);
         expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 270)));
         cubit.close();
       });
     });
 
     test('the general difficulty setting no longer changes the game: the round does (HU-037, D-038)', () {
-      stored = ParentalSettings(difficulty: GameDifficulty.impossible);
+      stored = ParentalSettings(difficulty: GameDifficulty.diamond);
       fakeAsync((async) {
         final cubit = started(async, level: 2);
-        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 90)));
+        expect(cubit.state.position, const MemoryLadderPosition(level: 2, timeLimit: Duration(seconds: 160)));
         cubit.close();
       });
     });

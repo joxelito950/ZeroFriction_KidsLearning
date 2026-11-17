@@ -88,9 +88,15 @@ abstract final class OddOneOut {
   static List<OddKind> kindsFor(GameDifficulty round, int level) {
     levelAt(level);
     return switch (round) {
-      GameDifficulty.easy => [level <= 2 ? OddKind.identical : OddKind.colour],
-      GameDifficulty.normal => const [OddKind.veryDifferent],
-      GameDifficulty.impossible => hardKinds,
+      // Las comparaciones difíciles llegan de una en una (HU-051 3.3).
+      GameDifficulty.bronze => [level <= 2 ? OddKind.identical : OddKind.colour],
+      GameDifficulty.silver => const [OddKind.colour],
+      GameDifficulty.gold => const [OddKind.veryDifferent],
+      GameDifficulty.ruby => const [OddKind.veryDifferent, OddKind.farmOrWild],
+      GameDifficulty.emerald => const [OddKind.farmOrWild, OddKind.landOrAir],
+      GameDifficulty.sapphire => const [OddKind.landOrAir, OddKind.landOrWater],
+      GameDifficulty.obsidian => const [OddKind.landOrWater, OddKind.wheelsOrWings],
+      GameDifficulty.diamond => hardKinds,
     };
   }
 
@@ -108,9 +114,14 @@ abstract final class OddOneOut {
   static final RoundLadder rounds = RoundLadder(
     levels: levels.length,
     timeLimits: {
-      GameDifficulty.easy: _seconds(const [60, 50, 45, 40]),
-      GameDifficulty.normal: _seconds(const [40, 35, 30, 25]),
-      GameDifficulty.impossible: _seconds(const [25, 20, 18, 15]),
+      GameDifficulty.bronze: _seconds(const [60, 50, 45, 40]),
+      GameDifficulty.silver: _seconds(const [52, 45, 40, 35]),
+      GameDifficulty.gold: _seconds(const [45, 40, 35, 30]),
+      GameDifficulty.ruby: _seconds(const [40, 35, 30, 25]),
+      GameDifficulty.emerald: _seconds(const [35, 30, 26, 22]),
+      GameDifficulty.sapphire: _seconds(const [30, 26, 22, 19]),
+      GameDifficulty.obsidian: _seconds(const [28, 24, 20, 17]),
+      GameDifficulty.diamond: _seconds(const [25, 20, 18, 15]),
     },
   );
 
@@ -119,7 +130,10 @@ abstract final class OddOneOut {
   /// La ronda Imposible es de Premium (HU-025 P1, HU-037 P6). Sin Premium se
   /// sigue en Normal tras la plata, como tras el oro se sigue en Imposible.
   static GameDifficulty playableRound(GameDifficulty round, {required bool premium}) =>
-      !premium && round == GameDifficulty.impossible ? GameDifficulty.normal : round;
+      !premium && round.index > lastFreeRound.index ? lastFreeRound : round;
+
+  /// Sin Premium se juega de bronce a rubí (HU-051 P4: la mitad de las rondas).
+  static const GameDifficulty lastFreeRound = GameDifficulty.ruby;
 
   static const List<OddGroup> groups = [
     OddGroup(id: 'farm', family: 'animals', symbols: ['🐮', '🐷', '🐔', '🐑', '🐴', '🐰']),

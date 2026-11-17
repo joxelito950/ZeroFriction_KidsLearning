@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/blocs/app_locale/app_locale_cubit.dart';
@@ -42,4 +43,30 @@ MockPersistenceRepository _stubbedRepository() {
   final repository = MockPersistenceRepository();
   stubPersistenceRepository(repository);
   return repository;
+}
+
+/// Abre [page], una pantalla de configuración de la Zona de Padres (HU-046),
+/// encima de otra ruta, como en la app: al guardar o salir vuelve a ella.
+Future<void> pumpSettingPage(
+  WidgetTester tester,
+  Widget page, {
+  MockPersistenceRepository? repository,
+  Locale locale = testLocale,
+}) async {
+  await tester.pumpWidget(localizedApp(
+    locale: locale,
+    repository: repository,
+    home: Builder(
+      builder: (context) => Scaffold(
+        body: TextButton(
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page)),
+          child: const Text('open setting page'),
+        ),
+      ),
+    ),
+  ));
+  await tester.tap(find.text('open setting page'));
+  // Sin pumpAndSettle: el tiempo de juego emite cada segundo y no se asienta.
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 500));
 }
