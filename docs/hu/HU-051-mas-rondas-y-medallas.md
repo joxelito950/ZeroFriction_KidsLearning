@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (2026-11-17, segunda versión). El dueño pide repartir la dificultad actual en más rondas |
+| **Estado** | **Casi lista** (2026-11-17): P1 a P6 decididas y colores nuevos aprobados. Falta confirmar P7 (cómo se baja de ronda sin tutorial en cada ronda) |
 | **Épica** | E1 · Juegos (progresión) |
 | **Prioridad** | **P1** (cambia el modelo de rondas: conviene antes de la pantalla «Su progreso» y de más juegos) |
 | **Tamaño** | L (4 entregas, más de una semana) |
@@ -92,13 +92,13 @@ Con `MedalBadge` (HU-048). Los metales llevan estrellas y las gemas, una **forma
 | Bronce | Disco con ★ | Bronce `#B0603C` |
 | Plata | Disco con ★★ | Plata `#748A8E` |
 | Oro | Disco con ★★★ | Ámbar `#ECA463` con borde dorado `#A86B12` |
-| Rubí | Gema | **Rubí oscuro (color nuevo)** |
-| Esmeralda | Gema | **Verde esmeralda (color nuevo)** |
+| Rubí | Gema | **Rubí oscuro (color nuevo; propuesto `#8E1F3B`)** |
+| Esmeralda | Gema | **Verde esmeralda (color nuevo; propuesto `#1E7F5C`)** |
 | Zafiro | Gema | Azul petróleo `#176B78` |
 | Obsidiana | Gema | Teal profundo `#00454D` con reflejo crema |
 | Diamante | Diamante tallado | Blanco y crema con destellos |
 
-⚠️ Rubí y esmeralda son **dos colores nuevos** en la paleta, solo para medallas, como ya se hizo con el bronce y la plata (HU-037 P17). El rubí tiene que ser oscuro, para no parecerse al rojo de un error (C7).
+✅ **Aprobado por el dueño (2026-11-17):** rubí y esmeralda entran en la paleta como **colores exclusivos de las medallas**: **nunca** se usan en mensajes, textos, botones ni secciones. Se registra en PALETA.md con esa restricción y `palette_test` comprueba que solo los use `MedalBadge`. Los valores propuestos se ajustan al verlos en el moto g55. El rubí es oscuro, para no parecerse al rojo de un error (C7).
 
 ## 4. ¿Dónde está el límite? (pregunta del dueño)
 
@@ -117,9 +117,10 @@ Si más adelante se quieren **más metas** después del diamante, mejor con **va
 
 ## 5. Reglas que cambian
 
-- **R1.** Un juego nuevo empieza en **bronce**, en su tutorial (como hoy en Fácil).
+- **R1.** Un juego nuevo empieza por el **tutorial**, que es el **nivel 0**: sin tiempo, sin estrellas y **solo una vez, al principio del juego** (P5). Después, bronce.
 - **R2.** Completar una ronda da su medalla y pasa a la siguiente. En diamante se sigue en diamante (como HU-037 P4).
-- **R3.** Bajar de ronda (HU-037 R10) baja **un escalón**: de esmeralda a rubí, no hasta el principio.
+- **R3.** Bajar de ronda baja **un escalón**: de esmeralda a rubí, no hasta el principio. Como ya no hay tutorial en cada ronda, la regla de HU-037 R10 (dos caídas al tutorial) se adapta: **perder dos veces en el primer nivel de la ronda** baja a la anterior, en su primer nivel (P7).
+- **R3b.** Cada ronda empieza en su **primer nivel con tiempo**. Al cambiar de ronda (porque se completa, se baja o lo cambia el adulto) no se repite el tutorial. La invitación a jugar (HU-037 R9, HU-049) aparece una sola vez, al terminar el tutorial.
 - **R4.** Las rondas se llaman por su medalla: «Ronda oro», en el juego y en la Zona de Padres (los nombres Fácil, Normal y Reto máximo desaparecen).
 - **R5.** El dorado del botón es la suma de las estrellas de las 8 rondas (sección 4: avanza más despacio).
 
@@ -168,9 +169,11 @@ El dorado **baja** (hay más estrellas posibles). Hace falta una celebración ú
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿8 rondas o más? | **8** (sección 4): más rondas serían pasos que no se notan |
-| P2 | ¿Se aceptan las tablas de la sección 3 como punto de partida? | **Sí**, con revisión de los tiempos en la prueba cerrada (como HU-007 tabla 4.3) |
-| P3 | ¿Cómo elige el adulto la ronda entre 8? | **Chips con la medalla en dos filas** (bronce a oro y rubí a diamante): se ve todo y no hay que deslizar |
-| P4 | ¿Qué es Premium con 8 rondas? | Memoria: **todo gratis** (HU-037 P6). Sombras: **todo gratis salvo el nivel 8** (como hoy). ¿Cuál es diferente?: **bronce a rubí gratis** (4 de 8, el 50 % que se buscaba en HU-025), **esmeralda a diamante Premium**. Mientras dure la prueba, todo gratis (D-040) |
-| P5 | ¿Cada ronda sigue empezando por el tutorial? | **Sí**: es la red de seguridad de la bajada de ronda (R10) y dura unos segundos. Se reconsidera tras la prueba si cansa |
-| P6 | ¿Se mantiene la celebración con el niño (HU-049) para las 8 medallas? | **Sí**: cada medalla es un logro |
+| P1 | ¿8 rondas o más? | ✅ Decidido (2026-11-17): **8** (sección 4) |
+| P2 | ¿Se aceptan las tablas de la sección 3 como punto de partida? | ✅ Decidido (2026-11-17): **sí**, con revisión de los tiempos en la prueba cerrada (como HU-007 tabla 4.3) |
+| P3 | ¿Cómo elige el adulto la ronda entre 8? | ✅ Decidido (2026-11-17): **chips con la medalla en dos filas** (bronce a oro y rubí a diamante): se ve todo y no hay que deslizar |
+| P4 | ¿Qué es Premium con 8 rondas? | ✅ Decidido (2026-11-17). Memoria: **todo gratis** (HU-037 P6). Sombras: **todo gratis salvo el nivel 8** (como hoy). ¿Cuál es diferente?: **bronce a rubí gratis** (4 de 8, el 50 % que se buscaba en HU-025), **esmeralda a diamante Premium**. Mientras dure la prueba, todo gratis (D-040) |
+| P5 | ¿Cada ronda sigue empezando por el tutorial? | ✅ Decidido (2026-11-17), distinto de la recomendación: **no**. El tutorial es el **nivel 0, solo al principio del juego**, sin tiempo ni estrellas (R1, R3b) |
+| P6 | ¿Se mantiene la celebración con el niño (HU-049) para las 8 medallas? | ✅ Decidido (2026-11-17): **sí** |
+| P7 | Sin tutorial en cada ronda, ¿cuándo se baja de ronda? | **Recomendación:** al **perder dos veces en el primer nivel** de la ronda (el equivalente de las dos caídas al tutorial de hoy), y se sigue en el primer nivel de la anterior. La cuenta vuelve a cero al cambiar de ronda (como HU-037 P15) |
+| P8 | ¿Qué pasa con quien ya jugó? ¿Vuelve a ver el tutorial? | **No**: el tutorial se da por hecho si ya tiene alguna estrella o medalla en ese juego |
