@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (2026-11-17). Corrección reportada por el dueño en el moto g55 |
+| **Estado** | **Lista** (2026-11-17): recomendaciones aceptadas (P1 y P2) |
 | **Épica** | E6 · Identidad (HU-013, HU-017) |
 | **Prioridad** | **P1** |
 | **Tamaño** | S (1 día) |
@@ -58,5 +58,5 @@ Las ilustraciones de PROMPTS §13 (celebrando) y §14 (invitando) **se añadiero
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿El niño también en las celebraciones de nivel (sin medalla)? | **No**: se reserva para las medallas, que así se sienten más especiales |
-| P2 | ¿Se usa al niño durmiendo (§12) ya, en la pantalla de descanso de noche? | **No**: llega con HU-038 (hora de dormir) |
+| P1 | ¿El niño también en las celebraciones de nivel (sin medalla)? | ✅ Decidido (2026-11-17): **no**: se reserva para las medallas, que así se sienten más especiales |
+| P2 | ¿Se usa al niño durmiendo (§12) ya, en la pantalla de descanso de noche? | ✅ Decidido (2026-11-17): **no**: llega con HU-038 (hora de dormir) |
