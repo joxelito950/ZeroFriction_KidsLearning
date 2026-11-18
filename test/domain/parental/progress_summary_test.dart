@@ -101,6 +101,17 @@ void main() {
       expect(summary.favoriteGame, GameId.memory);
     });
 
+    test('the total is the sum of the whole minutes the bars show', () {
+      const Duration seconds40 = Duration(seconds: 40);
+      final ProgressSummary summary = summaryOn(wednesday, [
+        PlayDay(day: DateTime(2026, 11, 18), byGame: {GameId.shadows: minute * 12 + seconds40}),
+        PlayDay(day: DateTime(2026, 11, 17), byGame: {GameId.shadows: minute * 22 + seconds40}),
+      ]);
+      final List<WeekSlot> week = summary.week(monday);
+      expect(week[1].played.inMinutes + week[2].played.inMinutes, 34);
+      expect(summary.total, minute * 34, reason: '22 + 12, not 35 from the seconds');
+    });
+
     test('no favourite without game time; a tie goes to the first game of the menu', () {
       expect(summaryOn(wednesday, [day(wednesday, outside: 5)]).favoriteGame, isNull);
       expect(summaryOn(wednesday, [day(wednesday, shadows: 5, odd: 5)]).favoriteGame, GameId.shadows);

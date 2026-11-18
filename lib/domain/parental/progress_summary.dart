@@ -80,8 +80,10 @@ final class ProgressSummary {
     );
   }
 
-  /// Total de los 6 días (§4.3).
-  Duration get total => history.days.fold(Duration.zero, (sum, day) => sum + day.total);
+  /// Total de los 6 días (§4.3): la suma de los minutos enteros de cada día,
+  /// para que coincida con lo que dicen las barras (cada una sin segundos).
+  Duration get total =>
+      Duration(minutes: history.days.fold(0, (sum, day) => sum + day.total.inMinutes));
 
   /// Tiempo de estos días en [game].
   Duration playedIn(GameId game) => history.days.fold(Duration.zero, (sum, day) => sum + day.playedIn(game));

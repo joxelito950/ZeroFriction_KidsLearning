@@ -115,10 +115,11 @@ final class MedalStyle {
   int get hashCode => Object.hash(fill, rim, stars, starColor, shape);
 }
 
-/// La medalla dibujada por la app (HU-048 P1): una cinta y un disco con sus
-/// estrellas. Ocupa un cuadrado de [size]; el disco tiene su centro en
-/// [discCenter] y su radio es [discRadius], en fracciones del lado, para poder
-/// colocarla sobre el pecho del niño (HU-049).
+/// La medalla dibujada por la app (HU-048 P1): un disco con sus estrellas o
+/// una gema, que llena el cuadrado de [size] (centro [discCenter], radio
+/// [discRadius], en fracciones del lado). Sin cinta: en el menú y en la Zona de
+/// Padres aprovecha todo el círculo; en la celebración, la cinta la dibuja
+/// [MedalRibbonPainter], que la cuelga del cuello del niño (HU-049).
 class MedalBadge extends StatelessWidget {
   const MedalBadge({super.key, required this.style, required this.size, this.semanticLabel});
 
@@ -128,8 +129,8 @@ class MedalBadge extends StatelessWidget {
   /// «Medalla de bronce», etc. Sin él, la medalla es decorativa.
   final String? semanticLabel;
 
-  static const Offset discCenter = Offset(0.5, 0.62);
-  static const double discRadius = 0.36;
+  static const Offset discCenter = Offset(0.5, 0.5);
+  static const double discRadius = 0.5;
 
   @override
   Widget build(BuildContext context) {
@@ -151,14 +152,8 @@ class MedalPainter extends CustomPainter {
     final Offset center = Offset(MedalBadge.discCenter.dx * s, MedalBadge.discCenter.dy * s);
     final double radius = MedalBadge.discRadius * s;
 
-    // Cinta: dos tiras que bajan hasta el disco.
-    final Paint ribbon = Paint()..color = AppPalette.softCoral;
-    final Paint ribbonShade = Paint()..color = AppPalette.deepTeal.withValues(alpha: 0.55);
-    canvas.drawPath(_strip(s, from: 0.30, to: 0.46), ribbon);
-    canvas.drawPath(_strip(s, from: 0.70, to: 0.54), ribbonShade);
-
     if (style.shape != MedalShape.disc) {
-      _paintGem(canvas, s, center, radius);
+      _paintGem(canvas, s, center);
       return;
     }
 
@@ -166,16 +161,16 @@ class MedalPainter extends CustomPainter {
     canvas.drawCircle(center, radius, Paint()..color = style.fill);
     canvas.drawCircle(
       center,
-      radius - s * 0.035,
+      radius - s * 0.045,
       Paint()
         ..color = style.rim
         ..style = PaintingStyle.stroke
-        ..strokeWidth = s * 0.07,
+        ..strokeWidth = s * 0.09,
     );
 
     // Estrellas grabadas, centradas en fila.
     final int count = style.stars.clamp(1, 3);
-    final double starRadius = s * (count == 1 ? 0.15 : 0.1);
+    final double starRadius = s * (count == 1 ? 0.21 : 0.13);
     final double step = starRadius * 2.05;
     final Paint star = Paint()..color = style.starColor;
     for (var index = 0; index < count; index++) {
@@ -184,10 +179,24 @@ class MedalPainter extends CustomPainter {
     }
   }
 
-  /// Una gema facetada (HU-051 3.4): un poco más grande que el disco, para
-  /// tapar igual el pecho del niño (HU-049). El diamante lleva destellos.
-  void _paintGem(Canvas canvas, double s, Offset center, double radius) {
-    final double r = radius * 1.2;
+  /// Una gema facetada (HU-051 3.4) engastada en un disco claro de su color,
+  /// con un borde del color de la gema: tan redonda como los metales, para
+  /// llenar el círculo del menú y tapar el pecho del niño (HU-049).
+  void _paintGem(Canvas canvas, double s, Offset discCenter) {
+    final double radius = MedalBadge.discRadius * s;
+    final Color setting = style.shape == MedalShape.diamond ? style.rim : style.fill;
+    canvas.drawCircle(discCenter, radius, Paint()..color = Color.alphaBlend(setting.withValues(alpha: 0.18), AppPalette.white));
+    canvas.drawCircle(
+      discCenter,
+      radius - s * 0.045,
+      Paint()
+        ..color = setting
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = s * 0.09,
+    );
+
+    final double r = s * 0.31;
+    final Offset center = discCenter + Offset(0, s * 0.03);
     // Corona plana arriba, pabellón en punta abajo.
     final List<Offset> outline = [
       center + Offset(-r * 0.55, -r * 0.75),
@@ -223,20 +232,9 @@ class MedalPainter extends CustomPainter {
 
     if (style.shape == MedalShape.diamond) {
       final Paint sparkle = Paint()..color = style.starColor;
-      canvas.drawPath(_star(center + Offset(-r * 0.95, -r * 0.95), s * 0.07), sparkle);
-      canvas.drawPath(_star(center + Offset(r * 0.95, -r * 0.7), s * 0.05), sparkle);
+      canvas.drawPath(_star(center + Offset(-r * 0.85, -r * 0.8), s * 0.07), sparkle);
+      canvas.drawPath(_star(center + Offset(r * 0.9, -r * 0.6), s * 0.05), sparkle);
     }
-  }
-
-  /// Una tira de la cinta, de arriba ([from], fracción del ancho) al disco ([to]).
-  static Path _strip(double s, {required double from, required double to}) {
-    final double width = s * 0.16;
-    return Path()
-      ..moveTo(s * from - width / 2, 0)
-      ..lineTo(s * from + width / 2, 0)
-      ..lineTo(s * to + width / 2, s * 0.36)
-      ..lineTo(s * to - width / 2, s * 0.36)
-      ..close();
   }
 
   static Path _star(Offset center, double radius) {
@@ -256,4 +254,55 @@ class MedalPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(MedalPainter oldDelegate) => oldDelegate.style != style;
+}
+
+/// La cinta de la medalla que lleva el niño en la celebración (HU-049): dos
+/// tiras que bajan desde los lados del cuello ([neckLeft], [neckRight]) hasta
+/// el disco ([discCenter], [discRadius]), como si colgara de sus hombros. Se
+/// pinta debajo de la medalla, que tapa sus extremos. Todo en píxeles del
+/// lienzo.
+class MedalRibbonPainter extends CustomPainter {
+  const MedalRibbonPainter({
+    required this.neckLeft,
+    required this.neckRight,
+    required this.discCenter,
+    required this.discRadius,
+  });
+
+  final Offset neckLeft;
+  final Offset neckRight;
+  final Offset discCenter;
+  final double discRadius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double width = discRadius * 0.5;
+    // Las tiras se juntan en V y acaban dentro del disco, que las tapa.
+    final Offset leftEnd = discCenter + Offset(-discRadius * 0.15, -discRadius * 0.5);
+    final Offset rightEnd = discCenter + Offset(discRadius * 0.15, -discRadius * 0.5);
+    canvas.drawPath(_strip(neckLeft, leftEnd, width), Paint()..color = AppPalette.softCoral);
+    canvas.drawPath(
+      _strip(neckRight, rightEnd, width),
+      Paint()..color = Color.alphaBlend(AppPalette.deepTeal.withValues(alpha: 0.45), AppPalette.softCoral),
+    );
+  }
+
+  /// Una tira recta de [from] a [to] con el ancho [width].
+  static Path _strip(Offset from, Offset to, double width) {
+    final Offset along = to - from;
+    final Offset across = Offset(-along.dy, along.dx) / along.distance * (width / 2);
+    return Path()
+      ..moveTo((from + across).dx, (from + across).dy)
+      ..lineTo((to + across).dx, (to + across).dy)
+      ..lineTo((to - across).dx, (to - across).dy)
+      ..lineTo((from - across).dx, (from - across).dy)
+      ..close();
+  }
+
+  @override
+  bool shouldRepaint(MedalRibbonPainter oldDelegate) =>
+      oldDelegate.neckLeft != neckLeft ||
+      oldDelegate.neckRight != neckRight ||
+      oldDelegate.discCenter != discCenter ||
+      oldDelegate.discRadius != discRadius;
 }
