@@ -1,6 +1,8 @@
 import 'package:hive_ce/hive.dart';
 
 import '../../../domain/entities/user_profile.dart';
+import '../../../domain/news/discovery.dart';
+import '../../../domain/progress/game_progress.dart';
 
 part 'user_profile_hive_model.g.dart';
 
@@ -12,13 +14,20 @@ class UserProfileHiveModel {
     required this.isPremium,
     required this.isSoundEnabled,
     this.languageCode,
+    this.gameOpens,
+    this.seenFeatures,
   });
 
+  /// Sin nada descubierto aún (instalación nueva), se guarda todo como visto
+  /// (HU-041 R2): así no se confunde después con un perfil anterior.
   factory UserProfileHiveModel.fromEntity(UserProfile entity) {
+    final Discovery discovery = entity.discovered;
     return UserProfileHiveModel(
       isPremium: entity.isPremium,
       isSoundEnabled: entity.isSoundEnabled,
       languageCode: entity.languageCode,
+      gameOpens: {for (final MapEntry<GameId, int> entry in discovery.gameOpens.entries) entry.key.name: entry.value},
+      seenFeatures: [for (final ParentsFeature feature in discovery.seenFeatures) feature.name],
     );
   }
 
@@ -31,11 +40,35 @@ class UserProfileHiveModel {
   @HiveField(2)
   final String? languageCode;
 
+  /// Añadido en HU-041: veces que se ha abierto cada juego, por el nombre de su
+  /// `GameId`. `null` en los perfiles anteriores.
+  @HiveField(3)
+  final Map<String, int>? gameOpens;
+
+  /// Añadido en HU-041: opciones de la Zona de Padres ya vistas, por nombre.
+  @HiveField(4)
+  final List<String>? seenFeatures;
+
   UserProfile toEntity() {
+    final Map<String, int>? opens = gameOpens;
+    final List<String>? features = seenFeatures;
     return UserProfile(
       isPremium: isPremium,
       isSoundEnabled: isSoundEnabled,
       languageCode: languageCode,
+      // Un perfil anterior a HU-041 había visto lo de `1.0.0-rc.5` (sección 5).
+      discovery: opens == null || features == null
+          ? Discovery.beforeNews()
+          : Discovery(
+              gameOpens: {
+                for (final GameId game in GameId.values)
+                  if (opens[game.name] case final int count) game: count.clamp(0, Discovery.opensToSee),
+              },
+              seenFeatures: {
+                for (final ParentsFeature feature in ParentsFeature.values)
+                  if (features.contains(feature.name)) feature,
+              },
+            ),
     );
   }
 }

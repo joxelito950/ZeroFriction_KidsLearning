@@ -10,6 +10,8 @@ import 'package:toddler_logic/presentation/widgets/liquid_gold.dart';
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/news/discovery.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/progress/level_record.dart';
 
@@ -78,5 +80,33 @@ void main() {
     expect(find.byKey(const ValueKey<String>('memory-game-icon')), findsOneWidget);
     expect(find.byType(GameIcon), findsWidgets);
     expect(find.byIcon(Icons.child_care_rounded), findsNothing);
+  });
+
+  testWidgets('opening a game from the menu counts the visit, for HU-041 (P1)', (tester) async {
+    final repository = MockPersistenceRepository();
+    stubPersistenceRepository(repository);
+    final UserProfile before = UserProfile(isPremium: false, isSoundEnabled: true, discovery: Discovery());
+    when(() => repository.readUserProfile()).thenAnswer((_) async => before);
+    await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+    await tester.pump();
+    await tester.tap(find.text(l10n.shadowsGameTitle));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+
+    final UserProfile saved = verify(() => repository.saveUserProfile(captureAny())).captured.last as UserProfile;
+    expect(saved.discovered.opensOf(GameId.shadows), 1);
+    expect(saved.discovered.opensOf(GameId.memory), 0);
+  });
+
+  testWidgets('a game opens even if counting the visit fails', (tester) async {
+    final repository = MockPersistenceRepository();
+    stubPersistenceRepository(repository);
+    when(() => repository.saveUserProfile(any())).thenThrow(StateError('disk'));
+    await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+    await tester.pump();
+    await tester.tap(find.text(l10n.oddOneOutTitle));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.byKey(const ValueKey<String>('odd-one-out-game-icon')), findsOneWidget);
   });
 }

@@ -14,6 +14,7 @@ import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/news/discovery.dart';
 
 class _MockLevelStateBox extends Mock implements Box<LevelStateHiveModel> {}
 
@@ -145,7 +146,8 @@ void main() {
 
       final result = await repository.readUserProfile();
 
-      expect(result, const UserProfile(isPremium: true, isSoundEnabled: false));
+      // Guardado antes de HU-041: había visto lo de rc.5.
+      expect(result, UserProfile(isPremium: true, isSoundEnabled: false, discovery: Discovery.beforeNews()));
       verify(() => userProfileBox.get('current_user_profile')).called(1);
       verifyNever(() => userProfileBox.isNotEmpty);
     });
@@ -169,7 +171,7 @@ void main() {
 
       final result = await repository.readUserProfile();
 
-      expect(result, const UserProfile(isPremium: false, isSoundEnabled: false));
+      expect(result, UserProfile(isPremium: false, isSoundEnabled: false, discovery: Discovery.beforeNews()));
       verify(() => userProfileBox.get('current_user_profile')).called(1);
       verify(() => userProfileBox.isNotEmpty).called(1);
       verify(() => userProfileBox.values).called(1);
@@ -184,7 +186,7 @@ void main() {
       final saved = verify(() => userProfileBox.put('current_user_profile', captureAny()))
           .captured
           .single as UserProfileHiveModel;
-      expect(saved.toEntity(), userProfile);
+      expect(saved.toEntity(), userProfile.copyWith(discovery: Discovery.allSeen()));
     });
     test('readParentalSettings returns the defaults when nothing is stored', () async {
       when(() => parentalSettingsBox.get('current_parental_settings')).thenReturn(null);

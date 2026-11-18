@@ -55,7 +55,14 @@
 | P3 | ¿Un aviso para los padres («Novedades de esta versión»)? | ✅ Decidido (2026-11-18), como la recomendación: **no** en la app; lo cuentan las notas de la versión de Google Play (`docs/store/`) |
 | P4 | ¿Se desarrolla junto con el 4.º juego? | ✅ Decidido (2026-11-18): **sí**, se une a las historias que van con el próximo juego. Las bases (dominio y guardado) se adelantan para que la versión que lo traiga ya sepa qué ha visto cada niño |
 
-## 7. Fuera de alcance
+## 7. Entregas
+
+| Entrega | Estado | Qué se hizo |
+|---|---|---|
+| Bases | ✅ 2026-11-18, rama `feature/hu-034-3-progress-screen` | Dominio `Discovery` (`lib/domain/news/discovery.dart`): veces abierto cada juego (hasta 3), `isNewGame` (R4: tercera apertura o medalla de plata), `ParentsFeature` y `isNewFeature` (R7). Guardado en `UserProfileHiveModel`, campos 3 y 4 (sin typeId nuevo): un perfil anterior se lee como «visto lo de `1.0.0-rc.5`» (los tres juegos y las filas sin «Su progreso»), y una instalación nueva guarda todo como visto (R2). El menú ya **cuenta cada apertura** de un juego, para que la versión del próximo juego sepa qué ha visto cada niño. **Sin cambios visibles** |
+| Destaque | Con el próximo juego (P4) | `NewGameHighlight` en el menú (destellos, saltito, punto fijo sin animaciones, «Nuevo» para el lector de pantalla) y la etiqueta «Nuevo» en las filas de la Zona de Padres. Con las bases, «Su progreso» ya saldría como nueva para quien actualice desde la `rc.5` |
+
+## 8. Fuera de alcance
 
 - Notificaciones del sistema.
 - Pantallas de «¿Qué hay de nuevo?» con texto.
