@@ -68,3 +68,11 @@ Una **medalla propia** (`MedalBadge`), dibujada por la app, que se distingue por
 - Sustituye el icono del sistema en el menú, en la celebración (HU-049) y en los chips de la Zona de Padres.
 - Tests: luminancia del oro ≥ 1,8 veces la del bronce (es unas 2,5), estrellas, estilos por ronda, semántica, sin iconos del sistema y bordes de los puntos.
 
+
+## 8. Medallas redondas y cinta al cuello (2026-11-18, decisión del dueño)
+
+Al verlas en el moto g55, la cinta dentro del cuadrado dejaba el disco en un tercio del círculo blanco del menú. Decidido el diseño **mixto**:
+
+- **`MedalBadge` sin cinta:** el disco llena todo el cuadrado (centro 0,5 y radio 0,5). En el menú, la medalla ocupa 36 de los 40 px del círculo blanco; en la Zona de Padres, igual de grande que el chip.
+- **Gemas engastadas (HU-051):** cada gema va sobre un disco claro de su color (18 % sobre blanco) con borde de su color; el diamante, con el borde teal. Así todas las medallas son redondas y tapan igual el pecho del niño.
+- **La cinta solo en la celebración (HU-049):** `MedalRibbonPainter` dibuja dos tiras en V desde los lados del cuello del niño hasta el disco, que tapa sus extremos, como si colgara de sus hombros. Coral y coral con teal, como antes.

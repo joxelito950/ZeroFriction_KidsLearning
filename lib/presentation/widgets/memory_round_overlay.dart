@@ -164,7 +164,8 @@ class PlayInvitation extends StatelessWidget {
 
 /// El niño celebrando entre confeti con la medalla de la ronda sobre el pecho
 /// (HU-049). La ilustración trae un hueco transparente en el pecho; la medalla
-/// se coloca con su disco centrado en él y un poco más grande, para taparlo.
+/// se coloca con su disco centrado en él y un poco más grande, para taparlo, y
+/// su cinta sube hasta el cuello, como si colgara de los hombros.
 class CelebratingChild extends StatelessWidget {
   const CelebratingChild({super.key, required this.medal});
 
@@ -181,6 +182,10 @@ class CelebratingChild extends StatelessWidget {
   static const Offset holeCenter = Offset(0.5385, 0.5344);
   static const double holeRadius = 0.0949;
 
+  /// Lados del cuello, de donde cuelga la cinta, en las mismas fracciones.
+  static const Offset neckLeft = Offset(0.455, 0.39);
+  static const Offset neckRight = Offset(0.625, 0.39);
+
   /// La medalla tapa el hueco con un 15 % de margen.
   static double get medalSize => holeRadius * 1.15 / MedalBadge.discRadius * height * aspect;
 
@@ -196,6 +201,17 @@ class CelebratingChild extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(BrandAssets.childCelebrating, fit: BoxFit.fill, excludeFromSemantics: true),
+          ),
+          Positioned.fill(
+            child: CustomPaint(
+              key: const ValueKey<String>('celebrating-child-ribbon'),
+              painter: MedalRibbonPainter(
+                neckLeft: Offset(neckLeft.dx * width, neckLeft.dy * height),
+                neckRight: Offset(neckRight.dx * width, neckRight.dy * height),
+                discCenter: Offset(holeCenter.dx * width, holeCenter.dy * height),
+                discRadius: size * MedalBadge.discRadius,
+              ),
+            ),
           ),
           Positioned(
             left: holeCenter.dx * width - MedalBadge.discCenter.dx * size,

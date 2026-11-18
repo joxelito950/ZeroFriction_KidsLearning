@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-10 sin las respuestas del dueño; preguntas en la sección 8) |
+| **Estado** | **Lista** (2026-11-18): P1, P2 y P4 decididas por el dueño. Primera pieza del próximo release a la prueba cerrada, antes del cuarto juego (HU-052 A) |
 | **Épica** | E4 · Nuevos juegos |
 | **Prioridad** | P2: **condición para empezar el cuarto juego** (decidido el 2026-11-11). El tercero (HU-025) cabe aún en la lista de botones anchos |
 | **Tamaño** | M (estimación: 2–3 días) |
-| **Depende de** | HU-013 (iconos de los juegos), HU-002 (dorado) y HU-037 (rondas y medallas: decide qué muestra cada botón) |
+| **Depende de** | HU-013 (iconos de los juegos), HU-002 (dorado) y HU-037 (rondas y medallas: decide qué muestra cada botón), las tres hechas |
 
 ## 1. Historia
 
@@ -24,6 +24,12 @@
 - En vertical, el logo va arriba y los botones debajo; en horizontal, lado a lado. Con dos juegos todo cabe sin scroll en los 4 teléfonos de los tests, en 9 idiomas y con el texto ampliado.
 - Con un tercer juego (HU-025), en el teléfono compacto en horizontal los botones anchos ya no caben sin scroll: el alto útil ronda 330 dp.
 - No hay nada bloqueado en el menú: Premium no existe todavía (HU-006).
+
+### 2.1 Actualización (2026-11-18)
+
+- Hoy hay **tres botones anchos**: Memoria, Sombras y ¿Cuál es diferente? En horizontal, el logo va a la izquierda y los tres botones llenan el alto a la derecha: **un cuarto no cabe** sin scroll.
+- HU-037 y HU-051 ya están hechas: los juegos comparten `GameId` y `GameProgress`, y cada botón muestra la medalla más alta de las ocho rondas (bronce a diamante), redonda y llenando su círculo blanco (HU-048 sección 8).
+- HU-041 dejó las bases para destacar un juego nuevo (`Discovery`): la etiqueta «Nuevo» irá en la tarjeta (R7).
 
 ## 3. Propuesta
 
@@ -53,12 +59,15 @@ Lo que todavía no se puede abrir **no se esconde ni se tacha**: la tarjeta se v
 | R4 | El lector de pantalla lee el nombre del juego y su dorado («Memoria, 40 % dorado»), como hoy. |
 | R5 | La entrada a la Zona de padres sigue fuera de la cuadrícula, con su doble toque (HU-004 R1). |
 | R6 | Añadir un juego nuevo es añadir una entrada a una lista (nombre, subtítulo, icono, pantalla y progreso): el menú no se reescribe con cada juego. |
+| R7 | Un juego nuevo lleva la etiqueta «Nuevo» en su tarjeta hasta abrirlo por tercera vez o superar la ronda plata (HU-041 R4). |
+| R8 | Un juego en edición especial lleva su adorno de temporada en una esquina de la tarjeta, sin texto ni precio (HU-042 R3, R4). |
+| R9 | Colores (D-032): cada tarjeta conserva el color de su botón actual (azul petróleo, teal profundo, blanco) con su onda de arena y su dorado; la medalla, sobre el círculo blanco; la etiqueta «Nuevo», en ámbar con texto teal profundo. Sin colores nuevos. |
 
 ## 5. Impacto técnico previsto
 
 | Área | Cambio |
 |---|---|
-| Dominio | Ninguno, salvo el modelo común de progreso que decida HU-037 (dorado y medalla por juego con una sola interfaz) |
+| Dominio | Ninguno: el modelo común de progreso ya existe (`GameId`, `GameProgress`, HU-037) y `Discovery` (HU-041) dice qué es nuevo |
 | Presentación | `GameCatalog`: la lista de juegos (R6). `GameCard` reutiliza `GameIcon` y `LiquidGold`. `MainMenuScreen` pasa a una cuadrícula adaptable |
 | Tests | Diseño con 2, 3 y 6 juegos en los 4 teléfonos, 9 idiomas y dos escalas de texto; orden fijo; lector de pantalla |
 
@@ -80,7 +89,7 @@ Teléfono en vertical, 3 juegos: dos tarjetas en la primera fila (Memoria y Somb
 
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
-| P1 | ¿Cuadrícula de tarjetas o seguir con botones anchos en lista? | **Cuadrícula** (3.1): el icono grande es lo que el niño reconoce y escala a 6 juegos sin scroll | Sí |
-| P2 | ¿Orden fijo o el último jugado primero? | **Fijo** (R3) | No |
+| P1 | ¿Cuadrícula de tarjetas o seguir con botones anchos en lista? | ✅ Decidido (2026-11-18): **cuadrícula** (3.1): el icono grande es lo que el niño reconoce y escala a 6 juegos sin scroll | — |
+| P2 | ¿Orden fijo o el último jugado primero? | ✅ Decidido (2026-11-18): **fijo** (R3), en el orden en que llegaron los juegos | — |
 | P3 | ¿Puede haber juegos enteros de Premium, o todos tienen una parte gratis? | ✅ Respondida por HU-037 P6 (2026-11-10): **sí habrá juegos enteros de Premium** (a partir del cuarto). Su tarjeta se ve igual, con el candado sutil; si hay una edición especial gratis (HU-042), sin candado mientras dure. Al tocar un juego cerrado: una animación suave de «cerrado», sin texto ni tienda (3.3) | — |
-| P4 | ¿Se desarrolla antes o después de HU-037? | **Después:** HU-037 cambia qué muestra cada tarjeta (medalla más alta, dorado sobre tres rondas) y crea el modelo común de progreso | No |
+| P4 | ¿Se desarrolla antes o después de HU-037? | ✅ Cerrada (2026-11-18): **ya no aplica**. HU-037 está hecha (y HU-051 amplió las rondas a ocho): se desarrolla después, sobre su modelo común de progreso, como se recomendaba. No se absorbió: HU-037 no tocó la forma del menú | — |
