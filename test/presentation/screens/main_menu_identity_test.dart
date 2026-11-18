@@ -39,7 +39,8 @@ void main() {
 
     final Finder icon = find.byKey(const ValueKey<String>('menu-memory-icon'));
     expect(icon, findsOneWidget);
-    expect(tester.getCenter(icon).dx, lessThan(tester.getCenter(find.text(l10n.menuMemoryTitle)).dx));
+    // HU-023: el icono grande, encima del nombre del juego.
+    expect(tester.getCenter(icon).dy, lessThan(tester.getCenter(find.text(l10n.menuMemoryTitle)).dy));
     // El botón se sigue anunciando solo con su texto.
     expect(find.bySemanticsLabel(RegExp(l10n.menuMemoryTitle)), findsWidgets);
     semantics.dispose();

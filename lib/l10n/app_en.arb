@@ -72,10 +72,6 @@
   "@menuMemoryTitle": {
     "description": "Main menu button that opens the memory game. Children see it; one short word if possible, max ~20 characters."
   },
-  "menuMemorySubtitle": "Find the pairs",
-  "@menuMemorySubtitle": {
-    "description": "Small text under the memory game button. Max ~30 characters."
-  },
   "memoryLevelIndicator": "Level {level} of {total}",
   "@memoryLevelIndicator": {
     "description": "Screen-reader label (not visible) of the five dots that show the level reached in the memory game.",
@@ -526,10 +522,6 @@
   "@feedbackEmailWhatExpected": {
     "description": "Second guide line in the body of the prepared email, followed by space to write."
   },
-  "menuShadowsSubtitle": "Find each shadow",
-  "@menuShadowsSubtitle": {
-    "description": "Subtitle of the Shadows button on the main menu, under the game name. Very short, like the memory game's 'Find the pairs'."
-  },
   "parentsZoneSoundTitle": "Sound",
   "@parentsZoneSoundTitle": {
     "description": "Title of the Sound switch in the Parents zone (HU-005). One word."
@@ -577,10 +569,6 @@
   "oddOneOutInstructions": "Tap the one that is not like the others.",
   "@oddOneOutInstructions": {
     "description": "One line under the game title, for the adult: tap the object that is not like the others."
-  },
-  "menuOddOneOutSubtitle": "Find the odd one",
-  "@menuOddOneOutSubtitle": {
-    "description": "Subtitle of the Odd one out button on the main menu. Very short, like 'Find the pairs'."
   },
   "oddOneOutObjectSemantics": "Picture {symbol}",
   "@oddOneOutObjectSemantics": {

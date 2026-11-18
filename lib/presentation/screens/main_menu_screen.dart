@@ -1,30 +1,26 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../brand/brand_assets.dart';
 import '../../domain/entities/user_profile.dart';
-import '../../domain/memory/memory_ladder.dart';
 import '../../domain/news/discovery.dart';
-import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/settings/game_difficulty.dart';
-import '../../domain/shadows/shadow_ladder.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
-import '../widgets/game_icon.dart';
+import '../widgets/game_catalog.dart';
+import '../widgets/game_grid.dart';
 import '../widgets/liquid_gold.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
 import '../widgets/medal_badge.dart';
 import '../widgets/round_style.dart';
-import 'memory_game_screen.dart';
-import 'odd_one_out_screen.dart';
-import 'shadow_game_screen.dart';
 
 /// Menú principal súper visual y simplificado para niños de 3 años.
 class MainMenuScreen extends StatelessWidget {
@@ -44,39 +40,32 @@ class MainMenuScreen extends StatelessWidget {
       onExit: _closeApp,
       child: Scaffold(
         body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // En horizontal el alto útil es muy bajo: encabezado y botones van lado a lado.
-              final bool isLandscape = constraints.maxWidth > constraints.maxHeight;
-
-              // El scroll es solo una red de seguridad para pantallas muy pequeñas;
-              // el mínimo de alto mantiene el contenido centrado cuando sí cabe.
-              return SingleChildScrollView(
-                padding: _padding,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight - _padding.vertical,
-                  ),
-                  child: isLandscape
-                      ? const Row(
-                          children: [
-                            Expanded(child: _MenuHeader()),
-                            SizedBox(width: 32),
-                            Expanded(child: _MenuActions()),
-                          ],
-                        )
-                      : const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _MenuHeader(),
-                            SizedBox(height: 48),
-                            _MenuActions(),
-                          ],
-                        ),
-                ),
-              );
-            },
+          child: Padding(
+            padding: _padding,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // En horizontal el alto útil es muy bajo: encabezado y juegos van
+                // lado a lado. La cuadrícula ocupa el alto que queda (HU-023).
+                final bool isLandscape = constraints.maxWidth > constraints.maxHeight;
+                return isLandscape
+                    ? const Row(
+                        children: [
+                          Expanded(child: SingleChildScrollView(child: _MenuHeader())),
+                          SizedBox(width: 32),
+                          Expanded(child: _MenuActions(minColumns: 1)),
+                        ],
+                      )
+                    : const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _MenuHeader(),
+                          SizedBox(height: 32),
+                          Flexible(child: _MenuActions(minColumns: 2)),
+                        ],
+                      );
+              },
+            ),
           ),
         ),
       ),
@@ -129,24 +118,22 @@ class _MenuHeader extends StatelessWidget {
   }
 }
 
-/// Juego de memoria, acceso a la zona de padres y salida de la app.
+/// Los juegos en cuadrícula (HU-023), el acceso a la zona de padres y la
+/// salida de la app.
 class _MenuActions extends StatefulWidget {
-  const _MenuActions();
+  const _MenuActions({required this.minColumns});
+
+  /// En vertical, al menos 2 columnas (HU-023 3.1).
+  final int minColumns;
 
   @override
   State<_MenuActions> createState() => _MenuActionsState();
 }
 
 class _MenuActionsState extends State<_MenuActions> {
-  /// Progreso del juego de memoria: medalla (HU-001 R9) y dorado (HU-002).
-  /// El menú solo lee lo guardado, sin calcular la pérdida (D-037).
-  GameProgress _memory = GameProgress.initial();
-
-  /// Progreso de Sombras (HU-007): medalla y dorado.
-  GameProgress _shadows = GameProgress.initial();
-
-  /// Progreso de «¿Cuál es diferente?» (HU-025).
-  GameProgress _oddOneOut = GameProgress.initial();
+  /// Progreso de cada juego: medalla (HU-037) y dorado (HU-002). El menú solo
+  /// lee lo guardado, sin calcular la pérdida (D-037).
+  Map<GameId, GameProgress> _progress = const {};
 
   @override
   void initState() {
@@ -154,41 +141,27 @@ class _MenuActionsState extends State<_MenuActions> {
     _loadProgress();
   }
 
-  /// Si no se puede leer un progreso, su botón se muestra sin medalla ni dorado.
+  /// Si no se puede leer un progreso, su tarjeta se muestra sin medalla ni dorado.
   Future<void> _loadProgress() async {
     final IPersistenceRepository repository = context.read<IPersistenceRepository>();
-    GameProgress memory;
-    GameProgress shadows;
-    try {
-      memory = await repository.readGameProgress(GameId.memory);
-    } catch (_) {
-      memory = GameProgress.initial();
+    final Map<GameId, GameProgress> progress = {};
+    for (final MenuGame game in GameCatalog.all) {
+      try {
+        progress[game.id] = await repository.readGameProgress(game.id);
+      } catch (_) {
+        progress[game.id] = GameProgress.initial();
+      }
     }
-    try {
-      shadows = await repository.readGameProgress(GameId.shadows);
-    } catch (_) {
-      shadows = GameProgress.initial();
-    }
-    GameProgress oddOneOut;
-    try {
-      oddOneOut = await repository.readGameProgress(GameId.oddOneOut);
-    } catch (_) {
-      oddOneOut = GameProgress.initial();
-    }
-    if (!mounted || (memory == _memory && shadows == _shadows && oddOneOut == _oddOneOut)) return;
-    setState(() {
-      _memory = memory;
-      _shadows = shadows;
-      _oddOneOut = oddOneOut;
-    });
+    if (!mounted || mapEquals(progress, _progress)) return;
+    setState(() => _progress = progress);
   }
 
   /// Abre un juego y, al volver, relee el progreso: la medalla o el dorado
   /// pueden haber cambiado.
-  Future<void> _open(GameId id, Widget game) async {
+  Future<void> _open(MenuGame game) async {
     final IPersistenceRepository repository = context.read<IPersistenceRepository>();
-    unawaited(_recordOpen(repository, id));
-    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => game));
+    unawaited(_recordOpen(repository, game.id));
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => game.screen()));
     await _loadProgress();
   }
 
@@ -205,97 +178,35 @@ class _MenuActionsState extends State<_MenuActions> {
     }
   }
 
-  /// La medalla del juego, sobre un círculo blanco: el dorado no contrasta con
-  /// el color del botón.
-  /// Con las rondas (HU-037), la medalla más alta: bronce, plata u oro.
-  Widget _medal(String key, String label, GameDifficulty round) => Semantics(
-        label: label,
-        excludeSemantics: true,
-        child: CircleAvatar(
-          radius: 20,
-          backgroundColor: AppPalette.white,
-          // La medalla propia (HU-048): bronce y oro ya no se confunden.
-          child: MedalBadge(key: ValueKey<String>(key), style: RoundStyle.medalStyleOf(round), size: 36),
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final ButtonStyle smallButtonStyle = TextButton.styleFrom(foregroundColor: AppPalette.petrolBlue);
+    final List<MenuGame> games = GameCatalog.all;
 
+    // Juntos y centrados: la cuadrícula ocupa lo que necesita, como mucho el
+    // alto que queda.
     return Column(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Un solo botón: el juego retoma el nivel alcanzado (HU-001 R1).
-        _MenuButton(
-          title: l10n.menuMemoryTitle,
-          subtitle: l10n.menuMemorySubtitle,
-          // Azul petróleo: lo que se toca (PALETA.md, C6).
-          backgroundColor: AppPalette.petrolBlue,
-          textColor: AppPalette.white,
-          icon: const GameIcon.memory(key: ValueKey<String>('menu-memory-icon'), size: 52),
-          // Dorado líquido en todo el botón (HU-002 R16) y anunciado (R6).
-          goldFraction: _memory.goldFraction(MemoryLadder.rounds),
-          goldLabel: l10n.menuGameGoldSemantics(
-            (_memory.goldFraction(MemoryLadder.rounds) * 100).round(),
-            _memory.stars,
-            MemoryLadder.rounds.maxStars,
+        Flexible(
+          child: GameGrid(
+            count: games.length,
+            minColumns: widget.minColumns,
+            cardBuilder: (context, index, side) {
+              final MenuGame game = games[index];
+              return _GameCard(
+                game: game,
+                progress: _progress[game.id] ?? GameProgress.initial(),
+                side: side,
+                onTap: () => _open(game),
+              );
+            },
           ),
-          badge: switch (_memory.bestMedal) {
-            final GameDifficulty medal => _medal('menu-memory-badge', RoundStyle.medalTitle(l10n, medal), medal),
-            null => null,
-          },
-          onTap: () => _open(GameId.memory, const MemoryGameScreen()),
         ),
         const SizedBox(height: 16),
-        // Segundo juego, debajo de «Memoria» (HU-007 R1).
-        _MenuButton(
-          key: const ValueKey<String>('menu-shadows'),
-          title: l10n.shadowsGameTitle,
-          subtitle: l10n.menuShadowsSubtitle,
-          // Teal profundo: se distingue del azul petróleo de la memoria.
-          backgroundColor: AppPalette.deepTeal,
-          textColor: AppPalette.white,
-          icon: const GameIcon.shadows(key: ValueKey<String>('menu-shadows-icon'), size: 52),
-          goldFraction: _shadows.goldFraction(ShadowLadder.rounds),
-          goldLabel: l10n.menuGameGoldSemantics(
-            (_shadows.goldFraction(ShadowLadder.rounds) * 100).round(),
-            _shadows.stars,
-            ShadowLadder.rounds.maxStars,
-          ),
-          badge: switch (_shadows.bestMedal) {
-            final GameDifficulty medal => _medal('menu-shadows-badge', RoundStyle.medalTitle(l10n, medal), medal),
-            null => null,
-          },
-          onTap: () => _open(GameId.shadows, const ShadowGameScreen()),
-        ),
-        const SizedBox(height: 16),
-        // Tercer juego (HU-025). El menú para varios juegos (HU-023) llega antes
-        // del cuarto: con tres, los botones anchos aún caben.
-        _MenuButton(
-          key: const ValueKey<String>('menu-odd-one-out'),
-          title: l10n.oddOneOutTitle,
-          subtitle: l10n.menuOddOneOutSubtitle,
-          // Blanco con texto teal: se distingue de los dos botones oscuros.
-          backgroundColor: AppPalette.white,
-          textColor: AppPalette.deepTeal,
-          icon: const GameIcon.oddOneOut(key: ValueKey<String>('menu-odd-one-out-icon'), size: 52),
-          goldFraction: _oddOneOut.goldFraction(OddOneOut.rounds),
-          goldLabel: l10n.menuGameGoldSemantics(
-            (_oddOneOut.goldFraction(OddOneOut.rounds) * 100).round(),
-            _oddOneOut.stars,
-            OddOneOut.rounds.maxStars,
-          ),
-          badge: switch (_oddOneOut.bestMedal) {
-            final GameDifficulty medal => _medal('menu-odd-one-out-badge', RoundStyle.medalTitle(l10n, medal), medal),
-            null => null,
-          },
-          onTap: () => _open(GameId.oddOneOut, const OddOneOutScreen()),
-        ),
-        const SizedBox(height: 40),
-
         Wrap(
           alignment: WrapAlignment.center,
           spacing: 16,
@@ -316,105 +227,96 @@ class _MenuActionsState extends State<_MenuActions> {
   }
 }
 
-/// Widget auxiliar para los botones interactivos del menú
-class _MenuButton extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final Color backgroundColor;
-  final Color textColor;
+/// La tarjeta de un juego (HU-023 R1): su icono grande, su nombre debajo en
+/// letra pequeña para el adulto, el dorado llenándola de abajo arriba (HU-002
+/// R16) y la medalla más alta en la esquina (HU-037). Toda se puede tocar.
+class _GameCard extends StatelessWidget {
+  const _GameCard({required this.game, required this.progress, required this.side, required this.onTap});
+
+  final MenuGame game;
+  final GameProgress progress;
+  final double side;
   final VoidCallback onTap;
 
-  /// Icono del juego, delante del título (HU-013).
-  final Widget? icon;
-
-  /// Distintivo opcional junto a la flecha (la medalla de la insignia).
-  final Widget? badge;
-
-  /// Dorado del juego, de 0 a 1, y cómo lo anuncia el lector de pantalla.
-  final double goldFraction;
-  final String? goldLabel;
-
-  const _MenuButton({
-    super.key,
-    required this.title,
-    required this.subtitle,
-    required this.backgroundColor,
-    required this.textColor,
-    required this.onTap,
-    this.icon,
-    this.badge,
-    this.goldFraction = 0,
-    this.goldLabel,
-  });
+  /// El nombre es para el adulto: con el texto del sistema al máximo, crece
+  /// hasta 1,6 veces para no tapar el icono, que es lo que reconoce el niño.
+  static const double maxTitleScale = 1.6;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final double gold = progress.goldFraction(game.rounds);
+    final String title = game.title(l10n);
     // Sobre el dorado, el blanco queda en 4,40:1: una sombra suave en teal
-    // profundo lo mantiene legible a cualquier altura del líquido (P13).
+    // profundo lo mantiene legible a cualquier altura del líquido (HU-002 P13).
     final List<Shadow>? shadows =
-        goldFraction > 0 ? [Shadow(color: AppPalette.deepTeal.withValues(alpha: 0.6), blurRadius: 4)] : null;
+        gold > 0 ? [Shadow(color: AppPalette.deepTeal.withValues(alpha: 0.6), blurRadius: 4)] : null;
+    final double medalRadius = (side * 0.13).clamp(14.0, 26.0);
+    final GameDifficulty? medal = progress.bestMedal;
 
     return Semantics(
-      value: goldLabel,
-      child: InkWell(
-        onTap: onTap,
+      button: true,
+      label: title,
+      value: l10n.menuGameGoldSemantics((gold * 100).round(), progress.stars, game.rounds.maxStars),
+      excludeSemantics: true,
+      child: Material(
+        key: ValueKey<String>('menu-${game.keyName}'),
+        color: game.background,
         borderRadius: BorderRadius.circular(24),
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: AppPalette.deepTeal.withValues(alpha: 0.12),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
+        clipBehavior: Clip.antiAlias,
+        elevation: 3,
+        shadowColor: AppPalette.deepTeal.withValues(alpha: 0.4),
+        child: InkWell(
+          onTap: onTap,
           child: Stack(
             children: [
-              Positioned.fill(child: LiquidGold(fraction: goldFraction)),
+              Positioned.fill(child: LiquidGold(fraction: gold)),
               Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
+                padding: EdgeInsets.fromLTRB(10, side * 0.1, 10, 10),
+                child: Column(
                   children: [
-                    if (icon case final Widget icon) ...[icon, const SizedBox(width: 14)],
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
-                              shadows: shadows,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            subtitle,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: textColor.withValues(alpha: goldFraction > 0 ? 1 : 0.8),
-                              shadows: shadows,
-                            ),
-                          ),
-                        ],
+                      child: FittedBox(
+                        child: game.icon(ValueKey<String>('menu-${game.keyName}-icon'), side * 0.5),
                       ),
                     ),
-                    if (badge case final Widget badge) ...[badge, const SizedBox(width: 8)],
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: textColor,
-                      size: 28,
-                      shadows: shadows,
-                    )
+                    const SizedBox(height: 6),
+                    MediaQuery.withClampedTextScaling(
+                      maxScaleFactor: maxTitleScale,
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 15,
+                          height: 1.15,
+                          fontWeight: FontWeight.bold,
+                          color: game.foreground,
+                          shadows: shadows,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
+              if (medal != null)
+                PositionedDirectional(
+                  top: 8,
+                  end: 8,
+                  // La medalla, sobre un círculo blanco: el dorado no contrasta
+                  // con el color de la tarjeta (HU-048).
+                  child: CircleAvatar(
+                    radius: medalRadius,
+                    backgroundColor: AppPalette.white,
+                    child: MedalBadge(
+                      key: ValueKey<String>('menu-${game.keyName}-badge'),
+                      style: RoundStyle.medalStyleOf(medal),
+                      size: medalRadius * 1.8,
+                      semanticLabel: RoundStyle.medalTitle(l10n, medal),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

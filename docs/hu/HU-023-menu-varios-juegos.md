@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-18): P1, P2 y P4 decididas por el dueño. Primera pieza del próximo release a la prueba cerrada, antes del cuarto juego (HU-052 A) |
+| **Estado** | **Desarrollada** (2026-11-18, rama `feature/hu-023-menu-grid`). Falta verla en el moto g55. Primera pieza del próximo release a la prueba cerrada |
 | **Épica** | E4 · Nuevos juegos |
 | **Prioridad** | P2: **condición para empezar el cuarto juego** (decidido el 2026-11-11). El tercero (HU-025) cabe aún en la lista de botones anchos |
 | **Tamaño** | M (estimación: 2–3 días) |
@@ -93,3 +93,29 @@ Teléfono en vertical, 3 juegos: dos tarjetas en la primera fila (Memoria y Somb
 | P2 | ¿Orden fijo o el último jugado primero? | ✅ Decidido (2026-11-18): **fijo** (R3), en el orden en que llegaron los juegos | — |
 | P3 | ¿Puede haber juegos enteros de Premium, o todos tienen una parte gratis? | ✅ Respondida por HU-037 P6 (2026-11-10): **sí habrá juegos enteros de Premium** (a partir del cuarto). Su tarjeta se ve igual, con el candado sutil; si hay una edición especial gratis (HU-042), sin candado mientras dure. Al tocar un juego cerrado: una animación suave de «cerrado», sin texto ni tienda (3.3) | — |
 | P4 | ¿Se desarrolla antes o después de HU-037? | ✅ Cerrada (2026-11-18): **ya no aplica**. HU-037 está hecha (y HU-051 amplió las rondas a ocho): se desarrolla después, sobre su modelo común de progreso, como se recomendaba. No se absorbió: HU-037 no tocó la forma del menú | — |
+
+## 9. Desarrollo (2026-11-18)
+
+- **`GameCatalog`** (`widgets/game_catalog.dart`, R6): la lista de juegos en orden fijo (R3). Cada entrada lleva el título, el icono, la escalera de rondas (dorado y estrellas), los colores y la pantalla que abre. Añadir un juego es añadir una entrada.
+- **`GameGrid` y `GridFit`** (`widgets/game_grid.dart`): eligen las columnas que dejan las tarjetas más grandes en el espacio que queda.
+  - Tamaño: de 96 a 200 dp por tarjeta.
+  - En vertical, al menos 2 columnas.
+  - Con 3 juegos: dos arriba y uno centrado debajo.
+  - Si las tarjetas tuvieran que bajar de 96 dp, la cuadrícula se desplaza (red de seguridad de R2).
+  - En árabe, de derecha a izquierda.
+- **Tarjeta (R1):**
+  - icono grande;
+  - nombre debajo, en letra de hasta 1,6 veces con el texto del sistema al máximo;
+  - dorado de abajo arriba;
+  - medalla más alta en la esquina, sobre el círculo blanco;
+  - se puede tocar entera;
+  - el lector de pantalla anuncia el nombre y el dorado (R4).
+- **Menú sin subtítulos:** se quitan las 3 claves de subtítulo de los 9 idiomas. La flecha también desaparece, porque toda la tarjeta se toca.
+- **Icono de «A su sitio»** preparado (`assets/brand/vehicles_icon.png`, prompt 16), para cuando llegue el juego.
+- **Tests:**
+  - el menú cabe sin desplazarse en los 4 teléfonos, los 9 idiomas y las dos escalas de texto, con tarjetas de 96 dp o más;
+  - el orden se invierte en árabe;
+  - `GridFit` con 3 y 6 juegos;
+  - la red de seguridad del desplazamiento;
+  - el catálogo.
+- **Queda para el resto del release:** la etiqueta «Nuevo» (R7, con HU-041) y el adorno de edición (R8, con HU-042), cuando llegue el cuarto juego.
