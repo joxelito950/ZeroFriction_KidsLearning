@@ -179,3 +179,28 @@ Cada tablero usa **una sola familia**. Como cada vehículo tiene un sitio en cad
 | P5 | ¿Nombre en el menú? «Cada vehículo a su casa» es largo para una tarjeta | ✅ Decidido (2026-11-18): **«A su sitio»**, sin subtítulo |
 | P6 | ¿Las dos familias (por dónde va y a qué se dedica), o solo una? | ✅ Decidido (2026-11-18): **las dos**: «Por dónde va» en bronce y plata; las dos desde oro |
 | P7 | ¿El icono del juego? Los otros tres son ilustraciones 3D (HU-013) | ✅ Decidido (2026-11-18): **ilustración 3D** con el prompt 16 de `docs/brand/PROMPTS-identidad.md` (un camión de bomberos entrando en su casita), que entrega el dueño como `assets/brand/vehicles_icon.png`. **Es necesaria para continuar** con la tarjeta del menú; el resto del juego se puede desarrollar antes |
+
+## 8. Entregas del juego A
+
+| # | Entrega | Estado |
+|---|---|---|
+| 1 | **Lógica** (`lib/domain/vehicles/`): catálogo con las dos familias, escalera de 8 niveles y ocho rondas, reglas por ronda, estrellas y sorteo del tablero | ✅ 2026-11-18 (`feature/hu-052-a-su-sitio`) |
+| 2 | **Pantalla**: sitios y bandeja con el arrastre y el imán de Sombras, tiempo, celebración, tutorial, nombres para el lector de pantalla en 9 idiomas | Pendiente |
+| 3 | **En el menú y en «Su progreso»**: `GameId.vehicles`, la tarjeta de `GameCatalog`, el progreso común y la etiqueta «Nuevo» (HU-041) | Pendiente |
+| 4 | **Edición de Navidad** (HU-042): fechas, trineo y regalos, protección del reloj y acceso (bronce y plata gratis) | Pendiente |
+
+**Entrega 1:**
+- **Sorteo** (`VehicleBoard.pick`), en este orden:
+  1. elige la familia, la que tenga sitios suficientes;
+  2. pone el trineo en Navidad;
+  3. pone primero los sitios que reciben 2 vehículos: en «A qué se dedica» solo los tienen el parque, la estación y la isla;
+  4. añade los parecidos;
+  5. completa un vehículo por cada sitio que falte;
+  6. añade el sitio libre.
+- **Comprobado con un test que sortea miles de tableros:**
+  - cada vehículo tiene un solo sitio correcto;
+  - como mucho 2 vehículos por sitio;
+  - salen los sitios y los vehículos que pide cada nivel;
+  - el sitio libre aparece solo desde oro;
+  - el trineo sale solo en Navidad.
+- **«Por dónde va»** tiene 5 sitios (6 en Navidad). Por eso, en los niveles que piden más sitios con el sitio libre, desde oro el sorteo usa «A qué se dedica».
