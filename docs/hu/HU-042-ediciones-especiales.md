@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (ficha creada el 2026-11-18; preguntas en la sección 7) |
+| **Estado** | **Lista** (2026-11-18): P1 a P5 decididas por el dueño; P6 con recomendación, no bloquea |
 | **Épica** | E3 · Monetización |
 | **Prioridad** | P2: la **edición de Navidad** de «Cada vehículo a su casa» (HU-052) va en el próximo release a la prueba cerrada |
 | **Tamaño** | S para la primera edición (fechas fijas y su aspecto); M con el candado de después (HU-006) |
@@ -31,11 +31,12 @@ Propuesta del dueño del 2026-11-10 (HU-037 P6): a partir del cuarto juego, los 
   - su tarjeta del menú lleva un adorno de temporada en una esquina, sin texto ni precio.
 - **Al terminar:**
   - desaparece el toque de temporada;
-  - el juego pasa a Premium con el candado sutil (HU-023 3.3), salvo lo que se quede como **muestra gratis** (P2);
-  - lo ganado se conserva (P3).
+  - el juego pasa a Premium con el candado sutil (HU-023 3.3), salvo la **muestra gratis**: las rondas de bronce y plata (P2), menos que la parte gratis de ¿Cuál es diferente?;
+  - lo ganado se conserva como logro, pero se va perdiendo con el tiempo, como siempre (D-031), si el niño no lo repasa; y para repasar las rondas de oro en adelante hace falta Premium (P3).
+- **Primero solo en «Cada vehículo a su casa»**; en futuras versiones, cualquier juego puede tener su edición especial (P4).
 - **Durante la prueba cerrada todo es gratis** (D-040): la edición se nota solo por el toque de temporada.
 
-## 4. Reglas (borrador)
+## 4. Reglas (D-043)
 
 | # | Regla |
 |---|---|
@@ -43,31 +44,39 @@ Propuesta del dueño del 2026-11-10 (HU-037 P6): a partir del cuarto juego, los 
 | R2 | Durante la edición, el juego entero se puede jugar sin Premium. |
 | R3 | El tema de temporada solo cambia los dibujos y la celebración del juego, y un adorno en su tarjeta del menú: nunca reglas, niveles ni estrellas. |
 | R4 | Nada de la edición invita al niño a comprar: ni precios, ni cuentas atrás, ni «últimos días» (D-029, política de Familias). |
-| R5 | Al terminar, las medallas, las estrellas y el dorado ganados se conservan. |
-| R6 | Cambiar la fecha del teléfono puede abrir o cerrar la edición: se acepta, porque el riesgo es bajo y no hay red para comprobarlo. |
+| R5 | Al terminar, las medallas, las estrellas y el dorado ganados se conservan como logros. Las estrellas se van perdiendo como siempre tras 7 días sin jugar ese nivel (D-031); sin Premium, solo se pueden repasar las rondas de bronce y plata (P3). |
+| R6 | Las fechas se guardan como día y mes y se repiten cada año (P5). La primera edición de Navidad va del **20 de noviembre al 6 de enero** (P1). |
+| R7 | **La fecha del teléfono no sirve para abrir ediciones** (P5). La app guarda la fecha más alta que ha visto. Una edición solo está abierta cuando se cumplen las tres condiciones: <br>• la fecha de hoy está dentro de su ventana; <br>• hoy no es anterior a esa fecha más alta, salvo un margen de 2 días por cambios de hora o de zona; <br>• hoy no es posterior al fin del soporte de la versión instalada, es decir, su fecha de compilación más 13 meses. |
+| R8 | Atrasar el reloj nunca reabre una edición terminada. Adelantarlo para abrir la del año siguiente obliga a dejar el teléfono con la fecha mal. Si luego se vuelve a la fecha real, la edición se cierra, y lo ganado queda como logro y se pierde con el tiempo (R5). |
+| R9 | Las rondas gratis de siempre (la muestra de P2) no dependen de la fecha: un reloj mal puesto nunca le quita al niño lo que es gratis. |
 
 ## 5. Criterios de aceptación (borrador)
 
-1. Con la fecha dentro de la edición, el juego muestra su toque de temporada y su tarjeta, el adorno.
+1. Con la fecha dentro de la edición (del 20 de noviembre al 6 de enero), el juego muestra su toque de temporada y su tarjeta, el adorno.
 2. Con la fecha fuera, el juego es el normal, sin adornos.
 3. Lo ganado durante la edición sigue ahí al terminar (test con un reloj inyectado).
 4. Ningún texto de la edición menciona precios ni compras.
+5. **Reloj atrasado:** tras ver el 7 de enero, poner el teléfono en diciembre no reabre la edición (test).
+6. **Reloj adelantado:** saltar de marzo al diciembre siguiente abre la edición solo si esa fecha está dentro del soporte de la versión (R7). Al volver a marzo, se cierra (test).
+7. Con la edición cerrada, el bronce y la plata siguen abiertos; el oro en adelante, con candado cuando exista HU-006.
 
 ## 6. Impacto técnico previsto
 
 | Área | Cambio |
 |---|---|
-| Dominio | `SpecialEdition(game, theme, from, until)` y `isActive(now)`, con el reloj inyectado, como en HU-034 |
+| Dominio | `SpecialEdition(game, theme, from, until)` con día y mes, y `EditionClock(highestSeen, buildDate)` que decide si una edición está abierta (R7, R8), con el reloj inyectado, como en HU-034. La parte gratis por juego: bronce y plata (P2) |
+| Persistencia | La fecha más alta vista, en el perfil (`UserProfile`, campo 5 de Hive). La fecha de compilación, constante generada en la versión |
 | Presentación | El adorno en la tarjeta (HU-023) y el tema del juego (HU-052). Colores de la paleta (D-032): los adornos son emojis; sin colores nuevos |
 | Acceso | `AccessPolicy` abre el juego mientras la edición está activa (cuando exista HU-006) |
 | Tests | Fechas límite (primer y último día, cambio de año) y que no se pierde el progreso |
 
-## 7. Preguntas
+## 7. Preguntas y decisiones
 
-| # | Pregunta | Recomendación |
+| # | Pregunta | Decisión |
 |---|---|---|
-| P1 | ¿Cuánto dura la edición de Navidad? | **Del 1 de diciembre al 6 de enero**, incluido el día de Reyes. Para las siguientes ediciones, de 4 a 6 semanas |
-| P2 | Al terminar, ¿queda algo gratis como **muestra**? | **Sí, la ronda de bronce**: el niño puede seguir jugando a lo básico y el adulto ve qué incluye Premium |
-| P3 | ¿Se conserva lo ganado durante la edición? | **Sí, todo**: las medallas, las estrellas y el dorado. Quitarle al niño una medalla ganada es justo lo que la app evita |
-| P4 | ¿El tema navideño se ve también fuera del juego, por ejemplo en el menú o en la pantalla de inicio? | **Solo en el juego y en su tarjeta.** Así el alcance es pequeño y no hace falta otra versión en enero para quitarlo |
-| P5 | ¿El toque de Navidad vuelve cada año con las mismas fechas? | **Sí**: las fechas se guardan como día y mes, sin el año |
+| P1 | ¿Cuánto dura la edición de Navidad? | ✅ Decidido (2026-11-18): **del 20 de noviembre al 6 de enero**. La versión llegará a la prueba cerrada ya empezada la ventana; estará abierta desde que se instale hasta el 6 de enero |
+| P2 | Al terminar, ¿queda algo gratis como muestra? | ✅ Decidido (2026-11-18): **sí, hasta la ronda de plata** (bronce y plata, 2 de 8 rondas), menos que la parte gratis de ¿Cuál es diferente? |
+| P3 | ¿Se conserva lo ganado durante la edición? | ✅ Decidido (2026-11-18): **sí, como logros**. Se van perdiendo con el tiempo si el niño no compra Premium y no los repasa (D-031) |
+| P4 | ¿El tema navideño se ve también fuera del juego? | ✅ Decidido (2026-11-18): **solo en el juego** y en su tarjeta. En futuras versiones, las ediciones especiales podrán ser de cualquier juego |
+| P5 | ¿Vuelve cada año con las mismas fechas? | ✅ Decidido (2026-11-18): **sí**, con cuidado de que no se pueda jugar con la fecha del teléfono para ir abriendo los juegos que estuvieron gratis en otras fechas: R7 a R9 |
+| P6 | El interruptor gratuito «Mantener las estrellas» (HU-016) detiene la pérdida de estrellas. ¿Se aplica también a lo ganado en la edición, o se ignora para esas rondas? | **Recomendación: se aplica.** Es una decisión del adulto, ya es gratis (2026-11-05), y hacer una excepción sería difícil de explicar. Lo ganado no da acceso a jugar: para repasar el oro en adelante sigue haciendo falta Premium. No bloquea |

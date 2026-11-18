@@ -55,7 +55,7 @@ El juego A llega en diciembre como **edición especial** (HU-042): el mismo jueg
 
 - **Trineo 🛷** (Emoji 5.0) entre los vehículos, con su sitio en la nieve ❄️ o junto al árbol 🎄.
 - **Regalos 🎁:** cada vehículo que llega a su sitio deja un regalo; al completar el tablero, los regalos se juntan bajo el árbol en la celebración.
-- **Fechas fijas en la versión** (sin red, HU-042): por ejemplo del 1 de diciembre al 6 de enero. Fuera de esas fechas, el juego es el normal.
+- **Fechas fijas en la versión** (sin red, HU-042): **del 20 de noviembre al 6 de enero**, cada año. Fuera de esas fechas, el juego es el normal y quedan gratis las rondas de bronce y plata.
 - **Gratis** durante la prueba cerrada (D-040).
 
 **Plan del release** (siguiente versión a la prueba cerrada, antes del 24 de diciembre):
