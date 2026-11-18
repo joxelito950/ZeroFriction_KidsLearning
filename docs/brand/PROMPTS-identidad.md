@@ -122,11 +122,20 @@ Es la variante opcional de la sección 10, ahora con más uso: en el modo «Toca
 
 No hace falta una mano izquierda: la app refleja la derecha (HU-031).
 
+## 16. Icono del juego «A su sitio» (silueta cerrada para el dorado, HU-052)
+
+> [Bloque común]
+> **Un camión de bomberos de juguete** de plastilina, redondeado y simpático, en coral suave #D9735F con las ventanas en crema #FFF2E2, las ruedas en teal profundo #00454D y una escalera corta en blanco sobre el techo. Está **entrando de frente y un poco de lado en su casita**: un garaje pequeño con tejado a dos aguas en azul petróleo #176B78 y la puerta abierta en arco, de la que el camión asoma la mitad delantera. Sobre la puerta, un círculo ámbar #ECA463 liso (sin dibujos ni letras) como farol. Contento, sin cara exagerada. **Sin el niño.** Fondo totalmente transparente. El conjunto (camión y casita) forma **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes, centrada y ocupando el 80 % del lienzo. Que a 48 px se lea «un vehículo que llega a su casa».
+
+Si el camión sale rojo intenso, pedir: «El camión es coral suave #D9735F, no rojo: el rojo intenso no está en la paleta». Si la casita queda detrás y no se ve la entrada, pedir: «El camión tiene que estar entrando por la puerta de la casita, con la parte de atrás todavía dentro del arco».
+
+Entregar como `assets/brand/vehicles_icon.png`, 1024 × 1024 px con transparencia real.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2 y de la 4 a la 15 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2 y de la 4 a la 16 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 
