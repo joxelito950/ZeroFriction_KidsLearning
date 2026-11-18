@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-18): P1 a P5 decididas por el dueño; P6 con recomendación, no bloquea |
+| **Estado** | **Lista** (2026-11-18): P1 a P6 decididas por el dueño, con la protección contra el cambio de fecha (R7 a R9) aceptada |
 | **Épica** | E3 · Monetización |
 | **Prioridad** | P2: la **edición de Navidad** de «Cada vehículo a su casa» (HU-052) va en el próximo release a la prueba cerrada |
 | **Tamaño** | S para la primera edición (fechas fijas y su aspecto); M con el candado de después (HU-006) |
@@ -79,4 +79,4 @@ Propuesta del dueño del 2026-11-10 (HU-037 P6): a partir del cuarto juego, los 
 | P3 | ¿Se conserva lo ganado durante la edición? | ✅ Decidido (2026-11-18): **sí, como logros**. Se van perdiendo con el tiempo si el niño no compra Premium y no los repasa (D-031) |
 | P4 | ¿El tema navideño se ve también fuera del juego? | ✅ Decidido (2026-11-18): **solo en el juego** y en su tarjeta. En futuras versiones, las ediciones especiales podrán ser de cualquier juego |
 | P5 | ¿Vuelve cada año con las mismas fechas? | ✅ Decidido (2026-11-18): **sí**, con cuidado de que no se pueda jugar con la fecha del teléfono para ir abriendo los juegos que estuvieron gratis en otras fechas: R7 a R9 |
-| P6 | El interruptor gratuito «Mantener las estrellas» (HU-016) detiene la pérdida de estrellas. ¿Se aplica también a lo ganado en la edición, o se ignora para esas rondas? | **Recomendación: se aplica.** Es una decisión del adulto, ya es gratis (2026-11-05), y hacer una excepción sería difícil de explicar. Lo ganado no da acceso a jugar: para repasar el oro en adelante sigue haciendo falta Premium. No bloquea |
+| P6 | El interruptor gratuito «Mantener las estrellas» (HU-016) detiene la pérdida de estrellas. ¿Se aplica también a lo ganado en la edición, o se ignora para esas rondas? | ✅ Decidido (2026-11-18): **se aplica.** Es una decisión del adulto, ya es gratis (2026-11-05), y hacer una excepción sería difícil de explicar. Lo ganado no da acceso a jugar: para repasar el oro en adelante sigue haciendo falta Premium. No bloquea |

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento: **P1 a P4 decididas el 2026-11-18**; falta completar la ficha del juego A (rondas, catálogo de parejas e impacto técnico) para pasarla a Lista. Propuesta del dueño el 2026-11-17 («juegos con temática de carros»); **redirigida el 2026-11-18**: uno o varios **juegos nuevos con temática exclusiva de vehículos**, distintos de los que ya están en el backlog |
+| **Estado** | En refinamiento: **P1 a P4 decididas el 2026-11-18**; ficha del juego A escrita (sección 7). Pasa a Lista con P5 a P7. Propuesta del dueño el 2026-11-17 («juegos con temática de carros»); **redirigida el 2026-11-18**: uno o varios **juegos nuevos con temática exclusiva de vehículos**, distintos de los que ya están en el backlog |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | Por juego: M (2–3 días) si reutiliza el arrastre de Sombras; L si trae una mecánica nueva |
@@ -51,7 +51,7 @@ Todos siguen las reglas de la casa: sin perdedores, sin texto para el niño, ron
 
 ## 6. Edición de Navidad (decidido el 2026-11-18)
 
-El juego A llega en diciembre como **edición especial** (HU-042): el mismo juego, con un toque navideño mientras dure la edición.
+El juego A llega como **edición especial** (HU-042): el mismo juego, con un toque navideño mientras dure la edición.
 
 - **Trineo 🛷** (Emoji 5.0) entre los vehículos, con su sitio en la nieve ❄️ o junto al árbol 🎄.
 - **Regalos 🎁:** cada vehículo que llega a su sitio deja un regalo; al completar el tablero, los regalos se juntan bajo el árbol en la celebración.
@@ -64,3 +64,118 @@ El juego A llega en diciembre como **edición especial** (HU-042): el mismo jueg
 2. **HU-052 A** (este juego), con sus ocho rondas y la edición de Navidad.
 3. **HU-041** (destacar lo nuevo): la etiqueta «Nuevo» en el menú y en la fila «Su progreso».
 4. **HU-042** (edición especial), solo lo necesario: fechas fijas y cómo se ve en el menú.
+
+## 7. Ficha del juego A · «Cada vehículo a su casa» (2026-11-18)
+
+### 7.1 El tablero
+
+- **Arriba o a la izquierda, los sitios** (como las sombras, HU-007 P13): tarjetas grandes con un emoji de sitio (🌊, 🏥…). **Abajo o a la derecha, la bandeja** con los vehículos.
+- El niño **arrastra** cada vehículo a su sitio con el arrastre y el imán de Sombras (HU-050). Si acierta, el vehículo se queda en su sitio con un saltito y un sonido suave (HU-005).
+- Si se equivoca, el vehículo vuelve despacio a la bandeja, sin sonido de error, igual que en Sombras.
+- **Un sitio puede recibir más de un vehículo** (⛵ y 🚤 van los dos al 🌊), pero **cada vehículo tiene un solo sitio correcto** en el tablero (criterio 2).
+- El tablero se supera cuando todos los vehículos están en su sitio.
+
+### 7.2 Dos familias de sitios
+
+Cada tablero usa **una sola familia**. Como cada vehículo tiene un sitio en cada familia, nunca hay dos respuestas válidas.
+
+| Vehículo | **Por dónde va** (bronce en adelante) | **A qué se dedica** (oro en adelante) |
+|---|---|---|
+| 🚗 coche | 🛣️ carretera | 🏠 casa |
+| 🚌 autobús | 🛣️ | 🚏 parada |
+| 🚕 taxi | 🛣️ | 🏨 hotel |
+| 🚐 furgoneta | 🛣️ | 🏫 colegio |
+| 🚓 policía | 🛣️ | 🚦 semáforo |
+| 🚑 ambulancia | 🛣️ | 🏥 hospital |
+| 🚒 bomberos | 🛣️ | 🔥 fuego |
+| 🚚 camión | 🛣️ | 📦 paquetes |
+| 🚛 tráiler | 🛣️ | 🏭 fábrica |
+| 🚜 tractor | 🛣️ | 🌾 campo |
+| 🏍️ moto | 🛣️ | 🏁 meta |
+| 🚲 bici, 🛴 patinete | 🛣️ | 🏞️ parque |
+| 🚂 🚆 trenes | 🛤️ vía | 🚉 estación |
+| ⛵ velero | 🌊 agua | 🏝️ isla |
+| 🚤 lancha | 🌊 | 🎣 pesca |
+| 🚢 barco | 🌊 | ⚓ puerto |
+| ✈️ avión | ☁️ cielo | 🏝️ isla |
+| 🚁 helicóptero | ☁️ | 🏔️ montaña |
+| 🚀 cohete | 🌙 espacio | 🌙 |
+| 🛷 trineo (solo en Navidad) | ❄️ nieve | 🎄 árbol |
+
+- En «Por dónde va» la carretera recibe muchos vehículos. Cada tablero saca como mucho 2 vehículos de un mismo sitio, para que no todo vaya a la carretera.
+- Todos son Emoji 5.0 o anteriores. Hay que comprobarlos en el emulador con Android 8 (criterio 1); ninguno lleva ZWJ.
+
+### 7.3 Niveles (como Sombras: el 1 es el tutorial)
+
+| Nivel | Vehículos | Sitios | Sitios libres (desde oro) | Parecidos |
+|---|---|---|---|---|
+| 1 | 2 | 2 | — | No |
+| 2 | 3 | 2 | — | No |
+| 3 | 3 | 3 | — | No |
+| 4 | 4 | 3 | +1 | No |
+| 5 | 4 | 4 | +1 | No |
+| 6 | 5 | 4 | +1 | Sí |
+| 7 | 6 | 4 | +1 | Sí |
+| 8 | 6 | 5 | +1 | Sí |
+
+- **Sitios libres:** un sitio de la familia al que no va ningún vehículo; distrae, como las sombras libres.
+- **Parecidos:** vehículos de forma parecida (🚓 🚑 🚒, o 🚌 🚐 🚕); con la familia «A qué se dedica», cada uno va a un sitio distinto.
+
+### 7.4 Rondas (HU-051), como en Sombras
+
+| Ronda | Familias | Sitios libres | Imán (cobertura para encajar) | Disposición | Tiempo |
+|---|---|---|---|---|---|
+| Bronce | Por dónde va | No | 40 % | Fija | No |
+| Plata | Por dónde va | No | 45 % | Fija | No |
+| Oro | Las dos | Sí | 50 % | Fija | Sí (tabla de Sombras) |
+| Rubí, esmeralda, zafiro | Las dos | Sí | 60–70 % | Fija | Sí |
+| Obsidiana, diamante | Las dos | Sí | 80–90 % | Al azar en cada tablero | Sí |
+
+- **Estrellas**, contando como fallo cada vehículo soltado en un sitio equivocado. Con N vehículos:
+  - 3★ con N fallos o menos;
+  - 2★ con más de N y hasta 2N;
+  - 1★ con más de 2N.
+
+  Así se puede tener 3★ en las rondas gratis. A diferencia de Sombras, no hace falta Premium.
+- **Medalla** al superar el nivel 8 de cada ronda. Las ocho rondas tienen sus 8 niveles: no hay nivel extra de Premium, porque el juego entero es Premium.
+- **Gratis** (D-043): bronce y plata siempre, y el juego entero durante la prueba cerrada (D-040) y durante su edición.
+- **Sin tiempo en bronce y plata:** la muestra gratis es para los más pequeños. «Jugar sin tiempo» (HU-030) quita el tiempo en el resto.
+
+### 7.5 Edición de Navidad (sección 6, HU-042)
+
+- Mientras dura, el 🛷 entra en el sorteo de vehículos (❄️ o 🎄 como sitio).
+- Cada vehículo que llega a su sitio deja un 🎁 encima. En la celebración del tablero, los regalos caen junto a un 🎄.
+- La tarjeta del menú lleva un 🎄 pequeño en la esquina (HU-023 R8).
+
+### 7.6 Accesibilidad e idiomas
+
+- El lector de pantalla nombra cada vehículo y cada sitio («Ambulancia», «Hospital») en los 9 idiomas. Son unas 45 claves nuevas por idioma.
+- Al soltar, anuncia el resultado («Ambulancia en el hospital»), como Sombras.
+- Sin texto para el niño.
+
+### 7.7 Colores (D-032)
+
+- **Tarjetas de los sitios:** blanco con borde teal profundo al 35 %. Al recibir un vehículo, borde ámbar.
+- **Bandeja:** crema cálida.
+- **Botón del menú:** un color de la paleta que no usen los tres juegos actuales; se elige en HU-023.
+- Sin colores nuevos.
+
+### 7.8 Impacto técnico
+
+| Área | Cambio |
+|---|---|
+| Dominio | `lib/domain/vehicles/`: `VehicleLadder` (niveles, rondas, tiempos y estrellas, como `ShadowLadder`), `VehicleCatalog` (la tabla 7.2, con un test de que cada vehículo tiene un solo sitio por familia) y `VehicleBoard` (sorteo del tablero y comprobación de cada soltar). `GameId.vehicles` |
+| Persistencia | El progreso común `GameProgressHiveModel` (typeId 5) con la clave `vehicles`: sin tipos nuevos. `Discovery` (HU-041) lo trata como juego nuevo, porque no está en `gamesInRc5` |
+| Presentación | `VehicleGameScreen`, que reutiliza la bandeja, el arrastre y el imán de Sombras, la barra de tiempo, la celebración, el tutorial (HU-022) y la invitación (HU-049). Tarjeta en el menú (HU-023) |
+| Acceso | `AccessPolicy`: bronce y plata gratis; el resto, con Premium o durante la edición (HU-042) |
+| Tests | Catálogo (unicidad y Emoji 5.0), escalera, sorteo con semilla, diseño en los 4 teléfonos y 9 idiomas, lector de pantalla y edición de Navidad con reloj inyectado |
+
+**Tamaño:** M–L (4–5 días): la mecánica se reutiliza, pero el catálogo, las dos familias y la edición son nuevos.
+
+### 7.9 Preguntas
+
+| # | Pregunta | Recomendación |
+|---|---|---|
+| P5 | ¿Nombre en el menú? «Cada vehículo a su casa» es largo para una tarjeta | **«¿A dónde va?»**, con el subtítulo «Lleva cada vehículo a su sitio» |
+| P6 | ¿Las dos familias (por dónde va y a qué se dedica), o solo una? | **Las dos**: «Por dónde va» para los pequeños (bronce y plata) y «A qué se dedica» desde oro, que es la que enseña vocabulario |
+| P7 | ¿El icono del juego? Los otros tres son ilustraciones 3D (HU-013) | **Una ilustración 3D** como las demás, a partir de un prompt que escribo en `PROMPTS-identidad.md` (por ejemplo, un camión de bomberos asomando de su casita). Mientras tanto, un emoji 🚒 provisional |
