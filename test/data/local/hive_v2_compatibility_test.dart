@@ -5,6 +5,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:toddler_logic/data/local/hive_persistence_config.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/news/discovery.dart';
 
 /// Los fixtures de `test/fixtures/hive_v2/` se generaron con hive 2.2.3 antes de
 /// migrar a hive_ce (TD-002). Este test garantiza que los datos guardados por
@@ -41,7 +42,8 @@ void main() {
 
     expect(
       HivePersistenceConfig.userProfileBox.get('current_user_profile')!.toEntity(),
-      const UserProfile(isPremium: true, isSoundEnabled: false),
+      // Sin los campos de HU-041: había visto lo de rc.5.
+      UserProfile(isPremium: true, isSoundEnabled: false, discovery: Discovery.beforeNews()),
     );
     // Los perfiles guardados antes de HU-011 no tienen idioma: se leen como null.
     expect(

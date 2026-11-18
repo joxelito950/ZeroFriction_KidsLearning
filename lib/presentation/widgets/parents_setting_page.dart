@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../theme/app_palette.dart';
 import 'adult_session_guard.dart';
 
 /// Fila de la Zona de Padres (HU-046 §4.1): icono, título y lo que está
@@ -12,12 +13,17 @@ class ParentsSettingRow extends StatelessWidget {
     required this.title,
     required this.summary,
     required this.onTap,
+    this.dot = false,
   });
 
   final IconData icon;
   final String title;
   final String summary;
   final VoidCallback onTap;
+
+  /// Un punto discreto junto a la flecha: hay algo que mirar dentro (HU-034
+  /// P8). Azul petróleo, nunca un color de alarma.
+  final bool dot;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +36,20 @@ class ParentsSettingRow extends StatelessWidget {
         title: Text(title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         subtitle: Text(summary, style: theme.textTheme.bodyMedium),
         // La flecha sigue la dirección del texto (árabe, RTL).
-        trailing: const Icon(Icons.chevron_right_rounded),
+        trailing: dot
+            ? const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DecoratedBox(
+                    key: ValueKey<String>('parents-row-dot'),
+                    decoration: BoxDecoration(color: AppPalette.petrolBlue, shape: BoxShape.circle),
+                    child: SizedBox.square(dimension: 10),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(Icons.chevron_right_rounded),
+                ],
+              )
+            : const Icon(Icons.chevron_right_rounded),
         onTap: onTap,
       ),
     );
