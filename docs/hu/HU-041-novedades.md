@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (borrador del 2026-11-12). Faltan las respuestas del dueño a P1–P4 |
+| **Estado** | **Lista** (2026-11-18): P1 a P4 decididas. **Bases desarrolladas** (dominio y guardado, sin cambios visibles); el resto se termina con el próximo juego (P4) |
 | **Épica** | E1 · Juegos y menú |
 | **Prioridad** | P3 (sube a P2 si el 4.º juego llega antes de la publicación) |
 | **Tamaño** | S (1 entrega, 1 día) |
@@ -21,35 +21,39 @@
 
 ## 3. Comportamiento propuesto
 
-- **R1.** La app recuerda qué juegos **ha visto** el niño (un conjunto de `GameId`), no la versión. Así no depende de cómo se numeran las versiones y funciona igual con cualquier actualización.
+- **R1.** La app recuerda, por juego, **cuántas veces lo ha abierto** el niño (un contador por `GameId`), no la versión. Así no depende de cómo se numeran las versiones y funciona igual con cualquier actualización.
 - **R2.** En la **primera instalación** todos los juegos cuentan como vistos: para un niño nuevo todo es nuevo, y destacar uno sería ruido.
 - **R3.** Tras una actualización con un juego que no estaba en el conjunto, su tarjeta del menú se **destaca**: unos destellos ámbar alrededor y un pequeño saltito cada pocos segundos. **Sin texto**: los niños aún no leen. Para el lector de pantalla, la tarjeta dice «Nuevo».
-- **R4.** El destaque dura hasta que el niño **abre ese juego** una vez. Entonces el juego pasa a vistos y no vuelve a destacarse.
+- **R4.** El destaque dura hasta que el niño **abre ese juego por tercera vez** o **supera la ronda plata** en él (consigue la medalla de plata), lo que ocurra antes (P1). Entonces el juego pasa a visto y no vuelve a destacarse.
 - **R5.** Si el sistema pide reducir las animaciones, en lugar de saltito y destellos se muestra un punto ámbar fijo en la esquina de la tarjeta.
+- **R6.** **Al niño solo se le destacan juegos nuevos** (P2): ni rondas, ni medallas, ni niveles. No hay celebración de «¡Nuevas medallas!» (la que se propuso para HU-051 queda descartada).
+- **R7.** **En la Zona de Padres sí se destacan las funciones nuevas** (P2): la fila de una opción nueva lleva una etiqueta «Nuevo» (el adulto sí lee) hasta que el adulto la abre una vez. Se guardan las filas vistas, con la misma regla de R2: en una instalación nueva no se destaca ninguna.
+- **R8.** No hay pantalla ni aviso de «Novedades de esta versión» para los padres (P3): lo cuentan las notas de Google Play.
 
 ## 4. Criterios de aceptación (borrador)
 
-1. En una instalación nueva, ninguna tarjeta se destaca.
-2. Al actualizar desde una versión sin un juego, su tarjeta se destaca; al abrirlo y volver al menú, ya no.
+1. En una instalación nueva, ninguna tarjeta ni fila de la Zona de Padres se destaca.
+2. Al actualizar desde una versión sin un juego, su tarjeta se destaca; tras abrirlo dos veces sigue destacada; al abrirlo la tercera vez, o al ganar en él la medalla de plata, ya no.
 3. Con «quitar animaciones» activo, se ve el punto fijo en vez de la animación.
 4. El lector de pantalla anuncia «Nuevo» en la tarjeta destacada, en los 9 idiomas.
+5. Una fila nueva de la Zona de Padres lleva «Nuevo» hasta que el adulto la abre una vez.
 
 ## 5. Impacto técnico previsto
 
 | Capa | Cambio |
 |---|---|
-| Dominio | `seenGames: Set<GameId>` en `UserProfile` |
-| Datos | Campo nuevo en `UserProfileHiveModel`. **`null` (perfil anterior a esta historia) se interpreta como «había visto los juegos que existían en `1.0.0-rc.4`»** (memoria, sombras y ¿Cuál es diferente?), para que la primera actualización con esta historia no destaque juegos viejos. Sin perfil (instalación nueva): todos vistos (R2) |
+| Dominio | `GameDiscovery` (veces que se ha abierto cada juego y filas de la Zona de Padres vistas), con `isNew(GameId, medals)` según R4 y `isNewSetting(id)` según R7 |
+| Datos | Campos nuevos en `UserProfileHiveModel`. **`null` (perfil anterior a esta historia) se interpreta como «había visto los juegos y las filas que existían en `1.0.0-rc.5`»** (memoria, sombras y ¿Cuál es diferente?), para que la primera actualización con esta historia no destaque nada viejo. Sin perfil (instalación nueva): todo visto (R2) |
 | Presentación | `NewGameHighlight`, un envoltorio de la tarjeta del menú con un `AnimationController` que respeta `MediaQuery.disableAnimations` |
 
 ## 6. Preguntas
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿El destaque dura hasta abrir el juego, o unos días? | **Hasta abrirlo**: es lo que el niño entiende |
-| P2 | ¿Se destacan también otras novedades (rondas, medallas, un nivel nuevo)? | **No.** Solo juegos: lo demás se descubre jugando, y HU-037 P11 ya decidió no avisar del dorado |
-| P3 | ¿Un aviso para los padres («Novedades de esta versión»)? | **No** en la app: las notas de la versión de Google Play ya lo cuentan (`docs/store/`) |
-| P4 | ¿Se desarrolla junto con el 4.º juego? | **Sí:** sin un juego nuevo no hay nada que probar en un teléfono real. Queda lista para entonces |
+| P1 | ¿El destaque dura hasta abrir el juego, o unos días? | ✅ Decidido (2026-11-18): **hasta abrirlo por tercera vez, o hasta que el niño supere la ronda plata** en ese juego (R4) |
+| P2 | ¿Se destacan también otras novedades (rondas, medallas, un nivel nuevo)? | ✅ Decidido (2026-11-18): **no** para el niño (sin «¡Nuevas medallas!»), **pero en la Zona de Padres sí se destacan las funciones nuevas** (R6, R7) |
+| P3 | ¿Un aviso para los padres («Novedades de esta versión»)? | ✅ Decidido (2026-11-18), como la recomendación: **no** en la app; lo cuentan las notas de la versión de Google Play (`docs/store/`) |
+| P4 | ¿Se desarrolla junto con el 4.º juego? | ✅ Decidido (2026-11-18): **sí**, se une a las historias que van con el próximo juego. Las bases (dominio y guardado) se adelantan para que la versión que lo traiga ya sepa qué ha visto cada niño |
 
 ## 7. Fuera de alcance
 
