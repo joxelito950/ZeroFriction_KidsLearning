@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento: **P1 a P4 decididas el 2026-11-18**; ficha del juego A escrita (sección 7). Pasa a Lista con P5 a P7. Propuesta del dueño el 2026-11-17 («juegos con temática de carros»); **redirigida el 2026-11-18**: uno o varios **juegos nuevos con temática exclusiva de vehículos**, distintos de los que ya están en el backlog |
+| **Estado** | **Lista** (2026-11-18): P1 a P7 decididas. El juego A se llama **«A su sitio»**. Falta el icono 3D (P7), que entrega el dueño. Propuesta del dueño el 2026-11-17 («juegos con temática de carros»); redirigida el 2026-11-18 a juegos nuevos con temática exclusiva de vehículos |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | Por juego: M (2–3 días) si reutiliza el arrastre de Sombras; L si trae una mecánica nueva |
@@ -65,7 +65,7 @@ El juego A llega como **edición especial** (HU-042): el mismo juego, con un toq
 3. **HU-041** (destacar lo nuevo): la etiqueta «Nuevo» en el menú y en la fila «Su progreso».
 4. **HU-042** (edición especial), solo lo necesario: fechas fijas y cómo se ve en el menú.
 
-## 7. Ficha del juego A · «Cada vehículo a su casa» (2026-11-18)
+## 7. Ficha del juego A · «A su sitio» (antes «Cada vehículo a su casa», 2026-11-18)
 
 ### 7.1 El tablero
 
@@ -176,6 +176,6 @@ Cada tablero usa **una sola familia**. Como cada vehículo tiene un sitio en cad
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P5 | ¿Nombre en el menú? «Cada vehículo a su casa» es largo para una tarjeta | **«¿A dónde va?»**, con el subtítulo «Lleva cada vehículo a su sitio» |
-| P6 | ¿Las dos familias (por dónde va y a qué se dedica), o solo una? | **Las dos**: «Por dónde va» para los pequeños (bronce y plata) y «A qué se dedica» desde oro, que es la que enseña vocabulario |
-| P7 | ¿El icono del juego? Los otros tres son ilustraciones 3D (HU-013) | **Una ilustración 3D** como las demás, a partir de un prompt que escribo en `PROMPTS-identidad.md` (por ejemplo, un camión de bomberos asomando de su casita). Mientras tanto, un emoji 🚒 provisional |
+| P5 | ¿Nombre en el menú? «Cada vehículo a su casa» es largo para una tarjeta | ✅ Decidido (2026-11-18): **«A su sitio»**, sin subtítulo |
+| P6 | ¿Las dos familias (por dónde va y a qué se dedica), o solo una? | ✅ Decidido (2026-11-18): **las dos**: «Por dónde va» en bronce y plata; las dos desde oro |
+| P7 | ¿El icono del juego? Los otros tres son ilustraciones 3D (HU-013) | ✅ Decidido (2026-11-18): **ilustración 3D** con el prompt 16 de `docs/brand/PROMPTS-identidad.md` (un camión de bomberos entrando en su casita), que entrega el dueño como `assets/brand/vehicles_icon.png`. **Es necesaria para continuar** con la tarjeta del menú; el resto del juego se puede desarrollar antes |
