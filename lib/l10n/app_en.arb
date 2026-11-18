@@ -677,5 +677,240 @@
   "medalDiamondTitle": "Diamond medal!",
   "@medalDiamondTitle": {
     "description": "Celebration title when the child completes the diamond round (HU-051), like \"Gold medal!\"."
+  },
+  "parentsProgressTitle": "Their progress",
+  "@parentsProgressTitle": {
+    "description": "Title of the \"Their progress\" row and screen of the parents zone (HU-034)."
+  },
+  "parentsProgressRowSummary": "Enjoys {game} · {time} these days",
+  "@parentsProgressRowSummary": {
+    "description": "Summary of the \"Their progress\" row: favourite game of these days and time played, e.g. \"Enjoys Shadows · 1 h 10 min these days\".",
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressRowEmpty": "No play these days yet",
+  "@parentsProgressRowEmpty": {
+    "description": "Summary of the \"Their progress\" row when the child has not played these days."
+  },
+  "parentsProgressSentence": "These days they have mostly played {game}.",
+  "@parentsProgressSentence": {
+    "description": "Positive summary sentence at the top of \"Their progress\": the game played most these days.",
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressSentenceMedal": "These days they have mostly played {game}. Their best medal there: {medal}.",
+  "@parentsProgressSentenceMedal": {
+    "description": "Positive summary sentence with the best medal in the favourite game. {medal} is the round name, e.g. \"Gold\".",
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "medal": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressSentenceEmpty": "No play these days. Whenever they want, we'll be here!",
+  "@parentsProgressSentenceEmpty": {
+    "description": "Summary sentence when the child has not played these days. Never worrying."
+  },
+  "parentsProgressExploring": "Exploring the {round} round · level {level}",
+  "@parentsProgressExploring": {
+    "description": "Game card: round and level the child is playing now, also after moving down a round (never say it moved down).",
+    "placeholders": {
+      "round": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "parentsProgressStars": "★ {stars} of {total}",
+  "@parentsProgressStars": {
+    "description": "Game card: total stars gathered, tappable, e.g. \"★ 23 of 168\".",
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "parentsProgressStarsSemantics": "{stars} of {total} stars. Tap to see each level",
+  "@parentsProgressStarsSemantics": {
+    "description": "Screen reader text for the tappable star total of a game card.",
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "parentsProgressUndiscovered": "Still to discover",
+  "@parentsProgressUndiscovered": {
+    "description": "A game the child has never opened, shown as an invitation (not as missing)."
+  },
+  "parentsProgressStarsTitle": "{game} stars",
+  "@parentsProgressStarsTitle": {
+    "description": "Title of the per-level stars dialog of a game.",
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressStarsIntro": "Each level gives up to 3 stars. With all of them, the game button turns fully golden.",
+  "@parentsProgressStarsIntro": {
+    "description": "Explanation at the top of the per-level stars dialog."
+  },
+  "parentsProgressLevel": "Level {level}",
+  "@parentsProgressLevel": {
+    "description": "A level in the per-level stars dialog, e.g. \"Level 4\".",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "parentsProgressToDiscover": "to discover",
+  "@parentsProgressToDiscover": {
+    "description": "A level not played yet in the stars dialog (instead of three empty stars)."
+  },
+  "parentsProgressLevelSemantics": "Level {level}: {stars} of 3 stars",
+  "@parentsProgressLevelSemantics": {
+    "description": "Screen reader text of a played level in the stars dialog.",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "parentsProgressWeekTitle": "Play time these days",
+  "@parentsProgressWeekTitle": {
+    "description": "Title of the weekly play time chart of \"Their progress\"."
+  },
+  "parentsProgressWeekTotal": "Total for these 6 days: {time}",
+  "@parentsProgressWeekTotal": {
+    "description": "Total time of the 6 days shown in the chart.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressHoursMinutes": "{hours} h {minutes} min",
+  "@parentsProgressHoursMinutes": {
+    "description": "A duration of one hour or more, e.g. \"1 h 10 min\".",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "parentsProgressBarToday": "{day}, today, {time}",
+  "@parentsProgressBarToday": {
+    "description": "Screen reader text of today's bar: weekday and time, e.g. \"Wednesday, today, 12 min\".",
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressBarThisWeek": "{day}, {time}",
+  "@parentsProgressBarThisWeek": {
+    "description": "Screen reader text of a bar of this week: weekday and time.",
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressBarLastWeek": "{day} last week, {time}",
+  "@parentsProgressBarLastWeek": {
+    "description": "Screen reader text of a bar of last week: weekday and time.",
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressStuckTitle": "{game} is a little tricky right now.",
+  "@parentsProgressStuckTitle": {
+    "description": "Kind suggestion when a level is hard for the child (HU-034 §4.5). Never alarming.",
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressStuckLower": "To keep enjoying and practising, they can try the {round} round. Nothing they have won is lost.",
+  "@parentsProgressStuckLower": {
+    "description": "Body of the suggestion: try the previous round; nothing won is lost.",
+    "placeholders": {
+      "round": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressStuckNoTime": "To keep enjoying and practising, they can play without a timer. Nothing they have won is lost.",
+  "@parentsProgressStuckNoTime": {
+    "description": "Body of the suggestion in the first round: play without a timer; nothing won is lost."
+  },
+  "parentsProgressLowerButton": "Switch to {round}",
+  "@parentsProgressLowerButton": {
+    "description": "Button of the suggestion that switches the game to the previous round.",
+    "placeholders": {
+      "round": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressNotNow": "Not now",
+  "@parentsProgressNotNow": {
+    "description": "Button that hides the suggestion."
+  },
+  "parentsProgressLowerConfirm": "Switch {game} to the {round} round? Their stars and medals are kept.",
+  "@parentsProgressLowerConfirm": {
+    "description": "Confirmation before switching a game to the previous round.",
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "round": {
+        "type": "String"
+      }
+    }
+  },
+  "parentsProgressCancel": "Cancel",
+  "@parentsProgressCancel": {
+    "description": "Cancel button of the confirmation."
   }
 }

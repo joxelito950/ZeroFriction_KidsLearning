@@ -6,6 +6,7 @@ import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/app_locale/app_locale_cubit.dart';
 import '../blocs/game_settings/game_settings_cubit.dart';
+import '../blocs/parents_progress/parents_progress_cubit.dart';
 import '../blocs/play_time/play_time_cubit.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
@@ -13,6 +14,7 @@ import '../widgets/parents_feedback_section.dart';
 import '../widgets/parents_games_section.dart';
 import '../widgets/parents_language_section.dart';
 import '../widgets/parents_play_time_section.dart';
+import '../widgets/parents_progress_page.dart';
 import '../widgets/parents_privacy_section.dart';
 import '../widgets/parents_setting_page.dart';
 import '../widgets/parents_sound_section.dart';
@@ -32,8 +34,12 @@ class ParentsZoneScreen extends StatelessWidget {
     if (repository == null) return zone;
     // Los ajustes de los juegos se leen una vez: dan el resumen de la fila y
     // los usa su pantalla.
-    return BlocProvider<GameSettingsCubit>(
-      create: (_) => GameSettingsCubit(repository: repository)..load(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<GameSettingsCubit>(create: (_) => GameSettingsCubit(repository: repository)..load()),
+        // El progreso de cada juego, para la fila y la pantalla «Su progreso» (HU-034).
+        BlocProvider<ParentsProgressCubit>(create: (_) => ParentsProgressCubit(repository: repository)..load()),
+      ],
       child: zone,
     );
   }
@@ -46,6 +52,7 @@ class _ParentsZoneList extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final GameSettingsCubit? games = context.read<GameSettingsCubit?>();
+    final ParentsProgressCubit? progress = context.read<ParentsProgressCubit?>();
     final PlayTimeCubit? playTime = context.read<PlayTimeCubit?>();
     final String language = context.watch<AppLocaleCubit>().state.languageCode;
 
@@ -69,6 +76,28 @@ class _ParentsZoneList extends StatelessWidget {
             ),
             if (playTime != null) _ExtraTime(cubit: playTime),
             const SizedBox(height: 16),
+            // «Su progreso», la primera fila (HU-034 §3, HU-046 P1).
+            if (progress != null && games != null)
+              BlocBuilder<ParentsProgressCubit, ParentsProgressState>(
+                bloc: progress,
+                builder: (context, state) => ParentsSettingRow(
+                  key: const ValueKey<String>('parents-row-progress'),
+                  icon: Icons.emoji_events_outlined,
+                  title: l10n.parentsProgressTitle,
+                  summary: parentsProgressRowSummary(l10n, progressSummaryOf(context, state)),
+                  dot: state.hasSuggestion,
+                  onTap: () => ParentsSettingPage.open(
+                    context,
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider<ParentsProgressCubit>.value(value: progress),
+                        BlocProvider<GameSettingsCubit>.value(value: games),
+                      ],
+                      child: const ParentsProgressPage(),
+                    ),
+                  ),
+                ),
+              ),
             ParentsSettingRow(
               key: const ValueKey<String>('parents-row-language'),
               icon: Icons.translate_rounded,
@@ -86,10 +115,11 @@ class _ParentsZoneList extends StatelessWidget {
                   icon: Icons.extension_outlined,
                   title: l10n.parentsZoneGamesTitle,
                   summary: ParentsGamesTexts.summary(l10n, state),
+                  // Cambiar la ronda cambia lo que muestra «Su progreso».
                   onTap: () => ParentsSettingPage.open(
                     context,
                     BlocProvider<GameSettingsCubit>.value(value: games, child: const ParentsGamesPage()),
-                  ),
+                  ).then((_) => progress?.load()),
                 ),
               ),
             if (playTime != null)
