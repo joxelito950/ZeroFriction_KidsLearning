@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En pausa (2026-11-10): lista desde el 2026-10-27, pero **depende de HU-037**, que cambia dónde empieza cada juego. Se retoma, o se absorbe, al cerrar HU-037 (sección 10) |
+| **Estado** | **Descartada (2026-11-18): absorbida.** HU-037 y HU-051 permiten al adulto elegir la ronda de cada juego en la Zona de Padres, que es el punto de partida que pedía esta historia. Antes: en pausa desde el 2026-11-10 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | S (1 día) |

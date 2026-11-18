@@ -3,6 +3,7 @@ import 'package:toddler_logic/data/local/models/level_state_hive_model.dart';
 import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/news/discovery.dart';
 
 void main() {
   group('LevelStateHiveModel', () {
@@ -33,11 +34,13 @@ void main() {
       expect(model.isPremium, isTrue);
       expect(model.isSoundEnabled, isFalse);
       expect(model.languageCode, isNull);
-      expect(model.toEntity(), entity);
+      // Sin nada descubierto se guarda todo como visto (HU-041 R2).
+      expect(model.toEntity(), entity.copyWith(discovery: Discovery.allSeen()));
     });
 
     test('round-trips the language code', () {
-      const entity = UserProfile(isPremium: false, isSoundEnabled: true, languageCode: 'ar');
+      final entity = const UserProfile(isPremium: false, isSoundEnabled: true, languageCode: 'ar')
+          .copyWith(discovery: Discovery.allSeen());
 
       expect(UserProfileHiveModel.fromEntity(entity).toEntity(), entity);
     });

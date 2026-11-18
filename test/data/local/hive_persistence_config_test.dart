@@ -15,6 +15,8 @@ import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/news/discovery.dart';
+import 'package:toddler_logic/domain/progress/game_progress.dart';
 
 /// Ejecuta [body] en una zona aislada y devuelve los errores no capturados.
 /// Un fallo de inicialización no debe dejar ninguno: ni de nuestro código ni de
@@ -121,7 +123,8 @@ void main() {
 
     test('opened boxes persist models through the generated adapters', () async {
       final level = LevelState(levelId: 'farm_easy', isCompleted: true, stars: 3);
-      const profile = UserProfile(isPremium: true, isSoundEnabled: false);
+      final profile = const UserProfile(isPremium: true, isSoundEnabled: false)
+          .copyWith(discovery: Discovery().openedGame(GameId.shadows).sawFeature(ParentsFeature.progress));
 
       await HivePersistenceConfig.levelStateBox
           .put(level.levelId, LevelStateHiveModel.fromEntity(level));

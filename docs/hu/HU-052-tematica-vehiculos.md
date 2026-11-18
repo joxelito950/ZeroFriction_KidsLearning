@@ -1,51 +1,50 @@
-# HU-052 · Temática de vehículos en los juegos
+# HU-052 · Juegos de vehículos
 
 | | |
 |---|---|
-| **Estado** | Idea en refinamiento (2026-11-17). Propuesta del dueño: «juegos con temática de carros» |
+| **Estado** | Idea en refinamiento. Propuesta del dueño el 2026-11-17 («juegos con temática de carros»); **redirigida el 2026-11-18**: uno o varios **juegos nuevos con temática exclusiva de vehículos**, distintos de los que ya están en el backlog |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
-| **Tamaño** | M (2–3 días) |
-| **Depende de** | HU-001 (temáticas de la memoria), HU-007 (series de Sombras), HU-025 (grupos de ¿Cuál es diferente?). Base del rubí de HU-051 |
+| **Tamaño** | Por juego: M (2–3 días) si reutiliza el arrastre de Sombras; L si trae una mecánica nueva |
+| **Depende de** | HU-023 (menú para varios juegos: condición para un cuarto juego). HU-037 y HU-051 (las ocho rondas), HU-041 (destacar el juego nuevo). HU-006 si es Premium |
 
 ## 1. Historia
 
 **Como** niño o niña al que le encantan los coches,
-**quiero** jugar a los juegos de siempre con carros, camiones y trenes,
-**para** disfrutar más y aprender sus nombres y formas.
+**quiero** juegos en los que los protagonistas sean los vehículos,
+**para** disfrutar, aprender sus nombres, para qué sirve cada uno y por dónde va.
 
-## 2. Propuesta
+## 2. Qué cambia respecto a la primera versión
 
-Una **temática de vehículos** para los **tres juegos actuales**, sin mecánicas nuevas (las carreras son HU-053):
+- **Antes (2026-11-17):** una temática de vehículos dentro de los tres juegos actuales (memoria, Sombras y ¿Cuál es diferente?).
+- **Ahora (2026-11-18):** **juegos propios**, en los que todo son vehículos. Los juegos actuales siguen como están: ya tienen algunos vehículos entre sus dibujos (HU-007 y HU-025), y no se les añade una temática nueva en esta historia.
+- **No se repiten** ideas del backlog: las carreras son HU-053; los caminos con el dedo, HU-029; los rompecabezas, HU-028; clasificar por color o tamaño, HU-027 y HU-008.
 
-| Juego | Cómo se usa |
-|---|---|
-| **Memoria** | Parejas de vehículos (🚗 🚕 🚌 🚒 🚑 🚓 🚜 🚂…) |
-| **Sombras** | Siluetas de vehículos con **formas muy distintas** (🚲 🚁 🚀 ⛵ 🚜 🚂): varios coches tienen casi la misma silueta y harían el juego injusto |
-| **¿Cuál es diferente?** | Grupos nuevos: «de tierra o de aire» (🚗 🚌 🚜 / ✈️), «de tierra o de agua» (🚗 / ⛵), «con ruedas o con alas» (ya existe en el Reto máximo, se amplía), «trabajo o pasear» (🚒 🚑 🚓 / 🚗) |
+## 3. Juegos propuestos
 
-- **Solo emojis compatibles con Android 8** (Emoji 5.0, D-026): 🚗 🚕 🚙 🚌 🚎 🚓 🚑 🚒 🚐 🚚 🚛 🚜 🏍️ 🚲 🛴 🛵 🚂 🚆 🚇 ✈️ 🚁 ⛵ 🚤 🚀. **Fuera:** 🛻 (pick-up, Emoji 13) y 🛺 (Emoji 12), que no se ven en Android 8.
-- Se comprueba en el emulador de Android 8 que todos se pintan (como en HU-025).
+Todos siguen las reglas de la casa: sin perdedores, sin texto para el niño, rondas de bronce a diamante (HU-051) y **solo emojis que se ven en Android 8** (Emoji 5.0, D-026): 🚗 🚕 🚙 🚌 🚎 🚓 🚑 🚒 🚐 🚚 🚛 🚜 🏍️ 🚲 🛴 🛵 🚂 🚆 🚇 ✈️ 🚁 ⛵ 🚤 🚀. **Fuera:** 🛻 (Emoji 13) y 🛺 (Emoji 12).
 
-## 3. ¿Cómo se elige la temática? (P1)
+| Juego | Cómo se juega | Qué practica | Edad | Coste |
+|---|---|---|---|---|
+| **A. Cada vehículo a su casa** | El niño arrastra cada vehículo a su sitio: el camión de bomberos 🚒 al parque de bomberos 🚒🏠, la ambulancia 🚑 al hospital 🏥, el avión ✈️ al aeropuerto o al cielo, el barco ⛵ al agua 🌊, el tren 🚂 a la vía. Las rondas suben el número de vehículos y de sitios, y en las últimas los sitios cambian de lugar | Clasificar por función y por medio (tierra, agua, aire); vocabulario | 2–5 años | **M**: reutiliza el arrastre y el imán de Sombras (HU-050) |
+| **B. El semáforo** | Una calle con un semáforo grande. Con **verde**, el niño toca y los coches avanzan; con **rojo**, se esperan. Cada coche que llega al otro lado suma una estrella. Tocar en rojo no castiga: los coches se quedan quietos y el semáforo parpadea amable | Control de impulsos (esperar), atención; base de la seguridad vial | 3–5 años | **L**: mecánica nueva de tiempo y espera |
+| **C. El lavadero** | Un vehículo llega con manchas de barro; el niño lo frota con el dedo hasta dejarlo limpio y brillante, y el vehículo se va contento. Sin tiempo en las primeras rondas | Motricidad fina, causa y efecto; calma | 2–3 años | **L**: dibujo de manchas y borrado con el dedo |
 
-| Opción | Valoración |
-|---|---|
-| **A. Mezclada con las actuales** | Los vehículos aparecen junto a granja y selva al azar. Sencillo, pero el niño al que le gustan los coches no puede elegirlos |
-| **B. Elegida por el adulto** en la Zona de Padres («Temática: Todas · Granja · Selva · Vehículos») | ✅ **Recomendado** para empezar: una fila más en «Juegos» (HU-046) |
-| **C. Como ronda propia** (el rubí de HU-051) | ✅ Complementaria: cuando llegue HU-051, el rubí usa esta temática |
+**Recomendación:** empezar por **A. Cada vehículo a su casa**, porque reutiliza el arrastre de Sombras y es el que más vocabulario enseña. B y C, después, según cómo vaya la prueba cerrada.
 
-## 4. Criterios de aceptación (borrador)
+## 4. Criterios de aceptación (borrador, para el juego A)
 
-1. Con la temática «Vehículos», los tres juegos usan solo vehículos de la lista, que se ven en Android 8.
-2. En Sombras, ningún tablero tiene dos vehículos con siluetas casi iguales (lista de parejas prohibidas, test).
-3. ¿Cuál es diferente? tiene al menos 4 comparaciones de vehículos, sin repetir el diferente (como HU-025 sección 13.5).
-4. La temática se elige en la Zona de Padres y se aplica en la siguiente partida.
+1. Todos los vehículos y sitios se ven en Android 8 (prueba en el emulador, como en HU-025).
+2. Cada vehículo tiene **un solo** sitio correcto en cada tablero (lista de parejas válida, con test).
+3. Sin texto para el niño; el lector de pantalla nombra cada vehículo y cada sitio en los 9 idiomas.
+4. Las ocho rondas, las medallas y las estrellas funcionan como en los otros juegos (HU-051).
+5. El juego aparece en el menú destacado como nuevo (HU-041).
 
 ## 5. Preguntas
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿Mezclada, elegida por el adulto o como ronda? | **Elegida por el adulto** ahora, y **ronda rubí** con HU-051 |
+| P1 | ¿Qué juego va primero? | **A. Cada vehículo a su casa** (reutiliza Sombras; más vocabulario) |
 | P2 | ¿Es Premium? | **Sí**, como contenido nuevo (D-039); mientras dure la prueba, gratis (D-040) |
-| P3 | ¿Se incluyen también trenes, barcos y aviones, o solo carros? | **Todos los vehículos**: con solo coches no hay variedad suficiente de formas para Sombras |
+| P3 | ¿Se incluyen trenes, barcos, aviones y bicicletas, o solo carros? | **Todos los vehículos**: con solo coches no hay variedad suficiente de sitios ni de formas |
+| P4 | ¿Hacen falta dibujos propios (sitios como el parque de bomberos), o bastan los emojis? | **Emojis** para empezar (🏥 🌊 🛤️ se ven en Android 8); dibujos propios más adelante, con la identidad visual |

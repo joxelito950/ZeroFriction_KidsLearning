@@ -6,6 +6,7 @@ import 'package:toddler_logic/domain/entities/app_language.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
+import 'package:toddler_logic/domain/progress/round_ladder.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/presentation/blocs/play_time/play_time_cubit.dart';
@@ -61,6 +62,8 @@ void main() {
     expect(find.textContaining('${l10n.shadowsGameTitle}: ${l10n.roundGold}'), findsOneWidget);
     expect(find.descendant(of: row('play-time'), matching: find.text(l10n.parentsZonePlayTimePerDay(60))),
         findsOneWidget);
+    // «Su progreso» va primero (HU-034 §3).
+    expect(tester.getTopLeft(row('progress')).dy, lessThan(tester.getTopLeft(row('language')).dy));
     await tester.scrollUntilVisible(find.byKey(const ValueKey<String>('parents-zone-privacy')), 200);
     expect(find.text(l10n.parentsZonePinSummary), findsOneWidget);
     expect(find.text(l10n.parentsFeedbackSummary), findsOneWidget);
@@ -73,6 +76,30 @@ void main() {
     expect(order, [...order]..sort());
     // Nada de «próximamente» ni de compras (HU-004 P4, D-028).
     expect(find.textContaining('Próximamente'), findsNothing);
+  });
+
+  testWidgets('«Their progress» says it calmly when there is nothing to show (HU-034 §3)', (tester) async {
+    await pumpZone(tester);
+    expect(find.descendant(of: row('progress'), matching: find.text(l10n.parentsProgressRowEmpty)), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('parents-row-dot')), findsNothing);
+  });
+
+  testWidgets('a stuck game puts a dot on «Their progress», whose page shows the suggestion (HU-034 P8)',
+      (tester) async {
+    when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => GameProgress(
+          position: const RoundPosition(round: GameDifficulty.gold, level: 4),
+          stuckLevel: 4,
+          stuckFalls: GameProgress.stuckThreshold,
+        ));
+    await pumpZone(tester);
+    expect(find.descendant(of: row('progress'), matching: find.byKey(const ValueKey<String>('parents-row-dot'))),
+        findsOneWidget);
+
+    await open(tester, 'progress');
+    expect(find.byKey(const ValueKey<String>('parents-zone-progress')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('progress-suggestion-memory')), findsOneWidget);
+    await back(tester);
+    expect(find.byKey(const ValueKey<String>('parents-zone-progress')), findsNothing);
   });
 
   testWidgets('screen pinning opens its read-only page, without Save (HU-046 R6)', (tester) async {

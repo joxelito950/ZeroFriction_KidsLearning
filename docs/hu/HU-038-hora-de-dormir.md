@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (2026-11-12). P1 a P5 respondidas por el dueño; quedan P6 y P7, con recomendación |
+| **Estado** | En refinamiento. P1 a P5 respondidas por el dueño (2026-11-12) y P6 (2026-11-18); queda P7, con recomendación |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3 entregas, unos 3 días) |
@@ -36,8 +36,8 @@ En la pantalla **«Tiempo de juego»** (HU-046), debajo del límite diario, una 
 | **Hora de dormir** | Interruptor | **Desactivado** |
 | Desde | Selector de hora del sistema (`showTimePicker`) | 19:30 |
 | Hasta | Selector de hora del sistema | 07:00 |
-| **Siesta** (P6) | Interruptor | **Desactivada** |
-| Desde · Hasta | Selector de hora del sistema | 13:00 · 15:00 |
+| **Siestas** (P6) | Interruptor y «Añadir otra siesta» (como máximo **2**) | **Desactivadas** |
+| Desde · Hasta de cada siesta | Selector de hora del sistema. Cada siesta dura **de 30 min a 2 h** seguidas | 1.ª: 13:00 · 15:00. 2.ª: la primera hora libre que cumpla R7 |
 
 Una frase resume lo elegido: «De 7:30 p. m. a 7:00 a. m., la app invita a dormir». En la fila de la Zona de Padres: «1 h al día · Dormir de 19:30 a 7:00».
 
@@ -64,7 +64,8 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 
 ### 3.4 Reglas
 
-- **R7.** El horario puede cruzar la medianoche (19:30–07:00) o no (13:00–15:00). Si «Desde» y «Hasta» son iguales, o si la siesta se solapa con la noche, no se puede guardar.
+- **R7.** El horario de la noche puede cruzar la medianoche (19:30–07:00). Si «Desde» y «Hasta» son iguales, no se puede guardar.
+- **R7a.** Las siestas (P6), como máximo **dos al día**, duran cada una **entre 30 minutos y 2 horas seguidas**, no cruzan la medianoche y **no se solapan** entre sí ni con la noche. Entre una siesta y la otra, y entre una siesta y la noche, quedan **al menos 2 horas** libres. Si no se cumple, «Guardar» no se activa y una frase amable dice qué ajustar («Deja al menos 2 horas entre la siesta y la noche»).
 - **R8.** Se usa el **reloj del teléfono**, en su zona horaria. Si el adulto cambia la hora del teléfono, la app la sigue (P3).
 - **R9.** El horario es **el mismo todos los días** (P2). Todo ocurre en el teléfono. No se envía nada.
 
@@ -75,7 +76,7 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 3. Si el horario empieza a mitad de un tablero, ese tablero se termina antes de mostrar la pantalla de noche.
 4. A las 19:00 se silencian los sonidos de celebración (no los de tocar) y empieza la capa cálida, que llega a su máximo a las 19:30. Nada lo anuncia.
 5. Con el teléfono en formato a. m./p. m., las horas se muestran así; con 24 horas, en 24 horas.
-6. La siesta, activada, funciona igual con su texto propio; no se puede guardar si se solapa con la noche.
+6. Cada siesta, activada, funciona igual con su texto propio. Se pueden configurar hasta 2; no se puede guardar una siesta de menos de 30 min o de más de 2 h, ni dos siestas (o una siesta y la noche) a menos de 2 h.
 7. Los «15 minutos más» funcionan igual que en el límite diario.
 8. La pantalla «Tiempo de juego» muestra primero la recomendación del sistema, después la de la OMS y después el ajuste, en los 9 idiomas, también en árabe.
 9. La pantalla de noche y el juego con la capa cálida al máximo cumplen el contraste AA con la paleta.
@@ -84,8 +85,8 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 
 | Capa | Cambio |
 |---|---|
-| Dominio | `Bedtime` (desde y hasta en minutos desde la medianoche; `contains(DateTime)` con el cruce de medianoche; `windDownProgress(DateTime)` de 0 a 1 en los 30 minutos antes). Un `RestSchedule` con la noche y la siesta opcional, que valida el solape |
-| Datos | Campos nuevos en `ParentalSettingsHiveModel`: inicio y fin de la noche y de la siesta (`null` = desactivada) y el permiso en curso (la hora a la que acaban los 15 minutos), con los siguientes índices libres |
+| Dominio | `Bedtime` (desde y hasta en minutos desde la medianoche; `contains(DateTime)` con el cruce de medianoche; `windDownProgress(DateTime)` de 0 a 1 en los 30 minutos antes). Un `RestSchedule` con la noche y hasta 2 siestas, que valida la duración (30 min a 2 h), el solape y la separación de 2 h (R7a) |
+| Datos | Campos nuevos en `ParentalSettingsHiveModel`: inicio y fin de la noche y de cada una de las 2 siestas (`null` = desactivada) y el permiso en curso (la hora a la que acaban los 15 minutos), con los siguientes índices libres |
 | Presentación | `PlayTimeCubit` decide «descanso» por límite **o** por horario, y expone cuál, para elegir la versión de la pantalla, y el avance de la preparación. Un temporizador hasta el próximo cambio (no un sondeo cada minuto). `RestScreen` gana las variantes de noche y siesta. `WarmVeil` sobre el `MaterialApp` (ámbar con transparencia). El servicio de sonidos de HU-005 consulta si está en preparación antes de sonar una celebración |
 | Zona de Padres | Parte nueva en la pantalla «Tiempo de juego» (HU-046) |
 | Catálogo | La leyenda de sueño de la OMS, siesta, textos de las pantallas y el resumen, en 9 idiomas |
@@ -101,7 +102,7 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 | P3 | ¿Se protege contra cambiar la hora del teléfono? | ✅ Decidido (2026-11-12): **no**, como la recomendación |
 | P4 | ¿Un botón que abra los ajustes de Bienestar digital? | ✅ Decidido (2026-11-12): **no**, como la recomendación |
 | P5 | ¿Cambia algo antes de la hora? | ✅ Decidido (2026-11-12), distinto de la recomendación: **sí, una preparación de 30 minutos** sin avisos: sin sonidos de celebración, capa cálida gradual y, con HU-045, solo música tranquila (§3.2) |
-| P6 | ¿Un segundo horario para la siesta? | **Recomendación: sí, opcional y desactivado** (13:00–15:00). La pregunta sobre la siesta lo sugiere, cuesta poco (otro par de horas) y sigue siendo el mismo todos los días |
+| P6 | ¿Un segundo horario para la siesta? | ✅ Decidido (2026-11-18): **sí**, como la recomendación (opcional y desactivado, 13:00–15:00 por defecto), y además **hasta 2 siestas al día**, de **30 min a 2 h** seguidas cada una, que no se solapen y con **al menos 2 h** entre ellas y con la noche (R7a) |
 | P7 | ¿Cuánta capa cálida? | **Recomendación:** ámbar con una transparencia de hasta un 15 %, ajustada midiendo que el texto y los botones sigan cumpliendo AA, y vista en el moto g55 |
 
 ## 7. Fuera de alcance

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../brand/brand_assets.dart';
+import '../../domain/entities/user_profile.dart';
 import '../../domain/memory/memory_ladder.dart';
+import '../../domain/news/discovery.dart';
 import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/settings/game_difficulty.dart';
@@ -182,9 +185,24 @@ class _MenuActionsState extends State<_MenuActions> {
 
   /// Abre un juego y, al volver, relee el progreso: la medalla o el dorado
   /// pueden haber cambiado.
-  Future<void> _open(Widget game) async {
+  Future<void> _open(GameId id, Widget game) async {
+    final IPersistenceRepository repository = context.read<IPersistenceRepository>();
+    unawaited(_recordOpen(repository, id));
     await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => game));
     await _loadProgress();
+  }
+
+  /// Cuenta la apertura para HU-041 (un juego nuevo se destaca hasta abrirlo
+  /// tres veces). Si falla, el juego se abre igual.
+  static Future<void> _recordOpen(IPersistenceRepository repository, GameId id) async {
+    try {
+      final UserProfile profile =
+          await repository.readUserProfile() ?? const UserProfile(isPremium: false, isSoundEnabled: true);
+      final Discovery next = profile.discovered.openedGame(id);
+      if (next != profile.discovered) await repository.saveUserProfile(profile.copyWith(discovery: next));
+    } catch (_) {
+      // Solo se pierde una cuenta: nunca bloquea el juego.
+    }
   }
 
   /// La medalla del juego, sobre un círculo blanco: el dorado no contrasta con
@@ -229,7 +247,7 @@ class _MenuActionsState extends State<_MenuActions> {
             final GameDifficulty medal => _medal('menu-memory-badge', RoundStyle.medalTitle(l10n, medal), medal),
             null => null,
           },
-          onTap: () => _open(const MemoryGameScreen()),
+          onTap: () => _open(GameId.memory, const MemoryGameScreen()),
         ),
         const SizedBox(height: 16),
         // Segundo juego, debajo de «Memoria» (HU-007 R1).
@@ -251,7 +269,7 @@ class _MenuActionsState extends State<_MenuActions> {
             final GameDifficulty medal => _medal('menu-shadows-badge', RoundStyle.medalTitle(l10n, medal), medal),
             null => null,
           },
-          onTap: () => _open(const ShadowGameScreen()),
+          onTap: () => _open(GameId.shadows, const ShadowGameScreen()),
         ),
         const SizedBox(height: 16),
         // Tercer juego (HU-025). El menú para varios juegos (HU-023) llega antes
@@ -274,7 +292,7 @@ class _MenuActionsState extends State<_MenuActions> {
             final GameDifficulty medal => _medal('menu-odd-one-out-badge', RoundStyle.medalTitle(l10n, medal), medal),
             null => null,
           },
-          onTap: () => _open(const OddOneOutScreen()),
+          onTap: () => _open(GameId.oddOneOut, const OddOneOutScreen()),
         ),
         const SizedBox(height: 40),
 

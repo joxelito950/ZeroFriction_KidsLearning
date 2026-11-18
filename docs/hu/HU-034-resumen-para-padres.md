@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En curso** (2026-11-16): entrega 1 desarrollada. P1 a P9 decididas; la entrega 2 es HU-046, lista |
+| **Estado** | **En curso** (2026-11-18): **las 4 entregas desarrolladas** (la 2 es HU-046); falta verla en el moto g55 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | **P1: es lo próximo que se desarrolla** (P6, 2026-11-12) |
 | **Tamaño** | L (4 entregas, unos 5 días; la entrega 2 es HU-046) |
@@ -141,6 +141,8 @@ Si el niño **llega una y otra vez al mismo nivel y no consigue superarlo**, la 
 | Entrega | Estado | Qué se hizo |
 |---|---|---|
 | 1 | ✅ 2026-11-16, rama `feature/hu-034-1-play-history` | `PlayHistory` y `PlayDay` (dominio): tiempo por día y por juego, y aparte el del menú, de hoy y los 5 días anteriores, contando días del calendario (sin fallar con el cambio de hora). `PlayTimeCubit` suma cada segundo al juego abierto (las pantallas de juego avisan con `setCurrentGame`) y guarda el día con el tiempo de hoy; el historial está en su estado para la pantalla. Caja `play_history` con `PlayDayHiveModel` (**typeId 6**), que borra al leer los días que salen de la ventana. R4: `GameProgress.stuckLevel` y `stuckFalls`, con `isStuck` (3 caídas en el mismo nivel, P7); se borra al superar el nivel, al cambiar de ronda o al bajar de ronda (HU-037 R10). Campos nuevos 10 y 11 en la memoria y Sombras, y 7 y 8 en el progreso común. No se ve nada todavía |
+| 3 | ✅ 2026-11-18, rama `feature/hu-034-3-progress-screen` | Fila «Su progreso» la primera de la Zona de Padres, con el juego favorito y el tiempo de estos días. Pantalla con la frase (favorito y su mejor medalla), una tarjeta por juego (icono con su dorado, solo las medallas conseguidas, «Está explorando la ronda X · nivel N», total de estrellas o «Aún por descubrir») y el gráfico semanal de 6 días con el hueco (`ProgressSummary.week`, primer día de la semana según el idioma, barras de la semana pasada con transparencia, minutos encima, lector de pantalla por barra, invertido en árabe). Al tocar el total, el diálogo de estrellas por ronda y nivel con las **ocho rondas** (HU-051): conseguidas en dorado, posibles en contorno; los niveles y rondas sin jugar, «por descubrir». 28 textos nuevos en 9 idiomas, sin porcentajes (test) |
+| 4 | ✅ 2026-11-18, misma rama | Sugerencia «X le está costando un poco» encima de las tarjetas y un **punto** azul petróleo en la fila (P8). Propone **bajar un solo escalón** (HU-051 R3) con confirmación y sin perder logros (lo mismo que «Juegos»), o en bronce «Jugar sin tiempo» si está disponible; «Ahora no» borra la cuenta (`GameProgress.withoutStuck`). Cambiar la ronda en «Juegos» actualiza «Su progreso» |
 
 ## 8. Preguntas
 

@@ -175,6 +175,15 @@ final class GameProgress implements DecayingProgress<GameProgress> {
         lastPlayedAt: lastPlayedAt,
       );
 
+  /// El adulto responde «Ahora no» a la sugerencia (HU-034 §4.5): la cuenta de
+  /// «atascado» vuelve a cero y no reaparece hasta otras 3 caídas.
+  GameProgress withoutStuck() => GameProgress(
+        position: position,
+        medals: medals,
+        records: records,
+        lastPlayedAt: lastPlayedAt,
+      );
+
   /// Quita estrellas empezando por el logro más antiguo, en cualquier ronda (R6).
   @override
   GameProgress loseStars(int count) {
