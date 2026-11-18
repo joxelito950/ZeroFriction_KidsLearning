@@ -2,6 +2,7 @@ import '../../../domain/sound/game_sound.dart';
 import '../memory_game/memory_ladder_state.dart';
 import '../odd_one_out/odd_one_out_state.dart';
 import '../shadow_game/shadow_game_state.dart';
+import '../vehicle_game/vehicle_game_state.dart';
 
 /// Qué sonido corresponde a un cambio de estado de los juegos (HU-005 R1, R2).
 /// Las pantallas comparan el estado anterior con el nuevo; los cubits no saben
@@ -50,5 +51,16 @@ abstract final class GameSoundEvents {
       OddPhase.inviting => GameSound.complete,
       _ => null,
     };
+  }
+
+  /// «A su sitio» (HU-052): como Sombras. Encajar un vehículo suena como una
+  /// pareja; completar el tablero o ganar la medalla, como siempre. Un fallo no
+  /// suena.
+  static GameSound? vehicles(VehicleGameState previous, VehicleGameState next) {
+    if (next.phase == VehiclePhase.celebrating && previous.phase != VehiclePhase.celebrating) {
+      return next.medal != null ? GameSound.badge : GameSound.complete;
+    }
+    if (previous.round != next.round || next.placed.length <= previous.placed.length) return null;
+    return next.vehicles.every(next.placed.contains) ? null : GameSound.match;
   }
 }

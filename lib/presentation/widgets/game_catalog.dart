@@ -5,10 +5,12 @@ import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/progress/round_ladder.dart';
 import '../../domain/shadows/shadow_ladder.dart';
+import '../../domain/vehicles/vehicle_ladder.dart';
 import '../../l10n/app_localizations.dart';
 import '../screens/memory_game_screen.dart';
 import '../screens/odd_one_out_screen.dart';
 import '../screens/shadow_game_screen.dart';
+import '../screens/vehicle_game_screen.dart';
 import '../theme/app_palette.dart';
 import 'game_icon.dart';
 
@@ -79,6 +81,18 @@ abstract final class GameCatalog {
       background: AppPalette.white,
       foreground: AppPalette.deepTeal,
       screen: () => const OddOneOutScreen(),
+    ),
+    MenuGame(
+      id: GameId.vehicles,
+      keyName: 'vehicles',
+      title: (l10n) => l10n.vehiclesGameTitle,
+      icon: (key, size) => GameIcon.vehicles(key: key, size: size),
+      rounds: VehicleLadder.rounds,
+      // Ámbar con texto teal: el único tono de la paleta que no usan las otras
+      // tarjetas y que contrasta con el camión coral del icono (HU-052 7.7).
+      background: AppPalette.amber,
+      foreground: AppPalette.deepTeal,
+      screen: () => const VehicleGameScreen(),
     ),
   ];
 }

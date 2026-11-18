@@ -900,5 +900,61 @@
   "parentsProgressCancel": "Cancel",
   "@parentsProgressCancel": {
     "description": "Cancel button of the confirmation."
+  },
+  "vehiclesGameTitle": "To its place",
+  "@vehiclesGameTitle": {
+    "description": "Name of the game «A su sitio» (HU-052 P5), on its menu card and in the game header. Short: the child does not read it."
+  },
+  "vehiclesGameInstructions": "Drag each vehicle to its place.",
+  "@vehiclesGameInstructions": {
+    "description": "One line under the game title, for the adult next to the child: drag each vehicle to the place where it goes."
+  },
+  "vehiclesVehicleName": "{vehicle, select, car{Car} bus{Bus} taxi{Taxi} minibus{Minibus} police{Police car} ambulance{Ambulance} fireEngine{Fire engine} truck{Delivery truck} lorry{Lorry} tractor{Tractor} motorcycle{Motorbike} bicycle{Bike} scooter{Scooter} locomotive{Steam train} train{Train} sailboat{Sailboat} speedboat{Speedboat} ship{Ship} airplane{Plane} helicopter{Helicopter} rocket{Rocket} sled{Sled} other{Vehicle}}",
+  "@vehiclesVehicleName": {
+    "description": "Name of a vehicle for the screen reader (not visible). One case per vehicle of the game; keep the same keys.",
+    "placeholders": {
+      "vehicle": {
+        "type": "String",
+        "example": "ambulance"
+      }
+    }
+  },
+  "vehiclesPlaceName": "{place, select, road{Road} rail{Railway} water{Water} sky{Sky} space{Space} snow{Snow} home{Home} busStop{Bus stop} hotel{Hotel} school{School} trafficLight{Traffic light} hospital{Hospital} fire{Fire} parcels{Parcels} factory{Factory} field{Field} finish{Finish line} park{Park} station{Station} island{Island} fishing{Fishing} port{Harbour} mountain{Mountain} christmasTree{Christmas tree} other{Place}}",
+  "@vehiclesPlaceName": {
+    "description": "Name of a place for the screen reader (not visible): where a vehicle goes (road, water…) or what it does (hospital, fire…). Keep the same keys.",
+    "placeholders": {
+      "place": {
+        "type": "String",
+        "example": "hospital"
+      }
+    }
+  },
+  "vehiclesVehicleSemantics": "{vehicle} to take to its place",
+  "@vehiclesVehicleSemantics": {
+    "description": "Screen-reader label (not visible) of a vehicle still in the tray. {vehicle} is its name. With the screen reader the vehicle is chosen first and then its place.",
+    "placeholders": {
+      "vehicle": {
+        "type": "String",
+        "example": "Ambulance"
+      }
+    }
+  },
+  "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
+  "@vehiclesPlaceWithSemantics": {
+    "description": "Screen-reader label (not visible) of a place that already has vehicles: the place and the vehicles on it, separated by commas.",
+    "placeholders": {
+      "place": {
+        "type": "String",
+        "example": "Hospital"
+      },
+      "vehicles": {
+        "type": "String",
+        "example": "Ambulance"
+      }
+    }
+  },
+  "vehiclesTimeUpFewerVehicles": "Time's up! Let's try again with fewer vehicles.",
+  "@vehiclesTimeUpFewerVehicles": {
+    "description": "Shown when time runs out: a helpful message, never a punishment. The next board has fewer vehicles."
   }
 }

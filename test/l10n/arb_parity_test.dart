@@ -17,8 +17,12 @@ void main() {
   Iterable<String> messageKeys(Map<String, dynamic> arb) =>
       arb.keys.where((key) => !key.startsWith('@'));
 
-  Set<String> placeholdersOf(String message) =>
-      RegExp(r'\{(\w+)[,}]').allMatches(message).map((match) => match.group(1)!).toSet();
+  // El texto de los casos de un `select` o un `plural` (`car{Coche}`) no son
+  // parámetros: se quitan antes de buscar los `{nombre}` (HU-052).
+  Set<String> placeholdersOf(String message) => RegExp(r'\{(\w+)[,}]')
+      .allMatches(message.replaceAll(RegExp(r'\b\w+\{[^{}]*\}'), ''))
+      .map((match) => match.group(1)!)
+      .toSet();
 
   final arbFiles = Directory('lib/l10n')
       .listSync()
