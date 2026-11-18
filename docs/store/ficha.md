@@ -29,7 +29,7 @@ Tres juegos
 
 Hecho para niños de 2 a 5 años
 • Se entiende mirando: sin textos que leer y una mano animada que enseña a jugar.
-• Cada juego empieza fácil y sube solo de reto: rondas Fácil, Normal y Reto máximo, con medallas de bronce, plata y oro.
+• Cada juego empieza fácil y sube solo de reto en ocho rondas, con medallas de bronce a diamante.
 • Celebra cada logro con estrellas y sonidos suaves, sin sonidos de error ni mensajes negativos.
 
 Tranquilidad para la familia
@@ -59,7 +59,7 @@ Three games
 
 Made for children aged 2 to 5
 • Easy to understand just by looking: no text to read, and an animated hand shows how to play.
-• Each game starts easy and grows by itself: Easy, Normal and Impossible rounds, with bronze, silver and gold medals.
+• Each game starts easy and grows by itself in eight rounds, with medals from bronze to diamond.
 • Every win is celebrated with stars and gentle sounds, with no error sounds or negative messages.
 
 Peace of mind for families
@@ -83,9 +83,25 @@ In 9 languages: English, Spanish, Portuguese, German, French, Italian, Japanese,
 - ✅ URL de la política: `https://joxelito950.github.io/ZeroFriction_KidsLearning/privacy/` (activa; se actualiza al pasar a `main`).
 - Capturas.
 - ✅ Sombras (HU-007) y «Enviar comentarios» (HU-032) ya están en la descripción (2026-11-10, versión `1.0.0-rc.3`). Cuando llegue el pago (HU-006), actualizarla otra vez.
-- Capturas de Sombras y de «¿Cuál es diferente?»: faltan (hacerlas en el moto g55 con la versión `1.0.0-rc.4`).
+- Capturas de Sombras y de «¿Cuál es diferente?»: faltan (hacerlas en el moto g55 con la versión `1.0.0-rc.5`, que trae las medallas nuevas y el niño en las celebraciones).
 
 ## Novedades de la versión (campo «Notas de la versión» de Play Console, máx. 500 caracteres)
+
+**`1.0.0-rc.5` · es-419:**
+
+> Ocho rondas con medallas, de bronce a diamante: cada juego sube de reto en pasos más pequeños.
+> El niño de ToddlerLogic celebra cada medalla y te invita a jugar.
+> En Sombras, la sombra se ve mientras llevas el dibujo.
+> Zona de padres más ordenada.
+> Tus medallas y estrellas se conservan: no hace falta borrar los datos.
+
+**`1.0.0-rc.5` · en-US:**
+
+> Eight rounds with medals, from bronze to diamond: each game grows in smaller steps.
+> The ToddlerLogic kid celebrates every medal and invites you to play.
+> In Shadows, the shadow stays visible while you drag the picture.
+> A tidier Parents' Zone.
+> Your medals and stars are kept: no need to clear the app's data.
 
 **`1.0.0-rc.4` · es-419:**
 

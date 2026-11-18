@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Versión de la app** | `1.0.0-rc.4+5` (2026-11-12: «¿Cuál es diferente?», HU-025; rondas y medallas, HU-037; sonidos, HU-005; todo gratis durante la prueba, D-040). La `1.0.0-rc.3+4` (2026-11-10) trajo Sombras sin pago y enviar comentarios. La `1.0.0-rc.2+3` fue la primera que se subió a Google Play (prueba interna, HU-014, el 2026-11-09; la `rc.1+2` no llegó a subirse). La línea base de la sección 1 es la `0.0.1-beta+1` |
+| **Versión de la app** | `1.0.0-rc.5+6` (2026-11-17: ocho rondas de bronce a diamante, HU-051; medallas que se distinguen, HU-048; el niño en las celebraciones, HU-049; sombra visible al arrastrar, HU-050; Zona de Padres por filas, HU-046; historial diario, HU-034 entrega 1; traducciones revisadas v2). La `1.0.0-rc.4+5` (2026-11-12) trajo «¿Cuál es diferente?», HU-025; rondas y medallas, HU-037; sonidos, HU-005; todo gratis durante la prueba, D-040). La `1.0.0-rc.3+4` (2026-11-10) trajo Sombras sin pago y enviar comentarios. La `1.0.0-rc.2+3` fue la primera que se subió a Google Play (prueba interna, HU-014, el 2026-11-09; la `rc.1+2` no llegó a subirse). La línea base de la sección 1 es la `0.0.1-beta+1` |
 | **Fecha de la línea base** | 2026-10-13 |
 | **Estado** | Beta interna · solo Android · sin publicar |
 | **Documentos relacionados** | [README.md](README.md) (visión de producto y alcance MVP) · [DOCUMENTATION.md](DOCUMENTATION.md) (detalle de persistencia Hive) · [BACKLOG.md](BACKLOG.md) (trabajo pendiente y refinamientos en `docs/hu/`) |
