@@ -52,7 +52,6 @@ void main() {
 
       expect(find.text('ToddlerLogic'), findsOneWidget);
       expect(find.text('Memoria'), findsOneWidget);
-      expect(find.text('Encuentra las parejas'), findsOneWidget);
       expect(find.text('Zona de padres'), findsOneWidget);
     });
 
@@ -173,14 +172,16 @@ void main() {
       expect(badgeFinder, findsNothing);
     });
 
-    testWidgets('shows Sombras under Memoria with its icon, and opens it (HU-007 R1)', (tester) async {
+    testWidgets('shows Sombras after Memoria with its icon, and opens it (HU-007 R1)', (tester) async {
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
 
       expect(find.text('Sombras'), findsOneWidget);
-      expect(find.text('Encuentra cada sombra'), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('menu-shadows-icon')), findsOneWidget);
-      expect(tester.getTopLeft(find.text('Sombras')).dy, greaterThan(tester.getTopLeft(find.text('Memoria')).dy));
+      // HU-023: en la cuadrícula, después de Memoria (a su derecha o debajo).
+      final Offset sombras = tester.getTopLeft(find.text('Sombras'));
+      final Offset memoria = tester.getTopLeft(find.text('Memoria'));
+      expect(sombras.dx > memoria.dx || sombras.dy > memoria.dy, isTrue);
       expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsNothing);
 
       await tester.tap(find.text('Sombras'));
@@ -203,15 +204,16 @@ void main() {
       expect(find.byKey(const ValueKey<String>('menu-shadows-badge')), findsNothing);
     });
 
-    testWidgets('shows the third game under Sombras with its icon, and opens it (HU-025)', (tester) async {
+    testWidgets('shows the third game after Sombras with its icon, and opens it (HU-025)', (tester) async {
       await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
       await tester.pump();
 
       expect(find.text('¿Cuál es diferente?'), findsOneWidget);
-      expect(find.text('Busca el diferente'), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('menu-odd-one-out-icon')), findsOneWidget);
-      expect(tester.getTopLeft(find.text('¿Cuál es diferente?')).dy,
-          greaterThan(tester.getTopLeft(find.text('Sombras')).dy));
+      // HU-023: en la cuadrícula, después de Sombras (a su derecha o debajo).
+      final Offset third = tester.getTopLeft(find.byKey(const ValueKey<String>('menu-odd-one-out')));
+      final Offset shadows = tester.getTopLeft(find.byKey(const ValueKey<String>('menu-shadows')));
+      expect(third.dx > shadows.dx || third.dy > shadows.dy, isTrue);
 
       await tester.ensureVisible(find.text('¿Cuál es diferente?'));
       await tester.tap(find.text('¿Cuál es diferente?'));

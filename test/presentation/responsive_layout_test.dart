@@ -21,6 +21,7 @@ import 'package:toddler_logic/presentation/screens/rest_screen.dart';
 import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/presentation/widgets/memory_round_overlay.dart';
+import 'package:toddler_logic/presentation/widgets/game_grid.dart';
 import 'package:toddler_logic/presentation/widgets/parental_keypad.dart';
 import 'package:toddler_logic/presentation/widgets/shadow_board.dart';
 
@@ -127,15 +128,28 @@ void main() {
 
             final TextDirection direction =
                 Directionality.of(tester.element(find.byType(MainMenuScreen)));
-            final double arrowX = tester.getCenter(find.byIcon(Icons.chevron_right_rounded).first).dx;
-            final double titleX = tester.getCenter(find.text(l10n.menuMemoryTitle)).dx;
+            // HU-023: las tarjetas, en orden fijo y de un tamaño que se reconoce,
+            // sin desplazar la cuadrícula.
+            final double memoryX = tester.getCenter(find.byKey(const ValueKey<String>('menu-memory'))).dx;
+            final double shadowsX = tester.getCenter(find.byKey(const ValueKey<String>('menu-shadows'))).dx;
             if (locale.languageCode == 'ar') {
               expect(direction, TextDirection.rtl);
-              expect(arrowX, lessThan(titleX), reason: 'in RTL the arrow sits on the left');
+              expect(memoryX, greaterThan(shadowsX), reason: 'in RTL the first game sits on the right');
             } else {
               expect(direction, TextDirection.ltr);
-              expect(arrowX, greaterThan(titleX));
+              expect(memoryX, lessThan(shadowsX));
             }
+            for (final String game in ['memory', 'shadows', 'odd-one-out']) {
+              final Rect card = tester.getRect(find.byKey(ValueKey<String>('menu-$game')));
+              expect(card.width, greaterThanOrEqualTo(GridFit.minSide), reason: game);
+              expect(tester.view.physicalSize.height / tester.view.devicePixelRatio, greaterThanOrEqualTo(card.bottom),
+                  reason: '$game is on screen without scrolling');
+            }
+            expect(
+              find.ancestor(
+                  of: find.byKey(const ValueKey<String>('menu-game-grid')), matching: find.byType(SingleChildScrollView)),
+              findsNothing,
+            );
           });
 
           // HU-004, criterio 8: la pregunta, la respuesta y las 12 teclas se ven sin scroll,
