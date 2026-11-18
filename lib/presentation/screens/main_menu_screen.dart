@@ -242,6 +242,10 @@ class _GameCard extends StatelessWidget {
   /// hasta 1,6 veces para no tapar el icono, que es lo que reconoce el niño.
   static const double maxTitleScale = 1.6;
 
+  /// Parte del alto libre que ocupa el icono (visto en el moto g55: a tamaño
+  /// completo, la medalla pisaba el icono).
+  static const double iconShare = 0.85;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -275,9 +279,13 @@ class _GameCard extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, side * 0.1, 10, 10),
                 child: Column(
                   children: [
+                    // Al 85 % del hueco: la esquina queda libre para la medalla.
                     Expanded(
-                      child: FittedBox(
-                        child: game.icon(ValueKey<String>('menu-${game.keyName}-icon'), side * 0.5),
+                      child: FractionallySizedBox(
+                        heightFactor: iconShare,
+                        child: FittedBox(
+                          child: game.icon(ValueKey<String>('menu-${game.keyName}-icon'), side * 0.5),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 6),
