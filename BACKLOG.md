@@ -131,6 +131,6 @@ Actualizado el 2026-11-18.
 5. **Próximo release a la prueba cerrada (antes del 24 de diciembre):** HU-023 (menú en cuadrícula, **lista**, condición para el cuarto juego), **HU-052 A «A su sitio» con edición de Navidad** (HU-042, lo mínimo: fechas fijas) y HU-041 (destacar lo nuevo). Medallas redondas con la cinta al cuello (HU-048 sección 8).
 6. **TD-015, TD-013 y TD-012:** prueba en el teléfono, rendimiento en gama baja y tamaño de descarga, antes de producción.
 7. **Antes de producción:** TD-010 (tablets) y el resto de TD-011 (7 idiomas).
-8. **Después:** HU-008, HU-024, HU-026 a HU-029, HU-036, HU-040, HU-043, HU-044, HU-052, HU-053 (juegos), HU-033, HU-038, HU-039, HU-045, HU-047 (padres), HU-035, HU-017, HU-015, HU-019, HU-020, HU-031, TD-005, TD-014.
+8. **Después:** HU-008, HU-024, HU-026 a HU-029, HU-036, HU-040, HU-043, HU-044, HU-053 y los juegos B y C de HU-052 (juegos), HU-033, HU-038, HU-039, HU-045, HU-047 (padres), HU-035, HU-017, HU-015, HU-019, HU-020, HU-031, TD-005, TD-014.
 
 **Pendiente del dueño:** verificar la cuenta de Play Console y configurarla (pasos en `docs/store/README.md`), reunir a los 15 testers y, opcional, la escena con varios juegos y las cartas con las esquinas redondeadas (HU-013). ✅ Hechos el 2026-11-06: GitHub Pages, el correo `toddler.logic.app@outlook.com` y la cuenta de Play Console.
