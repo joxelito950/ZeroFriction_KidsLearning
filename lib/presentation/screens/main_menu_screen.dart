@@ -215,7 +215,7 @@ class _MenuActionsState extends State<_MenuActions> {
           radius: 20,
           backgroundColor: AppPalette.white,
           // La medalla propia (HU-048): bronce y oro ya no se confunden.
-          child: MedalBadge(key: ValueKey<String>(key), style: RoundStyle.medalStyleOf(round), size: 32),
+          child: MedalBadge(key: ValueKey<String>(key), style: RoundStyle.medalStyleOf(round), size: 36),
         ),
       );
 
