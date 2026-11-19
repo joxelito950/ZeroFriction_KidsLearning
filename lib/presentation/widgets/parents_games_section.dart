@@ -8,7 +8,7 @@ import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/game_settings/game_settings_cubit.dart';
 import '../theme/app_palette.dart';
-import 'medal_badge.dart';
+import 'parents_progress_page.dart';
 import 'parents_setting_page.dart';
 import 'round_style.dart';
 
@@ -103,9 +103,26 @@ class _ParentsGamesPageState extends State<ParentsGamesPage> {
             ),
             for (final GameId game in GameId.values) ...[
               const SizedBox(height: 12),
-              Text(
-                ParentsGamesTexts.game(l10n, game),
-                style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+              // El icono del juego junto a su nombre; los chips, sin medallas: el
+              // adulto creía que elegía la medalla del niño (2026-11-19).
+              Row(
+                children: [
+                  ExcludeSemantics(
+                    child: Image.asset(
+                      ProgressGames.iconOf(game),
+                      key: ValueKey<String>('games-icon-${game.name}'),
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      ParentsGamesTexts.game(l10n, game),
+                      style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 6),
               // Chips que saltan de línea: con el texto ampliado no se desbordan.
@@ -125,7 +142,6 @@ class _ParentsGamesPageState extends State<ParentsGamesPage> {
                         }.index)
                       ChoiceChip(
                         key: ValueKey<String>('round-${game.name}-${round.name}'),
-                        avatar: MedalBadge(style: RoundStyle.medalStyleOf(round), size: 22),
                         label: Text(ParentsGamesTexts.round(l10n, round)),
                         selected: _rounds[game] == round,
                         onSelected: state.loaded ? (_) => setState(() => _rounds[game] = round) : null,

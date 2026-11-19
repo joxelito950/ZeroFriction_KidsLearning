@@ -117,9 +117,8 @@ final class MedalStyle {
 
 /// La medalla dibujada por la app (HU-048 P1): un disco con sus estrellas o
 /// una gema, que llena el cuadrado de [size] (centro [discCenter], radio
-/// [discRadius], en fracciones del lado). Sin cinta: en el menú y en la Zona de
-/// Padres aprovecha todo el círculo; en la celebración, la cinta la dibuja
-/// [MedalRibbonPainter], que la cuelga del cuello del niño (HU-049).
+/// [discRadius], en fracciones del lado). Sin cinta, en todas partes: aprovecha
+/// todo el círculo (HU-048 sección 8).
 class MedalBadge extends StatelessWidget {
   const MedalBadge({super.key, required this.style, required this.size, this.semanticLabel});
 
@@ -254,55 +253,4 @@ class MedalPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(MedalPainter oldDelegate) => oldDelegate.style != style;
-}
-
-/// La cinta de la medalla que lleva el niño en la celebración (HU-049): dos
-/// tiras que bajan desde los lados del cuello ([neckLeft], [neckRight]) hasta
-/// el disco ([discCenter], [discRadius]), como si colgara de sus hombros. Se
-/// pinta debajo de la medalla, que tapa sus extremos. Todo en píxeles del
-/// lienzo.
-class MedalRibbonPainter extends CustomPainter {
-  const MedalRibbonPainter({
-    required this.neckLeft,
-    required this.neckRight,
-    required this.discCenter,
-    required this.discRadius,
-  });
-
-  final Offset neckLeft;
-  final Offset neckRight;
-  final Offset discCenter;
-  final double discRadius;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double width = discRadius * 0.5;
-    // Las tiras se juntan en V y acaban dentro del disco, que las tapa.
-    final Offset leftEnd = discCenter + Offset(-discRadius * 0.15, -discRadius * 0.5);
-    final Offset rightEnd = discCenter + Offset(discRadius * 0.15, -discRadius * 0.5);
-    canvas.drawPath(_strip(neckLeft, leftEnd, width), Paint()..color = AppPalette.softCoral);
-    canvas.drawPath(
-      _strip(neckRight, rightEnd, width),
-      Paint()..color = Color.alphaBlend(AppPalette.deepTeal.withValues(alpha: 0.45), AppPalette.softCoral),
-    );
-  }
-
-  /// Una tira recta de [from] a [to] con el ancho [width].
-  static Path _strip(Offset from, Offset to, double width) {
-    final Offset along = to - from;
-    final Offset across = Offset(-along.dy, along.dx) / along.distance * (width / 2);
-    return Path()
-      ..moveTo((from + across).dx, (from + across).dy)
-      ..lineTo((to + across).dx, (to + across).dy)
-      ..lineTo((to - across).dx, (to - across).dy)
-      ..lineTo((from - across).dx, (from - across).dy)
-      ..close();
-  }
-
-  @override
-  bool shouldRepaint(MedalRibbonPainter oldDelegate) =>
-      oldDelegate.neckLeft != neckLeft ||
-      oldDelegate.neckRight != neckRight ||
-      oldDelegate.discCenter != discCenter ||
-      oldDelegate.discRadius != discRadius;
 }

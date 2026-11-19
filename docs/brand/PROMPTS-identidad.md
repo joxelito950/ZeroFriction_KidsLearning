@@ -104,6 +104,15 @@ Para las celebraciones al ganar una medalla. La medalla la pinta la app con el c
 > [Bloque común]
 > El niño **saltando de alegría con los dos brazos arriba**, la boca abierta en una gran sonrisa y los ojos felices, con **confeti redondeado** alrededor en coral #D9735F, ámbar #ECA463 y azul petróleo #176B78 (círculos y gotas, nada puntiagudo). Cuerpo entero, de frente. **Fondo totalmente transparente.** Deja un **hueco libre a la altura del pecho**, delante de la camiseta, del tamaño de una moneda grande, sin confeti encima: ahí se colocará la medalla. Ocupa el 85 % del lienzo.
 
+### 13b. Variante opcional: el niño celebrando con la cinta ya puesta (2026-11-19)
+
+La cinta que dibujaba la app encima de la ilustración no seguía el cuello del niño, porque no está del todo de frente, y se veía como dos rayas sueltas. Se quitó (HU-048 sección 9). Si se quiere recuperar, la cinta tiene que venir **dibujada en la ilustración**, siguiendo el cuello y los hombros, y la app solo pone el disco de la medalla en el hueco.
+
+> [Bloque común]
+> El mismo niño de la pieza 13, **en la misma postura**, saltando de alegría con los dos brazos arriba y el mismo confeti. Ahora lleva **una cinta de medalla al cuello**: dos tiras anchas y planas, una en coral suave #D9735F y otra en azul petróleo #176B78, que salen de detrás del cuello, **siguen la curva de los hombros y del cuello según el giro del cuerpo** y bajan juntas hasta el pecho. **Las tiras terminan justo en el borde de un círculo vacío** a la altura del pecho, del tamaño de una moneda grande: **ese círculo es totalmente transparente** (ahí la app pondrá la medalla, de bronce a diamante), sin nada dibujado dentro ni borde. **Sin medalla dibujada.** **Fondo totalmente transparente.** Ocupa el 85 % del lienzo.
+
+Si las tiras quedan delante de los brazos o tapan la cara, pedir: «Las tiras van por detrás de los brazos levantados, pegadas al cuello y a la camiseta». Si el círculo sale relleno, pedir: «El círculo del pecho tiene que quedar vacío y transparente». Con la imagen nueva hay que volver a medir el centro y el radio del hueco (`CelebratingChild.holeCenter` y `holeRadius`).
+
 ## 14. El niño invitando (estados vacíos y «Aún por descubrir», HU-034 y HU-041)
 
 Para la pantalla «Su progreso» de los padres cuando aún no hay datos, y para invitar a un juego nuevo.

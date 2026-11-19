@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En curso** (2026-11-18): **las 4 entregas desarrolladas** (la 2 es HU-046); falta verla en el moto g55 |
+| **Estado** | **En curso**: las 4 entregas en `develop` y «Su progreso» visto en el moto g55 (2026-11-18). Ajustes de la prueba cerrada del 2026-11-19 (sección 10). Falta probar en el teléfono la sugerencia de bajar de ronda |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | **P1: es lo próximo que se desarrolla** (P6, 2026-11-12) |
 | **Tamaño** | L (4 entregas, unos 5 días; la entrega 2 es HU-046) |
@@ -164,3 +164,15 @@ Si el niño **llega una y otra vez al mismo nivel y no consigue superarlo**, la 
 - Sincronizar entre teléfonos o con una cuenta.
 - Cambiar la dificultad sin que el adulto lo confirme: la sugerencia **propone**, no decide.
 - Borrar el progreso desde la app (R7).
+
+## 10. Ajustes tras la prueba cerrada (2026-11-19)
+
+Los testers confundían los logros con la ronda en juego.
+
+| Lo que pasaba | Cambio |
+|---|---|
+| **En «Su progreso»:** con 8 medallas y «Está explorando la ronda Oro · nivel 3», el adulto no relacionaba ese texto con el cambio de ronda que había hecho en «Juegos» y creía que el niño había perdido algo | Dos textos. Si la ronda en juego aún no tiene su medalla: «Juega por primera vez la ronda Oro · nivel 3». Si ya la tiene: «Repasa la ronda Oro, que ya superó · nivel 3». Nunca se dice que bajó |
+| **En «Juegos»:** los chips de las rondas llevaban la medalla, y el adulto creía que estaba cambiando la medalla del niño y que este perdería lo ganado al elegir una ronda inferior | Los chips, **sin medalla**: solo el nombre de la ronda. Junto al nombre de cada juego, **su icono**. El texto «Cambiar de ronda no hace perder estrellas ni medallas» se mantiene |
+| **En los juegos:** no se sabía en qué ronda se estaba hasta salir o terminarla | Encima de los puntos de nivel, en los 4 juegos: la medalla de la ronda y «Ronda Oro». El lector de pantalla dice «Ronda Oro. Nivel 3 de 8» |
+
+Los textos nuevos están en los 9 idiomas: `parentsProgressPlayingNew`, `parentsProgressReplaying` y `gameRoundIndicator`. `parentsProgressExploring` se retira.

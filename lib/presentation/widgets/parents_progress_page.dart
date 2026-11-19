@@ -166,9 +166,15 @@ class _GameCard extends StatelessWidget {
                           ],
                         ),
                       ),
+                    // Primera vez o repaso: con 8 medallas y «nivel 3», el adulto
+                    // creía que el niño había perdido algo (2026-11-19).
                     Text(
-                      l10n.parentsProgressExploring(
-                          RoundStyle.roundName(l10n, progress.position.round), progress.position.level),
+                      (medals.contains(progress.position.round)
+                          ? l10n.parentsProgressReplaying
+                          : l10n.parentsProgressPlayingNew)(
+                        RoundStyle.roundName(l10n, progress.position.round),
+                        progress.position.level,
+                      ),
                       key: ValueKey<String>('progress-exploring-${game.name}'),
                       style: theme.textTheme.bodyMedium,
                     ),
