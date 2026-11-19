@@ -15,7 +15,14 @@ import 'round_style.dart';
 /// sola. Es igual de alegre con cualquier número de estrellas; las que faltan se
 /// ven como contorno suave. Al conseguir la insignia, la celebración es dorada.
 class MemoryCelebration extends StatelessWidget {
-  const MemoryCelebration({super.key, required this.stars, required this.badgeEarned, this.medal, this.message});
+  const MemoryCelebration({
+    super.key,
+    required this.stars,
+    required this.badgeEarned,
+    this.medal,
+    this.message,
+    this.festive = false,
+  });
 
   final int stars;
   final bool badgeEarned;
@@ -27,6 +34,13 @@ class MemoryCelebration extends StatelessWidget {
   /// Ronda completada (HU-037): bronce, plata u oro. Sin ella, la insignia de
   /// siempre.
   final GameDifficulty? medal;
+
+  /// Edición de Navidad (HU-052 sección 6): los regalos que dejaron los
+  /// vehículos, junto al árbol.
+  final bool festive;
+
+  /// El árbol y los regalos de la celebración de Navidad.
+  static const String festiveSymbols = '🎁🎄🎁';
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +65,15 @@ class MemoryCelebration extends StatelessWidget {
             Icons.emoji_events_rounded,
             size: 56,
             color: badgeEarned ? medalColor : AppPalette.softCoral,
+          ),
+        if (festive)
+          const ExcludeSemantics(
+            child: Text(
+              festiveSymbols,
+              key: ValueKey<String>('celebration-festive'),
+              textScaler: TextScaler.noScaling,
+              style: TextStyle(fontSize: 36, height: 1.2),
+            ),
           ),
         const SizedBox(height: 12),
         Text(

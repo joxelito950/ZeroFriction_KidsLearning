@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/app_language.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
+import 'package:toddler_logic/domain/entities/user_profile.dart';
+import 'package:toddler_logic/domain/news/discovery.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/progress/round_ladder.dart';
@@ -100,6 +102,21 @@ void main() {
     expect(find.byKey(const ValueKey<String>('progress-suggestion-memory')), findsOneWidget);
     await back(tester);
     expect(find.byKey(const ValueKey<String>('parents-zone-progress')), findsNothing);
+  });
+
+  testWidgets('after updating from rc.5, «Their progress» is New until it is opened (HU-041 R7)', (tester) async {
+    UserProfile profile = UserProfile(isPremium: false, isSoundEnabled: true, discovery: Discovery.beforeNews());
+    when(() => repository.readUserProfile()).thenAnswer((_) async => profile);
+    when(() => repository.saveUserProfile(any())).thenAnswer((invocation) async {
+      profile = invocation.positionalArguments.single as UserProfile;
+    });
+    await pumpZone(tester);
+    expect(find.descendant(of: row('progress'), matching: find.text(l10n.newBadge)), findsOneWidget);
+
+    await open(tester, 'progress');
+    await back(tester);
+    expect(find.descendant(of: row('progress'), matching: find.text(l10n.newBadge)), findsNothing);
+    expect(profile.discovered.isNewFeature(ParentsFeature.progress), isFalse);
   });
 
   testWidgets('screen pinning opens its read-only page, without Save (HU-046 R6)', (tester) async {

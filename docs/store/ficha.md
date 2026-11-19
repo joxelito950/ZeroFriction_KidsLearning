@@ -87,6 +87,22 @@ In 9 languages: English, Spanish, Portuguese, German, French, Italian, Japanese,
 
 ## Novedades de la versión (campo «Notas de la versión» de Play Console, máx. 500 caracteres)
 
+**`1.0.0-rc.6` · es-419:**
+
+> Nuevo juego: A su sitio. Lleva cada vehículo a su sitio: por dónde va y a qué se dedica.
+> Edición de Navidad, del 20 de noviembre al 6 de enero: llegan el trineo y los regalos.
+> Menú en cuadrícula, con «Nuevo» en lo que acaba de llegar.
+> Cada juego muestra su ronda, y «Su progreso» dice si la juega por primera vez o la repasa.
+> Tus medallas y estrellas se conservan.
+
+**`1.0.0-rc.6` · en-US:**
+
+> New game: To its place. Take each vehicle where it belongs: where it goes and what it does.
+> Christmas edition, from 20 November to 6 January: the sled and the presents arrive.
+> A grid menu, with «New» on what just arrived.
+> Each game shows its round, and «Their progress» tells whether it is the first time or a replay.
+> Your medals and stars are kept.
+
 **`1.0.0-rc.5` · es-419:**
 
 > Ocho rondas con medallas, de bronce a diamante: cada juego sube de reto en pasos más pequeños.

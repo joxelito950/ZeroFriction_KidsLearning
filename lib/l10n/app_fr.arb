@@ -171,5 +171,6 @@
   "vehiclesPlaceName": "{place, select, road{Route} rail{Voie ferrée} water{Eau} sky{Ciel} space{Espace} snow{Neige} home{Maison} busStop{Arrêt de bus} hotel{Hôtel} school{École} trafficLight{Feu tricolore} hospital{Hôpital} fire{Feu} parcels{Colis} factory{Usine} field{Champ} finish{Arrivée} park{Parc} station{Gare} island{Île} fishing{Pêche} port{Port} mountain{Montagne} christmasTree{Sapin de Noël} other{Endroit}}",
   "vehiclesVehicleSemantics": "{vehicle} à mettre à sa place",
   "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
-  "vehiclesTimeUpFewerVehicles": "Le temps est écoulé ! Essayons avec moins de véhicules."
+  "vehiclesTimeUpFewerVehicles": "Le temps est écoulé ! Essayons avec moins de véhicules.",
+  "newBadge": "Nouveau"
 }

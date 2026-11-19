@@ -171,5 +171,6 @@
   "vehiclesPlaceName": "{place, select, road{도로} rail{철로} water{물} sky{하늘} space{우주} snow{눈} home{집} busStop{버스 정류장} hotel{호텔} school{학교} trafficLight{신호등} hospital{병원} fire{불} parcels{택배 상자} factory{공장} field{밭} finish{결승선} park{공원} station{역} island{섬} fishing{낚시} port{항구} mountain{산} christmasTree{크리스마스트리} other{장소}}",
   "vehiclesVehicleSemantics": "옮길 {vehicle}",
   "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
-  "vehiclesTimeUpFewerVehicles": "시간이 다 됐어요! 탈것을 줄여서 다시 해 봐요."
+  "vehiclesTimeUpFewerVehicles": "시간이 다 됐어요! 탈것을 줄여서 다시 해 봐요.",
+  "newBadge": "새로운"
 }

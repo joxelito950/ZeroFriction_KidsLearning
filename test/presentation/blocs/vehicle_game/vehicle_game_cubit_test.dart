@@ -29,6 +29,8 @@ void main() {
     stubPersistenceRepository(repository);
   });
 
+  void givenPremium() => when(() => repository.readUserProfile())
+      .thenAnswer((_) async => const UserProfile(isPremium: true, isSoundEnabled: true));
   void givenProgress(GameProgress progress) =>
       when(() => repository.readGameProgress(GameId.vehicles)).thenAnswer((_) async => progress);
   GameProgress lastSaved() =>
@@ -70,6 +72,7 @@ void main() {
     test('from gold the levels after the tutorial have time, unless «play without time»', () {
       fakeAsync((async) {
         givenProgress(progressAt(3, round: GameDifficulty.gold));
+        givenPremium();
         final timed = started(async);
         expect(timed.state.timeLimit, isNotNull);
         timed.close();
@@ -106,6 +109,43 @@ void main() {
         when(() => repository.readGameProgress(GameId.vehicles)).thenThrow(Exception('disk'));
         final cubit = started(async);
         expect(cubit.state.level, 1);
+        cubit.close();
+      });
+    });
+  });
+
+  group('access (D-043)', () {
+    test('without Premium and outside the edition, from gold the silver round is played; nothing is lost', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(5, round: GameDifficulty.ruby, medals: const {GameDifficulty.bronze, GameDifficulty.silver, GameDifficulty.gold}));
+        final cubit = started(async);
+        expect(cubit.state.gameRound, GameDifficulty.silver);
+        expect(cubit.state.level, 2);
+        expect(cubit.state.timeLimit, isNull);
+        cubit.close();
+      });
+    });
+
+    test('during the Christmas edition the whole game is open', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(5, round: GameDifficulty.ruby));
+        final cubit = started(async, christmas: true);
+        expect(cubit.state.gameRound, GameDifficulty.ruby);
+        expect(cubit.state.christmas, isTrue);
+        cubit.close();
+      });
+    });
+
+    test('without a test override, the edition is read from the profile with the clock protection', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(3, round: GameDifficulty.bronze));
+        when(() => repository.readUserProfile()).thenAnswer(
+            (_) async => UserProfile(isPremium: false, isSoundEnabled: true, highestSeenDate: DateTime(2026, 11, 18)));
+        final cubit = VehicleGameCubit(repository: repository, random: Random(1), now: () => DateTime(2026, 12, 1));
+        cubit.start();
+        async.flushMicrotasks();
+        expect(cubit.state.christmas, isTrue);
+        expect(cubit.state.vehicles, contains(Vehicle.sled));
         cubit.close();
       });
     });
@@ -193,6 +233,7 @@ void main() {
     test('the clock starts with the first touch, stops in the background and runs out kindly', () {
       fakeAsync((async) {
         givenProgress(progressAt(4, round: GameDifficulty.gold));
+        givenPremium();
         final cubit = started(async);
         final Duration limit = cubit.state.timeLimit!;
         async.elapse(const Duration(seconds: 5));
@@ -216,6 +257,7 @@ void main() {
     test('losing the first timed level plays it again', () {
       fakeAsync((async) {
         givenProgress(progressAt(2, round: GameDifficulty.gold));
+        givenPremium();
         final cubit = started(async);
         cubit.grab(cubit.state.vehicles.first);
         async.elapse(cubit.state.timeLimit!);

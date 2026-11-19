@@ -66,3 +66,10 @@
 
 - Notificaciones del sistema.
 - Pantallas de «¿Qué hay de nuevo?» con texto.
+
+## 8. Destaque (2026-11-19, con `1.0.0-rc.6`)
+
+- **Menú:** la tarjeta de un juego nuevo lleva «Nuevo» arriba, en ámbar con texto teal profundo y borde blanco (HU-023 R7, R9), hasta abrirlo tres veces o superar la plata (P1). El lector de pantalla dice «A su sitio, Nuevo».
+- **Zona de Padres:** la fila «Su progreso» lleva «Nuevo» para quien viene de la `rc.5`, hasta que el adulto la abre (R7, `ParentsProgressCubit.markSeen`).
+- Una instalación nueva no ve nada como nuevo (R2).
+- Textos: `newBadge` en los 9 idiomas.
