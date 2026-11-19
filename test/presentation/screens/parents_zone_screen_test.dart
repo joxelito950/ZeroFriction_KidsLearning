@@ -7,6 +7,7 @@ import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/news/discovery.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
+import 'package:toddler_logic/domain/parental/rest_schedule.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/progress/round_ladder.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
@@ -62,8 +63,8 @@ void main() {
     expect(find.text(l10n.parentsZoneBackToMenu), findsOneWidget);
     expect(find.descendant(of: row('language'), matching: find.text('Español')), findsOneWidget);
     expect(find.textContaining('${l10n.shadowsGameTitle}: ${l10n.roundGold}'), findsOneWidget);
-    expect(find.descendant(of: row('play-time'), matching: find.text(l10n.parentsZonePlayTimePerDay(60))),
-        findsOneWidget);
+    expect(
+        find.descendant(of: row('play-time'), matching: find.text(l10n.parentsZonePlayTimePerDay(60))), findsOneWidget);
     // «Su progreso» va primero (HU-034 §3).
     expect(tester.getTopLeft(row('progress')).dy, lessThan(tester.getTopLeft(row('language')).dy));
     await tester.scrollUntilVisible(find.byKey(const ValueKey<String>('parents-zone-privacy')), 200);
@@ -71,8 +72,7 @@ void main() {
     expect(find.text(l10n.parentsFeedbackSummary), findsOneWidget);
 
     final List<double> order = [
-      for (final String name in ['language', 'games', 'play-time', 'pin', 'feedback'])
-        tester.getTopLeft(row(name)).dy,
+      for (final String name in ['language', 'games', 'play-time', 'pin', 'feedback']) tester.getTopLeft(row(name)).dy,
       tester.getTopLeft(find.byKey(const ValueKey<String>('parents-zone-privacy'))).dy,
     ];
     expect(order, [...order]..sort());
@@ -243,14 +243,18 @@ void main() {
     testWidgets('opens the full policy in Spanish', (tester) async {
       final Finder policy = await openPrivacy(tester);
 
-      expect(find.descendant(of: policy, matching: find.text('Política de privacidad de ToddlerLogic', skipOffstage: false)), findsOneWidget);
+      expect(
+          find.descendant(
+              of: policy, matching: find.text('Política de privacidad de ToddlerLogic', skipOffstage: false)),
+          findsOneWidget);
     });
 
     testWidgets('falls back to the English policy for a language without its own (P7)', (tester) async {
       final Finder policy = await openPrivacy(tester, locale: const Locale('fr'));
 
       expect(find.text('Confidentialité'), findsOneWidget);
-      expect(find.descendant(of: policy, matching: find.text('ToddlerLogic Privacy Policy', skipOffstage: false)), findsOneWidget);
+      expect(find.descendant(of: policy, matching: find.text('ToddlerLogic Privacy Policy', skipOffstage: false)),
+          findsOneWidget);
     });
   });
 
@@ -308,5 +312,30 @@ void main() {
     await tester.pumpWidget(localizedApp(home: const ParentsZoneScreen()));
     expect(row('games'), findsNothing);
     expect(row('language'), findsOneWidget);
+  });
+
+  group('bedtime in the parents zone (HU-038)', () {
+    testWidgets('the «Play time» row also says the bedtime', (tester) async {
+      await pumpZone(
+        tester,
+        settings:
+            ParentalSettings(dailyLimitMinutes: 60, restSchedule: const RestSchedule(night: RestSchedule.defaultNight)),
+      );
+      expect(find.textContaining(l10n.parentsZonePlayTimePerDay(60)), findsOneWidget);
+      expect(find.textContaining(' · '), findsWidgets);
+    });
+
+    testWidgets('during the night, «15 more minutes» is at the top and lets the child play (R5)', (tester) async {
+      final int now = RestWindow.minuteOf(DateTime.now());
+      final RestWindow aroundNow = RestWindow((now - 60) % 1440, (now + 180) % 1440);
+      await pumpZone(tester, settings: ParentalSettings(restSchedule: RestSchedule(night: aroundNow)));
+      final Finder extra = find.byKey(const ValueKey<String>('play-time-extra'));
+      expect(extra, findsOneWidget);
+      await tester.tap(extra);
+      await tester.pump();
+      final PlayTimeCubit cubit = tester.element(find.byType(ParentsZoneScreen)).read<PlayTimeCubit>();
+      expect(cubit.state.restDue, isFalse);
+      expect(extra, findsNothing);
+    });
   });
 }

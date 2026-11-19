@@ -11,12 +11,19 @@ import 'quiet_hint.dart';
 /// toque solo muestra un aviso pequeño, sin botones; el segundo, dentro de
 /// [tapWindow], abre el desafío. Lo usan el menú y la pantalla de descanso.
 class ParentsZoneButton extends StatefulWidget {
-  const ParentsZoneButton({super.key, this.buttonKey = const ValueKey<String>('menu-parents-zone')});
+  const ParentsZoneButton({
+    super.key,
+    this.buttonKey = const ValueKey<String>('menu-parents-zone'),
+    this.foregroundColor = AppPalette.petrolBlue,
+  });
 
   /// Tiempo para el segundo toque (HU-004 S5).
   static const Duration tapWindow = Duration(seconds: 2);
 
   final Key buttonKey;
+
+  /// Azul petróleo sobre crema; crema sobre la pantalla de noche (HU-038 R3).
+  final Color foregroundColor;
 
   @override
   State<ParentsZoneButton> createState() => _ParentsZoneButtonState();
@@ -64,7 +71,7 @@ class _ParentsZoneButtonState extends State<ParentsZoneButton> {
         onPressed: _onTap,
         icon: const Icon(Icons.security, size: 18),
         label: Text(l10n.menuParentsZone),
-        style: TextButton.styleFrom(foregroundColor: AppPalette.petrolBlue),
+        style: TextButton.styleFrom(foregroundColor: widget.foregroundColor),
       ),
     );
   }

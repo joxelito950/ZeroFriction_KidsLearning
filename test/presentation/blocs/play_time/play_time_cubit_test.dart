@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
 import 'package:toddler_logic/domain/parental/play_history.dart';
+import 'package:toddler_logic/domain/parental/rest_schedule.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/presentation/blocs/play_time/play_time_cubit.dart';
 
@@ -295,6 +296,138 @@ void main() {
         final PlayHistory history = cubit.state.history!;
         expect(history.days.map((day) => day.day), [DateTime(2026, 11, 4), DateTime(2026, 11, 5)]);
       });
+    });
+  });
+
+  group('bedtime and naps (HU-038)', () {
+    const RestSchedule nightOnly = RestSchedule(night: RestSchedule.defaultNight);
+    final DateTime evening = DateTime(2026, 11, 20, 19, 29, 50);
+
+    test('opening the app at night asks for the night rest at once (R1)', () {
+      storeSettings(ParentalSettings(restSchedule: nightOnly));
+      run((async, cubit) {
+        expect(cubit.state.schedule, nightOnly);
+        expect(cubit.state.scheduledRest, RestKind.night);
+        expect(cubit.state.restDue, isTrue);
+        expect(cubit.state.mustRest, isTrue);
+        expect(cubit.state.limitReached, isFalse);
+      }, from: DateTime(2026, 11, 20, 22));
+    });
+
+    test('a nap is its own kind of rest', () {
+      storeSettings(ParentalSettings(restSchedule: const RestSchedule(naps: [RestSchedule.defaultNap])));
+      run((async, cubit) => expect(cubit.state.scheduledRest, RestKind.nap), from: DateTime(2026, 11, 20, 14));
+    });
+
+    test('the night starts while playing: the board in progress ends first (R2), and no time is counted', () {
+      storeSettings(ParentalSettings(restSchedule: nightOnly));
+      run((async, cubit) {
+        cubit.setBoardInProgress(true);
+        expect(cubit.state.scheduledRest, isNull);
+        async.elapse(const Duration(seconds: 15));
+        expect(cubit.state.scheduledRest, RestKind.night);
+        expect(cubit.state.mustRest, isFalse, reason: 'the board is not cut');
+        cubit.setBoardInProgress(false);
+        expect(cubit.state.mustRest, isTrue);
+        final Duration played = cubit.state.today.played;
+        async.elapse(const Duration(seconds: 5));
+        expect(cubit.state.today.played, played, reason: 'the rest screen does not use up play time');
+      }, from: evening);
+    });
+
+    test('at the end of the night the app is normal again (R6)', () {
+      storeSettings(ParentalSettings(restSchedule: nightOnly));
+      run((async, cubit) {
+        expect(cubit.state.mustRest, isTrue);
+        async.elapse(const Duration(seconds: 15));
+        expect(cubit.state.scheduledRest, isNull);
+        expect(cubit.state.mustRest, isFalse);
+      }, from: DateTime(2026, 11, 21, 6, 59, 50));
+    });
+
+    test('15 more minutes at night let the child play, are saved and end on time (R5)', () {
+      storeSettings(ParentalSettings(restSchedule: nightOnly));
+      final DateTime night = DateTime(2026, 11, 20, 22);
+      run((async, cubit) {
+        cubit.grantExtra();
+        async.flushMicrotasks();
+        expect(cubit.state.scheduledRest, isNull);
+        expect(cubit.state.limitMinutes, isNull, reason: 'no daily limit is invented');
+        expect(lastSaved().restAllowedUntil, night.add(PlayTimeCubit.extraTime));
+        async.elapse(const Duration(minutes: 14));
+        expect(cubit.state.scheduledRest, isNull);
+        async.elapse(const Duration(minutes: 1, seconds: 1));
+        expect(cubit.state.scheduledRest, RestKind.night);
+      }, from: night);
+    });
+
+    test('the 15 minutes survive closing the app', () {
+      final DateTime night = DateTime(2026, 11, 20, 22);
+      storeSettings(
+          ParentalSettings(restSchedule: nightOnly, restAllowedUntil: night.add(const Duration(minutes: 10))));
+      run((async, cubit) => expect(cubit.state.scheduledRest, isNull), from: night);
+    });
+
+    test('with both the limit and the night, one tap gives 15 minutes for both; the first to come rules', () {
+      final DateTime night = DateTime(2026, 11, 20, 22);
+      storeSettings(ParentalSettings(
+        dailyLimitMinutes: 15,
+        playTime: DailyPlayTime(day: night, played: const Duration(minutes: 20)),
+        restSchedule: nightOnly,
+      ));
+      run((async, cubit) {
+        expect(cubit.state.limitReached, isTrue);
+        expect(cubit.state.scheduledRest, RestKind.night);
+        cubit.grantExtra();
+        async.flushMicrotasks();
+        expect(cubit.state.restDue, isFalse);
+      }, from: night);
+    });
+
+    test('at night with the limit not reached, only the night is extended', () {
+      final DateTime night = DateTime(2026, 11, 20, 22);
+      storeSettings(ParentalSettings(dailyLimitMinutes: 60, restSchedule: nightOnly));
+      run((async, cubit) {
+        cubit.grantExtra();
+        async.flushMicrotasks();
+        expect(cubit.state.today.extraMinutes, 0);
+        expect(cubit.state.restDue, isFalse);
+      }, from: night);
+    });
+
+    test('a new schedule applies at once and is saved; an invalid one is refused', () {
+      run((async, cubit) {
+        cubit.setSchedule(nightOnly);
+        async.flushMicrotasks();
+        expect(cubit.state.scheduledRest, RestKind.night);
+        expect(lastSaved().restSchedule, nightOnly);
+        expect(
+          () => cubit.setSchedule(RestSchedule(night: RestWindow(20 * 60, 20 * 60))),
+          throwsArgumentError,
+        );
+      }, from: DateTime(2026, 11, 20, 21));
+    });
+
+    test('a failed save of the schedule is reported, and the schedule still applies', () {
+      when(() => repository.updateParentalSettings(any())).thenThrow(StateError('disk'));
+      run((async, cubit) {
+        final errors = <Object>[];
+        cubit.stream.listen((_) {}, onError: errors.add);
+        cubit.setSchedule(nightOnly);
+        async.flushMicrotasks();
+        expect(cubit.state.schedule, nightOnly);
+      }, from: DateTime(2026, 11, 20, 12));
+    });
+
+    test('coming back to the foreground looks at the time again', () {
+      storeSettings(ParentalSettings(restSchedule: nightOnly));
+      run((async, cubit) {
+        cubit.setForeground(false);
+        async.elapse(const Duration(minutes: 1));
+        expect(cubit.state.scheduledRest, isNull);
+        cubit.setForeground(true);
+        expect(cubit.state.scheduledRest, RestKind.night);
+      }, from: evening);
     });
   });
 }

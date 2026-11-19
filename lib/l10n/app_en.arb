@@ -984,5 +984,111 @@
   "newBadge": "New",
   "@newBadge": {
     "description": "Small label on something that arrived with an update (a new game card in the menu, a new row in the parents zone), until it has been opened (HU-041). One short word."
+  },
+  "restNightTitle": "Time for bed!",
+  "@restNightTitle": {
+    "description": "Title of the rest screen during bedtime (HU-038). Read to a toddler: short, warm, never a punishment."
+  },
+  "restNightSubtitle": "We'll play again tomorrow.",
+  "@restNightSubtitle": {
+    "description": "Subtitle of the bedtime rest screen (HU-038). Calm, no countdown."
+  },
+  "restNapTitle": "Time for a rest!",
+  "@restNapTitle": {
+    "description": "Title of the rest screen during a nap (HU-038). Short and warm."
+  },
+  "restNapSubtitle": "We'll play again later.",
+  "@restNapSubtitle": {
+    "description": "Subtitle of the nap rest screen (HU-038). Calm, no countdown."
+  },
+  "parentsBedtimeTitle": "Bedtime",
+  "@parentsBedtimeTitle": {
+    "description": "Heading of the bedtime part in the \"Play time\" screen of the parents zone (HU-038)."
+  },
+  "parentsBedtimeSystem": "Android has a Bedtime mode (Digital Wellbeing) that turns the screen grey and silences the phone, and Family Link can set downtime for the whole device. They are the most complete option.",
+  "@parentsBedtimeSystem": {
+    "description": "Recommends the system controls first: Android Bedtime mode (Digital Wellbeing) and Family Link downtime. Read by parents."
+  },
+  "parentsBedtimeWho": "The WHO recommends (2019): from 1 to 2 years old, 11 to 14 hours of sleep a day, including naps; from 3 to 4 years old, 10 to 13 hours. With regular sleep and wake-up times.",
+  "@parentsBedtimeWho": {
+    "description": "World Health Organization guideline (2019) on sleep hours for young children. Read by parents."
+  },
+  "parentsBedtimeEnable": "Invite to sleep in this app",
+  "@parentsBedtimeEnable": {
+    "description": "Switch that turns on the bedtime of this app (HU-038)."
+  },
+  "parentsBedtimeFrom": "From",
+  "@parentsBedtimeFrom": {
+    "description": "Label of the start time of a bedtime or nap."
+  },
+  "parentsBedtimeUntil": "Until",
+  "@parentsBedtimeUntil": {
+    "description": "Label of the end time of a bedtime or nap."
+  },
+  "parentsBedtimeSummary": "From {from} to {until}, the app invites to sleep.",
+  "@parentsBedtimeSummary": {
+    "description": "Sentence that sums up the chosen bedtime (HU-038).",
+    "placeholders": {
+      "from": {
+        "type": "String",
+        "example": "7:30 PM"
+      },
+      "until": {
+        "type": "String",
+        "example": "7:30 PM"
+      }
+    }
+  },
+  "parentsBedtimeRowSummary": "Sleep from {from} to {until}",
+  "@parentsBedtimeRowSummary": {
+    "description": "Part of the \"Play time\" row summary in the parents zone, after the daily limit (HU-038).",
+    "placeholders": {
+      "from": {
+        "type": "String",
+        "example": "7:30 PM"
+      },
+      "until": {
+        "type": "String",
+        "example": "7:30 PM"
+      }
+    }
+  },
+  "parentsNapsEnable": "Naps",
+  "@parentsNapsEnable": {
+    "description": "Switch that turns on naps (HU-038 P6)."
+  },
+  "parentsNapLabel": "Nap {number}",
+  "@parentsNapLabel": {
+    "description": "Heading of one nap: \"Nap 1\", \"Nap 2\".",
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
+  "parentsNapAdd": "Add another nap",
+  "@parentsNapAdd": {
+    "description": "Button that adds a second nap (at most two)."
+  },
+  "parentsNapRemove": "Remove this nap",
+  "@parentsNapRemove": {
+    "description": "Button that removes the second nap."
+  },
+  "parentsRestProblemSameTimes": "The start and end times must be different.",
+  "@parentsRestProblemSameTimes": {
+    "description": "Kind message: a bedtime or nap starts and ends at the same time, so it cannot be saved."
+  },
+  "parentsRestProblemNapLength": "Each nap lasts between 30 minutes and 2 hours.",
+  "@parentsRestProblemNapLength": {
+    "description": "Kind message: a nap must last 30 minutes to 2 hours."
+  },
+  "parentsRestProblemNapMidnight": "A nap cannot go past midnight.",
+  "@parentsRestProblemNapMidnight": {
+    "description": "Kind message: a nap cannot go past midnight."
+  },
+  "parentsRestProblemTooClose": "Leave at least 2 hours between naps and between a nap and the night.",
+  "@parentsRestProblemTooClose": {
+    "description": "Kind message: naps and the night need at least 2 free hours between them."
   }
 }

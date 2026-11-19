@@ -69,7 +69,7 @@ El ajuste vale para **todos los juegos de arrastrar**, los de ahora y los que ve
 | Capa | Cambio |
 |---|---|
 | Dominio | `MoveMode` en `lib/domain/settings/`. `ParentalSettings.moveMode` |
-| Datos | Campo nuevo en `ParentalSettingsHiveModel`, con `null` = «Ambas». Se asigna el siguiente índice libre (hoy 8) cuando se desarrolle, en el orden en que lleguen HU-039, HU-031 y HU-038 |
+| Datos | Campo nuevo en `ParentalSettingsHiveModel`, con `null` = «Ambas». Se asigna el siguiente índice libre (12 desde HU-038) cuando se desarrolle, en el orden en que lleguen HU-039 y HU-031 |
 | Presentación | `ShadowBoard` ya tiene el camino de toques (R16): se activa con `moveMode != drag` o con el lector de pantalla. `VehicleBoardView` ya acepta tocar el vehículo y el sitio: se condiciona igual. El arrastre se desactiva con `moveMode == tap`. `GestureHint` gana el gesto `HintGesture.tapThenTap`. El contador de movimientos sale de la cabecera de Memoria a un widget común |
 | Zona de Padres | Sección `ParentsHowToPlaySection` con un `SegmentedButton` de 3 opciones (como la dificultad) |
 

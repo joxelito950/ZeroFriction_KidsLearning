@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-19): P1 a P7 respondidas por el dueño |
+| **Estado** | **En curso** (2026-11-19, rama `feature/hu-038-bedtime`): entregas 1 y 3 hechas (sección 8); falta la 2, la preparación de 30 minutos |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3 entregas, unos 3 días) |
@@ -111,3 +111,31 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 - Horarios por día de la semana.
 - Avisos o notificaciones.
 - Cambiar la luz o los colores del sistema: la capa cálida solo cubre la app.
+
+## 8. Desarrollo
+
+| # | Entrega | Estado |
+|---|---|---|
+| 1 | Dominio, guardado, ajuste en la Zona de Padres y pantalla de noche | ✅ 2026-11-19, rama `feature/hu-038-bedtime` |
+| 2 | Preparación de 30 minutos: sin sonidos de celebración y capa cálida ámbar hasta un 15 % (P7) | Pendiente |
+| 3 | La ilustración del niño durmiendo | ✅ 2026-11-19: ya estaba en `assets/brand/child_sleeping.png` y entró con la entrega 1 |
+
+### 8.1 Entrega 1 (2026-11-19)
+
+- **Dominio** (`domain/parental/rest_schedule.dart`):
+  - `RestWindow`: desde y hasta en minutos desde la medianoche, con el cruce de medianoche (R7);
+  - `RestSchedule`: la noche y hasta 2 siestas. `problem` dice por qué no se puede guardar: horas iguales, siesta de menos de 30 min o más de 2 h, siesta que cruza la medianoche, o descansos a menos de 2 h (R7a). `suggestedNap` propone 13:00–15:00 si cabe; si no, la primera hora libre.
+- **Guardado:** campos 8 a 11 de `ParentalSettingsHiveModel` (SPECIFICATION 3.4). Un horario dañado se lee como apagado, para que la app nunca se quede en la pantalla de noche.
+- **Tiempo de juego** (`PlayTimeCubit`):
+  - decide el descanso por el límite **o** por el horario (`restDue`), y dice cuál (`scheduledRest`: noche o siesta);
+  - se mira la hora en cada segundo que ya contaba HU-009, así que no hace falta otro temporizador;
+  - el tablero en curso se termina antes (R2), y el tiempo frente a la pantalla de noche no cuenta como jugado.
+- **«15 minutos más»** (R5): en la noche o la siesta dejan jugar 15 minutos, también tras cerrar la app (campo 11). Con el límite diario alcanzado a la vez, el mismo botón da tiempo para los dos.
+- **Pantalla de noche** (R3): `RestScreen(kind:)` con el niño durmiendo bajo la luna, fondo teal profundo y textos en crema; «¡A dormir!» y «¡A descansar!». Si el motivo cambia con la pantalla abierta (del límite a la noche), cambia sola; a la hora «Hasta» vuelve el menú (R6).
+- **Zona de Padres:**
+  - en «Tiempo de juego», debajo del límite: la recomendación del sistema, la de sueño de la OMS y el ajuste, con el selector de hora del sistema en el formato del teléfono (P1);
+  - siestas con «Añadir otra siesta» y «Quitar esta siesta»;
+  - si algo no cumple las reglas, una frase amable sin rojo, y «Guardar» no guarda;
+  - la fila dice «60 min al día · Dormir de 19:30 a 7:00».
+- **Textos** en los 9 idiomas: 20 claves nuevas.
+- **Tests:** horario y reglas, guardado y datos dañados, cubit (abrir de noche, tablero en curso, fin de la noche, 15 minutos, límite y noche a la vez), pantalla de noche y de siesta, la app real pasando de la noche al menú, y el ajuste con el selector de hora. Cobertura del 100 % en los archivos de la historia.

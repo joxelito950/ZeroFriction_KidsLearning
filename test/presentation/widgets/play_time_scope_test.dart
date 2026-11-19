@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
+import 'package:toddler_logic/domain/parental/rest_schedule.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
@@ -175,5 +176,43 @@ void main() {
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump(const Duration(seconds: 3));
     expect(playTimeOf(tester).state.today.played, before + const Duration(seconds: 3));
+  });
+
+  group('bedtime (HU-038)', () {
+    testWidgets('opening at night shows the night screen; at 7:00 the menu is back by itself (R1, R6)', (tester) async {
+      DateTime clock = DateTime(2026, 11, 21, 6, 59, 58);
+      when(() => repository.readParentalSettings()).thenAnswer(
+          (_) async => ParentalSettings(restSchedule: const RestSchedule(night: RestSchedule.defaultNight)));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale, now: () => clock));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text(l10n.restNightTitle), findsOneWidget);
+      expect(menuGame(), findsNothing);
+
+      clock = DateTime(2026, 11, 21, 7);
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(RestScreen), findsNothing);
+      expect(menuGame(), findsOneWidget);
+    });
+
+    testWidgets('the screen changes from the daily limit to the night while it is open', (tester) async {
+      DateTime clock = DateTime(2026, 11, 20, 19, 29, 58);
+      when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings(
+            dailyLimitMinutes: 15,
+            playTime: DailyPlayTime(day: clock, played: const Duration(minutes: 20)),
+            restSchedule: const RestSchedule(night: RestSchedule.defaultNight),
+          ));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale, now: () => clock));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text(l10n.restTitle), findsOneWidget);
+
+      clock = DateTime(2026, 11, 20, 19, 30);
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump();
+      expect(find.text(l10n.restNightTitle), findsOneWidget);
+    });
   });
 }

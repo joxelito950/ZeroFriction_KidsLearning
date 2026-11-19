@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/parental/rest_schedule.dart';
 import '../blocs/play_time/play_time_cubit.dart';
 import '../screens/rest_screen.dart';
 
@@ -10,8 +11,10 @@ import '../screens/rest_screen.dart';
 /// - con el límite alcanzado y sin tablero a medias, deja solo el menú debajo
 ///   y abre la pantalla de descanso (R4, R5); si entra un adulto, espera a que
 ///   salga;
-/// - la cierra en cuanto vuelve a haber tiempo: 15 minutos más, otro límite o
-///   un día nuevo (R6, R7).
+/// - la cierra en cuanto vuelve a haber tiempo: 15 minutos más, otro límite,
+///   un día nuevo o el fin de la noche o la siesta (R6, R7; HU-038 R6);
+/// - con la hora de dormir, la pantalla es la de noche o la de siesta, y cambia
+///   sola si el motivo cambia mientras está abierta (HU-038 R3).
 class PlayTimeScope extends StatefulWidget {
   const PlayTimeScope({super.key, required this.navigatorKey, required this.child});
 
@@ -53,13 +56,20 @@ class _PlayTimeScopeState extends State<PlayTimeScope> with WidgetsBindingObserv
     if (navigator == null) return;
     final Route<void>? open = _restRoute;
     if (state.mustRest && open == null) {
-      final route = MaterialPageRoute<void>(builder: (_) => const RestScreen());
+      final PlayTimeCubit cubit = context.read<PlayTimeCubit>();
+      final route = MaterialPageRoute<void>(
+        builder: (_) => BlocSelector<PlayTimeCubit, PlayTimeState, RestKind?>(
+          bloc: cubit,
+          selector: (state) => state.scheduledRest,
+          builder: (_, kind) => RestScreen(kind: kind),
+        ),
+      );
       _restRoute = route;
       // Si se cierra por otro camino (la Zona de Padres vuelve al menú al pasar
       // a segundo plano, HU-004 R7), se vuelve a mirar si toca descansar.
       route.popped.then((_) => _onRestClosed(route));
       navigator.pushAndRemoveUntil(route, (route) => route.isFirst);
-    } else if (!state.limitReached && open != null) {
+    } else if (!state.restDue && open != null) {
       _restRoute = null;
       navigator.removeRoute(open);
     }
@@ -76,8 +86,7 @@ class _PlayTimeScopeState extends State<PlayTimeScope> with WidgetsBindingObserv
   @override
   Widget build(BuildContext context) {
     return BlocListener<PlayTimeCubit, PlayTimeState>(
-      listenWhen: (previous, current) =>
-          previous.mustRest != current.mustRest || previous.limitReached != current.limitReached,
+      listenWhen: (previous, current) => previous.mustRest != current.mustRest || previous.restDue != current.restDue,
       listener: _onState,
       child: widget.child,
     );

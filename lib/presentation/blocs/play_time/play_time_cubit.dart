@@ -5,10 +5,11 @@ import 'package:bloc/bloc.dart';
 import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/parental/daily_play_time.dart';
 import '../../../domain/parental/play_history.dart';
+import '../../../domain/parental/rest_schedule.dart';
 import '../../../domain/progress/game_progress.dart';
 import '../../../domain/repositories/i_persistence_repository.dart';
 
-/// Estado del tiempo de juego diario (HU-009).
+/// Estado del tiempo de juego diario (HU-009) y de la hora de dormir (HU-038).
 final class PlayTimeState {
   const PlayTimeState({
     required this.today,
@@ -16,6 +17,8 @@ final class PlayTimeState {
     this.boardInProgress = false,
     this.inAdultArea = false,
     this.history,
+    this.schedule = RestSchedule.off,
+    this.scheduledRest,
   });
 
   /// Lo jugado hoy y el tiempo extra dado.
@@ -34,12 +37,23 @@ final class PlayTimeState {
   /// `null` hasta que se lee. Cuenta lo mismo que [today].
   final PlayHistory? history;
 
+  /// La hora de dormir y las siestas guardadas (HU-038).
+  final RestSchedule schedule;
+
+  /// El descanso del horario que toca ahora, sin «15 minutos más» en curso;
+  /// `null` fuera del horario (HU-038 R1, R2).
+  final RestKind? scheduledRest;
+
   /// Ya se jugó todo lo permitido hoy.
   bool get limitReached => today.isOver(limitMinutes);
 
-  /// Toca la pantalla de descanso: límite alcanzado, ningún tablero a medias y
-  /// ningún adulto dentro (R4, R5).
-  bool get mustRest => limitReached && !boardInProgress && !inAdultArea;
+  /// No se puede jugar: por el límite diario o por el horario. Manda el que
+  /// llegue primero (HU-038 R5).
+  bool get restDue => limitReached || scheduledRest != null;
+
+  /// Toca la pantalla de descanso: hay que descansar, ningún tablero a medias
+  /// y ningún adulto dentro (R4, R5; HU-038 R2).
+  bool get mustRest => restDue && !boardInProgress && !inAdultArea;
 
   PlayTimeState copyWith({
     DailyPlayTime? today,
@@ -47,6 +61,8 @@ final class PlayTimeState {
     bool? boardInProgress,
     bool? inAdultArea,
     PlayHistory? history,
+    RestSchedule? schedule,
+    RestKind? Function()? scheduledRest,
   }) {
     return PlayTimeState(
       today: today ?? this.today,
@@ -54,6 +70,8 @@ final class PlayTimeState {
       boardInProgress: boardInProgress ?? this.boardInProgress,
       inAdultArea: inAdultArea ?? this.inAdultArea,
       history: history ?? this.history,
+      schedule: schedule ?? this.schedule,
+      scheduledRest: scheduledRest == null ? this.scheduledRest : scheduledRest(),
     );
   }
 
@@ -64,10 +82,12 @@ final class PlayTimeState {
       other.limitMinutes == limitMinutes &&
       other.boardInProgress == boardInProgress &&
       other.inAdultArea == inAdultArea &&
-      other.history == history;
+      other.history == history &&
+      other.schedule == schedule &&
+      other.scheduledRest == scheduledRest;
 
   @override
-  int get hashCode => Object.hash(today, limitMinutes, boardInProgress, inAdultArea, history);
+  int get hashCode => Object.hash(today, limitMinutes, boardInProgress, inAdultArea, history, schedule, scheduledRest);
 }
 
 /// Mide el tiempo con la app en primer plano, fuera de las pantallas de
@@ -85,6 +105,9 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
 
   /// Cada cuánto se guarda mientras se juega; también se guarda al salir.
   static const Duration saveEvery = Duration(seconds: 30);
+
+  /// Los «15 minutos más» (R6; HU-038 R5).
+  static const Duration extraTime = Duration(minutes: 15);
 
   final IPersistenceRepository _repository;
   final DateTime Function() _now;
@@ -119,6 +142,8 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
       today: _settings.playTime?.on(now) ?? DailyPlayTime.startOf(now),
       limitMinutes: () => _settings.dailyLimitMinutes,
       history: history,
+      schedule: _settings.restSchedule,
+      scheduledRest: () => _restAt(_settings.restSchedule, now),
     ));
     _started = true;
     _updateTicker();
@@ -131,7 +156,8 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
     if (!foreground) {
       unawaited(_save());
     } else if (_started) {
-      emit(state.copyWith(today: state.today.on(_now())));
+      final DateTime now = _now();
+      emit(state.copyWith(today: state.today.on(now), scheduledRest: () => _restAt(state.schedule, now)));
     }
     _updateTicker();
   }
@@ -168,12 +194,43 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
     await _save();
   }
 
-  /// «15 minutos más» para hoy (R6). Sin límite no hace nada.
+  /// Cambia la hora de dormir y las siestas al instante (HU-038). Un horario
+  /// que no cumple R7 o R7a no se guarda.
+  Future<void> setSchedule(RestSchedule schedule) async {
+    if (!schedule.isValid) throw ArgumentError.value(schedule.problem, 'schedule');
+    _emitAndUpdate(state.copyWith(schedule: schedule, scheduledRest: () => _restAt(schedule, _now())));
+    try {
+      _settings = await _repository.updateParentalSettings((current) => current.withRestSchedule(schedule));
+    } catch (error, stackTrace) {
+      if (!isClosed) addError(error, stackTrace);
+    }
+  }
+
+  /// «15 minutos más» (R6): durante la hora de dormir o una siesta, deja jugar
+  /// 15 minutos (HU-038 R5); con el límite diario, los suma a hoy. Sin límite
+  /// ni descanso, no hace nada.
   Future<void> grantExtra() async {
+    final DateTime now = _now();
     final int? limit = state.limitMinutes;
-    if (limit == null) return;
-    _emitAndUpdate(state.copyWith(today: state.today.grantExtra(limit, _now())));
+    final bool scheduled = state.scheduledRest != null;
+    if (limit == null && !scheduled) return;
+    PlayTimeState next = state;
+    if (scheduled) {
+      _settings = _settings.withRestAllowedUntil(now.add(extraTime));
+      next = next.copyWith(scheduledRest: () => null);
+    }
+    if (limit != null && (state.limitReached || !scheduled)) {
+      next = next.copyWith(today: next.today.grantExtra(limit, now));
+    }
+    _emitAndUpdate(next);
     await _save();
+  }
+
+  /// El descanso del horario a [now], salvo que haya «15 minutos más» en curso.
+  RestKind? _restAt(RestSchedule schedule, DateTime now) {
+    final DateTime? allowedUntil = _settings.restAllowedUntil;
+    if (allowedUntil != null && now.isBefore(allowedUntil)) return null;
+    return schedule.activeAt(now);
   }
 
   void _emitAndUpdate(PlayTimeState next) {
@@ -193,13 +250,16 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
     }
   }
 
-  /// Con el límite alcanzado y sin tablero a medias no se suma nada: el tiempo
+  /// Con el descanso debido y sin tablero a medias no se suma nada: el tiempo
   /// frente a la pantalla de descanso no se come los minutos extra que dé un
-  /// adulto. Aun así se mira el día, para que al día siguiente se pueda jugar.
+  /// adulto. Aun así se mira el día y la hora, para que al día siguiente, o al
+  /// acabar la noche o la siesta, se pueda jugar (HU-038 R6).
   void _onTick() {
     if (isClosed) return;
     final DateTime now = _now();
-    if (state.limitReached && !state.boardInProgress) {
+    final RestKind? scheduledRest = _restAt(state.schedule, now);
+    if (scheduledRest != state.scheduledRest) emit(state.copyWith(scheduledRest: () => scheduledRest));
+    if (state.restDue && !state.boardInProgress) {
       final DailyPlayTime today = state.today.on(now);
       if (today != state.today) emit(state.copyWith(today: today));
       return;
@@ -218,12 +278,13 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
     final int? limit = state.limitMinutes;
     final DailyPlayTime today = state.today;
     final PlayDay? day = state.history?.dayAt(today.day);
+    final DateTime? allowedUntil = _settings.restAllowedUntil;
     try {
       if (day != null && day.total > Duration.zero) await _repository.savePlayDay(day);
       // Solo sus dos campos: la dificultad y «Jugar sin tiempo» los guarda la
       // sección «Juegos» (HU-030) y no se deben pisar.
       _settings = await _repository.updateParentalSettings(
-        (current) => current.withLimit(limit).withPlayTime(today),
+        (current) => current.withLimit(limit).withPlayTime(today).withRestAllowedUntil(allowedUntil),
       );
     } catch (error, stackTrace) {
       if (!isClosed) addError(error, stackTrace);
