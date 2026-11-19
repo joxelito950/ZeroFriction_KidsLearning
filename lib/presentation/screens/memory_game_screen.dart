@@ -274,6 +274,7 @@ class _Header extends StatelessWidget {
                   total: MemoryLadder.maxLevel,
                   color: RoundStyle.colorOf(round),
                   rim: RoundStyle.rimOf(round),
+                  round: round,
                 ),
                 const SizedBox(width: 12),
                 // Se encoge antes que desbordarse con textos largos (árabe).

@@ -107,24 +107,9 @@ void main() {
         expect((disc - hole).distance, lessThan(0.5));
         expect(MedalBadge.discRadius * badge.width, greaterThan(CelebratingChild.holeRadius * child.width));
 
-        // La cinta cuelga del cuello, por encima del disco.
-        final MedalRibbonPainter ribbon = tester
-            .widget<CustomPaint>(find.byKey(const ValueKey<String>('celebrating-child-ribbon')))
-            .painter! as MedalRibbonPainter;
-        expect(ribbon.neckLeft.dy, lessThan(ribbon.discCenter.dy - ribbon.discRadius));
-        expect(ribbon.neckRight.dx, greaterThan(ribbon.neckLeft.dx));
+        // Sin cinta (2026-11-19): no seguía el cuello del niño.
+        expect(find.byKey(const ValueKey<String>('celebrating-child-ribbon')), findsNothing);
       }
-    });
-
-    test('the ribbon repaints only when it moves', () {
-      const MedalRibbonPainter ribbon =
-          MedalRibbonPainter(neckLeft: Offset(1, 1), neckRight: Offset(3, 1), discCenter: Offset(2, 5), discRadius: 2);
-      expect(ribbon.shouldRepaint(ribbon), isFalse);
-      expect(
-        ribbon.shouldRepaint(const MedalRibbonPainter(
-            neckLeft: Offset(1, 1), neckRight: Offset(3, 1), discCenter: Offset(2, 6), discRadius: 2)),
-        isTrue,
-      );
     });
 
     testWidgets('a level celebration keeps the cup, without the child (P1)', (tester) async {

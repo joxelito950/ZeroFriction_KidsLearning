@@ -87,6 +87,16 @@
     }
   },
   "memoryTimeBarSemantics": "Time left",
+  "gameRoundIndicator": "{round} round",
+  "@gameRoundIndicator": {
+    "description": "In every game header, above the level dots: the round being played, named after its medal (HU-051 R4). Short.",
+    "placeholders": {
+      "round": {
+        "type": "String",
+        "example": "Gold"
+      }
+    }
+  },
   "@memoryTimeBarSemantics": {
     "description": "Screen-reader label (not visible) of the bar that empties as time passes. It never shows numbers."
   },
@@ -711,12 +721,26 @@
   "@parentsProgressSentenceEmpty": {
     "description": "Summary sentence when the child has not played these days. Never worrying."
   },
-  "parentsProgressExploring": "Exploring the {round} round · level {level}",
-  "@parentsProgressExploring": {
-    "description": "Game card: round and level the child is playing now, also after moving down a round (never say it moved down).",
+  "parentsProgressPlayingNew": "Playing the {round} round for the first time · level {level}",
+  "@parentsProgressPlayingNew": {
+    "description": "Game card in «Their progress»: the child is playing this round for the first time (no medal of it yet). Never say it moved down.",
     "placeholders": {
       "round": {
-        "type": "String"
+        "type": "String",
+        "example": "Gold"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "parentsProgressReplaying": "Replaying the {round} round, already won · level {level}",
+  "@parentsProgressReplaying": {
+    "description": "Game card in «Their progress»: the child is playing again a round it already won (for example, the adult chose it in «Games»). Reassuring: nothing was lost.",
+    "placeholders": {
+      "round": {
+        "type": "String",
+        "example": "Gold"
       },
       "level": {
         "type": "int"

@@ -106,10 +106,21 @@ void main() {
     expect(key('progress-medal-shadows-bronze'), findsOneWidget);
     expect(key('progress-medal-shadows-silver'), findsOneWidget);
     expect(key('progress-medal-shadows-gold'), findsNothing, reason: 'the missing ones do not appear');
-    expect(find.text(l10n.parentsProgressExploring(l10n.roundSilver, 3)), findsOneWidget);
+    // Ya tiene la plata: la repasa (2026-11-19).
+    expect(find.text(l10n.parentsProgressReplaying(l10n.roundSilver, 3)), findsOneWidget);
     expect(find.text(l10n.parentsProgressStars(5, ShadowLadder.rounds.maxStars)), findsOneWidget);
     expect(key('progress-undiscovered-shadows'), findsNothing);
     expect(key('progress-undiscovered-memory'), findsOneWidget);
+  });
+
+  testWidgets('a round without its medal yet is played for the first time (2026-11-19)', (tester) async {
+    saved[GameId.shadows] = GameProgress(
+      position: const RoundPosition(round: GameDifficulty.gold, level: 4),
+      medals: const {GameDifficulty.bronze, GameDifficulty.silver},
+      lastPlayedAt: today,
+    );
+    await pumpPage(tester);
+    expect(find.text(l10n.parentsProgressPlayingNew(l10n.roundGold, 4)), findsOneWidget);
   });
 
   testWidgets('the star total opens the per-level detail; it closes with Close (criterion 4)', (tester) async {

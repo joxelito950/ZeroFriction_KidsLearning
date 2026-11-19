@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento. P1 a P5 respondidas por el dueño (2026-11-12) y P6 (2026-11-18); queda P7, con recomendación |
+| **Estado** | **Lista** (2026-11-19): P1 a P7 respondidas por el dueño |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3 entregas, unos 3 días) |
@@ -103,7 +103,7 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 | P4 | ¿Un botón que abra los ajustes de Bienestar digital? | ✅ Decidido (2026-11-12): **no**, como la recomendación |
 | P5 | ¿Cambia algo antes de la hora? | ✅ Decidido (2026-11-12), distinto de la recomendación: **sí, una preparación de 30 minutos** sin avisos: sin sonidos de celebración, capa cálida gradual y, con HU-045, solo música tranquila (§3.2) |
 | P6 | ¿Un segundo horario para la siesta? | ✅ Decidido (2026-11-18): **sí**, como la recomendación (opcional y desactivado, 13:00–15:00 por defecto), y además **hasta 2 siestas al día**, de **30 min a 2 h** seguidas cada una, que no se solapen y con **al menos 2 h** entre ellas y con la noche (R7a) |
-| P7 | ¿Cuánta capa cálida? | **Recomendación:** ámbar con una transparencia de hasta un 15 %, ajustada midiendo que el texto y los botones sigan cumpliendo AA, y vista en el moto g55 |
+| P7 | ¿Cuánta capa cálida? | ✅ Decidido (2026-11-19): **ámbar con una transparencia de hasta un 15 %**, ajustada midiendo que el texto y los botones sigan cumpliendo AA, y vista en el moto g55 |
 
 ## 7. Fuera de alcance
 
