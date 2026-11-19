@@ -182,7 +182,7 @@ void main() {
     expect(
       ParentsGamesTexts.summary(l10n, const GameSettingsState()),
       '${l10n.menuMemoryTitle}: ${l10n.roundBronze} · ${l10n.shadowsGameTitle}: ${l10n.roundBronze} · '
-      '${l10n.oddOneOutTitle}: ${l10n.roundBronze}',
+      '${l10n.oddOneOutTitle}: ${l10n.roundBronze} · ${l10n.vehiclesGameTitle}: ${l10n.roundBronze}',
     );
   });
 

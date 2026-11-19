@@ -32,6 +32,10 @@ class GameIcon extends StatefulWidget {
   const GameIcon.oddOneOut({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
       : this(key: key, asset: BrandAssets.oddOneOutIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
 
+  /// «A su sitio» (HU-052): el camión de bomberos en su casita.
+  const GameIcon.vehicles({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
+      : this(key: key, asset: BrandAssets.vehiclesIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
+
   final String asset;
   final double size;
   final double goldFraction;

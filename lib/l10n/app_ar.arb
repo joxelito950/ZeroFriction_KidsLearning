@@ -162,5 +162,12 @@
   "parentsProgressLowerButton": "الانتقال إلى {round}",
   "parentsProgressNotNow": "ليس الآن",
   "parentsProgressLowerConfirm": "نقل {game} إلى جولة {round}؟ تبقى نجومه وميدالياته.",
-  "parentsProgressCancel": "إلغاء"
+  "parentsProgressCancel": "إلغاء",
+  "vehiclesGameTitle": "إلى مكانه",
+  "vehiclesGameInstructions": "اسحب كل مركبة إلى مكانها.",
+  "vehiclesVehicleName": "{vehicle, select, car{سيارة} bus{حافلة} taxi{سيارة أجرة} minibus{حافلة صغيرة} police{سيارة شرطة} ambulance{سيارة إسعاف} fireEngine{سيارة إطفاء} truck{شاحنة} lorry{شاحنة كبيرة} tractor{جرار} motorcycle{دراجة نارية} bicycle{دراجة} scooter{سكوتر} locomotive{قاطرة} train{قطار} sailboat{مركب شراعي} speedboat{زورق سريع} ship{سفينة} airplane{طائرة} helicopter{مروحية} rocket{صاروخ} sled{زلاجة} other{مركبة}}",
+  "vehiclesPlaceName": "{place, select, road{طريق} rail{سكة حديد} water{ماء} sky{سماء} space{فضاء} snow{ثلج} home{بيت} busStop{موقف الحافلات} hotel{فندق} school{مدرسة} trafficLight{إشارة مرور} hospital{مستشفى} fire{نار} parcels{طرود} factory{مصنع} field{حقل} finish{خط النهاية} park{حديقة} station{محطة} island{جزيرة} fishing{صيد السمك} port{ميناء} mountain{جبل} christmasTree{شجرة عيد الميلاد} other{مكان}}",
+  "vehiclesVehicleSemantics": "{vehicle} لنقلها إلى مكانها",
+  "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
+  "vehiclesTimeUpFewerVehicles": "انتهى الوقت! لنحاول بعدد أقل من المركبات."
 }

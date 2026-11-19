@@ -162,5 +162,12 @@
   "parentsProgressLowerButton": "Passa a {round}",
   "parentsProgressNotNow": "Non ora",
   "parentsProgressLowerConfirm": "Passare {game} alla fase {round}? Conserva le sue stelle e medaglie.",
-  "parentsProgressCancel": "Annulla"
+  "parentsProgressCancel": "Annulla",
+  "vehiclesGameTitle": "Al suo posto",
+  "vehiclesGameInstructions": "Trascina ogni veicolo al suo posto.",
+  "vehiclesVehicleName": "{vehicle, select, car{Auto} bus{Autobus} taxi{Taxi} minibus{Pulmino} police{Auto della polizia} ambulance{Ambulanza} fireEngine{Camion dei pompieri} truck{Camion} lorry{Autoarticolato} tractor{Trattore} motorcycle{Moto} bicycle{Bici} scooter{Monopattino} locomotive{Locomotiva} train{Treno} sailboat{Barca a vela} speedboat{Motoscafo} ship{Nave} airplane{Aereo} helicopter{Elicottero} rocket{Razzo} sled{Slitta} other{Veicolo}}",
+  "vehiclesPlaceName": "{place, select, road{Strada} rail{Binari} water{Acqua} sky{Cielo} space{Spazio} snow{Neve} home{Casa} busStop{Fermata del bus} hotel{Hotel} school{Scuola} trafficLight{Semaforo} hospital{Ospedale} fire{Fuoco} parcels{Pacchi} factory{Fabbrica} field{Campo} finish{Traguardo} park{Parco} station{Stazione} island{Isola} fishing{Pesca} port{Porto} mountain{Montagna} christmasTree{Albero di Natale} other{Posto}}",
+  "vehiclesVehicleSemantics": "{vehicle} da portare al suo posto",
+  "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
+  "vehiclesTimeUpFewerVehicles": "Tempo scaduto! Riproviamo con meno veicoli."
 }

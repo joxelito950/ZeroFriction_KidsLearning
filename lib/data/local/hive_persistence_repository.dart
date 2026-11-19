@@ -105,7 +105,7 @@ class HivePersistenceRepository implements IPersistenceRepository {
     return switch (game) {
           GameId.memory => _memoryProgressBox.get(_memoryProgressKey)?.toGameProgress(),
           GameId.shadows => _shadowProgressBox.get(_shadowProgressKey)?.toGameProgress(),
-          GameId.oddOneOut => _gameProgressBox.get(game.name)?.toGameProgress(),
+          GameId.oddOneOut || GameId.vehicles => _gameProgressBox.get(game.name)?.toGameProgress(),
         } ??
         GameProgress.initial();
   }
@@ -117,7 +117,7 @@ class HivePersistenceRepository implements IPersistenceRepository {
         await _memoryProgressBox.put(_memoryProgressKey, MemoryProgressHiveModel.fromGameProgress(progress));
       case GameId.shadows:
         await _shadowProgressBox.put(_shadowProgressKey, ShadowProgressHiveModel.fromGameProgress(progress));
-      case GameId.oddOneOut:
+      case GameId.oddOneOut || GameId.vehicles:
         await _gameProgressBox.put(game.name, GameProgressHiveModel.fromGameProgress(progress));
     }
   }

@@ -162,5 +162,12 @@
   "parentsProgressLowerButton": "{round}(으)로 바꾸기",
   "parentsProgressNotNow": "나중에",
   "parentsProgressLowerConfirm": "{game}을(를) {round} 라운드로 바꿀까요? 별과 메달은 그대로 남아요.",
-  "parentsProgressCancel": "취소"
+  "parentsProgressCancel": "취소",
+  "vehiclesGameTitle": "제자리로",
+  "vehiclesGameInstructions": "탈것을 제자리로 옮겨요.",
+  "vehiclesVehicleName": "{vehicle, select, car{자동차} bus{버스} taxi{택시} minibus{승합차} police{경찰차} ambulance{구급차} fireEngine{소방차} truck{트럭} lorry{트레일러} tractor{트랙터} motorcycle{오토바이} bicycle{자전거} scooter{킥보드} locomotive{증기 기관차} train{기차} sailboat{돛단배} speedboat{모터보트} ship{배} airplane{비행기} helicopter{헬리콥터} rocket{로켓} sled{썰매} other{탈것}}",
+  "vehiclesPlaceName": "{place, select, road{도로} rail{철로} water{물} sky{하늘} space{우주} snow{눈} home{집} busStop{버스 정류장} hotel{호텔} school{학교} trafficLight{신호등} hospital{병원} fire{불} parcels{택배 상자} factory{공장} field{밭} finish{결승선} park{공원} station{역} island{섬} fishing{낚시} port{항구} mountain{산} christmasTree{크리스마스트리} other{장소}}",
+  "vehiclesVehicleSemantics": "옮길 {vehicle}",
+  "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
+  "vehiclesTimeUpFewerVehicles": "시간이 다 됐어요! 탈것을 줄여서 다시 해 봐요."
 }
