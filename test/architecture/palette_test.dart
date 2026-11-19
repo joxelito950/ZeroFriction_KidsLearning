@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:toddler_logic/presentation/theme/app_palette.dart';
 import 'package:toddler_logic/presentation/theme/app_theme.dart';
+import 'package:toddler_logic/presentation/widgets/warm_veil.dart';
 
 /// La app solo usa los 7 colores de la paleta (D-032, docs/brand/PALETA.md),
 /// y todos salen de `AppPalette` (TD-009).
@@ -167,6 +168,35 @@ void main() {
     for (final MapEntry<String, (Color, Color)> pair in pairs.entries) {
       test(pair.key, () {
         expect(contrastRatio(pair.value.$1, pair.value.$2), greaterThanOrEqualTo(4.5));
+      });
+    }
+  });
+
+  group('Contraste con la capa cálida al máximo (HU-038 P7, WCAG 2.1, 4,5:1)', () {
+    // La capa ámbar se pinta encima de todo: el texto y su fondo cambian a la vez.
+    Color veiled(Color color) => blend(WarmVeil.colorAt(1), color);
+    final ColorScheme scheme = AppTheme.colorScheme;
+    final pairs = <String, (Color, Color)>{
+      'texto teal profundo sobre el crema': (AppPalette.deepTeal, AppPalette.warmCream),
+      'texto teal profundo sobre el blanco': (AppPalette.deepTeal, AppPalette.white),
+      'azul petróleo sobre el crema (Zona de Padres)': (AppPalette.petrolBlue, AppPalette.warmCream),
+      'blanco sobre el azul petróleo (botones)': (AppPalette.white, AppPalette.petrolBlue),
+      'crema sobre el teal profundo (pantalla de noche)': (AppPalette.warmCream, AppPalette.deepTeal),
+      'ayuda del desafío sobre el crema': (blend(AppPalette.deepTeal.withValues(alpha: 0.8), AppPalette.warmCream), AppPalette.warmCream),
+      'onPrimary / primary': (scheme.onPrimary, scheme.primary),
+      'onSurface / surface': (scheme.onSurface, scheme.surface),
+      'primary / surface': (scheme.primary, scheme.surface),
+    };
+
+    test('la capa es ámbar de la paleta y no pasa del 15 %', () {
+      expect(WarmVeil.maxOpacity, lessThanOrEqualTo(0.15));
+      expect(WarmVeil.colorAt(2).withValues(alpha: 1), AppPalette.amber);
+      expect(WarmVeil.colorAt(2).a, closeTo(WarmVeil.maxOpacity, 0.001));
+    });
+
+    for (final MapEntry<String, (Color, Color)> pair in pairs.entries) {
+      test(pair.key, () {
+        expect(contrastRatio(veiled(pair.value.$1), veiled(pair.value.$2)), greaterThanOrEqualTo(4.5));
       });
     }
   });

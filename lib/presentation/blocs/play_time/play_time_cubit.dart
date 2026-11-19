@@ -19,6 +19,7 @@ final class PlayTimeState {
     this.history,
     this.schedule = RestSchedule.off,
     this.scheduledRest,
+    this.windDown = 0,
   });
 
   /// Lo jugado hoy y el tiempo extra dado.
@@ -44,6 +45,13 @@ final class PlayTimeState {
   /// `null` fuera del horario (HU-038 R1, R2).
   final RestKind? scheduledRest;
 
+  /// La preparación para dormir (HU-038 R10, R11): 0 fuera de ella, sube
+  /// hasta 1 en los 30 minutos antes y vale 1 durante el descanso.
+  final double windDown;
+
+  /// En la preparación o en el descanso: sin sonidos de celebración (R10).
+  bool get windingDown => windDown > 0;
+
   /// Ya se jugó todo lo permitido hoy.
   bool get limitReached => today.isOver(limitMinutes);
 
@@ -63,6 +71,7 @@ final class PlayTimeState {
     PlayHistory? history,
     RestSchedule? schedule,
     RestKind? Function()? scheduledRest,
+    double? windDown,
   }) {
     return PlayTimeState(
       today: today ?? this.today,
@@ -72,6 +81,7 @@ final class PlayTimeState {
       history: history ?? this.history,
       schedule: schedule ?? this.schedule,
       scheduledRest: scheduledRest == null ? this.scheduledRest : scheduledRest(),
+      windDown: windDown ?? this.windDown,
     );
   }
 
@@ -84,10 +94,12 @@ final class PlayTimeState {
       other.inAdultArea == inAdultArea &&
       other.history == history &&
       other.schedule == schedule &&
-      other.scheduledRest == scheduledRest;
+      other.scheduledRest == scheduledRest &&
+      other.windDown == windDown;
 
   @override
-  int get hashCode => Object.hash(today, limitMinutes, boardInProgress, inAdultArea, history, schedule, scheduledRest);
+  int get hashCode =>
+      Object.hash(today, limitMinutes, boardInProgress, inAdultArea, history, schedule, scheduledRest, windDown);
 }
 
 /// Mide el tiempo con la app en primer plano, fuera de las pantallas de
@@ -144,6 +156,7 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
       history: history,
       schedule: _settings.restSchedule,
       scheduledRest: () => _restAt(_settings.restSchedule, now),
+      windDown: _settings.restSchedule.windDownAt(now),
     ));
     _started = true;
     _updateTicker();
@@ -157,7 +170,11 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
       unawaited(_save());
     } else if (_started) {
       final DateTime now = _now();
-      emit(state.copyWith(today: state.today.on(now), scheduledRest: () => _restAt(state.schedule, now)));
+      emit(state.copyWith(
+        today: state.today.on(now),
+        scheduledRest: () => _restAt(state.schedule, now),
+        windDown: state.schedule.windDownAt(now),
+      ));
     }
     _updateTicker();
   }
@@ -198,7 +215,12 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
   /// que no cumple R7 o R7a no se guarda.
   Future<void> setSchedule(RestSchedule schedule) async {
     if (!schedule.isValid) throw ArgumentError.value(schedule.problem, 'schedule');
-    _emitAndUpdate(state.copyWith(schedule: schedule, scheduledRest: () => _restAt(schedule, _now())));
+    final DateTime now = _now();
+    _emitAndUpdate(state.copyWith(
+      schedule: schedule,
+      scheduledRest: () => _restAt(schedule, now),
+      windDown: schedule.windDownAt(now),
+    ));
     try {
       _settings = await _repository.updateParentalSettings((current) => current.withRestSchedule(schedule));
     } catch (error, stackTrace) {
@@ -258,7 +280,10 @@ class PlayTimeCubit extends Cubit<PlayTimeState> {
     if (isClosed) return;
     final DateTime now = _now();
     final RestKind? scheduledRest = _restAt(state.schedule, now);
-    if (scheduledRest != state.scheduledRest) emit(state.copyWith(scheduledRest: () => scheduledRest));
+    final double windDown = state.schedule.windDownAt(now);
+    if (scheduledRest != state.scheduledRest || windDown != state.windDown) {
+      emit(state.copyWith(scheduledRest: () => scheduledRest, windDown: windDown));
+    }
     if (state.restDue && !state.boardInProgress) {
       final DailyPlayTime today = state.today.on(now);
       if (today != state.today) emit(state.copyWith(today: today));

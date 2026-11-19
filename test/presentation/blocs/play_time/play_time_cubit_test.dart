@@ -419,6 +419,29 @@ void main() {
       }, from: DateTime(2026, 11, 20, 12));
     });
 
+    test('half an hour before the night the wind-down starts and grows, without any rest yet (R10, R11)', () {
+      storeSettings(ParentalSettings(restSchedule: nightOnly));
+      run((async, cubit) {
+        expect(cubit.state.windDown, 0);
+        expect(cubit.state.windingDown, isFalse);
+        async.elapse(const Duration(minutes: 15));
+        expect(cubit.state.windDown, closeTo(0.5, 0.01));
+        expect(cubit.state.windingDown, isTrue);
+        expect(cubit.state.restDue, isFalse, reason: 'no notice, no countdown: the child keeps playing');
+        async.elapse(const Duration(minutes: 15));
+        expect(cubit.state.windDown, 1);
+        expect(cubit.state.scheduledRest, RestKind.night);
+      }, from: DateTime(2026, 11, 20, 19));
+    });
+
+    test('a new schedule starts the wind-down at once', () {
+      run((async, cubit) {
+        cubit.setSchedule(nightOnly);
+        async.flushMicrotasks();
+        expect(cubit.state.windDown, 0.5);
+      }, from: DateTime(2026, 11, 20, 19, 15));
+    });
+
     test('coming back to the foreground looks at the time again', () {
       storeSettings(ParentalSettings(restSchedule: nightOnly));
       run((async, cubit) {

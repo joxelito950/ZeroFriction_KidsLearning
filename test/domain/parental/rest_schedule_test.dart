@@ -123,6 +123,22 @@ void main() {
       );
     });
 
+    test('the wind-down grows over the 30 minutes before, and is full during the rest (P5)', () {
+      const schedule = RestSchedule(night: RestSchedule.defaultNight, naps: [RestSchedule.defaultNap]);
+      DateTime atSecond(int hour, int minute, [int second = 0]) => DateTime(2026, 11, 20, hour, minute, second);
+      expect(schedule.windDownAt(atSecond(18, 59)), 0);
+      expect(schedule.windDownAt(atSecond(19, 0)), 0);
+      expect(schedule.windDownAt(atSecond(19, 15)), 0.5);
+      expect(schedule.windDownAt(atSecond(19, 29, 59)), closeTo(1, 0.001));
+      expect(schedule.windDownAt(atSecond(22, 0)), 1);
+      expect(schedule.windDownAt(atSecond(6, 59)), 1);
+      expect(schedule.windDownAt(atSecond(7, 0)), 0, reason: 'it ends at «Until»');
+      expect(schedule.windDownAt(atSecond(12, 45)), 0.5, reason: 'before a nap too');
+      expect(schedule.windDownAt(atSecond(14, 0)), 1);
+      expect(schedule.windDownAt(atSecond(10, 0)), 0);
+      expect(RestSchedule.off.windDownAt(atSecond(19, 15)), 0);
+    });
+
     test('changing the night or the naps, and equality by value', () {
       const schedule = RestSchedule(night: RestSchedule.defaultNight);
       expect(schedule.withNight(null), RestSchedule.off);

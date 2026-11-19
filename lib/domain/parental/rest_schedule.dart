@@ -94,6 +94,28 @@ final class RestSchedule {
     return null;
   }
 
+  /// La preparación para dormir dura 30 minutos (P5).
+  static const int windDownMinutes = 30;
+
+  /// Cuánto ha avanzado la preparación a [at] (R10, R11): 0 fuera de ella;
+  /// sube poco a poco hasta 1 en los 30 minutos antes de la noche o de una
+  /// siesta, y vale 1 durante el descanso, hasta la hora «Hasta».
+  double windDownAt(DateTime at) {
+    const int secondsPerDay = RestWindow.minutesPerDay * 60;
+    const int span = windDownMinutes * 60;
+    final int second = at.hour * 3600 + at.minute * 60 + at.second;
+    double progress = 0;
+    for (final RestWindow window in _windows) {
+      if (window.contains(at)) return 1;
+      final int untilStart = (window.from * 60 - second) % secondsPerDay;
+      if (untilStart <= span) {
+        final double here = 1 - untilStart / span;
+        if (here > progress) progress = here;
+      }
+    }
+    return progress;
+  }
+
   /// El primer problema que impide guardarlo, o `null` si vale.
   RestScheduleProblem? get problem {
     if (naps.length > maxNaps) return RestScheduleProblem.tooClose;

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En curso** (2026-11-19, rama `feature/hu-038-bedtime`): entregas 1 y 3 hechas (sección 8); falta la 2, la preparación de 30 minutos |
+| **Estado** | **Desarrollada** (2026-11-19, rama `feature/hu-038-bedtime`): las tres entregas (sección 8). Falta verla en el teléfono. R13 (música tranquila) llega con HU-045 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3 entregas, unos 3 días) |
@@ -103,7 +103,7 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 | P4 | ¿Un botón que abra los ajustes de Bienestar digital? | ✅ Decidido (2026-11-12): **no**, como la recomendación |
 | P5 | ¿Cambia algo antes de la hora? | ✅ Decidido (2026-11-12), distinto de la recomendación: **sí, una preparación de 30 minutos** sin avisos: sin sonidos de celebración, capa cálida gradual y, con HU-045, solo música tranquila (§3.2) |
 | P6 | ¿Un segundo horario para la siesta? | ✅ Decidido (2026-11-18): **sí**, como la recomendación (opcional y desactivado, 13:00–15:00 por defecto), y además **hasta 2 siestas al día**, de **30 min a 2 h** seguidas cada una, que no se solapen y con **al menos 2 h** entre ellas y con la noche (R7a) |
-| P7 | ¿Cuánta capa cálida? | ✅ Decidido (2026-11-19): **ámbar con una transparencia de hasta un 15 %**, ajustada midiendo que el texto y los botones sigan cumpliendo AA, y vista en el moto g55 |
+| P7 | ¿Cuánta capa cálida? | ✅ Decidido (2026-11-19): **ámbar con una transparencia de hasta un 15 %**, ajustada midiendo que el texto y los botones sigan cumpliendo AA, y vista en el moto g55. **Medido:** queda en un **14 %** (sección 8.2) |
 
 ## 7. Fuera de alcance
 
@@ -117,7 +117,7 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 | # | Entrega | Estado |
 |---|---|---|
 | 1 | Dominio, guardado, ajuste en la Zona de Padres y pantalla de noche | ✅ 2026-11-19, rama `feature/hu-038-bedtime` |
-| 2 | Preparación de 30 minutos: sin sonidos de celebración y capa cálida ámbar hasta un 15 % (P7) | Pendiente |
+| 2 | Preparación de 30 minutos: sin sonidos de celebración y capa cálida ámbar al 14 % (P7) | ✅ 2026-11-19, misma rama (sección 8.2) |
 | 3 | La ilustración del niño durmiendo | ✅ 2026-11-19: ya estaba en `assets/brand/child_sleeping.png` y entró con la entrega 1 |
 
 ### 8.1 Entrega 1 (2026-11-19)
@@ -139,3 +139,15 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
   - la fila dice «60 min al día · Dormir de 19:30 a 7:00».
 - **Textos** en los 9 idiomas: 20 claves nuevas.
 - **Tests:** horario y reglas, guardado y datos dañados, cubit (abrir de noche, tablero en curso, fin de la noche, 15 minutos, límite y noche a la vez), pantalla de noche y de siesta, la app real pasando de la noche al menú, y el ajuste con el selector de hora. Cobertura del 100 % en los archivos de la historia.
+
+### 8.2 Entrega 2 (2026-11-19)
+
+- **Dominio:** `RestSchedule.windDownAt` dice cuánto ha avanzado la preparación: 0 fuera de ella; sube poco a poco en los 30 minutos antes de la noche o de una siesta; vale 1 durante el descanso, hasta la hora «Hasta».
+- **Tiempo de juego:** `PlayTimeState.windDown` se actualiza cada segundo, con el mismo reloj que ya contaba el tiempo. Sin avisos ni cuenta atrás: el niño sigue jugando hasta la hora (R12).
+- **Sonidos** (R10): `SoundCubit.setCelebrationsMuted` calla las celebraciones (pareja, tablero, insignia o medalla). El sonido de voltear y tocar sigue, y el interruptor de sonido de los padres no cambia.
+- **Capa cálida** (R11, `WarmVeil`):
+  - un velo ámbar sobre toda la app, también encima de los diálogos;
+  - no recibe toques y el lector de pantalla no lo lee;
+  - se quita sola a la hora «Hasta».
+- **Transparencia máxima (P7):** con un 15 %, el azul petróleo sobre el crema baja a 4,47:1, por debajo de AA. Con un **14 %** queda en 4,54:1, y todos los pares medidos cumplen: texto, botones, la Zona de Padres y la pantalla de noche. Lo vigila el test de la paleta.
+- **Tests:** la preparación a las 19:00, 19:15 y 19:29 y durante el descanso; antes de una siesta; el estado del cubit; el sonido; la app real con la capa al 50 %, sin tapar los toques, y sin capa a las 7:00; el contraste con la capa al máximo.
