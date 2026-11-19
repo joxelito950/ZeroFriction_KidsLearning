@@ -89,6 +89,11 @@ abstract final class VehicleLadder {
   /// Sin Premium y fuera de su edición se juegan bronce y plata (D-043).
   static const GameDifficulty lastFreeRound = GameDifficulty.silver;
 
+  /// La ronda que se juega: sin Premium y fuera de la edición, como mucho la
+  /// plata. Lo ganado en las otras se conserva (HU-042 P3).
+  static GameDifficulty playableRound(GameDifficulty round, {required bool premium, required bool edition}) =>
+      premium || edition || round.index <= lastFreeRound.index ? round : lastFreeRound;
+
   /// Las ocho rondas con los tiempos de Sombras (HU-052 7.4). En bronce y plata
   /// no se usan: se juegan sin tiempo.
   static final RoundLadder rounds = RoundLadder(

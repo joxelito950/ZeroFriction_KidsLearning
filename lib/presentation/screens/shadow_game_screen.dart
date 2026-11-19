@@ -283,6 +283,7 @@ class _Header extends StatelessWidget {
               total: state.premium ? ShadowLadder.maxLevel : ShadowLadder.maxLevel - 1,
               color: RoundStyle.colorOf(state.gameRound),
               rim: RoundStyle.rimOf(state.gameRound),
+              round: state.gameRound,
             ),
           ],
         ),

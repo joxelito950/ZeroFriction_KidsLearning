@@ -149,6 +149,9 @@ class VehicleBoardView extends StatefulWidget {
 
   static const Duration flightDuration = Duration(milliseconds: 280);
 
+  /// El regalo que deja cada vehículo en Navidad (HU-052 sección 6).
+  static const String gift = '🎁';
+
   @override
   State<VehicleBoardView> createState() => _VehicleBoardViewState();
 }
@@ -306,10 +309,28 @@ class _VehicleBoardViewState extends State<VehicleBoardView> with SingleTickerPr
                 if (_flying != vehicle)
                   Positioned.fromRect(
                     rect: geometry.slotRect(place, math.min(index, 1)),
-                    child: _Emoji(
-                      key: ValueKey<String>('vehicle-placed-${vehicle.name}'),
-                      symbol: vehicle.symbol,
-                      size: geometry.slotRect(place, 0).width * VehicleBoardGeometry.emojiFraction,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned.fill(
+                          child: _Emoji(
+                            key: ValueKey<String>('vehicle-placed-${vehicle.name}'),
+                            symbol: vehicle.symbol,
+                            size: geometry.slotRect(place, 0).width * VehicleBoardGeometry.emojiFraction,
+                          ),
+                        ),
+                        // En Navidad, cada vehículo que llega deja un regalo (HU-052 §6).
+                        if (state.christmas)
+                          PositionedDirectional(
+                            end: -geometry.slotRect(place, 0).width * 0.1,
+                            bottom: 0,
+                            child: _Emoji(
+                              key: ValueKey<String>('vehicle-gift-${vehicle.name}'),
+                              symbol: VehicleBoardView.gift,
+                              size: geometry.slotRect(place, 0).width * 0.35,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
             for (final Vehicle vehicle in state.vehicles)

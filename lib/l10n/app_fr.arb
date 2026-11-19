@@ -16,6 +16,7 @@
   "victoryMessage": "Tu as trouvé toutes les paires.",
   "menuMemoryTitle": "Mémoire",
   "memoryLevelIndicator": "Niveau {level} sur {total}",
+  "gameRoundIndicator": "Manche {round}",
   "memoryTimeBarSemantics": "Temps restant",
   "memoryStarsSemantics": "{stars} étoiles sur {total}",
   "memoryBadgeTitle": "Badge doré !",
@@ -141,7 +142,8 @@
   "parentsProgressSentence": "Ces jours-ci, il a surtout joué à {game}.",
   "parentsProgressSentenceMedal": "Ces jours-ci, il a surtout joué à {game}. Sa plus belle médaille : {medal}.",
   "parentsProgressSentenceEmpty": "Pas de jeu ces jours-ci. Quand il voudra, nous serons là !",
-  "parentsProgressExploring": "Explore la manche {round} · niveau {level}",
+  "parentsProgressPlayingNew": "Joue la manche {round} pour la première fois · niveau {level}",
+  "parentsProgressReplaying": "Rejoue la manche {round}, déjà gagnée · niveau {level}",
   "parentsProgressStars": "★ {stars} sur {total}",
   "parentsProgressStarsSemantics": "{stars} étoiles sur {total}. Touchez pour voir chaque niveau",
   "parentsProgressUndiscovered": "Encore à découvrir",
@@ -169,5 +171,6 @@
   "vehiclesPlaceName": "{place, select, road{Route} rail{Voie ferrée} water{Eau} sky{Ciel} space{Espace} snow{Neige} home{Maison} busStop{Arrêt de bus} hotel{Hôtel} school{École} trafficLight{Feu tricolore} hospital{Hôpital} fire{Feu} parcels{Colis} factory{Usine} field{Champ} finish{Arrivée} park{Parc} station{Gare} island{Île} fishing{Pêche} port{Port} mountain{Montagne} christmasTree{Sapin de Noël} other{Endroit}}",
   "vehiclesVehicleSemantics": "{vehicle} à mettre à sa place",
   "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
-  "vehiclesTimeUpFewerVehicles": "Le temps est écoulé ! Essayons avec moins de véhicules."
+  "vehiclesTimeUpFewerVehicles": "Le temps est écoulé ! Essayons avec moins de véhicules.",
+  "newBadge": "Nouveau"
 }

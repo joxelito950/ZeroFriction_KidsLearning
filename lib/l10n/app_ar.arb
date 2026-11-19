@@ -16,6 +16,7 @@
   "victoryMessage": "وجدت كل الأزواج.",
   "menuMemoryTitle": "الذاكرة",
   "memoryLevelIndicator": "المستوى {level} من {total}",
+  "gameRoundIndicator": "جولة {round}",
   "memoryTimeBarSemantics": "الوقت المتبقي",
   "memoryStarsSemantics": "{stars} من {total} نجوم",
   "memoryBadgeTitle": "شارة ذهبية!",
@@ -141,7 +142,8 @@
   "parentsProgressSentence": "لعب في هذه الأيام {game} أكثر من غيرها.",
   "parentsProgressSentenceMedal": "لعب في هذه الأيام {game} أكثر من غيرها. أفضل ميدالية فيها: {medal}.",
   "parentsProgressSentenceEmpty": "لم يلعب في هذه الأيام. متى أراد، سنكون هنا!",
-  "parentsProgressExploring": "يستكشف جولة {round} · المستوى {level}",
+  "parentsProgressPlayingNew": "يلعب جولة {round} لأول مرة · المستوى {level}",
+  "parentsProgressReplaying": "يعيد جولة {round} التي اجتازها · المستوى {level}",
   "parentsProgressStars": "★ {stars} من {total}",
   "parentsProgressStarsSemantics": "{stars} من {total} نجمة. المس لرؤية كل مستوى",
   "parentsProgressUndiscovered": "لم يكتشفها بعد",
@@ -169,5 +171,6 @@
   "vehiclesPlaceName": "{place, select, road{طريق} rail{سكة حديد} water{ماء} sky{سماء} space{فضاء} snow{ثلج} home{بيت} busStop{موقف الحافلات} hotel{فندق} school{مدرسة} trafficLight{إشارة مرور} hospital{مستشفى} fire{نار} parcels{طرود} factory{مصنع} field{حقل} finish{خط النهاية} park{حديقة} station{محطة} island{جزيرة} fishing{صيد السمك} port{ميناء} mountain{جبل} christmasTree{شجرة عيد الميلاد} other{مكان}}",
   "vehiclesVehicleSemantics": "{vehicle} لنقلها إلى مكانها",
   "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
-  "vehiclesTimeUpFewerVehicles": "انتهى الوقت! لنحاول بعدد أقل من المركبات."
+  "vehiclesTimeUpFewerVehicles": "انتهى الوقت! لنحاول بعدد أقل من المركبات.",
+  "newBadge": "جديد"
 }

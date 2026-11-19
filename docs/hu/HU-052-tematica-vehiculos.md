@@ -186,8 +186,8 @@ Cada tablero usa **una sola familia**. Como cada vehículo tiene un sitio en cad
 |---|---|---|
 | 1 | **Lógica** (`lib/domain/vehicles/`): catálogo con las dos familias, escalera de 8 niveles y ocho rondas, reglas por ronda, estrellas y sorteo del tablero | ✅ 2026-11-18 (`feature/hu-052-a-su-sitio`) |
 | 2 | **Pantalla**: sitios y bandeja con el arrastre y el imán de Sombras, tiempo, celebración, tutorial, nombres para el lector de pantalla en 9 idiomas | ✅ 2026-11-18 (`feature/hu-052-2-screen`). Falta verla en el moto g55 |
-| 3 | **En el menú y en «Su progreso»**: `GameId.vehicles`, la tarjeta de `GameCatalog`, el progreso común y la etiqueta «Nuevo» (HU-041) | Hecho salvo la etiqueta «Nuevo» (va con la entrega 4) |
-| 4 | **Edición de Navidad** (HU-042): fechas, trineo y regalos, protección del reloj y acceso (bronce y plata gratis) | Pendiente |
+| 3 | **En el menú y en «Su progreso»**: `GameId.vehicles`, la tarjeta de `GameCatalog`, el progreso común y la etiqueta «Nuevo» (HU-041) | ✅ 2026-11-19 |
+| 4 | **Edición de Navidad** (HU-042): fechas, trineo y regalos, protección del reloj y acceso (bronce y plata gratis) | ✅ 2026-11-19 (`feature/christmas-edition`), con «Nuevo» en la tarjeta (HU-041) |
 
 **Entrega 1:**
 - **Sorteo** (`VehicleBoard.pick`), en este orden:

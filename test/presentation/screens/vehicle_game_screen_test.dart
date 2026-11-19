@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
@@ -178,6 +179,8 @@ void main() {
   });
 
   testWidgets('from gold the time bar shows and running out shows a helpful notice', (tester) async {
+    when(() => repository.readUserProfile())
+        .thenAnswer((_) async => const UserProfile(isPremium: true, isSoundEnabled: true));
     await pumpScreen(tester, round: GameDifficulty.gold);
     expect(find.byType(MemoryTimeBar), findsOneWidget);
     final Vehicle vehicle = stateOf(tester).vehicles.first;
@@ -206,9 +209,18 @@ void main() {
     expect(VehicleGameScreen.boardInProgress(const VehicleGameState()), isFalse);
   });
 
-  testWidgets('at Christmas the sled is in the tray', (tester) async {
+  testWidgets('at Christmas the sled is in the tray, each placed vehicle leaves a gift and the celebration has the tree',
+      (tester) async {
     await pumpScreen(tester, christmas: true);
     expect(find.byKey(const ValueKey<String>('vehicle-tray-sled')), findsOneWidget);
+    final VehicleGameState state = stateOf(tester);
+    for (final Vehicle vehicle in state.vehicles) {
+      await dragTo(tester, vehicle, state.board!.targetOf(vehicle));
+    }
+    expect(find.byKey(const ValueKey<String>('celebration-festive')), findsOneWidget);
+    expect(find.byKey(ValueKey<String>('vehicle-gift-${state.vehicles.last.name}')), findsOneWidget);
+    await tester.pump(VehicleGameCubit.celebrationDuration);
+    await tester.pump(const Duration(milliseconds: 500));
   });
 
   // HU-052 criterio 4: el tablero más grande cabe en el teléfono compacto, en

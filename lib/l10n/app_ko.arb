@@ -16,6 +16,7 @@
   "victoryMessage": "짝을 모두 찾았어요.",
   "menuMemoryTitle": "기억력",
   "memoryLevelIndicator": "{total}단계 중 {level}단계",
+  "gameRoundIndicator": "{round} 라운드",
   "memoryTimeBarSemantics": "남은 시간",
   "memoryStarsSemantics": "별 {total}개 중 {stars}개",
   "memoryBadgeTitle": "황금 배지!",
@@ -141,7 +142,8 @@
   "parentsProgressSentence": "최근 며칠 동안 주로 {game}을(를) 했어요.",
   "parentsProgressSentenceMedal": "최근 며칠 동안 주로 {game}을(를) 했어요. 그 게임의 최고 메달: {medal}.",
   "parentsProgressSentenceEmpty": "최근 며칠 동안 놀지 않았어요. 언제든 원할 때 여기 있을게요!",
-  "parentsProgressExploring": "{round} 라운드 · 레벨 {level} 탐험 중",
+  "parentsProgressPlayingNew": "{round} 라운드 처음 도전 중 · 레벨 {level}",
+  "parentsProgressReplaying": "이미 통과한 {round} 라운드 복습 중 · 레벨 {level}",
   "parentsProgressStars": "★ {stars} / {total}",
   "parentsProgressStarsSemantics": "별 {total}개 중 {stars}개. 탭하면 레벨별로 볼 수 있어요",
   "parentsProgressUndiscovered": "아직 발견하지 않았어요",
@@ -169,5 +171,6 @@
   "vehiclesPlaceName": "{place, select, road{도로} rail{철로} water{물} sky{하늘} space{우주} snow{눈} home{집} busStop{버스 정류장} hotel{호텔} school{학교} trafficLight{신호등} hospital{병원} fire{불} parcels{택배 상자} factory{공장} field{밭} finish{결승선} park{공원} station{역} island{섬} fishing{낚시} port{항구} mountain{산} christmasTree{크리스마스트리} other{장소}}",
   "vehiclesVehicleSemantics": "옮길 {vehicle}",
   "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
-  "vehiclesTimeUpFewerVehicles": "시간이 다 됐어요! 탈것을 줄여서 다시 해 봐요."
+  "vehiclesTimeUpFewerVehicles": "시간이 다 됐어요! 탈것을 줄여서 다시 해 봐요.",
+  "newBadge": "새로운"
 }

@@ -76,3 +76,7 @@ Al verlas en el moto g55, la cinta dentro del cuadrado dejaba el disco en un ter
 - **`MedalBadge` sin cinta:** el disco llena todo el cuadrado (centro 0,5 y radio 0,5). En el menú, la medalla ocupa 36 de los 40 px del círculo blanco; en la Zona de Padres, igual de grande que el chip.
 - **Gemas engastadas (HU-051):** cada gema va sobre un disco claro de su color (18 % sobre blanco) con borde de su color; el diamante, con el borde teal. Así todas las medallas son redondas y tapan igual el pecho del niño.
 - **La cinta solo en la celebración (HU-049):** `MedalRibbonPainter` dibuja dos tiras en V desde los lados del cuello del niño hasta el disco, que tapa sus extremos, como si colgara de sus hombros. Coral y coral con teal, como antes.
+
+## 9. Sin cinta en la celebración (2026-11-19, prueba cerrada)
+
+Los testers vieron que la cinta en V no se veía natural: el niño de la ilustración no está del todo de frente, y las dos tiras dibujadas encima sobresalían como dos rayas independientes del niño. Decisión del dueño: **todas las medallas sin cinta**, también en la celebración. `MedalRibbonPainter` se retira. Si se quiere recuperar la cinta, tiene que venir dibujada en la ilustración: es la variante 13b de `PROMPTS-identidad.md`, opcional.

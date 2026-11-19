@@ -101,7 +101,10 @@ void main() {
       expect(find.byKey(const ValueKey<String>('memory-level-dot-1-reached')), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('memory-level-dot-2-pending')), findsOneWidget);
       expect(find.text('¡Busquemos una pareja!'), findsOneWidget);
-      expect(find.bySemanticsLabel('Nivel 1 de 5'), findsOneWidget);
+      // La ronda, encima de los puntos (2026-11-19): con su medalla y su nombre.
+      expect(find.bySemanticsLabel(RegExp(r'^Ronda \w+\. Nivel 1 de 5$')), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('level-indicator-round')), findsOneWidget);
+      expect(find.textContaining('Ronda '), findsOneWidget);
     });
 
     // HU-009 R4: un tablero tocado, o su celebración, no se corta al llegar al límite diario.

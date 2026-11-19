@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 
 import '../../../domain/entities/parental_settings.dart';
+import '../../../domain/news/edition_check.dart';
 import '../../../domain/progress/game_progress.dart';
 import '../../../domain/progress/round_ladder.dart';
 import '../../../domain/progress/star_decay.dart';
@@ -29,10 +30,8 @@ class VehicleGameCubit extends Cubit<VehicleGameState> {
   })  : _repository = repository,
         _random = random ?? Random(),
         _now = now ?? DateTime.now,
-        _christmas = christmas ?? _never,
+        _christmas = christmas,
         super(const VehicleGameState());
-
-  static bool _never(DateTime _) => false;
 
   static const Duration tick = Duration(milliseconds: 100);
   static const Duration celebrationDuration = Duration(seconds: 2);
@@ -43,8 +42,15 @@ class VehicleGameCubit extends Cubit<VehicleGameState> {
   final Random _random;
   final DateTime Function() _now;
 
-  /// Si la edición de Navidad está activa (HU-042, entrega 4).
-  final bool Function(DateTime now) _christmas;
+  /// Para los tests: si la edición de Navidad está abierta. Sin él, se mira
+  /// el perfil con la protección del reloj (HU-042 R7 a R9).
+  final bool Function(DateTime now)? _christmas;
+
+  /// La edición está abierta en esta partida.
+  bool _edition = false;
+
+  /// Premium (o todo gratis durante la prueba cerrada, D-040).
+  bool _premium = false;
 
   static final RoundLadder _ladder = VehicleLadder.rounds;
 
@@ -64,6 +70,10 @@ class VehicleGameCubit extends Cubit<VehicleGameState> {
     } catch (error, stackTrace) {
       addError(error, stackTrace);
     }
+    final bool Function(DateTime now)? christmas = _christmas;
+    _edition = christmas != null
+        ? christmas(_now())
+        : (await EditionCheck.openNow(_repository, now: _now())).contains(GameId.vehicles);
     final bool timerDisabled = await _readTimerDisabled();
     if (isClosed) return;
     _deal(_progress.position, timerDisabled: timerDisabled);
@@ -86,6 +96,7 @@ class VehicleGameCubit extends Cubit<VehicleGameState> {
       final ParentalSettings settings = await _repository.readParentalSettings();
       final bool premium =
           AccessPolicy.hasPremium(purchased: (await _repository.readUserProfile())?.isPremium ?? false);
+      _premium = premium;
       return settings.timerDisabled && premium;
     } catch (error, stackTrace) {
       if (!isClosed) addError(error, stackTrace);
@@ -144,13 +155,17 @@ class VehicleGameCubit extends Cubit<VehicleGameState> {
 
   void _deal(RoundPosition saved, {required bool timerDisabled}) {
     _stopTimer();
-    _rules = VehicleRules(round: saved.round, timerDisabled: timerDisabled, christmas: _christmas(_now()));
-    final int level = saved.level.clamp(1, VehicleLadder.maxLevel);
+    // Sin Premium y fuera de la edición, del oro en adelante se juega la plata
+    // (D-043); lo ganado se conserva.
+    final GameDifficulty round = VehicleLadder.playableRound(saved.round, premium: _premium, edition: _edition);
+    final bool downgraded = round != saved.round;
+    _rules = VehicleRules(round: round, timerDisabled: timerDisabled, christmas: _edition);
+    final int level = downgraded ? RoundLadder.firstTimedLevel : saved.level.clamp(1, VehicleLadder.maxLevel);
     _position = RoundPosition(
-      round: saved.round,
+      round: round,
       level: level,
-      timeLimit: _ladder.limitFor(saved.round, level, timed: _rules.timed),
-      tutorialFalls: saved.tutorialFalls,
+      timeLimit: _ladder.limitFor(round, level, timed: _rules.timed),
+      tutorialFalls: downgraded ? 0 : saved.tutorialFalls,
     );
     emit(VehicleGameState(
       phase: VehiclePhase.playing,
@@ -160,7 +175,8 @@ class VehicleGameCubit extends Cubit<VehicleGameState> {
       board: VehicleBoard.pick(_random, VehicleLadder.levelAt(level), _rules),
       placesFirst: !_rules.randomLayout || _random.nextBool(),
       coverageToSnap: _rules.coverageToSnap,
-      gameRound: saved.round,
+      gameRound: round,
+      christmas: _rules.christmas,
     ));
   }
 

@@ -194,7 +194,12 @@ class _VehicleGameViewState extends State<_VehicleGameView> with WidgetsBindingO
 
   Widget _overlayFor(BuildContext context, VehicleGameState state) => switch (state.phase) {
         VehiclePhase.celebrating =>
-          MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.medal != null, medal: state.medal),
+          MemoryCelebration(
+            stars: state.stars ?? 0,
+            badgeEarned: state.medal != null,
+            medal: state.medal,
+            festive: state.christmas,
+          ),
         VehiclePhase.inviting => PlayInvitation(round: state.gameRound),
         VehiclePhase.timeUp => MemoryTimeUpNotice(
             loss: switch (state.lossKind) {
@@ -251,6 +256,7 @@ class _Header extends StatelessWidget {
               total: VehicleLadder.maxLevel,
               color: RoundStyle.colorOf(state.gameRound),
               rim: RoundStyle.rimOf(state.gameRound),
+              round: state.gameRound,
             ),
           ],
         ),

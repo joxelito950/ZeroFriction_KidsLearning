@@ -14,6 +14,7 @@ class ParentsSettingRow extends StatelessWidget {
     required this.summary,
     required this.onTap,
     this.dot = false,
+    this.newLabel,
   });
 
   final IconData icon;
@@ -25,6 +26,9 @@ class ParentsSettingRow extends StatelessWidget {
   /// P8). Azul petróleo, nunca un color de alarma.
   final bool dot;
 
+  /// «Nuevo» junto al título, hasta que el adulto abre la opción (HU-041 R7).
+  final String? newLabel;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -33,7 +37,14 @@ class ParentsSettingRow extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         leading: Icon(icon),
-        title: Text(title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+        title: Wrap(
+          spacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+            if (newLabel case final String label) NewBadge(key: const ValueKey<String>('parents-row-new'), label: label),
+          ],
+        ),
         subtitle: Text(summary, style: theme.textTheme.bodyMedium),
         // La flecha sigue la dirección del texto (árabe, RTL).
         trailing: dot
@@ -145,6 +156,32 @@ class ParentsSettingPage extends StatelessWidget {
                   ),
                 )
               : null,
+        ),
+      ),
+    );
+  }
+}
+
+/// La etiqueta «Nuevo» (HU-041 R7, HU-023 R9): ámbar con texto teal profundo y
+/// un borde blanco, para verse también sobre la tarjeta ámbar del menú.
+class NewBadge extends StatelessWidget {
+  const NewBadge({super.key, required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppPalette.amber,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppPalette.white, width: 2),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        child: Text(
+          label,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppPalette.deepTeal),
         ),
       ),
     );

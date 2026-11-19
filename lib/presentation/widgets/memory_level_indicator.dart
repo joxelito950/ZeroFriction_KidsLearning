@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import 'medal_badge.dart';
+import 'round_style.dart';
 
 /// Indicador de nivel (HU-001, S4): un punto por nivel; los alcanzados, rellenos.
 /// Muestra el alcance del juego y el avance logrado. Sombras lo usa también,
@@ -14,6 +17,7 @@ class MemoryLevelIndicator extends StatelessWidget {
     this.lockedLevel,
     this.color,
     this.rim,
+    this.round,
   });
 
   final int level;
@@ -29,6 +33,11 @@ class MemoryLevelIndicator extends StatelessWidget {
   /// Borde de los puntos alcanzados: el de la medalla de la ronda (HU-048 P3).
   final Color? rim;
 
+  /// La ronda en juego: se muestra encima de los puntos, con su medalla y su
+  /// nombre. Los testers no sabían en qué ronda estaban hasta salir del juego
+  /// o terminarla (2026-11-19).
+  final GameDifficulty? round;
+
   static const Color _reached = AppPalette.gold;
 
   // Sufijos de las claves de test de cada punto.
@@ -39,13 +48,43 @@ class MemoryLevelIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final int? locked = lockedLevel;
+    final GameDifficulty? round = this.round;
+    final Widget dots = _dots();
     return Semantics(
       label: [
+        if (round != null) l10n.gameRoundIndicator(RoundStyle.roundName(l10n, round)),
         l10n.memoryLevelIndicator(level, total),
         if (locked != null) l10n.levelLockedSemantics(locked),
       ].join('. '),
       excludeSemantics: true,
-      child: Row(
+      child: round == null
+          ? dots
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  key: const ValueKey<String>('level-indicator-round'),
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MedalBadge(style: RoundStyle.medalStyleOf(round), size: 18),
+                    const SizedBox(width: 4),
+                    Text(
+                      l10n.gameRoundIndicator(RoundStyle.roundName(l10n, round)),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppPalette.deepTeal),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                dots,
+              ],
+            ),
+    );
+  }
+
+  Widget _dots() {
+    final int? locked = lockedLevel;
+    return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           for (var dot = 1; dot <= total; dot++)
@@ -71,7 +110,6 @@ class MemoryLevelIndicator extends StatelessWidget {
                 ),
               ),
         ],
-      ),
-    );
+      );
   }
 }

@@ -44,6 +44,7 @@ class VehicleGameState {
     this.medal,
     this.gameRound = GameDifficulty.bronze,
     this.lossKind,
+    this.christmas = false,
   });
 
   final VehiclePhase phase;
@@ -83,6 +84,9 @@ class VehicleGameState {
   /// Ronda en juego: da color a los puntos de nivel.
   final GameDifficulty gameRound;
   final VehicleLoss? lossKind;
+
+  /// Edición de Navidad (HU-042): cada vehículo colocado deja un regalo.
+  final bool christmas;
 
   List<Vehicle> get vehicles => board?.vehicles ?? const [];
 
@@ -135,5 +139,6 @@ class VehicleGameState {
         medal: medal ?? this.medal,
         gameRound: gameRound,
         lossKind: lossKind ?? this.lossKind,
+        christmas: christmas,
       );
 }
