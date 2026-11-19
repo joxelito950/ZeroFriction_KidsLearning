@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-10; preguntas en la sección 6) |
-| **Prioridad** | P3 (P2 antes de producción, con TD-013) |
+| **Estado** | **Medido** (2026-11-19) con el dato de Play Console de la `1.0.0-rc.6` (sección 7): **10,5 MB** para instalar y **1,67 MB** para actualizar, muy por debajo de los 50 MB que promete el README. Queda opcional la vigilancia en el CI (P1) |
+| **Prioridad** | P3 (ya no bloquea producción) |
 | **Tamaño** | S (1 día) |
 | **Depende de** | Nada |
 
@@ -52,3 +52,17 @@ El grueso es el motor de Flutter y el código compilado de cada arquitectura; lo
 | P1 | ¿Qué límite pone el CI? | **20 MB para el APK de arm64** (hoy 18,4 MB): avisa de cualquier salto grande (una fuente, un vídeo, una dependencia pesada) sin bloquear el día a día | Sí |
 | P2 | ¿Se activan `--split-debug-info` y `--obfuscate`? | **Sí**, guardando los símbolos fuera del repo (como la clave de subida): reducen el código y Play Console acepta los símbolos para leer los errores | No |
 | P3 | ¿Se pasan los sonidos a OGG? | **Sí, si HU-005 se aprueba**: mismo sonido, una sexta parte del tamaño | No |
+
+## 7. Medida real en Google Play (2026-11-19)
+
+Play Console, *Resumen de la versión* de la `1.0.0-rc.6` (versionCode 7):
+
+| Medida | Valor |
+|---|---|
+| AAB subido | 53,3 MB (las tres arquitecturas, todas las densidades e idiomas) |
+| **Tamaño para instalaciones nuevas** | **10,5 MB** (unos 5 s de descarga) |
+| **Tamaño para actualizaciones** | **1,67 MB** |
+
+- Google Play entrega a cada teléfono solo su arquitectura, su densidad y sus idiomas, y comprime la descarga: el AAB no es lo que baja nadie.
+- Con esto se cumplen los criterios 1 y 3 sin `bundletool`: la tabla de versiones de `docs/store/README.md` lleva el tamaño desde la `rc.6`.
+- La promesa de menos de 50 MB tiene margen de sobra. El paso del CI (criterio 2) y las reducciones de la sección 3 quedan como mejora sin urgencia.
