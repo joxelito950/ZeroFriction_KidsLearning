@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/odd_one_out/odd_one_out.dart';
+import '../../domain/vehicles/vehicle_ladder.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/settings/game_difficulty.dart';
 import '../../l10n/app_localizations.dart';
@@ -20,6 +21,7 @@ abstract final class ParentsGamesTexts {
         GameId.memory => l10n.menuMemoryTitle,
         GameId.shadows => l10n.shadowsGameTitle,
         GameId.oddOneOut => l10n.oddOneOutTitle,
+        GameId.vehicles => l10n.vehiclesGameTitle,
       };
 
   /// Resumen de la fila «Juegos» (HU-046 §4.1): la ronda de cada juego.
@@ -114,9 +116,13 @@ class _ParentsGamesPageState extends State<ParentsGamesPage> {
                   for (final round in GameDifficulty.values)
                     // En «¿Cuál es diferente?», de esmeralda a diamante es Premium (HU-051
                     // P4): sin Premium no se muestra, como todo lo que aún no se puede comprar.
-                    if (game != GameId.oddOneOut ||
-                        round.index <= OddOneOut.lastFreeRound.index ||
-                        state.isPremium)
+                    // En «A su sitio», del oro en adelante (D-043).
+                    if (state.isPremium ||
+                        round.index <= switch (game) {
+                          GameId.oddOneOut => OddOneOut.lastFreeRound,
+                          GameId.vehicles => VehicleLadder.lastFreeRound,
+                          _ => GameDifficulty.diamond,
+                        }.index)
                       ChoiceChip(
                         key: ValueKey<String>('round-${game.name}-${round.name}'),
                         avatar: MedalBadge(style: RoundStyle.medalStyleOf(round), size: 22),

@@ -162,5 +162,12 @@
   "parentsProgressLowerButton": "{round}に変更",
   "parentsProgressNotNow": "今はしない",
   "parentsProgressLowerConfirm": "{game}を{round}ラウンドに変更しますか？星とメダルはそのまま残ります。",
-  "parentsProgressCancel": "キャンセル"
+  "parentsProgressCancel": "キャンセル",
+  "vehiclesGameTitle": "それぞれの ばしょへ",
+  "vehiclesGameInstructions": "のりものを ばしょまで うごかそう。",
+  "vehiclesVehicleName": "{vehicle, select, car{車} bus{バス} taxi{タクシー} minibus{ワゴン車} police{パトカー} ambulance{救急車} fireEngine{消防車} truck{トラック} lorry{大型トラック} tractor{トラクター} motorcycle{バイク} bicycle{自転車} scooter{キックボード} locomotive{機関車} train{電車} sailboat{ヨット} speedboat{モーターボート} ship{船} airplane{飛行機} helicopter{ヘリコプター} rocket{ロケット} sled{そり} other{のりもの}}",
+  "vehiclesPlaceName": "{place, select, road{道路} rail{線路} water{水} sky{空} space{宇宙} snow{雪} home{家} busStop{バス停} hotel{ホテル} school{学校} trafficLight{信号機} hospital{病院} fire{火事} parcels{荷物} factory{工場} field{畑} finish{ゴール} park{公園} station{駅} island{島} fishing{釣り} port{港} mountain{山} christmasTree{クリスマスツリー} other{ばしょ}}",
+  "vehiclesVehicleSemantics": "うごかすもの：{vehicle}",
+  "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
+  "vehiclesTimeUpFewerVehicles": "じかんぎれ！ のりものを へらして もういちど やってみよう。"
 }

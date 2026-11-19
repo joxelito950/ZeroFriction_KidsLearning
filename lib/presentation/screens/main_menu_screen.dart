@@ -77,6 +77,9 @@ class MainMenuScreen extends StatelessWidget {
 class _MenuHeader extends StatelessWidget {
   const _MenuHeader();
 
+  /// El lema acompaña: con el texto del sistema al máximo crece hasta 1,5.
+  static const double maxTaglineScale = 1.5;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -99,18 +102,28 @@ class _MenuHeader extends StatelessWidget {
           errorBuilder: (context, error, stackTrace) => SizedBox.square(dimension: logoSize),
         ),
         const SizedBox(height: 8),
-        Text(
-          l10n.appTitle,
-          style: theme.textTheme.headlineLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppPalette.deepTeal,
+        // El nombre, en una línea: con el texto al máximo en un teléfono
+        // estrecho se partía en tres y no dejaba sitio a los juegos (HU-023 R2).
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            l10n.appTitle,
+            maxLines: 1,
+            style: theme.textTheme.headlineLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppPalette.deepTeal,
+            ),
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          l10n.menuTagline,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: AppPalette.deepTeal.withValues(alpha: 0.8),
+        MediaQuery.withClampedTextScaling(
+          maxScaleFactor: _MenuHeader.maxTaglineScale,
+          child: Text(
+            l10n.menuTagline,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppPalette.deepTeal.withValues(alpha: 0.8),
+            ),
           ),
         ),
       ],
@@ -207,20 +220,25 @@ class _MenuActionsState extends State<_MenuActions> {
           ),
         ),
         const SizedBox(height: 16),
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 16,
-          children: [
-            // Doble toque y desafío para adultos (HU-004 R1).
-            const ParentsZoneButton(),
-            // La única salida sin confirmación (HU-001 R21).
-            TextButton.icon(
-              onPressed: MainMenuScreen._closeApp,
-              icon: const Icon(Icons.logout_rounded, size: 18),
-              label: Text(l10n.menuExit),
-              style: smallButtonStyle,
-            ),
-          ],
+        // Botones pequeños para el adulto: con el texto al máximo crecen hasta
+        // 1,5 para caber en una fila y dejar sitio a las tarjetas (HU-023 R2).
+        MediaQuery.withClampedTextScaling(
+          maxScaleFactor: _MenuHeader.maxTaglineScale,
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 16,
+            children: [
+              // Doble toque y desafío para adultos (HU-004 R1).
+              const ParentsZoneButton(),
+              // La única salida sin confirmación (HU-001 R21).
+              TextButton.icon(
+                onPressed: MainMenuScreen._closeApp,
+                icon: const Icon(Icons.logout_rounded, size: 18),
+                label: Text(l10n.menuExit),
+                style: smallButtonStyle,
+              ),
+            ],
+          ),
         ),
       ],
     );

@@ -185,8 +185,8 @@ Cada tablero usa **una sola familia**. Como cada vehículo tiene un sitio en cad
 | # | Entrega | Estado |
 |---|---|---|
 | 1 | **Lógica** (`lib/domain/vehicles/`): catálogo con las dos familias, escalera de 8 niveles y ocho rondas, reglas por ronda, estrellas y sorteo del tablero | ✅ 2026-11-18 (`feature/hu-052-a-su-sitio`) |
-| 2 | **Pantalla**: sitios y bandeja con el arrastre y el imán de Sombras, tiempo, celebración, tutorial, nombres para el lector de pantalla en 9 idiomas | Pendiente |
-| 3 | **En el menú y en «Su progreso»**: `GameId.vehicles`, la tarjeta de `GameCatalog`, el progreso común y la etiqueta «Nuevo» (HU-041) | Pendiente |
+| 2 | **Pantalla**: sitios y bandeja con el arrastre y el imán de Sombras, tiempo, celebración, tutorial, nombres para el lector de pantalla en 9 idiomas | ✅ 2026-11-18 (`feature/hu-052-2-screen`). Falta verla en el moto g55 |
+| 3 | **En el menú y en «Su progreso»**: `GameId.vehicles`, la tarjeta de `GameCatalog`, el progreso común y la etiqueta «Nuevo» (HU-041) | Hecho salvo la etiqueta «Nuevo» (va con la entrega 4) |
 | 4 | **Edición de Navidad** (HU-042): fechas, trineo y regalos, protección del reloj y acceso (bronce y plata gratis) | Pendiente |
 
 **Entrega 1:**
@@ -204,3 +204,29 @@ Cada tablero usa **una sola familia**. Como cada vehículo tiene un sitio en cad
   - el sitio libre aparece solo desde oro;
   - el trineo sale solo en Navidad.
 - **«Por dónde va»** tiene 5 sitios (6 en Navidad). Por eso, en los niveles que piden más sitios con el sitio libre, desde oro el sorteo usa «A qué se dedica».
+
+**Entregas 2 y 3:**
+- **Partida** (`VehicleGameCubit`), como Sombras:
+  - el cronómetro arranca al primer toque y se pausa con la app en segundo plano;
+  - estrellas, medalla y paso de ronda;
+  - el tutorial termina con la invitación a jugar;
+  - si se acaba el tiempo, se baja de nivel con un aviso amable;
+  - el progreso se guarda en el modelo común (typeId 5, clave `vehicles`).
+- **Encaje** (`VehicleDrop`): cuenta la parte del vehículo que cae sobre la tarjeta del sitio, porque el sitio es más grande y recibe hasta 2 vehículos. El imán de cada ronda es el de Sombras.
+- **Tablero** (`VehicleBoardView`):
+  - los sitios son tarjetas crema con borde teal; se iluminan en ámbar cuando el vehículo encajaría al soltarlo;
+  - cada tarjeta tiene dos huecos abajo para los vehículos que llegan;
+  - la bandeja es igual que la de Sombras, y la mano del tutorial lleva un vehículo a su sitio;
+  - con el lector de pantalla se elige el vehículo y después su sitio; el sitio anuncia los vehículos que ya tiene.
+- **Textos:** 7 claves en los 9 idiomas. Los nombres de los 22 vehículos y los 24 sitios van en dos mensajes `select`, así no hacen falta 46 claves. Las traducciones al francés, italiano, alemán, portugués, japonés, coreano y árabe conviene revisarlas.
+- **Menú:**
+  - tarjeta ámbar con texto teal, el único tono de la paleta libre que contrasta con el camión coral;
+  - en vertical, la cuadrícula de 2 × 2;
+  - con el texto al máximo, el nombre de la app se ajusta a una línea, y el lema y los botones de abajo crecen hasta 1,5 veces, para que las cuatro tarjetas quepan sin desplazar en el teléfono compacto (HU-023 R2).
+- **Zona de Padres y «Su progreso»:** el juego aparece con su ronda; sin Premium, solo bronce y plata (D-043).
+- **Tests:**
+  - la partida;
+  - la pantalla: arrastre, encaje, fallo, lector de pantalla, tiempo, mano y Navidad;
+  - el nivel 8 cabe en el compacto en vertical y horizontal en los 9 idiomas, y con el texto al máximo;
+  - los nombres son distintos en cada idioma;
+  - la paridad de textos admite los `select`.

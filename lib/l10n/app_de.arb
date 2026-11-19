@@ -162,5 +162,12 @@
   "parentsProgressLowerButton": "Zu {round} wechseln",
   "parentsProgressNotNow": "Jetzt nicht",
   "parentsProgressLowerConfirm": "{game} auf die Runde {round} stellen? Sterne und Medaillen bleiben erhalten.",
-  "parentsProgressCancel": "Abbrechen"
+  "parentsProgressCancel": "Abbrechen",
+  "vehiclesGameTitle": "An seinen Platz",
+  "vehiclesGameInstructions": "Zieh jedes Fahrzeug an seinen Platz.",
+  "vehiclesVehicleName": "{vehicle, select, car{Auto} bus{Bus} taxi{Taxi} minibus{Kleinbus} police{Polizeiauto} ambulance{Krankenwagen} fireEngine{Feuerwehrauto} truck{Lieferwagen} lorry{Sattelzug} tractor{Traktor} motorcycle{Motorrad} bicycle{Fahrrad} scooter{Roller} locomotive{Dampflok} train{Zug} sailboat{Segelboot} speedboat{Motorboot} ship{Schiff} airplane{Flugzeug} helicopter{Hubschrauber} rocket{Rakete} sled{Schlitten} other{Fahrzeug}}",
+  "vehiclesPlaceName": "{place, select, road{Straße} rail{Gleise} water{Wasser} sky{Himmel} space{Weltraum} snow{Schnee} home{Zuhause} busStop{Bushaltestelle} hotel{Hotel} school{Schule} trafficLight{Ampel} hospital{Krankenhaus} fire{Feuer} parcels{Pakete} factory{Fabrik} field{Feld} finish{Ziel} park{Park} station{Bahnhof} island{Insel} fishing{Angeln} port{Hafen} mountain{Berg} christmasTree{Weihnachtsbaum} other{Ort}}",
+  "vehiclesVehicleSemantics": "{vehicle} zum Platz bringen",
+  "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
+  "vehiclesTimeUpFewerVehicles": "Die Zeit ist um! Versuchen wir es mit weniger Fahrzeugen."
 }
