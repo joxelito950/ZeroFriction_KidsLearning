@@ -122,13 +122,10 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 
 Actualizado el 2026-11-19.
 
-**Hecho:** pendientes técnicos (TD-001 a TD-004, TD-006 a TD-009), HU-001 (memoria), HU-002 y HU-016 (dorado y pérdida de estrellas), HU-004 (Zona de padres), HU-005 (sonidos), HU-007 (Sombras, sin pago), HU-009 (tiempo diario), HU-011 y HU-012 (idiomas), HU-013 (identidad visual), HU-021, HU-022 (tutorial visual), HU-025 (¿Cuál es diferente?), HU-030 (dificultad), HU-023 (menú en cuadrícula), HU-032 (enviar comentarios), HU-037 (rondas y medallas), HU-046 (Zona de Padres por filas), TD-011 para español e inglés. **Versión `1.0.0-rc.5`** (etiqueta `v1.0.0-rc.5`) **publicada en la prueba cerrada el 2026-11-18**, con HU-048 a HU-051 en prueba. HU-010, descartada por absorbida.
+**Hecho:** pendientes técnicos (TD-001 a TD-004, TD-006 a TD-009), HU-001 (memoria), HU-002 y HU-016 (dorado y pérdida de estrellas), HU-004 (Zona de padres), HU-005 (sonidos), HU-007 (Sombras, sin pago), HU-009 (tiempo diario), HU-011 y HU-012 (idiomas), HU-013 (identidad visual), HU-021, HU-022 (tutorial visual), HU-025 (¿Cuál es diferente?), HU-030 (dificultad), HU-023 (menú en cuadrícula), HU-032 (enviar comentarios), HU-037 (rondas y medallas), HU-046 (Zona de Padres por filas), TD-011 para español e inglés. **Versión `1.0.0-rc.6`** (etiqueta `v1.0.0-rc.6`) **subida a la prueba cerrada el 2026-11-19**, con «A su sitio» y su edición de Navidad (HU-052, HU-042), «Nuevo» (HU-041) y la ronda en cada juego (HU-034, HU-048); la `rc.5` se publicó el 2026-11-18. HU-010, descartada por absorbida.
 
-1. **HU-014:** prueba cerrada con `1.0.0-rc.5` en marcha; cerrar HU-048 a HU-051 con lo que digan los testers.
-2. **Próximo release `1.0.0-rc.6` a la prueba cerrada, cuanto antes (la edición de Navidad empieza el 20 de noviembre):**
-   - **HU-052 entrega 4**, con **HU-042**: edición de Navidad de «A su sitio» (regalos 🎁 y árbol 🎄 en la celebración, fechas del 20 de noviembre al 6 de enero, protección contra cambiar la fecha) y el acceso del oro en adelante (con D-040 sigue todo abierto);
-   - **HU-041**: «Nuevo» en la tarjeta de «A su sitio» y en la fila «Su progreso»;
-   - probar en el teléfono la sugerencia de HU-034 y jugar «A su sitio» antes de etiquetar.
+1. **HU-014:** prueba cerrada con `1.0.0-rc.6` en marcha; cerrar HU-048 a HU-051 y HU-052 con lo que digan los testers.
+2. **Verificar en el teléfono con la `rc.6`:** desde el 20 de noviembre, el 🎄 en la tarjeta de «A su sitio», el trineo y los regalos 🎁 (HU-042); la celebración sin cinta (HU-048); la sugerencia de bajar de ronda tras 3 caídas (HU-034).
 3. **HU-006** (pago, lista): en 4 entregas. Mientras dure la prueba cerrada, todo es gratis (D-040).
 4. **TD-015, TD-013 y TD-012:** prueba en el teléfono, rendimiento en gama baja y tamaño de descarga, antes de producción.
 5. **Antes de producción:** TD-010 (tablets) y el resto de TD-011 (7 idiomas, ahora también los nombres de vehículos y sitios de «A su sitio»).
