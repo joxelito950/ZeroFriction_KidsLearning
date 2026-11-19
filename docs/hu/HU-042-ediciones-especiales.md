@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-18): P1 a P6 decididas por el dueño, con la protección contra el cambio de fecha (R7 a R9) aceptada |
+| **Estado** | **Desarrollada** (2026-11-19, rama `feature/christmas-edition`) para la Navidad de «A su sitio», en `1.0.0-rc.6`. El candado del oro en adelante se verá cuando exista el pago (HU-006) |
 | **Épica** | E3 · Monetización |
 | **Prioridad** | P2: la **edición de Navidad** de «Cada vehículo a su casa» (HU-052) va en el próximo release a la prueba cerrada |
 | **Tamaño** | S para la primera edición (fechas fijas y su aspecto); M con el candado de después (HU-006) |
@@ -80,3 +80,17 @@ Propuesta del dueño del 2026-11-10 (HU-037 P6): a partir del cuarto juego, los 
 | P4 | ¿El tema navideño se ve también fuera del juego? | ✅ Decidido (2026-11-18): **solo en el juego** y en su tarjeta. En futuras versiones, las ediciones especiales podrán ser de cualquier juego |
 | P5 | ¿Vuelve cada año con las mismas fechas? | ✅ Decidido (2026-11-18): **sí**, con cuidado de que no se pueda jugar con la fecha del teléfono para ir abriendo los juegos que estuvieron gratis en otras fechas: R7 a R9 |
 | P6 | El interruptor gratuito «Mantener las estrellas» (HU-016) detiene la pérdida de estrellas. ¿Se aplica también a lo ganado en la edición, o se ignora para esas rondas? | ✅ Decidido (2026-11-18): **se aplica.** Es una decisión del adulto, ya es gratis (2026-11-05), y hacer una excepción sería difícil de explicar. Lo ganado no da acceso a jugar: para repasar el oro en adelante sigue haciendo falta Premium. No bloquea |
+
+## 8. Desarrollo (2026-11-19)
+
+- **`SpecialEdition` y `SpecialEditions`** (`domain/news/special_edition.dart`):
+  - la ventana se guarda como día y mes y cruza el año (del 20 de noviembre al 6 de enero);
+  - `isOpen` aplica las tres condiciones de R7: dentro de la ventana, sin atrasar el reloj más de 2 días respecto a la fecha más alta vista, y como mucho 13 meses después de `AppRelease.builtOn`.
+- **Fecha más alta vista:** en el perfil (campo 5 de Hive). Solo la guarda el menú (`EditionCheck.refresh`). El juego solo la lee (`EditionCheck.openNow`), para no pisar el contador de aperturas de HU-041. Si no se puede leer, ninguna edición se abre, y lo gratis de siempre sigue igual (R9).
+- **En «A su sitio»:**
+  - durante la edición se juega entero, y en todos los tableros sale el trineo;
+  - cada vehículo colocado deja un 🎁, y la celebración muestra 🎁🎄🎁;
+  - fuera de ella y sin Premium, del oro en adelante se juega la plata (`VehicleLadder.playableRound`), conservando lo ganado.
+- **En el menú:** un 🎄 en la tarjeta mientras dura la edición, sin texto ni precio (HU-023 R8).
+- **Mientras dure la prueba cerrada** todo es gratis (D-040): el acceso solo se nota con las reglas de pago activas, como en los tests.
+- **Tests:** ventana y cambio de año, reloj atrasado con y sin margen, reloj adelantado fuera del soporte, la fecha que nunca baja, guardado solo al subir, errores, acceso sin Premium, trineo, regalos, árbol y el 🎄 del menú con un reloj fijo.

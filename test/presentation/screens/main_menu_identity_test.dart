@@ -4,6 +4,7 @@ import 'package:toddler_logic/brand/brand_assets.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/main.dart';
+import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
 import 'package:toddler_logic/presentation/widgets/game_icon.dart';
 import 'package:toddler_logic/presentation/widgets/liquid_gold.dart';
 
@@ -97,6 +98,39 @@ void main() {
     final UserProfile saved = verify(() => repository.saveUserProfile(captureAny())).captured.last as UserProfile;
     expect(saved.discovered.opensOf(GameId.shadows), 1);
     expect(saved.discovered.opensOf(GameId.memory), 0);
+  });
+
+  testWidgets('a new game is marked «New» until opened three times (HU-041, HU-023 R7)', (tester) async {
+    final SemanticsHandle semantics = tester.ensureSemantics();
+    final repository = MockPersistenceRepository();
+    stubPersistenceRepository(repository);
+    when(() => repository.readUserProfile())
+        .thenAnswer((_) async => UserProfile(isPremium: false, isSoundEnabled: true, discovery: Discovery.beforeNews()));
+    await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+    await tester.pump();
+    await tester.pump();
+    expect(find.byKey(const ValueKey<String>('menu-vehicles-new')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('menu-memory-new')), findsNothing);
+    expect(find.bySemanticsLabel(RegExp('${l10n.vehiclesGameTitle}, ${l10n.newBadge}')), findsOneWidget);
+    semantics.dispose();
+  });
+
+  testWidgets('during its edition the game card wears a tree, without text (HU-023 R8)', (tester) async {
+    final repository = MockPersistenceRepository();
+    stubPersistenceRepository(repository);
+    MainMenuScreen.clock = () => DateTime(2026, 12, 1);
+    addTearDown(() => MainMenuScreen.clock = DateTime.now);
+    await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+    await tester.pump();
+    await tester.pump();
+    expect(find.byKey(const ValueKey<String>('menu-vehicles-festive')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('menu-memory-festive')), findsNothing);
+
+    MainMenuScreen.clock = () => DateTime(2027, 3, 1);
+    await tester.pumpWidget(ToddlerLogicApp(key: UniqueKey(), repository: repository, locale: testLocale));
+    await tester.pump();
+    await tester.pump();
+    expect(find.byKey(const ValueKey<String>('menu-vehicles-festive')), findsNothing);
   });
 
   testWidgets('a game opens even if counting the visit fails', (tester) async {

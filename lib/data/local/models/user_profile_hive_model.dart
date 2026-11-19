@@ -16,6 +16,7 @@ class UserProfileHiveModel {
     this.languageCode,
     this.gameOpens,
     this.seenFeatures,
+    this.highestSeenDate,
   });
 
   /// Sin nada descubierto aún (instalación nueva), se guarda todo como visto
@@ -28,6 +29,7 @@ class UserProfileHiveModel {
       languageCode: entity.languageCode,
       gameOpens: {for (final MapEntry<GameId, int> entry in discovery.gameOpens.entries) entry.key.name: entry.value},
       seenFeatures: [for (final ParentsFeature feature in discovery.seenFeatures) feature.name],
+      highestSeenDate: entity.highestSeenDate,
     );
   }
 
@@ -49,6 +51,11 @@ class UserProfileHiveModel {
   @HiveField(4)
   final List<String>? seenFeatures;
 
+  /// Añadido en HU-042: la fecha más alta vista (R7). `null` en los perfiles
+  /// anteriores.
+  @HiveField(5)
+  final DateTime? highestSeenDate;
+
   UserProfile toEntity() {
     final Map<String, int>? opens = gameOpens;
     final List<String>? features = seenFeatures;
@@ -56,6 +63,7 @@ class UserProfileHiveModel {
       isPremium: isPremium,
       isSoundEnabled: isSoundEnabled,
       languageCode: languageCode,
+      highestSeenDate: highestSeenDate,
       // Un perfil anterior a HU-041 había visto lo de `1.0.0-rc.5` (sección 5).
       discovery: opens == null || features == null
           ? Discovery.beforeNews()

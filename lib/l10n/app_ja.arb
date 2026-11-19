@@ -171,5 +171,6 @@
   "vehiclesPlaceName": "{place, select, road{道路} rail{線路} water{水} sky{空} space{宇宙} snow{雪} home{家} busStop{バス停} hotel{ホテル} school{学校} trafficLight{信号機} hospital{病院} fire{火事} parcels{荷物} factory{工場} field{畑} finish{ゴール} park{公園} station{駅} island{島} fishing{釣り} port{港} mountain{山} christmasTree{クリスマスツリー} other{ばしょ}}",
   "vehiclesVehicleSemantics": "うごかすもの：{vehicle}",
   "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
-  "vehiclesTimeUpFewerVehicles": "じかんぎれ！ のりものを へらして もういちど やってみよう。"
+  "vehiclesTimeUpFewerVehicles": "じかんぎれ！ のりものを へらして もういちど やってみよう。",
+  "newBadge": "新しい"
 }

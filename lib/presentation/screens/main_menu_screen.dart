@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../brand/brand_assets.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/news/discovery.dart';
+import '../../domain/news/edition_check.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/settings/game_difficulty.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
@@ -17,6 +18,7 @@ import '../theme/app_palette.dart';
 import '../widgets/game_catalog.dart';
 import '../widgets/game_grid.dart';
 import '../widgets/liquid_gold.dart';
+import '../widgets/parents_setting_page.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
 import '../widgets/medal_badge.dart';
@@ -28,6 +30,10 @@ class MainMenuScreen extends StatelessWidget {
 
   /// Tiempo para el segundo toque en «Zona de Padres» (HU-004 R1, S5).
   static const Duration parentsZoneTapWindow = ParentsZoneButton.tapWindow;
+
+  /// El reloj de las ediciones especiales (HU-042); los tests lo cambian.
+  @visibleForTesting
+  static DateTime Function() clock = DateTime.now;
 
   static const EdgeInsets _padding = EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0);
 
@@ -148,6 +154,11 @@ class _MenuActionsState extends State<_MenuActions> {
   /// lee lo guardado, sin calcular la pérdida (D-037).
   Map<GameId, GameProgress> _progress = const {};
 
+  /// Lo que ya descubrió el niño (HU-041) y los juegos con su edición abierta
+  /// (HU-042).
+  Discovery _discovery = Discovery.allSeen();
+  Set<GameId> _editions = const {};
+
   @override
   void initState() {
     super.initState();
@@ -165,8 +176,23 @@ class _MenuActionsState extends State<_MenuActions> {
         progress[game.id] = GameProgress.initial();
       }
     }
-    if (!mounted || mapEquals(progress, _progress)) return;
-    setState(() => _progress = progress);
+    // La fecha más alta vista solo la guarda el menú (HU-042 R7).
+    final Set<GameId> editions = await EditionCheck.refresh(repository, now: MainMenuScreen.clock());
+    Discovery discovery = _discovery;
+    try {
+      discovery = (await repository.readUserProfile())?.discovered ?? Discovery.allSeen();
+    } catch (_) {
+      // Sin perfil, nada se destaca.
+    }
+    if (!mounted ||
+        (mapEquals(progress, _progress) && setEquals(editions, _editions) && discovery == _discovery)) {
+      return;
+    }
+    setState(() {
+      _progress = progress;
+      _editions = editions;
+      _discovery = discovery;
+    });
   }
 
   /// Abre un juego y, al volver, relee el progreso: la medalla o el dorado
@@ -210,9 +236,12 @@ class _MenuActionsState extends State<_MenuActions> {
             minColumns: widget.minColumns,
             cardBuilder: (context, index, side) {
               final MenuGame game = games[index];
+              final GameProgress progress = _progress[game.id] ?? GameProgress.initial();
               return _GameCard(
                 game: game,
-                progress: _progress[game.id] ?? GameProgress.initial(),
+                progress: progress,
+                isNew: _discovery.isNewGame(game.id, progress),
+                festive: _editions.contains(game.id),
                 side: side,
                 onTap: () => _open(game),
               );
@@ -249,12 +278,28 @@ class _MenuActionsState extends State<_MenuActions> {
 /// letra pequeña para el adulto, el dorado llenándola de abajo arriba (HU-002
 /// R16) y la medalla más alta en la esquina (HU-037). Toda se puede tocar.
 class _GameCard extends StatelessWidget {
-  const _GameCard({required this.game, required this.progress, required this.side, required this.onTap});
+  const _GameCard({
+    required this.game,
+    required this.progress,
+    required this.side,
+    required this.onTap,
+    this.isNew = false,
+    this.festive = false,
+  });
 
   final MenuGame game;
   final GameProgress progress;
   final double side;
   final VoidCallback onTap;
+
+  /// «Nuevo» hasta abrirlo tres veces o superar la plata (HU-023 R7, HU-041).
+  final bool isNew;
+
+  /// Edición especial abierta: un 🎄 en la esquina, sin texto ni precio (R8).
+  final bool festive;
+
+  /// El adorno de la edición de Navidad.
+  static const String festiveSymbol = '🎄';
 
   /// El nombre es para el adulto: con el texto del sistema al máximo, crece
   /// hasta 1,6 veces para no tapar el icono, que es lo que reconoce el niño.
@@ -278,7 +323,7 @@ class _GameCard extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: title,
+      label: isNew ? '$title, ${l10n.newBadge}' : title,
       value: l10n.menuGameGoldSemantics((gold * 100).round(), progress.stars, game.rounds.maxStars),
       excludeSemantics: true,
       child: Material(
@@ -326,6 +371,23 @@ class _GameCard extends StatelessWidget {
                   ],
                 ),
               ),
+              if (isNew)
+                PositionedDirectional(
+                  top: 8,
+                  start: 8,
+                  child: NewBadge(key: ValueKey<String>('menu-${game.keyName}-new'), label: l10n.newBadge),
+                ),
+              if (festive)
+                PositionedDirectional(
+                  bottom: side * 0.22,
+                  end: 8,
+                  child: Text(
+                    festiveSymbol,
+                    key: ValueKey<String>('menu-${game.keyName}-festive'),
+                    textScaler: TextScaler.noScaling,
+                    style: TextStyle(fontSize: (side * 0.16).clamp(18.0, 30.0)),
+                  ),
+                ),
               if (medal != null)
                 PositionedDirectional(
                   top: 8,

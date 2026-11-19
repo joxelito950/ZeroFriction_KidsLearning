@@ -86,7 +86,10 @@ class _ParentsZoneList extends StatelessWidget {
                   title: l10n.parentsProgressTitle,
                   summary: parentsProgressRowSummary(l10n, progressSummaryOf(context, state)),
                   dot: state.hasSuggestion,
-                  onTap: () => ParentsSettingPage.open(
+                  newLabel: state.isNew ? l10n.newBadge : null,
+                  onTap: () {
+                    progress.markSeen();
+                    ParentsSettingPage.open(
                     context,
                     MultiBlocProvider(
                       providers: [
@@ -95,7 +98,8 @@ class _ParentsZoneList extends StatelessWidget {
                       ],
                       child: const ParentsProgressPage(),
                     ),
-                  ),
+                  );
+                  },
                 ),
               ),
             ParentsSettingRow(

@@ -171,5 +171,6 @@
   "vehiclesPlaceName": "{place, select, road{طريق} rail{سكة حديد} water{ماء} sky{سماء} space{فضاء} snow{ثلج} home{بيت} busStop{موقف الحافلات} hotel{فندق} school{مدرسة} trafficLight{إشارة مرور} hospital{مستشفى} fire{نار} parcels{طرود} factory{مصنع} field{حقل} finish{خط النهاية} park{حديقة} station{محطة} island{جزيرة} fishing{صيد السمك} port{ميناء} mountain{جبل} christmasTree{شجرة عيد الميلاد} other{مكان}}",
   "vehiclesVehicleSemantics": "{vehicle} لنقلها إلى مكانها",
   "vehiclesPlaceWithSemantics": "{place}: {vehicles}",
-  "vehiclesTimeUpFewerVehicles": "انتهى الوقت! لنحاول بعدد أقل من المركبات."
+  "vehiclesTimeUpFewerVehicles": "انتهى الوقت! لنحاول بعدد أقل من المركبات.",
+  "newBadge": "جديد"
 }

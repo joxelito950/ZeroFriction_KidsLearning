@@ -980,5 +980,9 @@
   "vehiclesTimeUpFewerVehicles": "Time's up! Let's try again with fewer vehicles.",
   "@vehiclesTimeUpFewerVehicles": {
     "description": "Shown when time runs out: a helpful message, never a punishment. The next board has fewer vehicles."
+  },
+  "newBadge": "New",
+  "@newBadge": {
+    "description": "Small label on something that arrived with an update (a new game card in the menu, a new row in the parents zone), until it has been opened (HU-041). One short word."
   }
 }

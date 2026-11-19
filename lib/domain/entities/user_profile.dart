@@ -6,6 +6,7 @@ class UserProfile {
     required this.isSoundEnabled,
     this.languageCode,
     this.discovery,
+    this.highestSeenDate,
   });
 
   final bool isPremium;
@@ -19,6 +20,11 @@ class UserProfile {
   /// nueva, que aún no ha guardado nada: todo cuenta como visto (R2).
   final Discovery? discovery;
 
+  /// La fecha más alta que ha visto la app (HU-042 R7, R8): protege las
+  /// ediciones especiales de los cambios de fecha del teléfono. `null` hasta el
+  /// primer arranque con HU-042.
+  final DateTime? highestSeenDate;
+
   bool get soundEnabled => isSoundEnabled;
 
   /// Lo descubierto, con la regla de la instalación nueva aplicada.
@@ -29,12 +35,14 @@ class UserProfile {
     bool? isSoundEnabled,
     String? languageCode,
     Discovery? discovery,
+    DateTime? highestSeenDate,
   }) {
     return UserProfile(
       isPremium: isPremium ?? this.isPremium,
       isSoundEnabled: isSoundEnabled ?? this.isSoundEnabled,
       languageCode: languageCode ?? this.languageCode,
       discovery: discovery ?? this.discovery,
+      highestSeenDate: highestSeenDate ?? this.highestSeenDate,
     );
   }
 
@@ -45,9 +53,10 @@ class UserProfile {
         other.isPremium == isPremium &&
         other.isSoundEnabled == isSoundEnabled &&
         other.languageCode == languageCode &&
-        other.discovery == discovery;
+        other.discovery == discovery &&
+        other.highestSeenDate == highestSeenDate;
   }
 
   @override
-  int get hashCode => Object.hash(isPremium, isSoundEnabled, languageCode, discovery);
+  int get hashCode => Object.hash(isPremium, isSoundEnabled, languageCode, discovery, highestSeenDate);
 }
