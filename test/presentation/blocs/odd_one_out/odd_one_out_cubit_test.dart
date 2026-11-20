@@ -117,6 +117,34 @@ void main() {
     });
   });
 
+  test('every tap on an option is a move, right or wrong; they go on over the 3 boards of the level (HU-039 R7)', () {
+    fakeAsync((async) {
+      givenProgress(progressAt(2));
+      final cubit = started(async);
+      expect(cubit.state.moves, 0);
+      cubit.tap(wrongIndex(cubit.state));
+      expect(cubit.state.moves, 1);
+      cubit.tap(cubit.state.oddIndex);
+      expect(cubit.state.moves, 2);
+      cubit.tap(cubit.state.oddIndex);
+      expect(cubit.state.moves, 2, reason: 'while the odd one jumps, taps do nothing');
+      async.elapse(OddOneOutCubit.solvedDuration);
+      expect(cubit.state.board, 1);
+      expect(cubit.state.moves, 2);
+      cubit.tap(cubit.state.oddIndex);
+      async.elapse(OddOneOutCubit.solvedDuration);
+      cubit.tap(cubit.state.oddIndex);
+      expect(cubit.state.phase, OddPhase.celebrating);
+      expect(cubit.state.moves, 4);
+      expect(cubit.state.fails, 1, reason: 'the stars still go by mistakes (R8)');
+      async.elapse(OddOneOutCubit.celebrationDuration);
+      async.flushMicrotasks();
+      expect(cubit.state.level, 3);
+      expect(cubit.state.moves, 0, reason: 'a new level starts again from 0');
+      cubit.close();
+    });
+  });
+
   test('the tutorial gives no stars and invites to play (HU-037 R9)', () {
     fakeAsync((async) {
       final cubit = started(async);

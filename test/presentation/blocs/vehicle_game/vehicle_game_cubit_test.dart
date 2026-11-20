@@ -37,7 +37,8 @@ void main() {
       verify(() => repository.saveGameProgress(GameId.vehicles, captureAny())).captured.last as GameProgress;
 
   VehicleGameCubit started(FakeAsync async, {bool christmas = false}) {
-    final cubit = VehicleGameCubit(repository: repository, random: Random(1), now: () => now, christmas: (_) => christmas);
+    final cubit =
+        VehicleGameCubit(repository: repository, random: Random(1), now: () => now, christmas: (_) => christmas);
     cubit.start();
     async.flushMicrotasks();
     return cubit;
@@ -79,7 +80,8 @@ void main() {
 
         when(() => repository.readParentalSettings())
             .thenAnswer((_) async => ParentalSettings.initial.withTimerDisabled(true));
-        when(() => repository.readUserProfile()).thenAnswer((_) async => const UserProfile(isPremium: true, isSoundEnabled: true));
+        when(() => repository.readUserProfile())
+            .thenAnswer((_) async => const UserProfile(isPremium: true, isSoundEnabled: true));
         final untimed = started(async);
         expect(untimed.state.timeLimit, isNull);
         untimed.close();
@@ -117,7 +119,9 @@ void main() {
   group('access (D-043)', () {
     test('without Premium and outside the edition, from gold the silver round is played; nothing is lost', () {
       fakeAsync((async) {
-        givenProgress(progressAt(5, round: GameDifficulty.ruby, medals: const {GameDifficulty.bronze, GameDifficulty.silver, GameDifficulty.gold}));
+        givenProgress(progressAt(5,
+            round: GameDifficulty.ruby,
+            medals: const {GameDifficulty.bronze, GameDifficulty.silver, GameDifficulty.gold}));
         final cubit = started(async);
         expect(cubit.state.gameRound, GameDifficulty.silver);
         expect(cubit.state.level, 2);
@@ -185,6 +189,60 @@ void main() {
         final Place absent = Place.values.firstWhere((place) => !cubit.state.board!.places.contains(place));
         expect(cubit.match(vehicle, absent), ShadowDropOutcome.missed);
         expect(cubit.state.fails, 1);
+        cubit.close();
+      });
+    });
+
+    test('a drop on a place is a move, right or wrong; outside every place or just grabbing, not (HU-039 R7)', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(4, round: GameDifficulty.bronze));
+        final cubit = started(async);
+        final Vehicle vehicle = cubit.state.vehicles.first;
+        const ShadowBox box = ShadowBox(left: 0, top: 0, width: 10, height: 10);
+        const ShadowBox far = ShadowBox(left: 500, top: 500, width: 10, height: 10);
+        final Place target = cubit.state.board!.targetOf(vehicle);
+        final Place other = wrongPlace(cubit.state, vehicle);
+        expect(cubit.state.moves, 0);
+
+        cubit.grab(vehicle);
+        expect(cubit.state.moves, 0, reason: 'picking a vehicle up tries nothing');
+        cubit.drop(vehicle, box: box, placeBoxes: {other: far, target: far});
+        expect(cubit.state.moves, 0, reason: 'dropped outside every place');
+        cubit.drop(vehicle, box: box, placeBoxes: {other: box, target: far});
+        expect(cubit.state.moves, 1, reason: 'on the wrong place');
+        cubit.drop(vehicle, box: box, placeBoxes: {target: box});
+        expect(cubit.state.moves, 2, reason: 'on its place');
+        expect(cubit.state.fails, 1, reason: 'the stars still go by mistakes (R8)');
+        cubit.close();
+      });
+    });
+
+    test('tapping a place with a vehicle chosen is a move, right or wrong (HU-039 R7)', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(4, round: GameDifficulty.bronze));
+        final cubit = started(async);
+        final Vehicle vehicle = cubit.state.vehicles.first;
+        cubit.match(vehicle, wrongPlace(cubit.state, vehicle));
+        final Place absent = Place.values.firstWhere((place) => !cubit.state.board!.places.contains(place));
+        cubit.match(vehicle, absent);
+        expect(cubit.state.moves, 1);
+        cubit.match(vehicle, cubit.state.board!.targetOf(vehicle));
+        expect(cubit.state.moves, 2);
+        cubit.close();
+      });
+    });
+
+    test('a new board starts again from 0 moves, and the stars do not depend on them (HU-039 R8)', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(4, round: GameDifficulty.bronze));
+        final cubit = started(async);
+        placeAll(cubit);
+        expect(cubit.state.moves, cubit.state.vehicles.length);
+        expect(cubit.state.stars, 3);
+        async.elapse(VehicleGameCubit.celebrationDuration);
+        async.flushMicrotasks();
+        expect(cubit.state.level, 5);
+        expect(cubit.state.moves, 0);
         cubit.close();
       });
     });

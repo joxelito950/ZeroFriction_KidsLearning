@@ -136,14 +136,16 @@ class VehicleGameCubit extends Cubit<VehicleGameState> {
     return outcome;
   }
 
+  /// Un acierto o un fallo es un movimiento; soltar fuera de los sitios, no
+  /// (HU-039 R7).
   void _apply(Vehicle vehicle, ShadowDropOutcome outcome) {
     switch (outcome) {
       case ShadowDropOutcome.snapped:
         final Set<Vehicle> placed = {...state.placed, vehicle};
-        emit(state.copyWith(placed: placed));
+        emit(state.copyWith(placed: placed, moves: state.moves + 1));
         if (state.vehicles.every(placed.contains)) _win();
       case ShadowDropOutcome.wrongShadow:
-        emit(state.copyWith(fails: state.fails + 1));
+        emit(state.copyWith(fails: state.fails + 1, moves: state.moves + 1));
       case ShadowDropOutcome.missed:
         break;
     }

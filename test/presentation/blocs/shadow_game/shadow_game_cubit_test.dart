@@ -202,6 +202,63 @@ void main() {
     });
   });
 
+  group('moves (HU-039 R7, R8)', () {
+    const box = ShadowBox(left: 0, top: 0, width: 100, height: 100);
+    ShadowBox shifted(double dx) => ShadowBox(left: dx, top: 0, width: 100, height: 100);
+
+    test('a drop on a shadow is a move, right or wrong; outside any shadow or just grabbing, not', () {
+      fakeAsync((async) {
+        final cubit = started(async);
+        final String object = cubit.state.objects.first;
+        final String other = otherShadow(cubit.state, object);
+        final shadows = {object: box, other: shifted(300)};
+        expect(cubit.state.moves, 0);
+
+        cubit.grab(object);
+        expect(cubit.state.moves, 0, reason: 'picking an object up tries nothing');
+        cubit.drop(object, object: shifted(600), shadowBoxes: shadows);
+        expect(cubit.state.moves, 0, reason: 'dropped outside every shadow');
+        cubit.drop(object, object: shifted(300), shadowBoxes: shadows);
+        expect(cubit.state.moves, 1, reason: 'on the wrong shadow');
+        cubit.drop(object, object: box, shadowBoxes: shadows);
+        expect(cubit.state.moves, 2, reason: 'on its shadow');
+        expect(cubit.state.fails, 1, reason: 'the stars still go by mistakes (R8)');
+        cubit.close();
+      });
+    });
+
+    test('tapping a shadow with an object chosen is a move, right or wrong; a tap that does nothing, not', () {
+      fakeAsync((async) {
+        final cubit = started(async);
+        final String object = cubit.state.objects.first;
+        cubit.match(object, otherShadow(cubit.state, object));
+        cubit.match(object, '🦄');
+        expect(cubit.state.moves, 1);
+        cubit.match(object, object);
+        expect(cubit.state.moves, 2);
+        cubit.close();
+      });
+    });
+
+    test('a new board starts again from 0 moves, and the stars do not depend on them', () {
+      fakeAsync((async) {
+        givenProgress(progressAt(2));
+        final cubit = started(async);
+        final String object = cubit.state.objects.first;
+        cubit.match(object, otherShadow(cubit.state, object));
+        placeAll(cubit);
+        expect(cubit.state.moves, cubit.state.objects.length + 1);
+        expect(cubit.state.stars, 3);
+        async.elapse(ShadowGameCubit.celebrationDuration);
+        async.flushMicrotasks();
+        cubit.finishIntro();
+        expect(cubit.state.level, 3);
+        expect(cubit.state.moves, 0);
+        cubit.close();
+      });
+    });
+  });
+
   group('winning (R6, R8, R9, R10)', () {
     test('placing everything in the tutorial invites to play, without stars (HU-037 R9)', () {
       fakeAsync((async) {

@@ -17,6 +17,7 @@ import '../blocs/vehicle_game/vehicle_game_cubit.dart';
 import '../blocs/vehicle_game/vehicle_game_state.dart';
 import '../theme/app_palette.dart';
 import '../widgets/game_icon.dart';
+import '../widgets/game_header.dart';
 import '../widgets/gesture_hint.dart';
 import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
@@ -140,7 +141,8 @@ class _VehicleGameViewState extends State<_VehicleGameView> with WidgetsBindingO
                         target: vehicleKey,
                         gesture: HintGesture.drag,
                         dragTo: placeKey,
-                        dragGhost: hint == null ? null : FittedBox(child: Text(hint.symbol, textScaler: TextScaler.noScaling)),
+                        dragGhost:
+                            hint == null ? null : FittedBox(child: Text(hint.symbol, textScaler: TextScaler.noScaling)),
                         enabled: state.phase == VehiclePhase.playing && hint != null,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -162,8 +164,9 @@ class _VehicleGameViewState extends State<_VehicleGameView> with WidgetsBindingO
                                           key: ValueKey<int>(state.round),
                                           state: state,
                                           onGrab: context.read<VehicleGameCubit>().grab,
-                                          onDrop: (vehicle, box, places) =>
-                                              context.read<VehicleGameCubit>().drop(vehicle, box: box, placeBoxes: places),
+                                          onDrop: (vehicle, box, places) => context
+                                              .read<VehicleGameCubit>()
+                                              .drop(vehicle, box: box, placeBoxes: places),
                                           onMatch: context.read<VehicleGameCubit>().match,
                                           hintVehicle: hint,
                                           hintVehicleKey: vehicleKey,
@@ -193,8 +196,7 @@ class _VehicleGameViewState extends State<_VehicleGameView> with WidgetsBindingO
   }
 
   Widget _overlayFor(BuildContext context, VehicleGameState state) => switch (state.phase) {
-        VehiclePhase.celebrating =>
-          MemoryCelebration(
+        VehiclePhase.celebrating => MemoryCelebration(
             stars: state.stars ?? 0,
             badgeEarned: state.medal != null,
             medal: state.medal,
@@ -221,45 +223,18 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppPalette.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8)),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          children: [
-            // Icono del juego, sin dorado: el dorado se ve en el menú (HU-002 R16).
-            const GameIcon.vehicles(key: ValueKey<String>('vehicles-game-icon'), size: 44),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.vehiclesGameTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                  Text(
-                    l10n.vehiclesGameInstructions,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            MemoryLevelIndicator(
-              level: state.level,
-              total: VehicleLadder.maxLevel,
-              color: RoundStyle.colorOf(state.gameRound),
-              rim: RoundStyle.rimOf(state.gameRound),
-              round: state.gameRound,
-            ),
-          ],
-        ),
+    return GameHeader(
+      icon: const GameIcon.vehicles(key: ValueKey<String>('vehicles-game-icon'), size: 44),
+      title: l10n.vehiclesGameTitle,
+      instructions: l10n.vehiclesGameInstructions,
+      instructionsMaxLines: 2,
+      moves: state.moves,
+      levelIndicator: MemoryLevelIndicator(
+        level: state.level,
+        total: VehicleLadder.maxLevel,
+        color: RoundStyle.colorOf(state.gameRound),
+        rim: RoundStyle.rimOf(state.gameRound),
+        round: state.gameRound,
       ),
     );
   }
