@@ -248,6 +248,24 @@ Sustituyen a las secciones 3.4, 4 (R1, R8) y 8 donde no coincidan.
 
 | # | Entrega | Contenido |
 |---|---|---|
-| 1 | Dominio y contenido base | `Activity` (categoría, tiempo, edad, materiales, pasos, variantes, aviso propio, etiquetas, 3 recomendadas) y `ActivityCatalog` con las 24, en español e inglés; la sugerencia del día por la fecha; la búsqueda por texto y etiquetas |
+| 1 ✅ 2026-11-20 | Dominio y contenido base | `Activity` (categoría, tiempo, edad, materiales, pasos, variantes, aviso propio, etiquetas, 3 recomendadas) y `ActivityCatalog` con las 24, en español e inglés; la sugerencia del día por la fecha; la búsqueda por texto y etiquetas |
 | 2 | Pantallas | La sección con el aviso general, el buscador, las sugerencias de búsqueda y los chips; la pantalla de cada actividad; la tarjeta del día y el acceso en el menú; también desde la pantalla de descanso (D4); sin contar tiempo (P9) |
 | 3 | Idiomas y revisión | Las 24 actividades en los otros 7 idiomas (entran en la revisión de TD-011); diseño en vertical y horizontal; prueba rápida en los emuladores |
+
+### 13.2 Entrega 1 (2026-11-20, rama `feature/hu-047-1-activities`)
+
+- **Contenido** en `assets/activities/`:
+  - `catalog.json` lleva la estructura: categoría, minutos, edad mínima y las 3 recomendadas de cada actividad;
+  - `es.json` y `en.json` llevan los textos: título, objetivo, materiales, 3 a 5 pasos, 2 variantes, advertencia propia, 5 a 8 etiquetas, las sugerencias de búsqueda y la frase sin resultados.
+  - Son 24 actividades, 4 por categoría. 7 son desde los 3 años: «¿Cuál no es igual?», «Sombras con la linterna», «Formas con cinta», «Títere de calcetín», «Cuento con cucharas», «La bolsa misteriosa» y «Poner la mesa».
+  - Cuatro enlazan con los juegos de la app: «Parejas de calcetines» con Memoria, «Sombras con la linterna» con Sombras, «¿Cuál no es igual?» con «¿Cuál es diferente?» y «Cada juguete a su casa» con «A su sitio».
+- **Inglés británico**, como el resto de la app («colour», «torch»). Donde ayuda a buscar, las etiquetas llevan también la forma americana.
+- **Dominio** (`domain/activities/activity.dart`):
+  - `Activity` y `ActivityLibrary`, que se lee de los dos JSON;
+  - `suggestionFor(día)` va por la fecha: una categoría por turno, sin repetir actividad hasta recorrer las 24 y sin guardar nada (P10);
+  - `search(texto, categoría, minutos)` exige todas las palabras, sin distinguir mayúsculas ni tildes, en el título, el objetivo, los materiales y las etiquetas (P12);
+  - `recommendedFor` da las recomendadas (P11).
+- **Datos:** `AssetActivitySource` lee de los assets; si un idioma aún no tiene textos, usa el inglés.
+- **Tests:**
+  - lógica con un catálogo de ejemplo;
+  - `test/data/activities/activity_assets_test.dart` vigila el contenido real: 24 actividades y 4 por categoría, todas recomendadas por alguna, todos los textos en cada idioma, que cada sugerencia de búsqueda encuentre al menos 2, y ningún material de riesgo (botones, canicas, monedas, globos, bolsas de plástico, pilas, cuentas, legumbres o arroz) fuera de la advertencia que lo prohíbe.

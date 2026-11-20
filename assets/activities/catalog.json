@@ -1,0 +1,28 @@
+{
+  "activities": [
+    { "id": "search-color", "category": "search", "minutes": 5, "ageFrom": 2, "recommended": ["search-soft", "sort-colors", "routine-laundry"] },
+    { "id": "search-soft", "category": "search", "minutes": 5, "ageFrom": 2, "recommended": ["search-hidden-toy", "language-mystery-bag", "move-cushion-jumps"] },
+    { "id": "search-hidden-toy", "category": "search", "minutes": 10, "ageFrom": 2, "recommended": ["search-odd-one", "move-blanket-tunnel", "routine-toy-home"] },
+    { "id": "search-odd-one", "category": "search", "minutes": 5, "ageFrom": 3, "recommended": ["search-hidden-toy", "sort-sizes", "language-what-for"] },
+    { "id": "sort-socks", "category": "sort", "minutes": 10, "ageFrom": 2, "recommended": ["sort-colors", "routine-shoe-pairs", "art-sock-puppet"] },
+    { "id": "sort-colors", "category": "sort", "minutes": 10, "ageFrom": 2, "recommended": ["sort-sizes", "search-color", "routine-toy-home"] },
+    { "id": "sort-sizes", "category": "sort", "minutes": 10, "ageFrom": 2, "recommended": ["sort-shadows", "routine-table", "language-sounds"] },
+    { "id": "sort-shadows", "category": "sort", "minutes": 15, "ageFrom": 3, "recommended": ["sort-socks", "art-sock-puppet", "language-spoon-story"] },
+    { "id": "move-tape-line", "category": "move", "minutes": 10, "ageFrom": 2, "recommended": ["move-cushion-jumps", "art-tape-shapes", "search-color"] },
+    { "id": "move-cushion-jumps", "category": "move", "minutes": 5, "ageFrom": 2, "recommended": ["move-blanket-tunnel", "search-soft", "sort-sizes"] },
+    { "id": "move-blanket-tunnel", "category": "move", "minutes": 10, "ageFrom": 2, "recommended": ["move-animal-walk", "search-hidden-toy", "language-spoon-story"] },
+    { "id": "move-animal-walk", "category": "move", "minutes": 5, "ageFrom": 2, "recommended": ["move-tape-line", "language-sounds", "art-sock-puppet"] },
+    { "id": "art-tape-shapes", "category": "art", "minutes": 10, "ageFrom": 3, "recommended": ["art-paper-tear", "move-tape-line", "search-odd-one"] },
+    { "id": "art-paper-tear", "category": "art", "minutes": 15, "ageFrom": 2, "recommended": ["art-sock-puppet", "sort-colors", "routine-toy-home"] },
+    { "id": "art-water-paint", "category": "art", "minutes": 10, "ageFrom": 2, "recommended": ["art-paper-tear", "language-what-for", "routine-table"] },
+    { "id": "art-sock-puppet", "category": "art", "minutes": 15, "ageFrom": 3, "recommended": ["art-paper-tear", "language-spoon-story", "sort-socks"] },
+    { "id": "language-spoon-story", "category": "language", "minutes": 10, "ageFrom": 3, "recommended": ["language-sounds", "art-sock-puppet", "routine-table"] },
+    { "id": "language-what-for", "category": "language", "minutes": 5, "ageFrom": 2, "recommended": ["language-mystery-bag", "art-water-paint", "search-odd-one"] },
+    { "id": "language-mystery-bag", "category": "language", "minutes": 5, "ageFrom": 3, "recommended": ["language-sounds", "search-soft", "sort-sizes"] },
+    { "id": "language-sounds", "category": "language", "minutes": 10, "ageFrom": 2, "recommended": ["language-spoon-story", "move-animal-walk", "move-cushion-jumps"] },
+    { "id": "routine-toy-home", "category": "routine", "minutes": 10, "ageFrom": 2, "recommended": ["routine-laundry", "sort-colors", "search-hidden-toy"] },
+    { "id": "routine-laundry", "category": "routine", "minutes": 10, "ageFrom": 2, "recommended": ["routine-table", "sort-socks", "search-color"] },
+    { "id": "routine-table", "category": "routine", "minutes": 10, "ageFrom": 3, "recommended": ["routine-shoe-pairs", "language-spoon-story", "sort-sizes"] },
+    { "id": "routine-shoe-pairs", "category": "routine", "minutes": 5, "ageFrom": 2, "recommended": ["routine-laundry", "sort-socks", "move-tape-line"] }
+  ]
+}

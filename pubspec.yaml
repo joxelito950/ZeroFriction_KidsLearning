@@ -46,5 +46,7 @@ flutter:
     - assets/brand/
     # Sonidos (HU-005), generados con tool/sounds/generate_sounds.py.
     - assets/sounds/
+    # Actividades sin pantallas (HU-047): estructura y textos de cada idioma.
+    - assets/activities/
     - docs/privacy/es.md
     - docs/privacy/en.md

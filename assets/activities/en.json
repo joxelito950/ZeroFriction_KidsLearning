@@ -1,0 +1,414 @@
+{
+  "activities": {
+    "search-color": {
+      "title": "Find something red",
+      "goal": "Recognise colours and name them while moving around the house.",
+      "materials": ["4 to 6 large colourful objects (clothes, plastic cups, cushions)"],
+      "steps": [
+        "Leave several objects of different colours in plain sight in one room.",
+        "Show your child something red and say: “Can you bring me something red like this?”",
+        "When they bring it, name the colour and the object together.",
+        "Repeat with another colour for as long as they enjoy it."
+      ],
+      "variants": [
+        "Easier: look for just one colour and leave that object in plain sight.",
+        "Harder: ask for two things at once, such as “something blue and something yellow”."
+      ],
+      "safety": "Use objects bigger than your child's mouth and keep the way clear so they don't trip.",
+      "tags": ["colours", "colors", "clothes", "cups", "cushions", "quick", "at home"]
+    },
+    "search-soft": {
+      "title": "Soft treasure",
+      "goal": "Explore textures with the hands and learn the words soft and hard.",
+      "materials": ["Soft things from home (towel, cuddly toy, cushion)", "Hard, safe things (plastic cup, wooden spoon, box)"],
+      "steps": [
+        "Touch a towel with your child and say slowly: “soft”.",
+        "Touch a wooden spoon and say: “hard”.",
+        "Ask them to bring you something soft from the room.",
+        "Then ask for something hard, and compare the two with your hands."
+      ],
+      "variants": [
+        "Easier: put three things on the floor and let them pick the soft one.",
+        "Harder: add other words such as rough, smooth or squishy."
+      ],
+      "safety": "Choose objects with no loose parts or sharp edges, and bigger than your child's mouth.",
+      "tags": ["textures", "cuddly toys", "towels", "cushions", "before bed", "calm"]
+    },
+    "search-hidden-toy": {
+      "title": "Where is Teddy?",
+      "goal": "Practise attention and understand that things are still there even when out of sight.",
+      "materials": ["A big toy they love (a teddy bear, a big toy car, a doll)", "A blanket or a large box"],
+      "steps": [
+        "Show them the toy and say it is going to hide.",
+        "Hide it under a blanket while they watch, and ask: “Where is it?”",
+        "When they find it, celebrate calmly and choose a new hiding place.",
+        "Then hide it while they cover their eyes, always leaving part of it showing."
+      ],
+      "variants": [
+        "Easier: leave a paw or a wheel sticking out.",
+        "Harder: give word clues: “it's near the door”, “it's under something soft”."
+      ],
+      "safety": "Hide the toy only in low places within reach, never in wardrobes, drawers or on high furniture.",
+      "tags": ["cuddly toys", "cars", "hide and seek", "blanket", "boxes", "with siblings"]
+    },
+    "search-odd-one": {
+      "title": "Which one is different?",
+      "goal": "Notice details to find the one that is different, just like the game “Odd one out”.",
+      "materials": ["3 matching objects and 1 different one (for example, three wooden spoons and a plastic cup)"],
+      "steps": [
+        "Line up three matching objects and one different one.",
+        "Ask: “Which one is not the same?”",
+        "When they point to it, ask how it is different.",
+        "Mix up the order and change the odd one out."
+      ],
+      "variants": [
+        "Easier: make the odd one very different, like a sock among three cups.",
+        "Harder: use four nearly identical objects that only differ in colour or size."
+      ],
+      "safety": "Use only plastic, wooden or fabric objects that won't break and are bigger than your child's mouth.",
+      "tags": ["attention", "kitchen", "spoons", "cups", "quietly", "at the table"]
+    },
+    "sort-socks": {
+      "title": "Sock pairs",
+      "goal": "Find matching pairs and remember where each one is, just like the Memory game.",
+      "materials": ["5 or 6 pairs of clean socks, ideally in different colours or patterns"],
+      "steps": [
+        "Mix the socks up on the floor or on the bed.",
+        "Pick one and ask: “Where is its partner?”",
+        "When they find it, put the pair together and set it aside.",
+        "Keep going until no sock is left alone."
+      ],
+      "variants": [
+        "Easier: start with only three very different pairs.",
+        "Harder: lay the socks face down in a row and turn over two at a time, like in Memory."
+      ],
+      "safety": "Use clean socks with no decorations that could be pulled off.",
+      "tags": ["socks", "clothes", "pairs", "memory", "quietly", "colours"]
+    },
+    "sort-colors": {
+      "title": "Each colour to its basket",
+      "goal": "Group objects by colour and start sorting.",
+      "materials": ["2 or 3 baskets or boxes", "Large objects in those colours (clothes, big toys, plastic cups)"],
+      "steps": [
+        "Put each basket on the floor with a sample object inside: one red, one blue.",
+        "Gather the other objects in a pile.",
+        "Ask them to take each thing to the basket of its colour.",
+        "When you finish, check each basket together and name the colours."
+      ],
+      "variants": [
+        "Easier: use only two very different colours.",
+        "Harder: add a third colour, or sort by type (clothes, toys, kitchen)."
+      ],
+      "safety": "Use objects bigger than your child's mouth and low baskets that are light to move.",
+      "tags": ["colours", "colors", "boxes", "baskets", "toys", "cars"]
+    },
+    "sort-sizes": {
+      "title": "Big, medium and small",
+      "goal": "Compare sizes and put things in order from biggest to smallest.",
+      "materials": ["3 to 5 plastic cups, tumblers or containers in different sizes"],
+      "steps": [
+        "Put the containers on the table or floor, all mixed up.",
+        "Show them the biggest and the smallest, and name them.",
+        "Ask them to line them up from biggest to smallest.",
+        "Then let them nest one inside the other."
+      ],
+      "variants": [
+        "Easier: use just two containers, one big and one small.",
+        "Harder: ask them to put a toy or a car of the right size inside each container."
+      ],
+      "safety": "Use only plastic containers, never glass or ceramic.",
+      "tags": ["sizes", "kitchen", "cups", "containers", "boxes", "cars"]
+    },
+    "sort-shadows": {
+      "title": "Torch shadows",
+      "goal": "Match each object to its silhouette, just like the Shadows game.",
+      "materials": ["A torch (flashlight)", "3 or 4 big toys with clear shapes (animals, a car, a doll)", "A plain wall and a dim room"],
+      "steps": [
+        "Dim the lights and sit facing a plain wall.",
+        "Hold the torch and place a toy in front of it so its shadow appears.",
+        "Hide the toy behind you, make the shadow again and ask: “Whose shadow is this?”",
+        "Let them find it among the toys and hold it in the light to check."
+      ],
+      "variants": [
+        "Easier: keep the toys in view and let them choose between just two.",
+        "Harder: make animal shadows with your hands and let them guess which one."
+      ],
+      "safety": "You always hold the torch: don't let your child play with it or its battery cover.",
+      "tags": ["torch", "flashlight", "shadows", "animals", "before bed", "for a rainy day"]
+    },
+    "move-tape-line": {
+      "title": "Tape path",
+      "goal": "Improve balance and body control by walking along a line.",
+      "materials": ["Painter's tape or wide masking tape", "A clear space on the floor"],
+      "steps": [
+        "Stick a straight line on the floor, about two or three long steps long.",
+        "Walk along it first yourself, slowly, with your arms out.",
+        "Invite them to walk on the line without stepping off.",
+        "Once they manage, add a curve or a zigzag."
+      ],
+      "variants": [
+        "Easier: make it short and wide, with two strips of tape side by side.",
+        "Harder: walk on tiptoes, backwards, or push a toy car along the line as if it were a road."
+      ],
+      "safety": "Stick the tape away from furniture corners and remove it yourself afterwards; never on skin or near the mouth.",
+      "tags": ["tape", "balance", "cars", "road", "for a rainy day", "moving"]
+    },
+    "move-cushion-jumps": {
+      "title": "Cushion hop",
+      "goal": "Practise jumping, balance and coordination safely.",
+      "materials": ["3 or 4 big cushions", "A clear space on the floor"],
+      "steps": [
+        "Lay the cushions on the floor in a path, a little apart.",
+        "Show them how to go from one to the next with a big step or a small hop.",
+        "Hold their hand the first few times.",
+        "Sing a song and let them hop to the beat of the music."
+      ],
+      "variants": [
+        "Easier: put the cushions close together so they just walk across.",
+        "Harder: space them a bit further apart, or call out a colour and let them hop to that cushion."
+      ],
+      "safety": "Play only on the floor, away from furniture corners, and never climbing onto the sofa or bed.",
+      "tags": ["cushions", "jumping", "music", "songs", "for a rainy day", "moving"]
+    },
+    "move-blanket-tunnel": {
+      "title": "Sheet tunnel",
+      "goal": "Crawl and move through a new space, building confidence and coordination.",
+      "materials": ["A sheet or light blanket", "Two sturdy chairs or the back of the sofa"],
+      "steps": [
+        "Drape a sheet over two chairs to make a short tunnel, open at both ends.",
+        "Go to the other end and call their name.",
+        "Let them crawl through until they reach you.",
+        "Do it again, now with a cuddly toy waiting at the end."
+      ],
+      "variants": [
+        "Easier: lift the sheet with your hands so they can see the way out.",
+        "Harder: ask them to carry a cuddly toy through without dropping it."
+      ],
+      "safety": "Use a light fabric, always leave both ends open and check that the chairs can't tip over.",
+      "tags": ["sheet", "blanket", "tunnel", "crawling", "for a rainy day", "with siblings", "cuddly toys"]
+    },
+    "move-animal-walk": {
+      "title": "Walk like an animal",
+      "goal": "Move the body in different ways and link each animal to its movement and sound.",
+      "materials": ["Nothing, just some clear space"],
+      "steps": [
+        "Pick an animal and show how it moves: a duck, a cat, a frog.",
+        "Move around the room together like that animal.",
+        "Add the animal's sound as you go.",
+        "Let them choose the next animal."
+      ],
+      "variants": [
+        "Easier: use only two animals and move slowly.",
+        "Harder: play music and, when it stops, name a new animal to change the way you walk."
+      ],
+      "safety": "Clear toys off the floor and stay away from furniture corners and stairs.",
+      "tags": ["animals", "moving", "music", "no materials", "with siblings", "quick"]
+    },
+    "art-tape-shapes": {
+      "title": "Tape shapes",
+      "goal": "Get to know basic shapes like circle, square and triangle.",
+      "materials": ["Painter's tape or coloured tape", "A large sheet of paper or a table"],
+      "steps": [
+        "Make a big square with tape on the paper or the table.",
+        "Trace the sides with their finger and count them together.",
+        "Make a triangle and ask how it is the same and how it is different.",
+        "Offer some ready-cut strips of tape so they can make their own shape."
+      ],
+      "variants": [
+        "Easier: make the shapes yourself and let them put a toy inside each one.",
+        "Harder: stick the shapes on the floor and name one for them to jump into."
+      ],
+      "safety": "You cut the tape; the strips go on paper or the table, never on skin or near the mouth.",
+      "tags": ["tape", "shapes", "paper", "crafts", "at the table", "colours"]
+    },
+    "art-paper-tear": {
+      "title": "Tear and stick paper",
+      "goal": "Strengthen the fingers and create a picture of their own with pieces of paper.",
+      "materials": ["Tissue paper, kitchen paper or old magazines", "A large sheet of paper", "Sticky tape or a child-safe glue stick"],
+      "steps": [
+        "Show them how to tear the paper with both hands into big pieces.",
+        "Tear a pile of colourful pieces together.",
+        "Stick a strip of tape sticky side up, or spread the glue on the sheet yourself.",
+        "Let them stick the pieces wherever they like, and give their picture a name."
+      ],
+      "variants": [
+        "Easier: just tear, without sticking, for the fun of the sound and the movement.",
+        "Harder: draw a simple outline, like a tree, and let them fill it with paper."
+      ],
+      "safety": "No scissors for the child: paper is torn by hand, and pick up small scraps so they don't go in the mouth.",
+      "tags": ["paper", "tape", "crafts", "colours", "for a rainy day", "at the table"]
+    },
+    "art-water-paint": {
+      "title": "Painting with water",
+      "goal": "Explore drawing strokes and hand movement without any mess.",
+      "materials": ["A wide paintbrush or a big sponge", "A little water in a plastic cup", "Dark card or a dark paving stone outside"],
+      "steps": [
+        "Pour a little water into the cup, just a finger deep.",
+        "Dip the brush and paint a line: the drawing shows up dark.",
+        "Give them the brush and let them paint freely.",
+        "Watch together as the drawing fades while it dries, and paint again."
+      ],
+      "variants": [
+        "Easier: let them paint with wet fingers.",
+        "Harder: paint a shape or a letter and let them trace over it with the brush."
+      ],
+      "safety": "Use very little water, stay right next to your child and dry the floor afterwards so nobody slips.",
+      "tags": ["water", "painting", "paintbrush", "quietly", "no mess", "outdoors"]
+    },
+    "art-sock-puppet": {
+      "title": "Sock puppet",
+      "goal": "Create a character and give it a voice, to imagine and express feelings.",
+      "materials": ["A large clean sock", "A washable marker (for the adult)"],
+      "steps": [
+        "Let them choose a sock and decide which animal or character it will be.",
+        "Draw the eyes and mouth yourself with the marker.",
+        "Put the sock on your hand and make it say hello in a funny voice.",
+        "Hand them the puppet and let them invent a name and a voice."
+      ],
+      "variants": [
+        "Easier: you move the puppet and it just asks simple questions.",
+        "Harder: make two puppets and let them have a little conversation."
+      ],
+      "safety": "Don't glue on eyes, beads or decorations: draw the face so there are no parts that could come loose.",
+      "tags": ["socks", "puppets", "animals", "stories", "pretend play", "with siblings"]
+    },
+    "language-spoon-story": {
+      "title": "Spoon story",
+      "goal": "Make up and tell a simple story with characters made from spoons.",
+      "materials": ["2 or 3 large wooden spoons", "A tea towel as the stage"],
+      "steps": [
+        "Introduce each spoon as a character: “This is Grandma Spoon.”",
+        "Start a short story: “One day, Grandma Spoon went for a walk…”",
+        "Ask what happens next and follow their idea.",
+        "End the story with all the characters going to sleep under the tea towel."
+      ],
+      "variants": [
+        "Easier: use just one spoon that says hello, eats and goes to sleep.",
+        "Harder: let them tell the story while you only ask questions."
+      ],
+      "safety": "Use large, smooth wooden spoons with no splinters, and avoid metal cutlery with an edge.",
+      "tags": ["stories", "spoons", "kitchen", "imagination", "before bed", "calm"]
+    },
+    "language-what-for": {
+      "title": "What is it for?",
+      "goal": "Grow vocabulary and understand what each everyday thing is used for.",
+      "materials": ["4 or 5 safe everyday objects (hairbrush, wooden spoon, towel, shoe, big comb)"],
+      "steps": [
+        "Put the objects in front of them, one at a time.",
+        "Ask: “What is this? What is it for?”",
+        "If they don't know, mime using it and let them copy you.",
+        "At the end, ask the other way round: “What do we brush our hair with?”"
+      ],
+      "variants": [
+        "Easier: you say what it is for and they point to the object.",
+        "Harder: ask where each thing is kept and let them take it there."
+      ],
+      "safety": "Use objects with no sharp edges or cords, and none small enough to fit in the mouth.",
+      "tags": ["words", "household objects", "hairbrush", "towel", "quick", "in the kitchen"]
+    },
+    "language-mystery-bag": {
+      "title": "The mystery bag",
+      "goal": "Recognise objects by touch and describe them with words.",
+      "materials": ["A cloth bag or a pillowcase", "3 or 4 familiar, large objects (cuddly toy, wooden spoon, sock, soft ball)"],
+      "steps": [
+        "Put one object in the pillowcase without them seeing it.",
+        "Let them reach in and feel it without looking.",
+        "Ask: “Is it soft or hard? Big or small? What is it?”",
+        "Take the object out to check, and swap it for another one."
+      ],
+      "variants": [
+        "Easier: show them the objects first and let them guess which one they touched.",
+        "Harder: let them describe the object without saying its name while you guess."
+      ],
+      "safety": "Always use a cloth bag or a pillowcase, never a plastic bag, and put it away afterwards.",
+      "tags": ["touch", "textures", "cuddly toys", "before bed", "quietly", "guessing games"]
+    },
+    "language-sounds": {
+      "title": "What sounds like this?",
+      "goal": "Listen carefully and link each sound to the object that makes it.",
+      "materials": ["A pot, a lid and a wooden spoon", "2 or 3 plastic containers"],
+      "steps": [
+        "Tap the pot with the spoon and let them listen to the sound.",
+        "Try the lid and a plastic container, and compare how they sound.",
+        "Turn your back, make a sound and ask: “What sounds like this?”",
+        "Finish by making music together, loud and then very soft."
+      ],
+      "variants": [
+        "Easier: make the sound while they watch and let them point to the object.",
+        "Harder: imitate animal sounds and let them guess which one."
+      ],
+      "safety": "Use only cold pots and plastic containers, never glass, and don't put anything small inside to make shakers.",
+      "tags": ["music", "sounds", "kitchen", "pots", "animals", "with siblings"]
+    },
+    "routine-toy-home": {
+      "title": "Every toy to its home",
+      "goal": "Learn to tidy up and that everything has its place, just like the game “To its place”.",
+      "materials": ["2 or 3 boxes or baskets (one for cuddly toys, one for cars, one for big blocks)"],
+      "steps": [
+        "Put a sample in each box: a cuddly toy, a car.",
+        "Say: “The toys are going home to sleep.”",
+        "Hand them the toys one at a time and let them take each to its box.",
+        "When you finish, check each box together and thank them."
+      ],
+      "variants": [
+        "Easier: use just one box for everything.",
+        "Harder: put a picture on each box and let them tidy up on their own by looking at the picture."
+      ],
+      "safety": "Use light boxes without heavy lids that could close on their fingers.",
+      "tags": ["toys", "boxes", "cars", "cuddly toys", "tidying up", "before bed"]
+    },
+    "routine-laundry": {
+      "title": "Laundry helper",
+      "goal": "Join in with housework and practise sorting by person or by type.",
+      "materials": ["Clean, dry clothes (socks, T-shirts, towels)", "A laundry basket"],
+      "steps": [
+        "Put the clean clothes on the floor or the bed.",
+        "Ask them to find all their own clothes first.",
+        "Then let them put socks and towels into piles.",
+        "Carry each pile to its place together."
+      ],
+      "variants": [
+        "Easier: let them just take the towels out of the basket.",
+        "Harder: let them fold a small towel in half, with your help."
+      ],
+      "safety": "Use only clean, dry clothes, away from the washing machine, the iron and cleaning products.",
+      "tags": ["clothes", "socks", "towels", "helping", "colours", "at home"]
+    },
+    "routine-table": {
+      "title": "Setting the table",
+      "goal": "Count, match and feel part of the family by helping to set the table.",
+      "materials": ["Plastic plates, cups and spoons (unbreakable)", "Cloth or paper napkins"],
+      "steps": [
+        "Count together how many people are eating.",
+        "Hand them the plates one at a time and let them put one at each place.",
+        "Then the cups, then the spoons and the napkins.",
+        "When everyone sits down, tell them who set the table."
+      ],
+      "variants": [
+        "Easier: let them put out only the napkins.",
+        "Harder: let them give each person their own colour, or count aloud while handing things out."
+      ],
+      "safety": "Use only unbreakable things, with no knives, glass or hot plates.",
+      "tags": ["kitchen", "plates", "spoons", "counting", "helping", "in the kitchen"]
+    },
+    "routine-shoe-pairs": {
+      "title": "Shoe pairs",
+      "goal": "Match shoes, tell sizes apart and learn to leave them tidy.",
+      "materials": ["Family shoes, 3 or 4 pairs"],
+      "steps": [
+        "Mix the shoes up by the front door.",
+        "Ask: “Where is this shoe's partner?”",
+        "Let them place each pair together, side by side.",
+        "At the end, let them guess whose each pair is."
+      ],
+      "variants": [
+        "Easier: use only two very different pairs.",
+        "Harder: let them line them up from biggest to smallest."
+      ],
+      "safety": "Use shoes without long laces, and set aside any with heels or buckles.",
+      "tags": ["shoes", "pairs", "sizes", "tidying up", "quick", "with siblings"]
+    }
+  },
+  "searchHints": ["socks", "boxes", "tape", "animals", "cars", "music", "for a rainy day", "before bed", "quietly"],
+  "noResults": "We couldn't find ideas with that word. Try another one, or tap one of these suggestions."
+}
