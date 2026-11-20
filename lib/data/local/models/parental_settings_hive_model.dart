@@ -4,6 +4,7 @@ import '../../../domain/entities/parental_settings.dart';
 import '../../../domain/parental/daily_play_time.dart';
 import '../../../domain/parental/rest_schedule.dart';
 import '../../../domain/settings/game_difficulty.dart';
+import '../../../domain/settings/how_to_play.dart';
 
 part 'parental_settings_hive_model.g.dart';
 
@@ -25,6 +26,8 @@ class ParentalSettingsHiveModel {
     this.nightUntil,
     this.naps,
     this.restAllowedUntil,
+    this.moveMode,
+    this.playingHand,
   });
 
   factory ParentalSettingsHiveModel.fromEntity(ParentalSettings entity) {
@@ -46,6 +49,8 @@ class ParentalSettingsHiveModel {
               for (final RestWindow nap in entity.restSchedule.naps) ...[nap.from, nap.until]
             ],
       restAllowedUntil: entity.restAllowedUntil,
+      moveMode: entity.moveMode.name,
+      playingHand: entity.playingHand.name,
     );
   }
 
@@ -84,6 +89,14 @@ class ParentalSettingsHiveModel {
   @HiveField(11)
   final DateTime? restAllowedUntil;
 
+  /// Nombre de [MoveMode] (HU-039); `null` en los datos anteriores: «Ambas».
+  @HiveField(12)
+  final String? moveMode;
+
+  /// Nombre de [PlayingHand] (HU-031); `null` en los datos anteriores: derecha.
+  @HiveField(13)
+  final String? playingHand;
+
   /// Un horario dañado (fuera del día o impar) se lee como apagado: la app
   /// nunca se queda bloqueada en la pantalla de noche por un dato raro.
   RestSchedule _restSchedule() {
@@ -113,6 +126,8 @@ class ParentalSettingsHiveModel {
       starDecayResumedAt: starDecayResumedAt?.toLocal(),
       restSchedule: _restSchedule(),
       restAllowedUntil: restAllowedUntil?.toLocal(),
+      moveMode: MoveMode.fromName(moveMode),
+      playingHand: PlayingHand.fromName(playingHand),
     );
   }
 }

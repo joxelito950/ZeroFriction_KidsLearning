@@ -10,6 +10,7 @@ import 'domain/feedback/feedback_email.dart';
 import 'domain/repositories/i_persistence_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/blocs/app_locale/app_locale_cubit.dart';
+import 'presentation/blocs/how_to_play/how_to_play_cubit.dart';
 import 'presentation/blocs/play_time/play_time_cubit.dart';
 import 'presentation/blocs/sound/sound_cubit.dart';
 import 'presentation/l10n/startup_locale.dart';
@@ -96,6 +97,8 @@ class _ToddlerLogicAppState extends State<ToddlerLogicApp> {
           BlocProvider<PlayTimeCubit>(
             create: (_) => PlayTimeCubit(repository: repository, now: widget.now)..start(),
           ),
+          // Cómo juega: arrastrar o tocar y la mano dominante (HU-039, HU-031).
+          BlocProvider<HowToPlayCubit>(create: (_) => HowToPlayCubit(repository: repository)..load()),
           // Sonidos suaves de los juegos y su interruptor (HU-005).
           BlocProvider<SoundCubit>(
             create: (_) => SoundCubit(repository: repository, effects: AudioplayersSoundEffects())..load(),

@@ -2,11 +2,13 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/shadows/shadow_drop.dart';
 import '../../domain/vehicles/vehicle_catalog.dart';
 import '../../domain/vehicles/vehicle_drop.dart';
 import '../../l10n/app_localizations.dart';
+import '../blocs/how_to_play/how_to_play_cubit.dart';
 import '../blocs/vehicle_game/vehicle_game_state.dart';
 import '../theme/app_palette.dart';
 
@@ -41,8 +43,12 @@ final class VehicleBoardGeometry {
     required List<Place> places,
     required List<Vehicle> vehicles,
     required double devicePixelRatio,
+    bool leftHanded = false,
   }) {
     final bool horizontal = size.width > size.height;
+    // Con la mano izquierda y en horizontal, los sitios pasan al otro lado,
+    // donde la mano no los tapa (HU-031 R1), como en Sombras.
+    placesFirst = placesFirst != (horizontal && leftHanded);
     final int placeCount = math.max(places.length, 1);
     final int vehicleCount = math.max(vehicles.length, 1);
     // Los sitios llevan dentro sus vehículos: reciben algo más de espacio.
@@ -118,7 +124,8 @@ final class VehicleBoardGeometry {
     return rects;
   }
 
-  static ShadowBox boxOf(Rect rect) => ShadowBox(left: rect.left, top: rect.top, width: rect.width, height: rect.height);
+  static ShadowBox boxOf(Rect rect) =>
+      ShadowBox(left: rect.left, top: rect.top, width: rect.width, height: rect.height);
 }
 
 /// Tablero de «A su sitio» (HU-052 7.1): los sitios, la bandeja y el vehículo
@@ -219,9 +226,7 @@ class _VehicleBoardViewState extends State<VehicleBoardView> with SingleTickerPr
     if (_dragged != vehicle || geometry == null) return;
     final Rect from = _draggedRect(geometry);
     final ShadowDropOutcome outcome = widget.onDrop(vehicle, VehicleBoardGeometry.boxOf(from), _placeBoxes(geometry));
-    final Rect to = outcome == ShadowDropOutcome.snapped
-        ? _slotOf(geometry, vehicle)
-        : geometry.trayRects[vehicle]!;
+    final Rect to = outcome == ShadowDropOutcome.snapped ? _slotOf(geometry, vehicle) : geometry.trayRects[vehicle]!;
     _fly(vehicle, from: from, to: to);
   }
 
@@ -257,11 +262,29 @@ class _VehicleBoardViewState extends State<VehicleBoardView> with SingleTickerPr
         widget.state.coverageToSnap;
   }
 
+  /// Tocar el vehículo lo elige; tocarlo otra vez lo suelta; tocar otro
+  /// cambia la elección (HU-039 R3).
+  void _onVehicleTapped(Vehicle vehicle) {
+    if (_dragged != null || _flying != null || !widget.state.canDrag(vehicle)) return;
+    if (_selected != vehicle) widget.onGrab(vehicle);
+    setState(() => _selected = _selected == vehicle ? null : vehicle);
+  }
+
+  /// Con un vehículo elegido, tocar un sitio lo lleva hasta él. Si no es el
+  /// suyo, vuelve a la bandeja como al soltarlo mal (HU-039 R4).
   void _onPlaceActivated(Place place) {
     final Vehicle? selected = _selected;
+    final VehicleBoardGeometry? geometry = _geometry;
     if (selected == null) return;
     setState(() => _selected = null);
-    widget.onMatch(selected, place);
+    final Rect? slotBefore = geometry == null ? null : _slotOf(geometry, selected);
+    final ShadowDropOutcome outcome = widget.onMatch(selected, place);
+    final Rect? tray = geometry?.trayRects[selected];
+    final Rect? at = geometry?.placeRects[place];
+    if (tray == null || at == null || slotBefore == null) return;
+    _fly(selected,
+        from: outcome == ShadowDropOutcome.snapped ? tray : at,
+        to: outcome == ShadowDropOutcome.snapped ? slotBefore : tray);
   }
 
   @override
@@ -271,6 +294,11 @@ class _VehicleBoardViewState extends State<VehicleBoardView> with SingleTickerPr
     final List<Place> places = state.board?.places ?? const [];
     final Vehicle? hintVehicle = widget.hintVehicle;
     final Place? hintPlace = hintVehicle == null ? null : state.board?.targetOf(hintVehicle);
+    // Arrastrar, tocar o ambas (HU-039). Con el lector de pantalla siempre se
+    // puede tocar.
+    final HowToPlay how = context.select<HowToPlayCubit?, HowToPlay>((cubit) => cubit?.state ?? const HowToPlay());
+    final bool tapEnabled = how.moveMode.allowsTap || MediaQuery.accessibleNavigationOf(context);
+    final bool dragEnabled = how.moveMode.allowsDrag;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -280,6 +308,7 @@ class _VehicleBoardViewState extends State<VehicleBoardView> with SingleTickerPr
           places: places,
           vehicles: state.vehicles,
           devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
+          leftHanded: how.leftHanded,
         );
         _geometry = geometry;
         final double vehicleEmoji = geometry.vehicleCell * VehicleBoardGeometry.emojiFraction;
@@ -351,13 +380,15 @@ class _VehicleBoardViewState extends State<VehicleBoardView> with SingleTickerPr
                       excludeSemantics: true,
                       child: GestureDetector(
                         dragStartBehavior: DragStartBehavior.down,
-                        onPanStart: (_) => _onPanStart(vehicle),
-                        onPanUpdate: (details) => _onPanUpdate(vehicle, details),
-                        onPanEnd: (_) => _onPanEnd(vehicle),
-                        onPanCancel: () => _onPanEnd(vehicle),
+                        onTap: tapEnabled ? () => _onVehicleTapped(vehicle) : null,
+                        onPanStart: dragEnabled ? (_) => _onPanStart(vehicle) : null,
+                        onPanUpdate: dragEnabled ? (details) => _onPanUpdate(vehicle, details) : null,
+                        onPanEnd: dragEnabled ? (_) => _onPanEnd(vehicle) : null,
+                        onPanCancel: dragEnabled ? () => _onPanEnd(vehicle) : null,
                         child: Opacity(
                           opacity: _dragged == vehicle ? 0 : 1,
-                          child: _VehicleCard(symbol: vehicle.symbol, emojiSize: vehicleEmoji, selected: _selected == vehicle),
+                          child: _VehicleCard(
+                              symbol: vehicle.symbol, emojiSize: vehicleEmoji, selected: _selected == vehicle),
                         ),
                       ),
                     ),
@@ -402,7 +433,8 @@ class _VehicleBoardViewState extends State<VehicleBoardView> with SingleTickerPr
     final String name = l10n.vehiclesPlaceName(place.name);
     final List<Vehicle> here = state.placedAt(place);
     if (here.isEmpty) return name;
-    return l10n.vehiclesPlaceWithSemantics(name, here.map((vehicle) => l10n.vehiclesVehicleName(vehicle.name)).join(', '));
+    return l10n.vehiclesPlaceWithSemantics(
+        name, here.map((vehicle) => l10n.vehiclesVehicleName(vehicle.name)).join(', '));
   }
 
   Widget _hintWrap(bool hinted, GlobalKey? key, Widget child) =>
@@ -452,20 +484,25 @@ class _PlaceCard extends StatelessWidget {
       label: semanticLabel,
       onTap: onActivate,
       excludeSemantics: true,
-      child: LayoutBuilder(
-        builder: (context, constraints) => DecoratedBox(
-          key: almost ? ValueKey<String>('vehicle-almost-${place.name}') : null,
-          decoration: BoxDecoration(
-            color: AppPalette.warmCream,
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(
-              color: almost ? AppPalette.amber : AppPalette.deepTeal.withValues(alpha: 0.35),
-              width: almost ? 4 : 2,
+      // Con un vehículo elegido, el sitio se toca para llevarlo (HU-039 R3).
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onActivate,
+        child: LayoutBuilder(
+          builder: (context, constraints) => DecoratedBox(
+            key: almost ? ValueKey<String>('vehicle-almost-${place.name}') : null,
+            decoration: BoxDecoration(
+              color: AppPalette.warmCream,
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(
+                color: almost ? AppPalette.amber : AppPalette.deepTeal.withValues(alpha: 0.35),
+                width: almost ? 4 : 2,
+              ),
             ),
-          ),
-          child: Align(
-            alignment: const Alignment(0, -0.6),
-            child: _Emoji(symbol: place.symbol, size: constraints.maxWidth * 0.42),
+            child: Align(
+              alignment: const Alignment(0, -0.6),
+              child: _Emoji(symbol: place.symbol, size: constraints.maxWidth * 0.42),
+            ),
           ),
         ),
       ),
@@ -475,7 +512,8 @@ class _PlaceCard extends StatelessWidget {
 
 /// Un vehículo de la bandeja: el emoji en color sobre una tarjeta blanca.
 class _VehicleCard extends StatelessWidget {
-  const _VehicleCard({super.key, required this.symbol, required this.emojiSize, this.selected = false, this.lifted = false});
+  const _VehicleCard(
+      {super.key, required this.symbol, required this.emojiSize, this.selected = false, this.lifted = false});
 
   final String symbol;
   final double emojiSize;
