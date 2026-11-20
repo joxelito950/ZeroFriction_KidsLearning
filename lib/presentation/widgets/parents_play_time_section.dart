@@ -3,19 +3,34 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/parental_settings.dart';
+import '../../domain/parental/rest_schedule.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/play_time/play_time_cubit.dart';
 import '../theme/app_palette.dart';
+import 'parents_bedtime_editor.dart';
 import 'parents_setting_page.dart';
 
 /// Resumen de la fila «Tiempo de juego» (HU-046 §4.1).
 String parentsPlayTimeSummary(AppLocalizations l10n, int? limitMinutes) =>
     limitMinutes == null ? l10n.parentsZonePlayTimeNoLimit : l10n.parentsZonePlayTimePerDay(limitMinutes);
 
+/// El resumen con la hora de dormir: «60 min al día · Dormir de 19:30 a 7:00»
+/// (HU-038 §3.1).
+String parentsPlayTimeRowSummary(BuildContext context, PlayTimeState state) {
+  final l10n = AppLocalizations.of(context);
+  final String limit = parentsPlayTimeSummary(l10n, state.limitMinutes);
+  final RestWindow? night = state.schedule.night;
+  if (night == null) return limit;
+  final String bedtime =
+      l10n.parentsBedtimeRowSummary(formatDayMinute(context, night.from), formatDayMinute(context, night.until));
+  return '$limit · $bedtime';
+}
+
 /// Pantalla «Tiempo de juego» (HU-009 R1, HU-046): primero los controles
 /// parentales del sistema, después la recomendación de la OMS y, para
-/// reforzarlos, el límite diario de la app. Se elige un borrador y se aplica
-/// con «Guardar»; los «15 minutos más» están arriba de la Zona de Padres.
+/// reforzarlos, el límite diario de la app; debajo, la hora de dormir y las
+/// siestas (HU-038). Se elige un borrador y se aplica con «Guardar»; los «15
+/// minutos más» están arriba de la Zona de Padres.
 class ParentsPlayTimePage extends StatefulWidget {
   const ParentsPlayTimePage({super.key});
 
@@ -27,6 +42,7 @@ class _ParentsPlayTimePageState extends State<ParentsPlayTimePage> {
   final TextEditingController _custom = TextEditingController();
   late int? _limit;
   late bool _customSelected;
+  late RestSchedule _schedule;
   bool _customInvalid = false;
 
   /// El adulto ya ha tocado algo: el borrador es suyo.
@@ -36,7 +52,9 @@ class _ParentsPlayTimePageState extends State<ParentsPlayTimePage> {
   @override
   void initState() {
     super.initState();
-    _resetTo(context.read<PlayTimeCubit>().state.limitMinutes);
+    final PlayTimeState state = context.read<PlayTimeCubit>().state;
+    _resetTo(state.limitMinutes);
+    _schedule = state.schedule;
     _custom.addListener(_onCustomChanged);
   }
 
@@ -69,7 +87,14 @@ class _ParentsPlayTimePageState extends State<ParentsPlayTimePage> {
   /// El límite elegido; con «Personalizado», lo escrito (`null` si no es un número).
   int? get _chosen => _customSelected ? int.tryParse(_custom.text) : _limit;
 
-  bool _dirty(int? saved) => _customSelected ? _custom.text.isNotEmpty && _chosen != saved : _limit != saved;
+  bool _limitDirty(int? saved) => _customSelected ? _custom.text.isNotEmpty && _chosen != saved : _limit != saved;
+
+  bool _dirty(PlayTimeState state) => _limitDirty(state.limitMinutes) || _schedule != state.schedule;
+
+  void _changeSchedule(RestSchedule schedule) => setState(() {
+        _touched = true;
+        _schedule = schedule;
+      });
 
   void _choose(int? minutes) => setState(() {
         _touched = true;
@@ -85,14 +110,18 @@ class _ParentsPlayTimePageState extends State<ParentsPlayTimePage> {
       });
 
   /// Un valor fuera de 5–720 no se guarda: se resalta el rango, sin tono de
-  /// error (R1c), y la pantalla sigue abierta.
+  /// error (R1c), y la pantalla sigue abierta. Un horario que no cumple R7 o
+  /// R7a tampoco: su frase ya está a la vista (HU-038).
   Future<bool> _save() async {
     final int? minutes = _chosen;
     if (_customSelected && (minutes == null || !ParentalSettings.isValidLimit(minutes))) {
       setState(() => _customInvalid = true);
       return false;
     }
-    await context.read<PlayTimeCubit>().setLimit(minutes);
+    if (!_schedule.isValid) return false;
+    final PlayTimeCubit cubit = context.read<PlayTimeCubit>();
+    await cubit.setLimit(minutes);
+    if (_schedule != cubit.state.schedule) await cubit.setSchedule(_schedule);
     return true;
   }
 
@@ -104,16 +133,21 @@ class _ParentsPlayTimePageState extends State<ParentsPlayTimePage> {
     return BlocConsumer<PlayTimeCubit, PlayTimeState>(
       // El límite guardado llega después de abrir (se lee al arrancar) o cambia
       // desde fuera: si el adulto aún no ha tocado nada, el borrador lo sigue.
-      listenWhen: (previous, current) => previous.limitMinutes != current.limitMinutes,
+      listenWhen: (previous, current) =>
+          previous.limitMinutes != current.limitMinutes || previous.schedule != current.schedule,
       listener: (context, state) {
-        if (!_touched) setState(() => _resetTo(state.limitMinutes));
+        if (_touched) return;
+        setState(() {
+          _resetTo(state.limitMinutes);
+          _schedule = state.schedule;
+        });
       },
       builder: (context, state) {
         final int? saved = state.limitMinutes;
         return ParentsSettingPage(
           key: const ValueKey<String>('parents-zone-play-time'),
           title: l10n.parentsZonePlayTimeTitle,
-          dirty: _dirty(saved),
+          dirty: _dirty(state),
           onSave: _save,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +214,8 @@ class _ParentsPlayTimePageState extends State<ParentsPlayTimePage> {
                   style: theme.textTheme.bodyMedium,
                 ),
               ],
+              const Divider(height: 40),
+              ParentsBedtimeEditor(schedule: _schedule, onChanged: _changeSchedule),
             ],
           ),
         );

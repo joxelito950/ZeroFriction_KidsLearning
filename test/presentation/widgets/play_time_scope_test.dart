@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
+import 'package:toddler_logic/domain/parental/rest_schedule.dart';
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
@@ -16,6 +17,8 @@ import 'package:toddler_logic/presentation/screens/parental_gate_screen.dart';
 import 'package:toddler_logic/presentation/screens/rest_screen.dart';
 import 'package:toddler_logic/presentation/widgets/memory_board.dart';
 import 'package:toddler_logic/presentation/widgets/play_time_scope.dart';
+import 'package:toddler_logic/presentation/blocs/sound/sound_cubit.dart';
+import 'package:toddler_logic/presentation/widgets/warm_veil.dart';
 
 import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
@@ -175,5 +178,86 @@ void main() {
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump(const Duration(seconds: 3));
     expect(playTimeOf(tester).state.today.played, before + const Duration(seconds: 3));
+  });
+
+  group('bedtime (HU-038)', () {
+    testWidgets('opening at night shows the night screen; at 7:00 the menu is back by itself (R1, R6)', (tester) async {
+      DateTime clock = DateTime(2026, 11, 21, 6, 59, 58);
+      when(() => repository.readParentalSettings()).thenAnswer(
+          (_) async => ParentalSettings(restSchedule: const RestSchedule(night: RestSchedule.defaultNight)));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale, now: () => clock));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text(l10n.restNightTitle), findsOneWidget);
+      expect(menuGame(), findsNothing);
+
+      clock = DateTime(2026, 11, 21, 7);
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(RestScreen), findsNothing);
+      expect(menuGame(), findsOneWidget);
+    });
+
+    testWidgets('the screen changes from the daily limit to the night while it is open', (tester) async {
+      DateTime clock = DateTime(2026, 11, 20, 19, 29, 58);
+      when(() => repository.readParentalSettings()).thenAnswer((_) async => ParentalSettings(
+            dailyLimitMinutes: 15,
+            playTime: DailyPlayTime(day: clock, played: const Duration(minutes: 20)),
+            restSchedule: const RestSchedule(night: RestSchedule.defaultNight),
+          ));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale, now: () => clock));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text(l10n.restTitle), findsOneWidget);
+
+      clock = DateTime(2026, 11, 20, 19, 30);
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump();
+      expect(find.text(l10n.restNightTitle), findsOneWidget);
+    });
+  });
+
+  group('winding down for bed (HU-038 R10, R11)', () {
+    Finder veil() => find.byKey(const ValueKey<String>('warm-veil'));
+
+    testWidgets('the warm veil grows over the whole app, celebrations go quiet, and nothing can be missed by touch',
+        (tester) async {
+      DateTime clock = DateTime(2026, 11, 20, 18, 59, 59);
+      when(() => repository.readParentalSettings())
+          .thenAnswer((_) async => ParentalSettings(restSchedule: const RestSchedule(night: RestSchedule.defaultNight)));
+      await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale, now: () => clock));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      final SoundCubit sound = tester.element(find.byType(PlayTimeScope)).read<SoundCubit>();
+      expect(veil(), findsNothing);
+      expect(sound.celebrationsMuted, isFalse);
+
+      clock = DateTime(2026, 11, 20, 19, 15);
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump();
+      expect(tester.widget<ColoredBox>(veil()).color, WarmVeil.colorAt(0.5));
+      expect(tester.getSize(veil()), tester.getSize(find.byType(MaterialApp)));
+      expect(sound.celebrationsMuted, isTrue);
+      // La capa no tapa los toques: el menú sigue abriendo los juegos.
+      expect(menuGame(), findsOneWidget);
+
+      clock = DateTime(2026, 11, 21, 7);
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(veil(), findsNothing);
+      expect(sound.celebrationsMuted, isFalse);
+    });
+
+    testWidgets('opening the app inside the wind-down mutes celebrations from the start', (tester) async {
+      when(() => repository.readParentalSettings())
+          .thenAnswer((_) async => ParentalSettings(restSchedule: const RestSchedule(night: RestSchedule.defaultNight)));
+      await tester.pumpWidget(
+          ToddlerLogicApp(repository: repository, locale: testLocale, now: () => DateTime(2026, 11, 20, 19, 20)));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(tester.element(find.byType(PlayTimeScope)).read<SoundCubit>().celebrationsMuted, isTrue);
+      expect(veil(), findsOneWidget);
+    });
   });
 }

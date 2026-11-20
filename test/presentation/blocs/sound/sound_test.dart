@@ -119,6 +119,22 @@ void main() {
       await cubit.close();
     });
 
+    test('while winding down for bed, only the soft flip plays; the parents switch is untouched (HU-038 R10)', () async {
+      final cubit = SoundCubit(repository: repository, effects: effects);
+      expect(GameSound.values.where((sound) => !sound.isCelebration), [GameSound.flip]);
+      cubit.setCelebrationsMuted(true);
+      expect(cubit.celebrationsMuted, isTrue);
+      for (final GameSound sound in GameSound.values) {
+        cubit.play(sound);
+      }
+      expect(effects.played, [GameSound.flip]);
+      expect(cubit.state, isTrue);
+      cubit.setCelebrationsMuted(false);
+      cubit.play(GameSound.complete);
+      expect(effects.played, [GameSound.flip, GameSound.complete]);
+      await cubit.close();
+    });
+
     test('reads a silenced app, and keeps going if the profile cannot be read or saved', () async {
       when(() => repository.readUserProfile())
           .thenAnswer((_) async => const UserProfile(isPremium: false, isSoundEnabled: false));

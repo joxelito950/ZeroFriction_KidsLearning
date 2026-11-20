@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (borrador del 2026-11-12, con el estudio de viabilidad). Faltan las respuestas del dueño a P1–P4 |
+| **Estado** | **Lista** (2026-11-19): P1 a P4 decididas por el dueño, como las recomendaciones. Se desarrolla junto con HU-039 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | S (1 entrega, 1 día) |
@@ -64,10 +64,10 @@ En la sección **«Cómo juega»** (compartida con HU-039):
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿Se refleja también la disposición en vertical (sombras abajo para el zurdo)? | **No.** Arriba no lo tapa ninguna de las dos manos y cambiarlo despistaría |
-| P2 | ¿Se dibuja una mano izquierda propia o se refleja la derecha? | **Se refleja.** La de ahora es simétrica de luz; un dibujo aparte duplica el trabajo de identidad |
-| P3 | ¿Un ajuste por niño? | **No**, la app no tiene perfiles (fuera de alcance) |
-| P4 | ¿Se desarrolla junto con HU-039, en la misma sección y la misma entrega de datos? | **Sí:** comparten sección, modelo y pruebas de la Zona de Padres |
+| P1 | ¿Se refleja también la disposición en vertical (sombras abajo para el zurdo)? | ✅ Decidido (2026-11-19), como la recomendación: **no.** Arriba no lo tapa ninguna de las dos manos y cambiarlo despistaría |
+| P2 | ¿Se dibuja una mano izquierda propia o se refleja la derecha? | ✅ Decidido (2026-11-19), como la recomendación: **se refleja.** La de ahora es simétrica de luz; un dibujo aparte duplica el trabajo de identidad |
+| P3 | ¿Un ajuste por niño? | ✅ Decidido (2026-11-19), como la recomendación: **no**, la app no tiene perfiles (fuera de alcance) |
+| P4 | ¿Se desarrolla junto con HU-039, en la misma sección y la misma entrega de datos? | ✅ Decidido (2026-11-19), como la recomendación: **sí:** comparten sección, modelo y pruebas de la Zona de Padres |
 
 ## 8. Fuera de alcance
 

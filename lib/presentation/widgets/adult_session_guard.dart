@@ -21,6 +21,10 @@ class AdultSessionGuard extends StatefulWidget {
   final Widget child;
   final Duration inactivity;
 
+  /// Un toque fuera de las pantallas guardadas pero dentro de la sesión, por
+  /// ejemplo en el selector de hora (HU-038), que se abre como otra ruta.
+  static void registerActivity() => _AdultSessionGuardState._onActivity();
+
   @override
   State<AdultSessionGuard> createState() => _AdultSessionGuardState();
 }

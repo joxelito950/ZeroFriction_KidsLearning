@@ -12,6 +12,7 @@ import 'package:toddler_logic/data/local/models/user_profile_hive_model.dart';
 import 'package:toddler_logic/domain/entities/level_state.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/parental/daily_play_time.dart';
+import 'package:toddler_logic/domain/parental/rest_schedule.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/news/discovery.dart';
@@ -97,8 +98,7 @@ void main() {
     });
 
     test('readLevelState returns a level state by id', () async {
-      when(() => levelStateBox.get('level_1'))
-          .thenReturn(_levelModel('level_1', completed: true, stars: 2));
+      when(() => levelStateBox.get('level_1')).thenReturn(_levelModel('level_1', completed: true, stars: 2));
 
       final result = await repository.readLevelState('level_1');
 
@@ -133,8 +133,8 @@ void main() {
 
       await repository.saveLevelStates(levelStates);
 
-      final saved = verify(() => levelStateBox.putAll(captureAny())).captured.single
-          as Map<dynamic, LevelStateHiveModel>;
+      final saved =
+          verify(() => levelStateBox.putAll(captureAny())).captured.single as Map<dynamic, LevelStateHiveModel>;
       expect(saved.keys, ['level_10', 'level_11']);
       expect(saved['level_10']!.toEntity(), levelStates[0]);
       expect(saved['level_11']!.toEntity(), levelStates[1]);
@@ -183,9 +183,8 @@ void main() {
 
       await repository.saveUserProfile(userProfile);
 
-      final saved = verify(() => userProfileBox.put('current_user_profile', captureAny()))
-          .captured
-          .single as UserProfileHiveModel;
+      final saved = verify(() => userProfileBox.put('current_user_profile', captureAny())).captured.single
+          as UserProfileHiveModel;
       expect(saved.toEntity(), userProfile.copyWith(discovery: Discovery.allSeen()));
     });
     test('readParentalSettings returns the defaults when nothing is stored', () async {
@@ -203,12 +202,45 @@ void main() {
 
       await repository.saveParentalSettings(settings);
 
-      final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny()))
-          .captured
-          .single as ParentalSettingsHiveModel;
+      final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny())).captured.single
+          as ParentalSettingsHiveModel;
       expect(saved.playedSeconds, 754);
       when(() => parentalSettingsBox.get('current_parental_settings')).thenReturn(saved);
       expect(await repository.readParentalSettings(), settings);
+    });
+
+    test('the bedtime, the naps and the 15 minutes are stored and read back (HU-038)', () async {
+      final settings = ParentalSettings(
+        restSchedule: RestSchedule(
+            night: RestSchedule.defaultNight, naps: [RestWindow(9 * 60, 10 * 60), RestSchedule.defaultNap]),
+        restAllowedUntil: DateTime(2026, 11, 20, 22, 15),
+      );
+      when(() => parentalSettingsBox.put(any(), any())).thenAnswer((_) async {});
+
+      await repository.saveParentalSettings(settings);
+
+      final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny())).captured.single
+          as ParentalSettingsHiveModel;
+      expect(saved.nightFrom, 19 * 60 + 30);
+      expect(saved.naps, [540, 600, 780, 900]);
+      expect(saved.toEntity(), settings);
+      expect(ParentalSettingsHiveModel.fromEntity(ParentalSettings.initial).naps, isNull);
+    });
+
+    test('a damaged schedule is read as off, so the app never stays stuck on the night screen', () {
+      for (final model in [
+        const ParentalSettingsHiveModel(nightFrom: 1170, nightUntil: 2000),
+        const ParentalSettingsHiveModel(nightFrom: 1170),
+        const ParentalSettingsHiveModel(naps: [780]),
+        const ParentalSettingsHiveModel(naps: [780, -1]),
+        const ParentalSettingsHiveModel(nightFrom: 1200, nightUntil: 1200),
+      ]) {
+        expect(model.toEntity().restSchedule, RestSchedule.off);
+      }
+      expect(
+        const ParentalSettingsHiveModel(nightFrom: 1170, nightUntil: 420).toEntity().restSchedule,
+        const RestSchedule(night: RestSchedule.defaultNight),
+      );
     });
 
     test('updateParentalSettings changes only what the update touches and saves it', () async {
@@ -220,9 +252,8 @@ void main() {
           await repository.updateParentalSettings((current) => current.withDifficulty(GameDifficulty.bronze));
 
       expect(next, ParentalSettings(dailyLimitMinutes: 30, difficulty: GameDifficulty.bronze));
-      final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny()))
-          .captured
-          .single as ParentalSettingsHiveModel;
+      final saved = verify(() => parentalSettingsBox.put('current_parental_settings', captureAny())).captured.single
+          as ParentalSettingsHiveModel;
       expect(saved.toEntity(), next);
     });
 
