@@ -56,3 +56,11 @@ Que la app se vea fluida en los teléfonos que tienen muchas familias: Android 8
 |---|---|---|---|
 | P1 | ¿Hay algún teléfono real de gama baja disponible (de un tester o de la familia)? | Pedirlo a los testers de la prueba cerrada con «Enviar comentarios» (HU-032). Si no, basta el emulador limitado | No |
 | P2 | ¿Qué objetivo se fija? | El de la sección 3.3: 60 fps en el moto g55; 30 fps estables en gama baja | Sí |
+
+## 7. Primera medida en un teléfono real (2026-11-19)
+
+Xiaomi Mi 8 Lite del dueño: Android 10, Snapdragon 660, 6 GB, pantalla de 60 Hz, con la `1.0.0-rc.5` instalada desde Play (sin reinstalar, para no borrar sus datos). Se midieron los fotogramas que presenta la capa de Flutter con `dumpsys SurfaceFlinger --latency`.
+
+- **Menú quieto:** un fotograma por segundo. El dorado no repinta mientras nadie toca, así que el menú no gasta batería ni procesador.
+- **El resto de escenarios no se pudo medir:** la pantalla del teléfono está rota y genera toques y arrastres solos, y MIUI no deja que el ordenador toque la app sin una tarjeta SIM. Las pruebas en este teléfono son solo básicas.
+- **Siguiente paso:** medir los arrastres con la prueba en el teléfono de TD-015, que no necesita tocar la pantalla, o en el emulador limitado.

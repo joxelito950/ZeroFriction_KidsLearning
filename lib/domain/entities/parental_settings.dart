@@ -1,9 +1,10 @@
 import '../parental/daily_play_time.dart';
+import '../parental/rest_schedule.dart';
 import '../settings/game_difficulty.dart';
 
 /// Ajustes de la Zona de Padres y el tiempo jugado hoy (HU-009), la dificultad
-/// y «Jugar sin tiempo» (HU-030) y «Mantener las estrellas» (HU-016). Más
-/// adelante, la mano dominante (HU-031).
+/// y «Jugar sin tiempo» (HU-030), «Mantener las estrellas» (HU-016) y la hora
+/// de dormir con sus siestas (HU-038). Más adelante, la mano dominante (HU-031).
 final class ParentalSettings {
   ParentalSettings({
     this.dailyLimitMinutes,
@@ -12,6 +13,8 @@ final class ParentalSettings {
     this.timerDisabled = false,
     this.keepStars = false,
     this.starDecayResumedAt,
+    this.restSchedule = RestSchedule.off,
+    this.restAllowedUntil,
   }) {
     if (dailyLimitMinutes case final int minutes) {
       RangeError.checkValueInInterval(minutes, minLimitMinutes, maxLimitMinutes, 'dailyLimitMinutes');
@@ -24,7 +27,9 @@ final class ParentalSettings {
         difficulty = GameDifficulty.gold,
         timerDisabled = false,
         keepStars = false,
-        starDecayResumedAt = null;
+        starDecayResumedAt = null,
+        restSchedule = RestSchedule.off,
+        restAllowedUntil = null;
 
   /// Sin límite y sin nada jugado: el valor por defecto (R1c).
   static const ParentalSettings initial = ParentalSettings._initial();
@@ -58,6 +63,12 @@ final class ParentalSettings {
   /// empieza de nuevo desde ese momento.
   final DateTime? starDecayResumedAt;
 
+  /// La hora de dormir y las siestas (HU-038).
+  final RestSchedule restSchedule;
+
+  /// Hasta cuándo dejan jugar los «15 minutos más» dados en un descanso (R5).
+  final DateTime? restAllowedUntil;
+
   ParentalSettings withLimit(int? minutes) => _copy(dailyLimitMinutes: () => minutes);
 
   ParentalSettings withPlayTime(DailyPlayTime time) => _copy(playTime: time);
@@ -65,6 +76,10 @@ final class ParentalSettings {
   ParentalSettings withDifficulty(GameDifficulty value) => _copy(difficulty: value);
 
   ParentalSettings withTimerDisabled(bool value) => _copy(timerDisabled: value);
+
+  ParentalSettings withRestSchedule(RestSchedule value) => _copy(restSchedule: value);
+
+  ParentalSettings withRestAllowedUntil(DateTime? value) => _copy(restAllowedUntil: () => value);
 
   /// Activar «Mantener las estrellas» las congela; desactivarlo reinicia la
   /// gracia desde [at] (HU-016 R2, R3).
@@ -78,6 +93,8 @@ final class ParentalSettings {
     bool? timerDisabled,
     bool? keepStars,
     DateTime? starDecayResumedAt,
+    RestSchedule? restSchedule,
+    DateTime? Function()? restAllowedUntil,
   }) {
     return ParentalSettings(
       dailyLimitMinutes: dailyLimitMinutes == null ? this.dailyLimitMinutes : dailyLimitMinutes(),
@@ -86,6 +103,8 @@ final class ParentalSettings {
       timerDisabled: timerDisabled ?? this.timerDisabled,
       keepStars: keepStars ?? this.keepStars,
       starDecayResumedAt: starDecayResumedAt ?? this.starDecayResumedAt,
+      restSchedule: restSchedule ?? this.restSchedule,
+      restAllowedUntil: restAllowedUntil == null ? this.restAllowedUntil : restAllowedUntil(),
     );
   }
 
@@ -97,9 +116,11 @@ final class ParentalSettings {
       other.difficulty == difficulty &&
       other.timerDisabled == timerDisabled &&
       other.keepStars == keepStars &&
-      other.starDecayResumedAt == starDecayResumedAt;
+      other.starDecayResumedAt == starDecayResumedAt &&
+      other.restSchedule == restSchedule &&
+      other.restAllowedUntil == restAllowedUntil;
 
   @override
-  int get hashCode =>
-      Object.hash(dailyLimitMinutes, playTime, difficulty, timerDisabled, keepStars, starDecayResumedAt);
+  int get hashCode => Object.hash(dailyLimitMinutes, playTime, difficulty, timerDisabled, keepStars, starDecayResumedAt,
+      restSchedule, restAllowedUntil);
 }

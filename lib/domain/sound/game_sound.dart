@@ -11,7 +11,11 @@ enum GameSound {
   complete,
 
   /// Conseguir la insignia o la medalla.
-  badge,
+  badge;
+
+  /// Sonidos de celebración: se callan en la preparación para dormir. El de
+  /// voltear o tocar sigue, para que el juego no parezca roto (HU-038 R10).
+  bool get isCelebration => this != flip;
 }
 
 /// Reproduce los sonidos. Se implementa con el plugin de audio en `data/`.

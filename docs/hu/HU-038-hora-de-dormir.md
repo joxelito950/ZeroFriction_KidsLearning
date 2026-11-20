@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-19): P1 a P7 respondidas por el dueño |
+| **Estado** | **Desarrollada** (2026-11-19, rama `feature/hu-038-bedtime`): las tres entregas (sección 8). Falta verla en el teléfono. R13 (música tranquila) llega con HU-045 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3 entregas, unos 3 días) |
@@ -103,7 +103,7 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 | P4 | ¿Un botón que abra los ajustes de Bienestar digital? | ✅ Decidido (2026-11-12): **no**, como la recomendación |
 | P5 | ¿Cambia algo antes de la hora? | ✅ Decidido (2026-11-12), distinto de la recomendación: **sí, una preparación de 30 minutos** sin avisos: sin sonidos de celebración, capa cálida gradual y, con HU-045, solo música tranquila (§3.2) |
 | P6 | ¿Un segundo horario para la siesta? | ✅ Decidido (2026-11-18): **sí**, como la recomendación (opcional y desactivado, 13:00–15:00 por defecto), y además **hasta 2 siestas al día**, de **30 min a 2 h** seguidas cada una, que no se solapen y con **al menos 2 h** entre ellas y con la noche (R7a) |
-| P7 | ¿Cuánta capa cálida? | ✅ Decidido (2026-11-19): **ámbar con una transparencia de hasta un 15 %**, ajustada midiendo que el texto y los botones sigan cumpliendo AA, y vista en el moto g55 |
+| P7 | ¿Cuánta capa cálida? | ✅ Decidido (2026-11-19): **ámbar con una transparencia de hasta un 15 %**, ajustada midiendo que el texto y los botones sigan cumpliendo AA, y vista en el moto g55. **Medido:** queda en un **14 %** (sección 8.2) |
 
 ## 7. Fuera de alcance
 
@@ -111,3 +111,54 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
 - Horarios por día de la semana.
 - Avisos o notificaciones.
 - Cambiar la luz o los colores del sistema: la capa cálida solo cubre la app.
+
+## 8. Desarrollo
+
+| # | Entrega | Estado |
+|---|---|---|
+| 1 | Dominio, guardado, ajuste en la Zona de Padres y pantalla de noche | ✅ 2026-11-19, rama `feature/hu-038-bedtime` |
+| 2 | Preparación de 30 minutos: sin sonidos de celebración y capa cálida ámbar al 14 % (P7) | ✅ 2026-11-19, misma rama (sección 8.2) |
+| 3 | La ilustración del niño durmiendo | ✅ 2026-11-19: ya estaba en `assets/brand/child_sleeping.png` y entró con la entrega 1 |
+
+### 8.1 Entrega 1 (2026-11-19)
+
+- **Dominio** (`domain/parental/rest_schedule.dart`):
+  - `RestWindow`: desde y hasta en minutos desde la medianoche, con el cruce de medianoche (R7);
+  - `RestSchedule`: la noche y hasta 2 siestas. `problem` dice por qué no se puede guardar: horas iguales, siesta de menos de 30 min o más de 2 h, siesta que cruza la medianoche, o descansos a menos de 2 h (R7a). `suggestedNap` propone 13:00–15:00 si cabe; si no, la primera hora libre.
+- **Guardado:** campos 8 a 11 de `ParentalSettingsHiveModel` (SPECIFICATION 3.4). Un horario dañado se lee como apagado, para que la app nunca se quede en la pantalla de noche.
+- **Tiempo de juego** (`PlayTimeCubit`):
+  - decide el descanso por el límite **o** por el horario (`restDue`), y dice cuál (`scheduledRest`: noche o siesta);
+  - se mira la hora en cada segundo que ya contaba HU-009, así que no hace falta otro temporizador;
+  - el tablero en curso se termina antes (R2), y el tiempo frente a la pantalla de noche no cuenta como jugado.
+- **«15 minutos más»** (R5): en la noche o la siesta dejan jugar 15 minutos, también tras cerrar la app (campo 11). Con el límite diario alcanzado a la vez, el mismo botón da tiempo para los dos.
+- **Pantalla de noche** (R3): `RestScreen(kind:)` con el niño durmiendo bajo la luna, fondo teal profundo y textos en crema; «¡A dormir!» y «¡A descansar!». Si el motivo cambia con la pantalla abierta (del límite a la noche), cambia sola; a la hora «Hasta» vuelve el menú (R6).
+- **Zona de Padres:**
+  - en «Tiempo de juego», debajo del límite: la recomendación del sistema, la de sueño de la OMS y el ajuste, con el selector de hora del sistema en el formato del teléfono (P1);
+  - siestas con «Añadir otra siesta» y «Quitar esta siesta»;
+  - si algo no cumple las reglas, una frase amable sin rojo, y «Guardar» no guarda;
+  - la fila dice «60 min al día · Dormir de 19:30 a 7:00».
+- **Textos** en los 9 idiomas: 20 claves nuevas.
+- **Tests:** horario y reglas, guardado y datos dañados, cubit (abrir de noche, tablero en curso, fin de la noche, 15 minutos, límite y noche a la vez), pantalla de noche y de siesta, la app real pasando de la noche al menú, y el ajuste con el selector de hora. Cobertura del 100 % en los archivos de la historia.
+
+### 8.2 Entrega 2 (2026-11-19)
+
+- **Dominio:** `RestSchedule.windDownAt` dice cuánto ha avanzado la preparación: 0 fuera de ella; sube poco a poco en los 30 minutos antes de la noche o de una siesta; vale 1 durante el descanso, hasta la hora «Hasta».
+- **Tiempo de juego:** `PlayTimeState.windDown` se actualiza cada segundo, con el mismo reloj que ya contaba el tiempo. Sin avisos ni cuenta atrás: el niño sigue jugando hasta la hora (R12).
+- **Sonidos** (R10): `SoundCubit.setCelebrationsMuted` calla las celebraciones (pareja, tablero, insignia o medalla). El sonido de voltear y tocar sigue, y el interruptor de sonido de los padres no cambia.
+- **Capa cálida** (R11, `WarmVeil`):
+  - un velo ámbar sobre toda la app, también encima de los diálogos;
+  - no recibe toques y el lector de pantalla no lo lee;
+  - se quita sola a la hora «Hasta».
+- **Transparencia máxima (P7):** con un 15 %, el azul petróleo sobre el crema baja a 4,47:1, por debajo de AA. Con un **14 %** queda en 4,54:1, y todos los pares medidos cumplen: texto, botones, la Zona de Padres y la pantalla de noche. Lo vigila el test de la paleta.
+- **Tests:** la preparación a las 19:00, 19:15 y 19:29 y durante el descanso; antes de una siesta; el estado del cubit; el sonido; la app real con la capa al 50 %, sin tapar los toques, y sin capa a las 7:00; el contraste con la capa al máximo.
+
+### 8.3 Prueba en el moto g55 (2026-11-19)
+
+Con la versión instalada conservando los datos y la hora de dormir puesta a las 15:45:
+
+- **Se vio bien:** la parte «Hora de dormir» en su orden, el interruptor con 19:30–7:00, el selector de hora y la **capa cálida**. El crema del menú pasó de (255, 242, 226) a (253, 235, 215) a las 15:33, justo lo que toca con un 14 % de ámbar al 60 % de la preparación. El horario se conservó al reinstalar.
+- **Tres fallos, corregidos:**
+  1. La fila «Tiempo de juego» no se actualizaba al guardar la hora de dormir: solo se repintaba al cambiar el límite.
+  2. **La Zona de Padres se cerraba sola mientras se elegía la hora.** El selector es otra ruta, y sus toques no contaban como actividad (HU-004 R7, un minuto). Ahora los cuenta (`AdultSessionGuard.registerActivity`).
+  3. **Formato de la hora:** en español Flutter escribe las horas en 24 h aunque el teléfono esté en a. m./p. m. En el modo teclado, el selector validaba con el formato del teléfono y no dejaba escribir las 15:00. Ahora la pantalla y el selector usan el mismo formato (`use24HourTimes`): 24 h si el teléfono lo pide o si el idioma escribe así las horas (español, francés, alemán…); a. m./p. m. en inglés con el teléfono en 12 h. **Cambia P1:** «el formato del teléfono» pasa a ser «el del teléfono o el del idioma», porque el selector de Flutter no ofrece a. m./p. m. en español.
+- **Pendiente en el teléfono:** ver la pantalla de noche a la hora y los «15 minutos más». Después hay que quitar la hora de prueba, porque el teléfono quedó con 15:45–7:00.

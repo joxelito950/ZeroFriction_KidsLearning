@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../brand/brand_assets.dart';
+import '../../domain/parental/rest_schedule.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
 import '../widgets/parents_zone_button.dart';
@@ -13,8 +14,15 @@ import '../widgets/protected_exit.dart';
 /// y sin acceso a los juegos. Solo deja entrar a la Zona de Padres (doble toque
 /// y desafío), donde un adulto puede dar 15 minutos más. El «atrás» se protege
 /// como en el menú (D-025).
+///
+/// Con [kind], es la versión de la hora de dormir (HU-038 R3): el niño dormido
+/// bajo la luna, fondo teal profundo y textos en crema; «¡A dormir!» por la
+/// noche y «¡A descansar!» en la siesta.
 class RestScreen extends StatelessWidget {
-  const RestScreen({super.key});
+  const RestScreen({super.key, this.kind});
+
+  /// `null`: el límite diario (HU-009).
+  final RestKind? kind;
 
   static void _closeApp() => SystemNavigator.pop();
 
@@ -22,11 +30,20 @@ class RestScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final RestKind? kind = this.kind;
+    final bool night = kind != null;
+    final Color ink = night ? AppPalette.warmCream : AppPalette.deepTeal;
+    final (String title, String subtitle) = switch (kind) {
+      RestKind.night => (l10n.restNightTitle, l10n.restNightSubtitle),
+      RestKind.nap => (l10n.restNapTitle, l10n.restNapSubtitle),
+      null => (l10n.restTitle, l10n.restSubtitle),
+    };
 
     return ProtectedExit(
       onExit: _closeApp,
       child: Scaffold(
         key: const ValueKey<String>('rest-screen'),
+        backgroundColor: night ? AppPalette.deepTeal : null,
         body: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) => SingleChildScrollView(
@@ -42,37 +59,38 @@ class RestScreen extends StatelessWidget {
                     // el título ya lo dice. Crece con la pantalla sin pasar de
                     // 200 dp ni dejar sin sitio a los botones en horizontal.
                     Image.asset(
-                      BrandAssets.childResting,
-                      key: const ValueKey<String>('rest-illustration'),
+                      night ? BrandAssets.childSleeping : BrandAssets.childResting,
+                      key: ValueKey<String>(night ? 'rest-illustration-night' : 'rest-illustration'),
                       width: math.min(200, MediaQuery.sizeOf(context).shortestSide * 0.4),
                       height: math.min(200, MediaQuery.sizeOf(context).shortestSide * 0.4),
                       excludeFromSemantics: true,
                       errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.bedtime_rounded, size: 96, color: AppPalette.deepTeal.withValues(alpha: 0.85)),
+                          Icon(Icons.bedtime_rounded, size: 96, color: ink.withValues(alpha: 0.85)),
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      l10n.restTitle,
+                      title,
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppPalette.deepTeal,
-                      ),
+                      style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: ink),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n.restSubtitle,
+                      subtitle,
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.titleMedium?.copyWith(color: AppPalette.deepTeal.withValues(alpha: 0.8)),
+                      style: theme.textTheme.titleMedium?.copyWith(color: ink.withValues(alpha: night ? 0.9 : 0.8)),
                     ),
                     const SizedBox(height: 40),
-                    const ParentsZoneButton(buttonKey: ValueKey<String>('rest-parents-zone')),
+                    ParentsZoneButton(
+                      buttonKey: const ValueKey<String>('rest-parents-zone'),
+                      foregroundColor: night ? AppPalette.warmCream : AppPalette.petrolBlue,
+                    ),
                     const SizedBox(height: 12),
                     // Salida directa, como en el menú: al llegar al límite el
                     // adulto puede cerrar la app sin pasar por la Zona de Padres.
                     TextButton.icon(
                       key: const ValueKey<String>('rest-exit'),
                       onPressed: _closeApp,
+                      style: night ? TextButton.styleFrom(foregroundColor: AppPalette.warmCream) : null,
                       icon: const Icon(Icons.logout_rounded),
                       label: Text(l10n.menuExit),
                     ),

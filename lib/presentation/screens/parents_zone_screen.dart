@@ -90,15 +90,15 @@ class _ParentsZoneList extends StatelessWidget {
                   onTap: () {
                     progress.markSeen();
                     ParentsSettingPage.open(
-                    context,
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider<ParentsProgressCubit>.value(value: progress),
-                        BlocProvider<GameSettingsCubit>.value(value: games),
-                      ],
-                      child: const ParentsProgressPage(),
-                    ),
-                  );
+                      context,
+                      MultiBlocProvider(
+                        providers: [
+                          BlocProvider<ParentsProgressCubit>.value(value: progress),
+                          BlocProvider<GameSettingsCubit>.value(value: games),
+                        ],
+                        child: const ParentsProgressPage(),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -129,12 +129,13 @@ class _ParentsZoneList extends StatelessWidget {
             if (playTime != null)
               BlocBuilder<PlayTimeCubit, PlayTimeState>(
                 bloc: playTime,
-                buildWhen: (previous, current) => previous.limitMinutes != current.limitMinutes,
+                buildWhen: (previous, current) =>
+                    previous.limitMinutes != current.limitMinutes || previous.schedule != current.schedule,
                 builder: (context, state) => ParentsSettingRow(
                   key: const ValueKey<String>('parents-row-play-time'),
                   icon: Icons.timer_outlined,
                   title: l10n.parentsZonePlayTimeTitle,
-                  summary: parentsPlayTimeSummary(l10n, state.limitMinutes),
+                  summary: parentsPlayTimeRowSummary(context, state),
                   onTap: () => ParentsSettingPage.open(context, const ParentsPlayTimePage()),
                 ),
               ),
@@ -175,7 +176,8 @@ class _ExtraTime extends StatelessWidget {
     return BlocBuilder<PlayTimeCubit, PlayTimeState>(
       bloc: cubit,
       builder: (context, state) {
-        if (state.limitMinutes == null || !state.limitReached) return const SizedBox.shrink();
+        // Con el límite diario alcanzado o en la hora de dormir (HU-038 R5).
+        if (!state.restDue) return const SizedBox.shrink();
         return Padding(
           padding: const EdgeInsets.only(top: 16),
           child: FilledButton.icon(
@@ -223,7 +225,8 @@ class _ScreenPinningPage extends StatelessWidget {
                     backgroundColor: AppPalette.petrolBlue,
                     child: Text(
                       '${index + 1}',
-                      style: theme.textTheme.labelMedium?.copyWith(color: AppPalette.white, fontWeight: FontWeight.bold),
+                      style:
+                          theme.textTheme.labelMedium?.copyWith(color: AppPalette.white, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(width: 12),

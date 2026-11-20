@@ -18,6 +18,14 @@ class SoundCubit extends Cubit<bool> {
   final IPersistenceRepository _repository;
   final ISoundEffects _effects;
 
+  /// En la preparación para dormir no suenan las celebraciones (HU-038 R10).
+  bool _celebrationsMuted = false;
+
+  bool get celebrationsMuted => _celebrationsMuted;
+
+  /// Lo avisa la hora de dormir; no cambia el interruptor de los padres.
+  void setCelebrationsMuted(bool muted) => _celebrationsMuted = muted;
+
   /// Lee el ajuste guardado. Si no se puede leer, el sonido sigue activado.
   Future<void> load() async {
     try {
@@ -41,7 +49,9 @@ class SoundCubit extends Cubit<bool> {
   }
 
   /// Reproduce [sound] si el sonido está activado, sin esperar a que termine.
+  /// En la preparación para dormir, solo los sonidos suaves (HU-038 R10).
   void play(GameSound sound) {
-    if (state) unawaited(_effects.play(sound));
+    if (!state || (_celebrationsMuted && sound.isCelebration)) return;
+    unawaited(_effects.play(sound));
   }
 }
