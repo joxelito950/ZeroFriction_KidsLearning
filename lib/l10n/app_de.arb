@@ -192,5 +192,15 @@
   "parentsRestProblemSameTimes": "Beginn und Ende müssen unterschiedlich sein.",
   "parentsRestProblemNapLength": "Ein Mittagsschlaf dauert zwischen 30 Minuten und 2 Stunden.",
   "parentsRestProblemNapMidnight": "Ein Mittagsschlaf darf nicht über Mitternacht gehen.",
-  "parentsRestProblemTooClose": "Lass mindestens 2 Stunden zwischen den Mittagsschläfen und zwischen Mittagsschlaf und Nacht."
+  "parentsRestProblemTooClose": "Lass mindestens 2 Stunden zwischen den Mittagsschläfen und zwischen Mittagsschlaf und Nacht.",
+  "parentsHowToPlayTitle": "Wie es spielt",
+  "parentsHowToPlayMoveLabel": "Teile bewegen",
+  "parentsHowToPlayMoveHelp": "In den Spielen, in denen ein Teil an seinen Platz kommt (heute Schatten und An seinen Platz). Tippen: erst das Teil, dann seinen Platz antippen; das hilft den Kleinsten oder Kindern, die den Finger noch nicht gut steuern.",
+  "moveModeDrag": "Ziehen",
+  "moveModeTap": "Tippen",
+  "moveModeBoth": "Beides",
+  "parentsHowToPlayHandLabel": "Hand, mit der es spielt",
+  "parentsHowToPlayHandHelp": "Mit links wandern bei quer gehaltenem Handy die Schatten und Plätze nach rechts, damit die Hand sie nicht verdeckt, und die Hilfshand ist eine linke Hand.",
+  "playingHandRight": "Rechte Hand",
+  "playingHandLeft": "Linke Hand"
 }

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-19): P1 a P4 decididas por el dueño, como las recomendaciones. Se desarrolla junto con HU-039 |
+| **Estado** | **Desarrollada** (2026-11-20, con HU-039, rama `feature/hu-039-031-how-to-play`): sección 9. Falta verla en el teléfono |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | S (1 entrega, 1 día) |
@@ -73,3 +73,10 @@ En la sección **«Cómo juega»** (compartida con HU-039):
 
 - Detectar la mano automáticamente.
 - Perfiles de varios niños.
+
+## 9. Desarrollo (2026-11-20)
+
+- **Ajuste:** `PlayingHand { right, left }` en el campo 13 de `ParentalSettingsHiveModel`; si falta, la derecha. Se elige en «Cómo juega» (HU-039).
+- **Sombras y «A su sitio»** (R1): con la mano izquierda y el teléfono en horizontal, las sombras y los sitios pasan a la derecha. En vertical no cambia nada (P1). En las rondas con la disposición al azar, el lado sigue siendo al azar (R2).
+- **Mano guía** (R3): se dibuja reflejada (`Transform.flip`) y su yema sigue cayendo en el objetivo (`GestureHint.leftFingertipAnchor`). Además llega desde abajo a la izquierda, del lado de la mano.
+- **El idioma no cambia nada** (R4): todo usa la izquierda y la derecha físicas.

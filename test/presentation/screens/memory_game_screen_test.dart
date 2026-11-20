@@ -16,6 +16,7 @@ import '../l10n_test_support.dart';
 import '../memory_game_test_support.dart';
 import 'package:toddler_logic/domain/progress/game_progress.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
+import 'package:toddler_logic/presentation/widgets/game_header.dart';
 
 /// Abre el juego desde una pantalla previa, para poder comprobar la salida.
 class _Launcher extends StatelessWidget {
@@ -49,7 +50,8 @@ void main() {
       stubPersistenceRepository(repository);
     });
 
-    Future<void> pumpScreen(WidgetTester tester, {int level = 1, Locale locale = testLocale, bool keepStub = false}) async {
+    Future<void> pumpScreen(WidgetTester tester,
+        {int level = 1, Locale locale = testLocale, bool keepStub = false}) async {
       if (!keepStub) when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => progressAt(level));
       await tester.pumpWidget(
         RepositoryProvider<IPersistenceRepository>.value(
@@ -89,7 +91,8 @@ void main() {
 
     int cardCount() => find.byType(MemoryBoard).evaluate().isEmpty
         ? 0
-        : find.descendant(of: find.byType(MemoryBoard), matching: find.byIcon(Icons.question_mark_rounded))
+        : find
+            .descendant(of: find.byType(MemoryBoard), matching: find.byIcon(Icons.question_mark_rounded))
             .evaluate()
             .length;
 
@@ -105,6 +108,8 @@ void main() {
       expect(find.bySemanticsLabel(RegExp(r'^Ronda \w+\. Nivel 1 de 5$')), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('level-indicator-round')), findsOneWidget);
       expect(find.textContaining('Ronda '), findsOneWidget);
+      // El contador, en la cabecera común de los juegos (HU-039 R9).
+      expect(find.descendant(of: find.byType(GameHeader), matching: find.text('Movimientos: 0')), findsOneWidget);
     });
 
     // HU-009 R4: un tablero tocado, o su celebración, no se corta al llegar al límite diario.
@@ -339,9 +344,13 @@ void main() {
       await tester.pump();
       expect(find.byKey(const ValueKey<String>('exit-repeat-hint')), findsOneWidget);
       expect(find.text('Repite el gesto para salir.'), findsOneWidget);
-      final TextStyle hintStyle = tester.widget<RichText>(
-        find.descendant(of: find.byKey(const ValueKey<String>('exit-repeat-hint')), matching: find.byType(RichText)),
-      ).text.style!;
+      final TextStyle hintStyle = tester
+          .widget<RichText>(
+            find.descendant(
+                of: find.byKey(const ValueKey<String>('exit-repeat-hint')), matching: find.byType(RichText)),
+          )
+          .text
+          .style!;
       expect(hintStyle.decoration, isNot(TextDecoration.underline), reason: 'hint must not use the fallback style');
       expect(find.byType(MemoryGameScreen), findsOneWidget);
 

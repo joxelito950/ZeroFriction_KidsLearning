@@ -16,6 +16,7 @@ import '../blocs/shadow_game/shadow_game_cubit.dart';
 import '../blocs/shadow_game/shadow_game_state.dart';
 import '../theme/app_palette.dart';
 import '../widgets/game_icon.dart';
+import '../widgets/game_header.dart';
 import '../widgets/gesture_hint.dart';
 import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
@@ -244,49 +245,21 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppPalette.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          children: [
-            // Icono del juego, sin dorado: el dorado se ve en el menú (HU-002 R16).
-            const GameIcon.shadows(key: ValueKey<String>('shadows-game-icon'), size: 44),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.shadowsGameTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                  Text(
-                    l10n.shadowsGameInstructions,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            // Versión sin pago (2026-11-10): sin Premium solo existen los 7 niveles
-            // gratis, sin candado, hasta que llegue la compra (HU-006). Con
-            // Premium, los 8 (R11).
-            MemoryLevelIndicator(
-              level: state.level,
-              total: state.premium ? ShadowLadder.maxLevel : ShadowLadder.maxLevel - 1,
-              color: RoundStyle.colorOf(state.gameRound),
-              rim: RoundStyle.rimOf(state.gameRound),
-              round: state.gameRound,
-            ),
-          ],
-        ),
+    return GameHeader(
+      icon: const GameIcon.shadows(key: ValueKey<String>('shadows-game-icon'), size: 44),
+      title: l10n.shadowsGameTitle,
+      instructions: l10n.shadowsGameInstructions,
+      instructionsMaxLines: 2,
+      moves: state.moves,
+      // Versión sin pago (2026-11-10): sin Premium solo existen los 7 niveles
+      // gratis, sin candado, hasta que llegue la compra (HU-006). Con
+      // Premium, los 8 (R11).
+      levelIndicator: MemoryLevelIndicator(
+        level: state.level,
+        total: state.premium ? ShadowLadder.maxLevel : ShadowLadder.maxLevel - 1,
+        color: RoundStyle.colorOf(state.gameRound),
+        rim: RoundStyle.rimOf(state.gameRound),
+        round: state.gameRound,
       ),
     );
   }

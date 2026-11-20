@@ -16,6 +16,7 @@ import '../blocs/sound/game_sound_events.dart';
 import '../blocs/sound/sound_cubit.dart';
 import '../theme/app_palette.dart';
 import '../widgets/game_icon.dart';
+import '../widgets/game_header.dart';
 import '../widgets/gesture_hint.dart';
 import '../widgets/memory_level_indicator.dart';
 import '../widgets/memory_round_overlay.dart';
@@ -157,8 +158,7 @@ class _OddOneOutViewState extends State<_OddOneOutView> with WidgetsBindingObser
   }
 
   Widget _overlayFor(BuildContext context, OddOneOutState state) => switch (state.phase) {
-        OddPhase.celebrating =>
-          MemoryCelebration(
+        OddPhase.celebrating => MemoryCelebration(
             stars: state.stars ?? 0,
             badgeEarned: state.medal != null,
             medal: state.medal,
@@ -185,44 +185,18 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppPalette.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          children: [
-            const GameIcon.oddOneOut(key: ValueKey<String>('odd-one-out-game-icon'), size: 44),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.oddOneOutTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                  Text(
-                    l10n.oddOneOutInstructions,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            MemoryLevelIndicator(
-              level: state.level,
-              total: OddOneOut.maxLevel,
-              color: RoundStyle.colorOf(state.gameRound),
-              rim: RoundStyle.rimOf(state.gameRound),
-              round: state.gameRound,
-            ),
-          ],
-        ),
+    return GameHeader(
+      icon: const GameIcon.oddOneOut(key: ValueKey<String>('odd-one-out-game-icon'), size: 44),
+      title: l10n.oddOneOutTitle,
+      instructions: l10n.oddOneOutInstructions,
+      instructionsMaxLines: 2,
+      moves: state.moves,
+      levelIndicator: MemoryLevelIndicator(
+        level: state.level,
+        total: OddOneOut.maxLevel,
+        color: RoundStyle.colorOf(state.gameRound),
+        rim: RoundStyle.rimOf(state.gameRound),
+        round: state.gameRound,
       ),
     );
   }

@@ -2,10 +2,12 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/shadows/shadow_drop.dart';
 import '../../domain/shadows/shadow_ladder.dart';
 import '../../l10n/app_localizations.dart';
+import '../blocs/how_to_play/how_to_play_cubit.dart';
 import '../blocs/shadow_game/shadow_game_state.dart';
 import '../theme/app_palette.dart';
 
@@ -42,6 +44,7 @@ final class ShadowBoardGeometry {
     required List<String> shadows,
     required List<String> objects,
     required double devicePixelRatio,
+    bool leftHanded = false,
   }) {
     final bool horizontal = size.width > size.height;
     final int shadowCount = math.max(shadows.length, 1);
@@ -51,11 +54,13 @@ final class ShadowBoardGeometry {
     final double main = (horizontal ? size.width : size.height) - gap;
     final double shadowMain = main * share;
     final double trayMain = main - shadowMain;
-    final bool shadowsFirst = layout == ShadowLayout.shadowsFirst;
+    // Con la mano izquierda y en horizontal, las sombras pasan al otro lado,
+    // donde la mano no las tapa (HU-031 R1). En vertical, arriba sirve a las
+    // dos manos. En las rondas con la disposición al azar sigue al azar (R2).
+    final bool shadowsFirst = (layout == ShadowLayout.shadowsFirst) != (horizontal && leftHanded);
 
-    Rect zone(double start, double length) => horizontal
-        ? Rect.fromLTWH(start, 0, length, size.height)
-        : Rect.fromLTWH(0, start, size.width, length);
+    Rect zone(double start, double length) =>
+        horizontal ? Rect.fromLTWH(start, 0, length, size.height) : Rect.fromLTWH(0, start, size.width, length);
     final Rect shadowZone = shadowsFirst ? zone(0, shadowMain) : zone(trayMain + gap, shadowMain);
     final Rect trayZone = shadowsFirst ? zone(shadowMain + gap, trayMain) : zone(0, trayMain);
 
@@ -192,8 +197,17 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
   Rect _flightTo = Rect.zero;
   bool _flyingToShadow = false;
 
-  /// Objeto elegido con el lector de pantalla, a la espera de su sombra (R16).
+  /// Objeto elegido con un toque o con el lector de pantalla, a la espera de
+  /// su sombra (R16; HU-039 R3).
   String? _selected;
+
+  /// Tocar el objeto lo elige; tocarlo otra vez lo suelta; tocar otro cambia
+  /// la elección (HU-039 R3).
+  void _onObjectTapped(String symbol) {
+    if (_dragged != null || _flying != null || !widget.state.canDrag(symbol)) return;
+    if (_selected != symbol) widget.onGrab(symbol);
+    setState(() => _selected = _selected == symbol ? null : symbol);
+  }
 
   @override
   void didChangeDependencies() {
@@ -264,7 +278,8 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
       {for (final entry in geometry.shadowRects.entries) entry.key: ShadowBoardGeometry.boxOf(entry.value)},
     );
     final bool snapped = outcome == ShadowDropOutcome.snapped;
-    _fly(symbol, from: object, to: snapped ? geometry.shadowRects[symbol]! : geometry.trayRects[symbol]!, toShadow: snapped);
+    _fly(symbol,
+        from: object, to: snapped ? geometry.shadowRects[symbol]! : geometry.trayRects[symbol]!, toShadow: snapped);
   }
 
   /// Vuelo suave del objeto (R4, R5); sin vuelo con «reducir movimiento».
@@ -291,17 +306,33 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
         widget.state.coverageToSnap;
   }
 
+  /// Con un objeto elegido, tocar una sombra lo lleva hasta ella. Si no es la
+  /// suya, vuelve a la bandeja como al soltarlo mal (HU-039 R4).
   void _onShadowActivated(String shadow) {
     final String? selected = _selected;
+    final ShadowBoardGeometry? geometry = _geometry;
     if (selected == null) return;
     setState(() => _selected = null);
-    widget.onMatch(selected, shadow);
+    final ShadowDropOutcome outcome = widget.onMatch(selected, shadow);
+    final Rect? from = geometry?.trayRects[selected];
+    final Rect? at = geometry?.shadowRects[shadow];
+    if (geometry == null || from == null || at == null) return;
+    if (outcome == ShadowDropOutcome.snapped) {
+      _fly(selected, from: from, to: geometry.shadowRects[selected]!, toShadow: true);
+    } else {
+      _fly(selected, from: at, to: from, toShadow: false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final ShadowGameState state = widget.state;
     final l10n = AppLocalizations.of(context);
+    // Arrastrar, tocar o ambas (HU-039). Con el lector de pantalla siempre se
+    // puede tocar (R2).
+    final HowToPlay how = context.select<HowToPlayCubit?, HowToPlay>((cubit) => cubit?.state ?? const HowToPlay());
+    final bool tapEnabled = how.moveMode.allowsTap || MediaQuery.accessibleNavigationOf(context);
+    final bool dragEnabled = how.moveMode.allowsDrag;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -311,6 +342,7 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
           shadows: state.shadows,
           objects: state.objects,
           devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
+          leftHanded: how.leftHanded,
         );
         _geometry = geometry;
         final bool introducing = state.phase == ShadowRoundPhase.introducing;
@@ -335,9 +367,8 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
                     semanticLabel: state.placed.contains(shadow)
                         ? l10n.shadowsPlacedSemantics(shadow)
                         : l10n.shadowsShadowSemantics(shadow),
-                    onActivate: state.placed.contains(shadow) || _selected == null
-                        ? null
-                        : () => _onShadowActivated(shadow),
+                    onActivate:
+                        state.placed.contains(shadow) || _selected == null ? null : () => _onShadowActivated(shadow),
                   ),
                 ),
               ),
@@ -358,10 +389,11 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
                       onTap: state.canDrag(object) ? () => setState(() => _selected = object) : null,
                       child: GestureDetector(
                         dragStartBehavior: DragStartBehavior.down,
-                        onPanStart: (details) => _onPanStart(object, details),
-                        onPanUpdate: (details) => _onPanUpdate(object, details),
-                        onPanEnd: (_) => _onPanEnd(object),
-                        onPanCancel: () => _onPanEnd(object),
+                        onTap: tapEnabled ? () => _onObjectTapped(object) : null,
+                        onPanStart: dragEnabled ? (details) => _onPanStart(object, details) : null,
+                        onPanUpdate: dragEnabled ? (details) => _onPanUpdate(object, details) : null,
+                        onPanEnd: dragEnabled ? (_) => _onPanEnd(object) : null,
+                        onPanCancel: dragEnabled ? () => _onPanEnd(object) : null,
                         child: Opacity(
                           opacity: _dragged == object ? 0 : 1,
                           child: _TrayObject(
@@ -497,18 +529,23 @@ class _ShadowCell extends StatelessWidget {
       label: semanticLabel,
       onTap: onActivate,
       excludeSemantics: true,
-      child: DecoratedBox(
-        key: almost ? ValueKey<String>('shadow-almost-$symbol') : null,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: AppPalette.amber.withValues(alpha: almost ? 1 : 0), width: 4),
-        ),
-        child: Center(
-          child: _Emoji(
-            key: ValueKey<String>(filled ? 'shadow-placed-$symbol' : 'shadow-silhouette-$symbol'),
-            symbol: symbol,
-            size: emojiSize,
-            silhouette: !filled,
+      // Con un objeto elegido, la sombra se toca para llevarlo (HU-039 R3).
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onActivate,
+        child: DecoratedBox(
+          key: almost ? ValueKey<String>('shadow-almost-$symbol') : null,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: AppPalette.amber.withValues(alpha: almost ? 1 : 0), width: 4),
+          ),
+          child: Center(
+            child: _Emoji(
+              key: ValueKey<String>(filled ? 'shadow-placed-$symbol' : 'shadow-silhouette-$symbol'),
+              symbol: symbol,
+              size: emojiSize,
+              silhouette: !filled,
+            ),
           ),
         ),
       ),

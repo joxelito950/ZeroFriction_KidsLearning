@@ -6,12 +6,14 @@ import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/app_locale/app_locale_cubit.dart';
 import '../blocs/game_settings/game_settings_cubit.dart';
+import '../blocs/how_to_play/how_to_play_cubit.dart';
 import '../blocs/parents_progress/parents_progress_cubit.dart';
 import '../blocs/play_time/play_time_cubit.dart';
 import '../theme/app_palette.dart';
 import '../widgets/adult_session_guard.dart';
 import '../widgets/parents_feedback_section.dart';
 import '../widgets/parents_games_section.dart';
+import '../widgets/parents_how_to_play_page.dart';
 import '../widgets/parents_language_section.dart';
 import '../widgets/parents_play_time_section.dart';
 import '../widgets/parents_progress_page.dart';
@@ -54,6 +56,7 @@ class _ParentsZoneList extends StatelessWidget {
     final GameSettingsCubit? games = context.read<GameSettingsCubit?>();
     final ParentsProgressCubit? progress = context.read<ParentsProgressCubit?>();
     final PlayTimeCubit? playTime = context.read<PlayTimeCubit?>();
+    final HowToPlayCubit? howToPlay = context.read<HowToPlayCubit?>();
     final String language = context.watch<AppLocaleCubit>().state.languageCode;
 
     return Scaffold(
@@ -124,6 +127,21 @@ class _ParentsZoneList extends StatelessWidget {
                     context,
                     BlocProvider<GameSettingsCubit>.value(value: games, child: const ParentsGamesPage()),
                   ).then((_) => progress?.load()),
+                ),
+              ),
+            // Cómo juega (HU-039, HU-031): debajo de «Juegos».
+            if (howToPlay != null)
+              BlocBuilder<HowToPlayCubit, HowToPlay>(
+                bloc: howToPlay,
+                builder: (context, state) => ParentsSettingRow(
+                  key: const ValueKey<String>('parents-row-how-to-play'),
+                  icon: Icons.touch_app_outlined,
+                  title: l10n.parentsHowToPlayTitle,
+                  summary: ParentsHowToPlayTexts.summary(l10n, state),
+                  onTap: () => ParentsSettingPage.open(
+                    context,
+                    BlocProvider<HowToPlayCubit>.value(value: howToPlay, child: const ParentsHowToPlayPage()),
+                  ),
                 ),
               ),
             if (playTime != null)

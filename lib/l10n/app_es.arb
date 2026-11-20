@@ -192,5 +192,15 @@
   "parentsRestProblemSameTimes": "La hora de inicio y la de fin deben ser distintas.",
   "parentsRestProblemNapLength": "Cada siesta dura entre 30 minutos y 2 horas.",
   "parentsRestProblemNapMidnight": "Una siesta no puede pasar de la medianoche.",
-  "parentsRestProblemTooClose": "Deja al menos 2 horas entre las siestas y entre una siesta y la noche."
+  "parentsRestProblemTooClose": "Deja al menos 2 horas entre las siestas y entre una siesta y la noche.",
+  "parentsHowToPlayTitle": "Cómo juega",
+  "parentsHowToPlayMoveLabel": "Forma de mover las piezas",
+  "parentsHowToPlayMoveHelp": "En los juegos donde se lleva una pieza a su sitio (hoy, Sombras y A su sitio). Tocar: se toca la pieza y después su sitio; ayuda a los más pequeños o a quien aún no controla bien el dedo.",
+  "moveModeDrag": "Arrastrar",
+  "moveModeTap": "Tocar",
+  "moveModeBoth": "Ambas",
+  "parentsHowToPlayHandLabel": "Mano con la que juega",
+  "parentsHowToPlayHandHelp": "Con la izquierda, con el teléfono en horizontal las sombras y los sitios pasan a la derecha, para que la mano no los tape, y la mano que guía es una mano izquierda.",
+  "playingHandRight": "Mano derecha",
+  "playingHandLeft": "Mano izquierda"
 }
