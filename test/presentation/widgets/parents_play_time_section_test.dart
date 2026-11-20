@@ -342,6 +342,68 @@ void main() {
       expect(find.text(l10n.parentsBedtimeSummary(time(tester, 20 * 60), time(tester, 390))), findsOneWidget);
     });
 
+    testWidgets('Spanish writes hours in 24 h even on a 12-hour phone, and the picker lets you type 15:00 (moto g55)',
+        (tester) async {
+      tester.platformDispatcher.alwaysUse24HourFormatTestValue = false;
+      addTearDown(tester.platformDispatcher.clearAlwaysUse24HourTestValue);
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      await pumpPage(tester, stored: ParentalSettings(restSchedule: const RestSchedule(night: RestSchedule.defaultNight)));
+      expect(use24HourTimes(tester.element(page())), isTrue);
+      expect(find.text(l10n.parentsBedtimeSummary('19:30', '7:00')), findsOneWidget);
+
+      await tapKey(tester, 'bedtime-from');
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.tap(find.byIcon(Icons.keyboard_outlined));
+      await tester.pump(const Duration(milliseconds: 500));
+      final Finder fields = find.descendant(of: find.byType(Dialog), matching: find.byType(TextField));
+      await tester.enterText(fields.at(0), '15');
+      await tester.enterText(fields.at(1), '45');
+      await tester.tap(find.text(MaterialLocalizations.of(tester.element(page())).okButtonLabel));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text(l10n.parentsBedtimeSummary('15:45', '7:00')), findsOneWidget);
+    });
+
+    testWidgets('English on a 12-hour phone shows AM/PM (P1)', (tester) async {
+      tester.platformDispatcher.alwaysUse24HourFormatTestValue = false;
+      addTearDown(tester.platformDispatcher.clearAlwaysUse24HourTestValue);
+      await pumpSettingPage(tester, const ParentsPlayTimePage(), repository: repository, locale: const Locale('en'));
+      final BuildContext context = tester.element(page());
+      expect(use24HourTimes(context), isFalse);
+      expect(formatDayMinute(context, 1170), '7:30 PM');
+    });
+
+    testWidgets('English on a 24-hour phone shows 24 h', (tester) async {
+      late BuildContext context;
+      await tester.pumpWidget(MediaQuery(
+        data: const MediaQueryData(alwaysUse24HourFormat: true),
+        child: localizedApp(
+          locale: const Locale('en'),
+          home: Builder(builder: (inner) {
+            context = inner;
+            return const SizedBox.shrink();
+          }),
+        ),
+      ));
+      expect(formatDayMinute(context, 1170), '19:30');
+    });
+
+    testWidgets('choosing the time calmly in the picker does not close the parents session (HU-004 R7)', (tester) async {
+      await pumpPage(tester, stored: ParentalSettings(restSchedule: const RestSchedule(night: RestSchedule.defaultNight)));
+      await tapKey(tester, 'bedtime-from');
+      await tester.pump(const Duration(milliseconds: 500));
+      for (var i = 0; i < 4; i++) {
+        await tester.pump(const Duration(seconds: 40));
+        await tester.tap(find.byType(Dialog), warnIfMissed: false);
+        await tester.pump();
+      }
+      expect(find.byType(Dialog), findsOneWidget, reason: 'more than a minute inside the picker, still open');
+      expect(page(), findsOneWidget);
+      await tester.tap(find.text(MaterialLocalizations.of(tester.element(page())).cancelButtonLabel));
+      await tester.pump(const Duration(milliseconds: 500));
+    });
+
     testWidgets('every problem has its kind sentence', (tester) async {
       for (final RestScheduleProblem problem in RestScheduleProblem.values) {
         expect(restProblemText(l10n, problem), isNotEmpty);

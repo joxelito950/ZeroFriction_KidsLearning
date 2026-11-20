@@ -151,3 +151,14 @@ Media hora antes de que empiece la hora de dormir (y la siesta, si está activa)
   - se quita sola a la hora «Hasta».
 - **Transparencia máxima (P7):** con un 15 %, el azul petróleo sobre el crema baja a 4,47:1, por debajo de AA. Con un **14 %** queda en 4,54:1, y todos los pares medidos cumplen: texto, botones, la Zona de Padres y la pantalla de noche. Lo vigila el test de la paleta.
 - **Tests:** la preparación a las 19:00, 19:15 y 19:29 y durante el descanso; antes de una siesta; el estado del cubit; el sonido; la app real con la capa al 50 %, sin tapar los toques, y sin capa a las 7:00; el contraste con la capa al máximo.
+
+### 8.3 Prueba en el moto g55 (2026-11-19)
+
+Con la versión instalada conservando los datos y la hora de dormir puesta a las 15:45:
+
+- **Se vio bien:** la parte «Hora de dormir» en su orden, el interruptor con 19:30–7:00, el selector de hora y la **capa cálida**. El crema del menú pasó de (255, 242, 226) a (253, 235, 215) a las 15:33, justo lo que toca con un 14 % de ámbar al 60 % de la preparación. El horario se conservó al reinstalar.
+- **Tres fallos, corregidos:**
+  1. La fila «Tiempo de juego» no se actualizaba al guardar la hora de dormir: solo se repintaba al cambiar el límite.
+  2. **La Zona de Padres se cerraba sola mientras se elegía la hora.** El selector es otra ruta, y sus toques no contaban como actividad (HU-004 R7, un minuto). Ahora los cuenta (`AdultSessionGuard.registerActivity`).
+  3. **Formato de la hora:** en español Flutter escribe las horas en 24 h aunque el teléfono esté en a. m./p. m. En el modo teclado, el selector validaba con el formato del teléfono y no dejaba escribir las 15:00. Ahora la pantalla y el selector usan el mismo formato (`use24HourTimes`): 24 h si el teléfono lo pide o si el idioma escribe así las horas (español, francés, alemán…); a. m./p. m. en inglés con el teléfono en 12 h. **Cambia P1:** «el formato del teléfono» pasa a ser «el del teléfono o el del idioma», porque el selector de Flutter no ofrece a. m./p. m. en español.
+- **Pendiente en el teléfono:** ver la pantalla de noche a la hora y los «15 minutos más». Después hay que quitar la hora de prueba, porque el teléfono quedó con 15:45–7:00.

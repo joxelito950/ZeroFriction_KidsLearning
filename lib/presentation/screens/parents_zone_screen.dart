@@ -129,7 +129,8 @@ class _ParentsZoneList extends StatelessWidget {
             if (playTime != null)
               BlocBuilder<PlayTimeCubit, PlayTimeState>(
                 bloc: playTime,
-                buildWhen: (previous, current) => previous.limitMinutes != current.limitMinutes,
+                buildWhen: (previous, current) =>
+                    previous.limitMinutes != current.limitMinutes || previous.schedule != current.schedule,
                 builder: (context, state) => ParentsSettingRow(
                   key: const ValueKey<String>('parents-row-play-time'),
                   icon: Icons.timer_outlined,

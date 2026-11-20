@@ -315,6 +315,16 @@ void main() {
   });
 
   group('bedtime in the parents zone (HU-038)', () {
+    testWidgets('saving a bedtime updates the «Play time» row at once (moto g55)', (tester) async {
+      await pumpZone(tester, settings: ParentalSettings(dailyLimitMinutes: 60));
+      expect(find.text(l10n.parentsZonePlayTimePerDay(60)), findsOneWidget);
+      final PlayTimeCubit cubit = tester.element(find.byType(ParentsZoneScreen)).read<PlayTimeCubit>();
+      await cubit.setSchedule(const RestSchedule(night: RestSchedule.defaultNight));
+      await tester.pump();
+      expect(find.text(l10n.parentsZonePlayTimePerDay(60)), findsNothing);
+      expect(find.textContaining(l10n.parentsZonePlayTimePerDay(60)), findsOneWidget);
+    });
+
     testWidgets('the «Play time» row also says the bedtime', (tester) async {
       await pumpZone(
         tester,

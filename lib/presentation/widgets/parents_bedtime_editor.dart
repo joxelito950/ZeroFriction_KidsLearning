@@ -3,13 +3,23 @@ import 'package:flutter/material.dart';
 import '../../domain/parental/rest_schedule.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import 'adult_session_guard.dart';
 
-/// Una hora del día en el formato del teléfono: 24 horas o a. m./p. m.
-/// (HU-038 P1).
+/// Si las horas se muestran en 24 horas (HU-038 P1): con el teléfono en 24
+/// horas, o si el idioma escribe así las horas (español, francés, alemán…).
+/// El selector de hora de Flutter usa el formato del idioma en la esfera pero
+/// el del teléfono al escribir: en español con el teléfono en a. m./p. m. no
+/// dejaba escribir las 15:00 (visto en el moto g55 el 2026-11-19). Por eso la
+/// pantalla y el selector usan siempre este mismo formato.
+bool use24HourTimes(BuildContext context) =>
+    MediaQuery.alwaysUse24HourFormatOf(context) ||
+    hourFormat(of: MaterialLocalizations.of(context).timeOfDayFormat()) != HourFormat.h;
+
+/// Una hora del día en el formato de [use24HourTimes].
 String formatDayMinute(BuildContext context, int minute) {
   return MaterialLocalizations.of(context).formatTimeOfDay(
     TimeOfDay(hour: minute ~/ 60, minute: minute % 60),
-    alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    alwaysUse24HourFormat: use24HourTimes(context),
   );
 }
 
@@ -32,9 +42,21 @@ class ParentsBedtimeEditor extends StatelessWidget {
   final ValueChanged<RestSchedule> onChanged;
 
   Future<int?> _pick(BuildContext context, int minute) async {
+    final bool use24 = use24HourTimes(context);
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: minute ~/ 60, minute: minute % 60),
+      // El selector es otra ruta: sus toques también mantienen abierta la
+      // Zona de Padres (HU-004 R7). Sin esto, elegir la hora con calma la
+      // cerraba al minuto (visto en el moto g55 el 2026-11-19).
+      builder: (context, child) => Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) => AdultSessionGuard.registerActivity(),
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: use24),
+          child: child!,
+        ),
+      ),
     );
     return picked == null ? null : picked.hour * 60 + picked.minute;
   }
