@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-19): P1 a P5 decididas por el dueño. P2 añade el contador de movimientos en todos los juegos (sección 8) |
+| **Estado** | **Desarrollada** (2026-11-20, rama `feature/hu-039-031-how-to-play`, con HU-031): las tres entregas (sección 9). Falta verla en el teléfono |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P3 |
 | **Tamaño** | M (3 entregas, unos 3 días) |
@@ -105,3 +105,23 @@ Hoy solo Memoria enseña «Movimientos: N». El dueño pide que **todos los jueg
 - **R7.** Soltar fuera de cualquier sombra o sitio, o tocar un objeto para elegirlo, **no** cuenta: el niño no ha intentado nada.
 - **R8.** Las estrellas siguen sus reglas de siempre: Memoria por movimientos, y los demás por fallos (R4, R6). Así ninguna partida guardada cambia de estrellas.
 - **R9.** El contador va en la cabecera de cada juego, junto a la ronda y los puntos de nivel (HU-034, sección 10), y el lector de pantalla lo lee como en Memoria.
+
+## 9. Desarrollo (2026-11-20)
+
+- **Hallazgo al empezar:** hasta ahora, en Sombras y en «A su sitio» solo se podía tocar la pieza y después su sitio **con el lector de pantalla**. Un niño solo podía arrastrar. Esta historia añade el toque a la vista.
+- **Ajuste** (`domain/settings/how_to_play.dart`): `MoveMode { drag, tap, both }`, guardado en el campo 12 de `ParentalSettingsHiveModel`; si falta, es «Ambas». Lo leen los tableros a través de `HowToPlayCubit`, que vive en toda la app. Cambiarlo en la Zona de Padres cambia los dos juegos a la vez (P5).
+- **Tableros** (`ShadowBoard`, `VehicleBoardView`):
+  - con «Tocar» o «Ambas», tocar una pieza la elige (crece, como al levantarla); tocarla otra vez la suelta, y tocar otra cambia la elección (R3);
+  - con una pieza elegida, tocar su sitio la lleva volando hasta él. Si no es el suyo, vuelve a la bandeja y **cuenta como fallo** (R4, P2);
+  - con «Arrastrar», tocar no elige nada; con «Tocar», arrastrar no mueve nada;
+  - con el lector de pantalla siempre se puede tocar (R2).
+- **Mano guía:** en «Ambas» enseña el arrastre (P3). Con «Tocar», un juego de arrastrar enseña los dos toques (`HintGesture.tapThenTap`): toca la pieza, levanta el dedo y toca su sitio.
+- **Zona de Padres:** fila **«Cómo juega»** debajo de «Juegos», con su pantalla: «Forma de mover las piezas» (Arrastrar · Tocar · Ambas) y «Mano con la que juega» (HU-031), con «Guardar». La fila resume «Ambas · Mano derecha».
+- **Movimientos** (sección 8, hecho por un agente en paralelo y fusionado):
+  - los cuatro juegos comparten la cabecera `GameHeader`, con «Movimientos: N» junto a la ronda y los puntos de nivel;
+  - en Sombras y «A su sitio» cuenta cada vez que se suelta o se toca una pieza sobre un sitio, acierte o no; en «¿Cuál es diferente?», cada toque en una opción;
+  - las estrellas no cambian;
+  - en «¿Cuál es diferente?» el contador sigue durante los 3 tableros de un nivel y vuelve a 0 en el siguiente, como los fallos y el tiempo de ese juego;
+  - en Sombras, «A su sitio» y «¿Cuál es diferente?» los puntos de nivel bajan a una segunda fila de la cabecera, que queda un poco más alta.
+- **R5 (64 dp): pendiente.** No se agrandaron las zonas táctiles. Falta medir si las piezas de los tableros más llenos llegan a 64 dp en un teléfono pequeño y, si no, agrandar solo la zona que se toca.
+- **Tests:** `test/presentation/how_to_play_test.dart`, además de los del contador en los cuatro juegos. Suite completa: 2139 tests.

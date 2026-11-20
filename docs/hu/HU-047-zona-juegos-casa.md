@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento |
+| **Estado** | En refinamiento (2026-11-20): **el dueño cambió el planteamiento** (sección 12) y la adelanta a antes de HU-006 |
 | **Épica** | E2 · Zona de Padres |
-| **Prioridad** | P3 |
+| **Prioridad** | P2 |
 | **Tamaño** | M (estimación: 2–3 días) |
 | **Depende de** | HU-046 (Zona de Padres por filas), HU-009 (tiempo de juego diario) y HU-030 (dificultad general) |
 
@@ -202,3 +202,28 @@ Para la primera entrega se recomienda:
 - 1 pantalla de “sin resultados” o “más ideas”
 - textos en 9 idiomas
 - revisión visual en un teléfono real
+
+## 12. Decisiones del dueño (2026-11-20)
+
+Sustituyen a las secciones 3.4, 4 (R1, R8) y 8 donde no coincidan.
+
+| # | Decisión |
+|---|---|
+| D1 | **No va en la Zona de Padres.** En el **menú principal**, entre el logo y los juegos, aparece **una tarjeta con la sugerencia del día** |
+| D2 | En el pie del menú, junto a «Zona de padres» y «Salir», un botón **«Actividades sin pantallas»** abre el **listado de sugerencias con una barra de búsqueda** |
+| D3 | **Cada sugerencia abre su propia pantalla** con: instrucciones claras, lista de materiales, categoría, tiempo, **variantes** y, al final, **actividades recomendadas** para seguir jugando en casa sin pantallas, sin que se vuelvan repetitivas |
+| D4 | **Se puede abrir en todo momento**, también de noche, en la siesta o con el límite diario superado: también desde la pantalla de descanso |
+| D5 | Contenido: las **6 categorías genéricas** de la sección 3.2 (buscar y encontrar, emparejar y clasificar, movimiento, arte, lenguaje y rutina) |
+| D6 | Seguridad: **una advertencia general** y **otra en cada actividad** |
+
+### 12.1 Preguntas que abren estas decisiones
+
+| # | Pregunta | Recomendación |
+|---|---|---|
+| P7 | ¿Cuántas actividades en la primera versión? Con buscador y sugerencia diaria conviene que no se repitan pronto | **24**, 4 por categoría: casi un mes de sugerencias distintas. Son unos 24 × 7 textos en 9 idiomas, el grueso del trabajo |
+| P8 | ¿El niño puede abrirlas sin el desafío de adultos? La tarjeta y el botón están en su menú | **Sí, sin desafío:** no cambian nada ni compran nada, y el texto es para leerlo con un adulto. La tarjeta lleva un aspecto de «para mamá o papá», con el niño y un adulto, para que no parezca un juego |
+| P9 | ¿El tiempo que se pasa leyéndolas cuenta como tiempo de pantalla (HU-009)? | **No cuenta**, como la Zona de Padres: es tiempo de preparar un juego sin pantalla |
+| P10 | ¿Cómo se elige la sugerencia del día? | **Por la fecha**, la misma todo el día y en orden por categorías, para no repetir hasta recorrer todas; sin guardar historial (R9) |
+| P11 | ¿Qué son las «recomendadas» al final de cada actividad? | **3 actividades**: una de la misma categoría que sube un paso la dificultad y dos de otras categorías que encajan con los mismos materiales. Se eligen a mano al escribir el contenido, para que tengan sentido y no se repitan |
+| P12 | ¿La búsqueda filtra solo por texto o también por categoría y tiempo? | **Texto más chips de categoría** (las 6) y de tiempo (5 · 10 · 15 min) |
+| P13 | ¿Se oculta la tarjeta del día en algún momento? | **Se puede cerrar por hoy** con una ✕ pequeña; vuelve mañana con otra sugerencia |
