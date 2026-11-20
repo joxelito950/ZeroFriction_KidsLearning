@@ -166,14 +166,16 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
     return outcome;
   }
 
+  /// Un acierto o un fallo es un movimiento; soltar fuera de las sombras, no
+  /// (HU-039 R7).
   void _apply(String symbol, ShadowDropOutcome outcome) {
     switch (outcome) {
       case ShadowDropOutcome.snapped:
         final Set<String> placed = {...state.placed, symbol};
-        emit(state.copyWith(placed: placed));
+        emit(state.copyWith(placed: placed, moves: state.moves + 1));
         if (state.objects.every(placed.contains)) _win();
       case ShadowDropOutcome.wrongShadow:
-        emit(state.copyWith(fails: state.fails + 1));
+        emit(state.copyWith(fails: state.fails + 1, moves: state.moves + 1));
       case ShadowDropOutcome.missed:
         break;
     }

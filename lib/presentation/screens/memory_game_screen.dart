@@ -15,6 +15,7 @@ import '../blocs/sound/game_sound_events.dart';
 import '../blocs/sound/sound_cubit.dart';
 import '../theme/app_palette.dart';
 import '../widgets/game_icon.dart';
+import '../widgets/game_header.dart';
 import '../widgets/gesture_hint.dart';
 import '../widgets/memory_board.dart';
 import '../widgets/memory_level_indicator.dart';
@@ -230,74 +231,17 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppPalette.white,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(color: AppPalette.deepTeal.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 8))
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-        // El contador va en la fila de los puntos de nivel: junto al título le
-        // quitaba el ancho y, con el texto ampliado, el título se partía letra
-        // a letra (TD-007).
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // Icono del juego (HU-013); el título ya dice el nombre.
-                // Sin dorado: el dorado se ve en el botón del menú (HU-002 R16, 2026-11-09).
-                const GameIcon.memory(key: ValueKey<String>('memory-game-icon'), size: 48),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(l10n.memoryGameTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 2),
-                      Text(l10n.memoryGameInstructions,
-                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                MemoryLevelIndicator(
-                  level: level,
-                  total: MemoryLadder.maxLevel,
-                  color: RoundStyle.colorOf(round),
-                  rim: RoundStyle.rimOf(round),
-                  round: round,
-                ),
-                const SizedBox(width: 12),
-                // Se encoge antes que desbordarse con textos largos (árabe).
-                Expanded(
-                  child: Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(color: AppPalette.deepTeal, borderRadius: BorderRadius.circular(20)),
-                        child: Text(
-                          l10n.memoryGameMovesCounter(moves),
-                          style: const TextStyle(color: AppPalette.white, fontSize: 14, fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+    return GameHeader(
+      icon: const GameIcon.memory(key: ValueKey<String>('memory-game-icon'), size: 48),
+      title: l10n.memoryGameTitle,
+      instructions: l10n.memoryGameInstructions,
+      moves: moves,
+      levelIndicator: MemoryLevelIndicator(
+        level: level,
+        total: MemoryLadder.maxLevel,
+        color: RoundStyle.colorOf(round),
+        rim: RoundStyle.rimOf(round),
+        round: round,
       ),
     );
   }

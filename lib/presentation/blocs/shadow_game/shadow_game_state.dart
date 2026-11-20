@@ -49,6 +49,7 @@ class ShadowGameState {
     this.shadows = const [],
     this.placed = const {},
     this.fails = 0,
+    this.moves = 0,
     this.elapsed = Duration.zero,
     this.timerStarted = false,
     this.premium = false,
@@ -83,6 +84,11 @@ class ShadowGameState {
 
   /// Fallos de forma del tablero (R9).
   final int fails;
+
+  /// Movimientos del tablero (HU-039 R7): cada vez que se suelta un objeto sobre
+  /// una sombra, o se toca una sombra con un objeto elegido, acierte o no.
+  /// Solo se enseñan; las estrellas siguen por fallos (R8).
+  final int moves;
 
   final Duration elapsed;
 
@@ -150,6 +156,7 @@ class ShadowGameState {
     ShadowRoundPhase? phase,
     Set<String>? placed,
     int? fails,
+    int? moves,
     Duration? elapsed,
     bool? timerStarted,
     int? stars,
@@ -168,6 +175,7 @@ class ShadowGameState {
       shadows: shadows,
       placed: placed ?? this.placed,
       fails: fails ?? this.fails,
+      moves: moves ?? this.moves,
       elapsed: elapsed ?? this.elapsed,
       timerStarted: timerStarted ?? this.timerStarted,
       premium: premium,

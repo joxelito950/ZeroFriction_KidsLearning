@@ -108,8 +108,7 @@ void main() {
       state.shadows.firstWhere((shadow) => shadow != object && !state.placed.contains(shadow));
 
   group('start (4.1, R19)', () {
-    testWidgets('shows the title and icon, the 7 free levels, and the start animation before playing',
-        (tester) async {
+    testWidgets('shows the title and icon, the 7 free levels, and the start animation before playing', (tester) async {
       await pumpScreen(tester, waitIntro: false);
 
       expect(find.text('Sombras'), findsOneWidget);
@@ -219,6 +218,27 @@ void main() {
       expect(stateOf(tester).placed, isEmpty);
     });
 
+    testWidgets('the header shows the moves: a drop on a shadow counts, right or wrong; outside, not (HU-039)',
+        (tester) async {
+      final SemanticsHandle semantics = tester.ensureSemantics();
+      await pumpScreen(tester, level: 2);
+      expect(find.text('Movimientos: 0'), findsOneWidget);
+      expect(find.bySemanticsLabel('Movimientos: 0'), findsOneWidget, reason: 'read as in Memoria (R9)');
+      final String object = stateOf(tester).objects.first;
+
+      final Offset from = centerOf(tester, 'shadow-object-$object');
+      await tester.dragFrom(from, const Offset(0, -10));
+      await tester.pump();
+      await tester.pump(ShadowBoard.flightDuration + const Duration(milliseconds: 50));
+      expect(find.text('Movimientos: 0'), findsOneWidget, reason: 'dropped outside every shadow (R7)');
+
+      await dragTo(tester, object, otherShadow(stateOf(tester), object));
+      expect(find.text('Movimientos: 1'), findsOneWidget);
+      await dragTo(tester, object, object);
+      expect(find.text('Movimientos: 2'), findsOneWidget);
+      semantics.dispose();
+    });
+
     testWidgets('a second finger cannot drag another object at the same time', (tester) async {
       await pumpScreen(tester);
       final [String first, String second] = stateOf(tester).objects;
@@ -322,8 +342,7 @@ void main() {
   group('layout (4.1, P13, R13, criterion 12)', () {
     for (final (String name, Size size) in [('portrait', portrait), ('landscape', landscape)]) {
       for (final locale in const [Locale('es'), Locale('ar')]) {
-        testWidgets('level 8 fits in compact $name (${locale.languageCode}) with the shadows first',
-            (tester) async {
+        testWidgets('level 8 fits in compact $name (${locale.languageCode}) with the shadows first', (tester) async {
           await pumpScreen(tester, level: 8, premium: true, size: size, locale: locale);
           expect(tester.takeException(), isNull);
 

@@ -30,7 +30,8 @@ class _Launcher extends StatelessWidget {
         body: Center(
           child: TextButton(
             onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => VehicleGameScreen(random: Random(7), christmas: (_) => christmas)),
+              MaterialPageRoute<void>(
+                  builder: (_) => VehicleGameScreen(random: Random(7), christmas: (_) => christmas)),
             ),
             child: const Text('launcher'),
           ),
@@ -133,6 +134,26 @@ void main() {
     expect(find.byKey(ValueKey<String>('vehicle-tray-${vehicle.name}')), findsNothing);
   });
 
+  testWidgets('the header shows the moves: a drop on a place counts, right or wrong; outside, not (HU-039)',
+      (tester) async {
+    await pumpScreen(tester);
+    expect(find.text('Movimientos: 0'), findsOneWidget);
+    final VehicleGameState state = stateOf(tester);
+    final Vehicle vehicle = state.vehicles.first;
+    final Place wrong = state.board!.places.firstWhere((place) => !state.board!.accepts(place, vehicle));
+
+    final Offset from = centerOf(tester, 'vehicle-tray-${vehicle.name}');
+    await tester.dragFrom(from, const Offset(0, -10));
+    await tester.pump();
+    await tester.pump(VehicleBoardView.flightDuration + const Duration(milliseconds: 50));
+    expect(find.text('Movimientos: 0'), findsOneWidget, reason: 'dropped outside every place (R7)');
+
+    await dragTo(tester, vehicle, wrong);
+    expect(find.text('Movimientos: 1'), findsOneWidget);
+    await dragTo(tester, vehicle, state.board!.targetOf(vehicle));
+    expect(find.text('Movimientos: 2'), findsOneWidget);
+  });
+
   testWidgets('with the screen reader: choose a vehicle, then its place', (tester) async {
     final SemanticsHandle semantics = tester.ensureSemantics();
     await pumpScreen(tester);
@@ -149,14 +170,17 @@ void main() {
     tester.semantics.tap(find.semantics.byLabel(placeName));
     await tester.pump();
     expect(stateOf(tester).placed, {vehicle});
-    expect(find.bySemanticsLabel(RegExp('^${RegExp.escape(placeName)}: .*${RegExp.escape(vehicleName)}')), findsOneWidget);
+    expect(
+        find.bySemanticsLabel(RegExp('^${RegExp.escape(placeName)}: .*${RegExp.escape(vehicleName)}')), findsOneWidget);
     semantics.dispose();
   });
 
   testWidgets('every vehicle and place has its own name in each language', (tester) async {
     for (final Locale locale in AppLocalizations.supportedLocales) {
       final AppLocalizations l10n = lookupAppLocalizations(locale);
-      final Set<String> vehicles = {for (final Vehicle vehicle in Vehicle.values) l10n.vehiclesVehicleName(vehicle.name)};
+      final Set<String> vehicles = {
+        for (final Vehicle vehicle in Vehicle.values) l10n.vehiclesVehicleName(vehicle.name)
+      };
       expect(vehicles, hasLength(Vehicle.values.length), reason: locale.languageCode);
       expect(vehicles, isNot(contains(l10n.vehiclesVehicleName('unknown'))), reason: locale.languageCode);
       for (final Place place in Place.values) {
@@ -209,7 +233,8 @@ void main() {
     expect(VehicleGameScreen.boardInProgress(const VehicleGameState()), isFalse);
   });
 
-  testWidgets('at Christmas the sled is in the tray, each placed vehicle leaves a gift and the celebration has the tree',
+  testWidgets(
+      'at Christmas the sled is in the tray, each placed vehicle leaves a gift and the celebration has the tree',
       (tester) async {
     await pumpScreen(tester, christmas: true);
     expect(find.byKey(const ValueKey<String>('vehicle-tray-sled')), findsOneWidget);
