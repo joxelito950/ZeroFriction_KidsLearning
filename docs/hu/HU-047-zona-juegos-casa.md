@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (2026-11-20): **el dueño cambió el planteamiento** (sección 12) y la adelanta a antes de HU-006 |
+| **Estado** | **Lista** (2026-11-20): planteamiento nuevo del dueño (secciones 12 y 13), P7 a P13 decididas. Se desarrolla antes de HU-006 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 |
 | **Tamaño** | M (estimación: 2–3 días) |
@@ -227,3 +227,27 @@ Sustituyen a las secciones 3.4, 4 (R1, R8) y 8 donde no coincidan.
 | P11 | ¿Qué son las «recomendadas» al final de cada actividad? | **3 actividades**: una de la misma categoría que sube un paso la dificultad y dos de otras categorías que encajan con los mismos materiales. Se eligen a mano al escribir el contenido, para que tengan sentido y no se repitan |
 | P12 | ¿La búsqueda filtra solo por texto o también por categoría y tiempo? | **Texto más chips de categoría** (las 6) y de tiempo (5 · 10 · 15 min) |
 | P13 | ¿Se oculta la tarjeta del día en algún momento? | **Se puede cerrar por hoy** con una ✕ pequeña; vuelve mañana con otra sugerencia |
+
+## 13. Respuestas del dueño (2026-11-20)
+
+- **Dónde vive (corrige D1):** «Actividades sin pantallas» es **una sección independiente**, una pantalla propia de la app. **No va en la Zona de Padres ni dentro del menú.** En el menú solo están la **tarjeta con la sugerencia del día** y el **acceso a la sección**, en el pie junto a «Zona de padres» y «Salir».
+- **P2 a P11 y P13:** aceptadas las recomendaciones:
+  - **P7:** 24 actividades, 4 por categoría;
+  - **P8:** se abre sin el desafío de adultos;
+  - **P9:** el tiempo en la sección no cuenta como tiempo de pantalla;
+  - **P10:** la sugerencia del día va por la fecha, sin guardar historial;
+  - **P11:** 3 recomendadas, elegidas a mano;
+  - **P13:** la tarjeta del día se cierra por hoy con una ✕.
+- **P12, búsqueda:** texto, chips de categoría y chips de tiempo (5 · 10 · 15 min), y además **textos que enseñan al adulto a buscar**:
+  - el campo dice qué se puede escribir: «Busca por material, por lo que le gusta o por una idea»;
+  - debajo, **sugerencias de búsqueda** que se tocan para buscar. Mezclan materiales («calcetines», «cajas», «cinta»), gustos («animales», «coches», «música») e ideas («para un día de lluvia», «antes de dormir», «sin hacer ruido»);
+  - si no hay resultados, una frase que propone otra búsqueda y vuelve a mostrar las sugerencias, en vez de dejar la pantalla vacía;
+  - para que esas búsquedas encuentren algo, **cada actividad lleva etiquetas** (materiales, gustos y momentos) además de su título y su texto.
+
+### 13.1 Entregas propuestas
+
+| # | Entrega | Contenido |
+|---|---|---|
+| 1 | Dominio y contenido base | `Activity` (categoría, tiempo, edad, materiales, pasos, variantes, aviso propio, etiquetas, 3 recomendadas) y `ActivityCatalog` con las 24, en español e inglés; la sugerencia del día por la fecha; la búsqueda por texto y etiquetas |
+| 2 | Pantallas | La sección con el aviso general, el buscador, las sugerencias de búsqueda y los chips; la pantalla de cada actividad; la tarjeta del día y el acceso en el menú; también desde la pantalla de descanso (D4); sin contar tiempo (P9) |
+| 3 | Idiomas y revisión | Las 24 actividades en los otros 7 idiomas (entran en la revisión de TD-011); diseño en vertical y horizontal; prueba rápida en los emuladores |

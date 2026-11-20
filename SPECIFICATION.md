@@ -227,6 +227,19 @@ Antes de **subir** un AAB a Google Play: `dart run tool/check_upload_signature.d
 
 Un cambio de UI DEBERÍA probarse además en un dispositivo real o en un emulador, en las dos orientaciones.
 
+**Prueba rápida en los emuladores (decidido el 2026-11-20, TD-015).** Cada desarrollo termina con una prueba de funcionamiento en los dos extremos que soporta la app, antes de abrir el PR:
+
+```powershell
+powershell -File tool/smoke.ps1      # LowEnd_API26 (Android 8.0) y Medium_Phone_API_37.0
+```
+
+| Emulador | Para qué |
+|---|---|
+| `LowEnd_API26` | La versión más antigua que se soporta (Android 8.0, API 26, D-026), con 2 núcleos, 2 GB, 720 × 1280 y GPU por software: también sirve para medir TD-013 |
+| `Medium_Phone_API_37.0` | La versión más reciente de Android |
+
+La prueba (`integration_test/smoke_test.dart`) arranca la app real, entra y sale de los cuatro juegos y abre el desafío de la Zona de Padres. Un cambio en un juego DEBERÍA añadir allí su comprobación más básica.
+
 ---
 
 ## 6. Testing y cobertura
