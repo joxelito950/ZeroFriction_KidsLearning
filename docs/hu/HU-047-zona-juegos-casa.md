@@ -249,7 +249,7 @@ Sustituyen a las secciones 3.4, 4 (R1, R8) y 8 donde no coincidan.
 | # | Entrega | Contenido |
 |---|---|---|
 | 1 ✅ 2026-11-20 | Dominio y contenido base | `Activity` (categoría, tiempo, edad, materiales, pasos, variantes, aviso propio, etiquetas, 3 recomendadas) y `ActivityCatalog` con las 24, en español e inglés; la sugerencia del día por la fecha; la búsqueda por texto y etiquetas |
-| 2 | Pantallas | La sección con el aviso general, el buscador, las sugerencias de búsqueda y los chips; la pantalla de cada actividad; la tarjeta del día y el acceso en el menú; también desde la pantalla de descanso (D4); sin contar tiempo (P9) |
+| 2 ✅ 2026-11-23 | Pantallas | La sección con el aviso general, el buscador, las sugerencias de búsqueda y los chips; la pantalla de cada actividad; la tarjeta del día y el acceso en el menú; también desde la pantalla de descanso (D4); sin contar tiempo (P9) |
 | 3 | Idiomas y revisión | Las 24 actividades en los otros 7 idiomas (entran en la revisión de TD-011); diseño en vertical y horizontal; prueba rápida en los emuladores |
 
 ### 13.2 Entrega 1 (2026-11-20, rama `feature/hu-047-1-activities`)
@@ -269,3 +269,37 @@ Sustituyen a las secciones 3.4, 4 (R1, R8) y 8 donde no coincidan.
 - **Tests:**
   - lógica con un catálogo de ejemplo;
   - `test/data/activities/activity_assets_test.dart` vigila el contenido real: 24 actividades y 4 por categoría, todas recomendadas por alguna, todos los textos en cada idioma, que cada sugerencia de búsqueda encuentre al menos 2, y ningún material de riesgo (botones, canicas, monedas, globos, bolsas de plástico, pilas, cuentas, legumbres o arroz) fuera de la advertencia que lo prohíbe.
+
+### 13.3 Entrega 2 (2026-11-23, misma rama)
+
+- **Sección propia** (`ActivitiesScreen`):
+  - arriba, la advertencia general;
+  - el buscador «Busca por material, por lo que le gusta o por una idea», con las sugerencias de búsqueda debajo para tocarlas;
+  - chips de las 6 categorías y de «Hasta 5 · 10 · 15 · 30 min»;
+  - el número de resultados y la lista, que se construye a medida que se baja, preparada para cientos de actividades;
+  - sin resultados, la frase que propone otra búsqueda y otra vez las sugerencias. Nunca queda la pantalla vacía.
+- **Pantalla de cada actividad** (`ActivityScreen`):
+  - categoría, tiempo y edad mínima;
+  - qué practica y la advertencia propia en un recuadro ámbar;
+  - materiales, pasos numerados y variantes;
+  - «Para seguir jugando», con 3 que abren su propia pantalla.
+- **Menú:**
+  - la tarjeta pequeña «Idea para hoy, sin pantallas», con el icono de una familia (P8), va entre el logo y los juegos;
+  - la ✕ la oculta hasta mañana; el día se guarda en el campo 6 del perfil;
+  - el botón «Actividades sin pantallas» va en el pie, junto a «Zona de padres» y «Salir». En horizontal, para no hacer que la cuadrícula de juegos tenga que desplazarse en el teléfono pequeño, el botón pasa a la columna izquierda, debajo de la tarjeta.
+- **Pantalla de descanso:** el mismo acceso, también de noche y en la siesta (D4).
+- **Tiempo de juego:** mientras está abierta la sección o una actividad, no se cuenta y no salta la pantalla de descanso (P9). Funciona como en la Zona de Padres, pero sin desafío (P8) y sin cerrarse por inactividad.
+- **Textos:** 16 claves nuevas en los 9 idiomas; los que no son español ni inglés entran en la revisión de TD-011.
+- **Tests:** la sección (búsqueda escrita y por sugerencia, filtros, sin resultados y 300 actividades), la pantalla de cada actividad, la tarjeta del día (ocultar hasta mañana y volver al día siguiente), los accesos, el tiempo que no cuenta y el diseño en los 9 idiomas, 4 teléfonos y los dos tamaños de texto. Suite completa: 2260 tests.
+- **Pendiente:** si el menú sigue abierto pasada la medianoche, la tarjeta cambia al volver a pintarse el menú o al abrir la app, no en el mismo instante.
+
+### 13.4 Preparado para crecer: meta de 1000 actividades (2026-11-23)
+
+Decidido por el dueño: llegar a **1000 actividades** con materiales y tiempos variados, y traducirlas a más idiomas.
+
+- **Por idioma y actividad:** lo que aún no está traducido se muestra en inglés, actividad por actividad. Se puede traducir por tandas sin esperar a tener un idioma completo.
+- **Recomendadas automáticas:** si una actividad no las trae elegidas a mano, la app elige una de la misma categoría y dos de otras, las que más materiales y etiquetas comparten.
+- **Tiempos variados:** de 1 a 60 minutos, con los filtros «hasta N min».
+- **Guía para escribir y traducir:** [docs/activities/GUIA.md](../activities/GUIA.md), con el formato, el tono, las reglas de seguridad y cómo crecer por tandas sin repetir.
+- **Estado del contenido:** `dart run tool/activities_report.dart` dice cuántas hay por categoría, tiempo y edad, cuánto falta para 1000 y cuánto está traducido cada idioma.
+- **Tests:** vigilan cualquier cantidad: al menos 4 por categoría, `id` únicos con su categoría, el inglés completo, que cada sugerencia encuentre al menos 2 y que no se propongan materiales de riesgo.
