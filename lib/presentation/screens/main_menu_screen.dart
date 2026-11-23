@@ -15,6 +15,8 @@ import '../../domain/settings/game_difficulty.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import '../widgets/activity_widgets.dart';
+import '../widgets/daily_activity_card.dart';
 import '../widgets/game_catalog.dart';
 import '../widgets/game_grid.dart';
 import '../widgets/liquid_gold.dart';
@@ -53,21 +55,43 @@ class MainMenuScreen extends StatelessWidget {
                 // En horizontal el alto útil es muy bajo: encabezado y juegos van
                 // lado a lado. La cuadrícula ocupa el alto que queda (HU-023).
                 final bool isLandscape = constraints.maxWidth > constraints.maxHeight;
+                // La idea del día (HU-047 D1) va entre el logo y los juegos; en
+                // horizontal, debajo del logo, en la columna que se desplaza, y
+                // con ella el acceso a la sección: en el pie, un tercer botón
+                // pasaba a otra fila y dejaba los juegos sin sitio (HU-023 R2).
                 return isLandscape
-                    ? const Row(
+                    ? Row(
                         children: [
-                          Expanded(child: SingleChildScrollView(child: _MenuHeader())),
-                          SizedBox(width: 32),
-                          Expanded(child: _MenuActions(minColumns: 1)),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const _MenuHeader(),
+                                  DailyActivityCard(
+                                      clock: MainMenuScreen.clock, padding: const EdgeInsets.only(top: 16)),
+                                  const SizedBox(height: 8),
+                                  MediaQuery.withClampedTextScaling(
+                                    maxScaleFactor: _MenuHeader.maxTaglineScale,
+                                    child: const ActivitiesButton(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 32),
+                          const Expanded(child: _MenuActions(minColumns: 1, withActivities: false)),
                         ],
                       )
-                    : const Column(
+                    : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _MenuHeader(),
-                          SizedBox(height: 32),
-                          Flexible(child: _MenuActions(minColumns: 2)),
+                          const _MenuHeader(),
+                          const SizedBox(height: 16),
+                          DailyActivityCard(clock: MainMenuScreen.clock, padding: const EdgeInsets.only(bottom: 16)),
+                          const SizedBox(height: 16),
+                          const Flexible(child: _MenuActions(minColumns: 2)),
                         ],
                       );
               },
@@ -140,10 +164,14 @@ class _MenuHeader extends StatelessWidget {
 /// Los juegos en cuadrícula (HU-023), el acceso a la zona de padres y la
 /// salida de la app.
 class _MenuActions extends StatefulWidget {
-  const _MenuActions({required this.minColumns});
+  const _MenuActions({required this.minColumns, this.withActivities = true});
 
   /// En vertical, al menos 2 columnas (HU-023 3.1).
   final int minColumns;
+
+  /// El acceso a las actividades sin pantallas va en el pie (HU-047 D2); en
+  /// horizontal, debajo de la idea del día.
+  final bool withActivities;
 
   @override
   State<_MenuActions> createState() => _MenuActionsState();
@@ -184,8 +212,7 @@ class _MenuActionsState extends State<_MenuActions> {
     } catch (_) {
       // Sin perfil, nada se destaca.
     }
-    if (!mounted ||
-        (mapEquals(progress, _progress) && setEquals(editions, _editions) && discovery == _discovery)) {
+    if (!mounted || (mapEquals(progress, _progress) && setEquals(editions, _editions) && discovery == _discovery)) {
       return;
     }
     setState(() {
@@ -257,6 +284,8 @@ class _MenuActionsState extends State<_MenuActions> {
             alignment: WrapAlignment.center,
             spacing: 16,
             children: [
+              // Ideas para jugar sin pantalla, sin desafío (HU-047 D2, P8).
+              if (widget.withActivities) const ActivitiesButton(),
               // Doble toque y desafío para adultos (HU-004 R1).
               const ParentsZoneButton(),
               // La única salida sin confirmación (HU-001 R21).

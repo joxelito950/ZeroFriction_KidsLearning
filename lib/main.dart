@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'data/activities/asset_activity_source.dart';
 import 'data/local/hive_persistence_config.dart';
 import 'data/local/hive_persistence_repository.dart';
 import 'data/platform/audioplayers_sound_effects.dart';
 import 'data/platform/platform_feedback_channel.dart';
+import 'domain/activities/activity.dart';
 import 'domain/feedback/feedback_email.dart';
 import 'domain/repositories/i_persistence_repository.dart';
 import 'l10n/app_localizations.dart';
@@ -86,6 +88,8 @@ class _ToddlerLogicAppState extends State<ToddlerLogicApp> {
         RepositoryProvider<IPersistenceRepository>.value(value: repository),
         // Correo de comentarios (HU-032): datos técnicos y app de correo.
         RepositoryProvider<IFeedbackChannel>(create: (_) => PlatformFeedbackChannel()),
+        // Actividades sin pantallas (HU-047), desde los assets de la app.
+        RepositoryProvider<IActivitySource>(create: (_) => AssetActivitySource()),
       ],
       child: MultiBlocProvider(
         providers: [

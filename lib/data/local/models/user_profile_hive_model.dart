@@ -17,6 +17,7 @@ class UserProfileHiveModel {
     this.gameOpens,
     this.seenFeatures,
     this.highestSeenDate,
+    this.activityHiddenOn,
   });
 
   /// Sin nada descubierto aún (instalación nueva), se guarda todo como visto
@@ -30,6 +31,7 @@ class UserProfileHiveModel {
       gameOpens: {for (final MapEntry<GameId, int> entry in discovery.gameOpens.entries) entry.key.name: entry.value},
       seenFeatures: [for (final ParentsFeature feature in discovery.seenFeatures) feature.name],
       highestSeenDate: entity.highestSeenDate,
+      activityHiddenOn: entity.activityHiddenOn,
     );
   }
 
@@ -56,6 +58,11 @@ class UserProfileHiveModel {
   @HiveField(5)
   final DateTime? highestSeenDate;
 
+  /// Añadido en HU-047: el día en que se cerró la tarjeta de la actividad del
+  /// día (P13). `null` en los perfiles anteriores. Siguiente índice libre: 7.
+  @HiveField(6)
+  final DateTime? activityHiddenOn;
+
   UserProfile toEntity() {
     final Map<String, int>? opens = gameOpens;
     final List<String>? features = seenFeatures;
@@ -64,6 +71,7 @@ class UserProfileHiveModel {
       isSoundEnabled: isSoundEnabled,
       languageCode: languageCode,
       highestSeenDate: highestSeenDate,
+      activityHiddenOn: activityHiddenOn,
       // Un perfil anterior a HU-041 había visto lo de `1.0.0-rc.5` (sección 5).
       discovery: opens == null || features == null
           ? Discovery.beforeNews()

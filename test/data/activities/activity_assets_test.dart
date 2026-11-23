@@ -22,35 +22,44 @@ void main() {
         file.uri.pathSegments.last.replaceAll('.json', ''),
   ]..sort();
 
-  test('24 activities, 4 per category, with allowed times and ages (P7)', () {
-    expect(ids, hasLength(24));
-    expect(ids.toSet(), hasLength(24));
+  test('at least 24, at least 4 per category, unique ids, sensible times and ages (P7; goal: 1000)', () {
+    expect(ids.length, greaterThanOrEqualTo(24));
+    expect(ids.toSet(), hasLength(ids.length));
+    for (final String id in ids) {
+      expect(RegExp(r'^[a-z]+(-[a-z0-9]+)+$').hasMatch(id), isTrue, reason: 'id «$id»: <category>-<words>');
+    }
     for (final ActivityCategory category in ActivityCategory.values) {
-      expect(entries.where((entry) => entry['category'] == category.name), hasLength(4), reason: category.name);
+      expect(entries.where((entry) => entry['category'] == category.name).length, greaterThanOrEqualTo(4),
+          reason: category.name);
     }
     for (final Map<String, dynamic> entry in entries) {
-      expect(Activity.durations, contains(entry['minutes']), reason: entry['id'] as String);
-      expect([2, 3], contains(entry['ageFrom']), reason: entry['id'] as String);
+      expect(entry['id'] as String, startsWith('${entry['category']}-'));
+      expect(entry['minutes'] as int, inInclusiveRange(1, 60), reason: entry['id'] as String);
+      expect([2, 3, 4, 5], contains(entry['ageFrom']), reason: entry['id'] as String);
     }
   });
 
-  test('each one recommends 3 others, and every one is recommended by someone (P11)', () {
-    final Set<String> recommended = {};
+  test('hand-picked recommendations, when present, are up to 3 other existing ones (P11)', () {
     for (final Map<String, dynamic> entry in entries) {
-      final List<Object?> list = entry['recommended'] as List;
-      expect(list.toSet(), hasLength(3), reason: entry['id'] as String);
+      final List<Object?> list = (entry['recommended'] as List?) ?? const [];
+      expect(list.length, lessThanOrEqualTo(3), reason: entry['id'] as String);
+      expect(list.toSet(), hasLength(list.length));
       expect(list, isNot(contains(entry['id'])));
       expect(ids, containsAll(list));
-      recommended.addAll(list.cast<String>());
     }
-    expect(recommended, containsAll(ids));
+    final ActivityLibrary library = ActivityLibrary.fromJson(catalog, read('en'));
+    for (final Activity activity in library.activities) {
+      expect(library.recommendedFor(activity), hasLength(3), reason: activity.id);
+    }
   });
 
-  test('Spanish and English exist; every language has all the texts', () {
+  test('English has every activity (it is the fallback); every text present is complete', () {
     expect(languages, containsAll(['en', 'es']));
+    expect(ActivityLibrary.fromJson(catalog, read('en')).activities.map((a) => a.id), ids);
     for (final String language in languages) {
+      // Un idioma puede ir traduciendo poco a poco: lo que falta sale en inglés.
       final ActivityLibrary library = ActivityLibrary.fromJson(catalog, read(language));
-      expect(library.activities.map((a) => a.id), ids, reason: '$language has every activity');
+      expect(ids, containsAll(library.activities.map((a) => a.id)), reason: '$language: no unknown ids');
       for (final Activity activity in library.activities) {
         final String where = '$language/${activity.id}';
         expect(activity.title.trim(), isNotEmpty, reason: where);
