@@ -192,5 +192,15 @@
   "parentsRestProblemSameTimes": "L'ora di inizio e quella di fine devono essere diverse.",
   "parentsRestProblemNapLength": "Ogni sonnellino dura tra 30 minuti e 2 ore.",
   "parentsRestProblemNapMidnight": "Un sonnellino non può superare la mezzanotte.",
-  "parentsRestProblemTooClose": "Lascia almeno 2 ore tra i sonnellini e tra un sonnellino e la notte."
+  "parentsRestProblemTooClose": "Lascia almeno 2 ore tra i sonnellini e tra un sonnellino e la notte.",
+  "parentsHowToPlayTitle": "Come gioca",
+  "parentsHowToPlayMoveLabel": "Modo di muovere i pezzi",
+  "parentsHowToPlayMoveHelp": "Nei giochi in cui si porta un pezzo al suo posto (oggi, Ombre e Al suo posto). Toccare: si tocca il pezzo e poi il suo posto; aiuta i più piccoli o chi non controlla ancora bene il dito.",
+  "moveModeDrag": "Trascinare",
+  "moveModeTap": "Toccare",
+  "moveModeBoth": "Entrambi",
+  "parentsHowToPlayHandLabel": "Mano con cui gioca",
+  "parentsHowToPlayHandHelp": "Con la sinistra, con il telefono in orizzontale le ombre e i posti passano a destra, così la mano non li copre, e la mano guida è una mano sinistra.",
+  "playingHandRight": "Mano destra",
+  "playingHandLeft": "Mano sinistra"
 }

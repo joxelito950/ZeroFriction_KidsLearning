@@ -37,6 +37,7 @@ class OddOneOutState {
     this.objects = const [],
     this.oddIndex = 0,
     this.fails = 0,
+    this.moves = 0,
     this.wrongIndex,
     this.wrongCount = 0,
     this.elapsed = Duration.zero,
@@ -68,6 +69,11 @@ class OddOneOutState {
   /// Fallos del nivel (R4).
   final int fails;
 
+  /// Movimientos del nivel (HU-039 R7): cada toque en una opción, acierte o no.
+  /// Siguen de un tablero al siguiente del nivel, como los fallos y el tiempo.
+  /// Solo se enseñan; las estrellas siguen por fallos (R8).
+  final int moves;
+
   /// Último objeto tocado por error y cuántos van: cambia en cada fallo para
   /// repetir el «no» aunque se toque el mismo (R3).
   final int? wrongIndex;
@@ -94,6 +100,7 @@ class OddOneOutState {
   OddOneOutState copyWith({
     OddPhase? phase,
     int? fails,
+    int? moves,
     int? wrongIndex,
     int? wrongCount,
     Duration? elapsed,
@@ -114,6 +121,7 @@ class OddOneOutState {
         objects: objects,
         oddIndex: oddIndex,
         fails: fails ?? this.fails,
+        moves: moves ?? this.moves,
         wrongIndex: wrongIndex ?? this.wrongIndex,
         wrongCount: wrongCount ?? this.wrongCount,
         elapsed: elapsed ?? this.elapsed,

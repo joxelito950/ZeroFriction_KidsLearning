@@ -192,5 +192,15 @@
   "parentsRestProblemSameTimes": "يجب أن يختلف وقت البداية عن وقت النهاية.",
   "parentsRestProblemNapLength": "تستمر كل قيلولة بين 30 دقيقة وساعتين.",
   "parentsRestProblemNapMidnight": "لا يمكن أن تتجاوز القيلولة منتصف الليل.",
-  "parentsRestProblemTooClose": "اترك ساعتين على الأقل بين القيلولات، وبين القيلولة والليل."
+  "parentsRestProblemTooClose": "اترك ساعتين على الأقل بين القيلولات، وبين القيلولة والليل.",
+  "parentsHowToPlayTitle": "طريقة اللعب",
+  "parentsHowToPlayMoveLabel": "طريقة تحريك القطع",
+  "parentsHowToPlayMoveHelp": "في الألعاب التي تُنقل فيها قطعة إلى مكانها (حاليًا «الظلال» و«إلى مكانه»). اللمس: تُلمس القطعة ثم مكانها؛ يساعد الأصغر سنًا أو من لا يتحكم جيدًا في إصبعه بعد.",
+  "moveModeDrag": "السحب",
+  "moveModeTap": "اللمس",
+  "moveModeBoth": "كلاهما",
+  "parentsHowToPlayHandLabel": "اليد التي يلعب بها",
+  "parentsHowToPlayHandHelp": "مع اليد اليسرى، وعند وضع الهاتف أفقيًا، تنتقل الظلال والأماكن إلى اليمين حتى لا تغطيها اليد، وتصبح اليد المرشدة يدًا يسرى.",
+  "playingHandRight": "اليد اليمنى",
+  "playingHandLeft": "اليد اليسرى"
 }

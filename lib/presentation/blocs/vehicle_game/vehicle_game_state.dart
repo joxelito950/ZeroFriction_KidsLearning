@@ -37,6 +37,7 @@ class VehicleGameState {
     this.placesFirst = true,
     this.placed = const {},
     this.fails = 0,
+    this.moves = 0,
     this.elapsed = Duration.zero,
     this.timerStarted = false,
     this.coverageToSnap = 0.4,
@@ -67,6 +68,11 @@ class VehicleGameState {
 
   /// Vehículos soltados en un sitio equivocado (las estrellas, 7.4).
   final int fails;
+
+  /// Movimientos del tablero (HU-039 R7): cada vez que se suelta un vehículo sobre
+  /// un sitio, o se toca un sitio con un vehículo elegido, acierte o no.
+  /// Solo se enseñan; las estrellas siguen por fallos (R8).
+  final int moves;
   final Duration elapsed;
 
   /// El cronómetro arranca al tocar el primer vehículo.
@@ -117,6 +123,7 @@ class VehicleGameState {
     VehiclePhase? phase,
     Set<Vehicle>? placed,
     int? fails,
+    int? moves,
     Duration? elapsed,
     bool? timerStarted,
     int? stars,
@@ -132,6 +139,7 @@ class VehicleGameState {
         placesFirst: placesFirst,
         placed: placed ?? this.placed,
         fails: fails ?? this.fails,
+        moves: moves ?? this.moves,
         elapsed: elapsed ?? this.elapsed,
         timerStarted: timerStarted ?? this.timerStarted,
         coverageToSnap: coverageToSnap,

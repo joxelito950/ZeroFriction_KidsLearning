@@ -33,8 +33,8 @@ class _Launcher extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         body: Center(
           child: TextButton(
-            onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute<void>(builder: (_) => OddOneOutScreen(random: Random(4)))),
+            onPressed: () =>
+                Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => OddOneOutScreen(random: Random(4)))),
             child: const Text('launcher'),
           ),
         ),
@@ -55,8 +55,7 @@ void main() {
   });
 
   Future<void> pumpScreen(WidgetTester tester, {int level = 1, GameDifficulty round = GameDifficulty.gold}) async {
-    when(() => repository.readGameProgress(GameId.oddOneOut))
-        .thenAnswer((_) async => progressAt(level, round: round));
+    when(() => repository.readGameProgress(GameId.oddOneOut)).thenAnswer((_) async => progressAt(level, round: round));
     await tester.pumpWidget(RepositoryProvider<IPersistenceRepository>.value(
       value: repository,
       child: BlocProvider<SoundCubit>(
@@ -69,8 +68,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 700));
   }
 
-  OddOneOutState stateOf(WidgetTester tester) =>
-      tester.element(find.byType(GestureHint)).read<OddOneOutCubit>().state;
+  OddOneOutState stateOf(WidgetTester tester) => tester.element(find.byType(GestureHint)).read<OddOneOutCubit>().state;
   Finder card(int index) => find.byKey(ValueKey<String>('odd-object-$index'));
 
   testWidgets('shows the title, icon, 5 level dots and one card per object', (tester) async {
@@ -99,6 +97,20 @@ void main() {
     await tester.pump(OddOneOutCubit.solvedDuration);
     await tester.pump(const Duration(milliseconds: 400));
     expect(stateOf(tester).board, 1);
+  });
+
+  testWidgets('the header shows the moves: every tap, right or wrong (HU-039 R7, R9)', (tester) async {
+    await pumpScreen(tester, level: 2);
+    expect(find.text('Movimientos: 0'), findsOneWidget);
+    final int odd = stateOf(tester).oddIndex;
+    await tester.tap(card(odd == 0 ? 1 : 0));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Movimientos: 1'), findsOneWidget);
+    await tester.tap(card(odd));
+    await tester.pump();
+    expect(find.text('Movimientos: 2'), findsOneWidget);
+    await tester.pump(OddOneOutCubit.solvedDuration);
+    await tester.pump(const Duration(milliseconds: 400));
   });
 
   testWidgets('three right boards celebrate the level', (tester) async {
@@ -161,7 +173,8 @@ void main() {
   });
 
   testWidgets('diamond keeps its time with Premium; Premium removes nothing for the child', (tester) async {
-    when(() => repository.readUserProfile()).thenAnswer((_) async => const UserProfile(isPremium: true, isSoundEnabled: true));
+    when(() => repository.readUserProfile())
+        .thenAnswer((_) async => const UserProfile(isPremium: true, isSoundEnabled: true));
     await pumpScreen(tester, level: 2, round: GameDifficulty.diamond);
     expect(stateOf(tester).gameRound, GameDifficulty.diamond);
     expect(stateOf(tester).timeLimit, const Duration(seconds: 25));
@@ -172,10 +185,14 @@ void main() {
     expect(OddOneOutScreen.boardInProgress(const OddOneOutState(phase: OddPhase.playing, fails: 1)), isTrue);
     expect(OddOneOutScreen.boardInProgress(const OddOneOutState(phase: OddPhase.solved)), isTrue);
     expect(OddOneOutScreen.boardInProgress(const OddOneOutState()), isFalse);
-    expect(GameSoundEvents.oddOneOut(const OddOneOutState(phase: OddPhase.playing),
-        const OddOneOutState(phase: OddPhase.celebrating, medal: GameDifficulty.bronze)), GameSound.badge);
-    expect(GameSoundEvents.oddOneOut(const OddOneOutState(phase: OddPhase.solved),
-        const OddOneOutState(phase: OddPhase.celebrating)), GameSound.complete);
+    expect(
+        GameSoundEvents.oddOneOut(const OddOneOutState(phase: OddPhase.playing),
+            const OddOneOutState(phase: OddPhase.celebrating, medal: GameDifficulty.bronze)),
+        GameSound.badge);
+    expect(
+        GameSoundEvents.oddOneOut(
+            const OddOneOutState(phase: OddPhase.solved), const OddOneOutState(phase: OddPhase.celebrating)),
+        GameSound.complete);
   });
 
   testWidgets('two «back» presses leave the game (D-025)', (tester) async {

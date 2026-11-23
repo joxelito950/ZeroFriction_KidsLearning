@@ -192,5 +192,15 @@
   "parentsRestProblemSameTimes": "L'heure de début et l'heure de fin doivent être différentes.",
   "parentsRestProblemNapLength": "Chaque sieste dure entre 30 minutes et 2 heures.",
   "parentsRestProblemNapMidnight": "Une sieste ne peut pas dépasser minuit.",
-  "parentsRestProblemTooClose": "Laissez au moins 2 heures entre les siestes, et entre une sieste et la nuit."
+  "parentsRestProblemTooClose": "Laissez au moins 2 heures entre les siestes, et entre une sieste et la nuit.",
+  "parentsHowToPlayTitle": "Comment il joue",
+  "parentsHowToPlayMoveLabel": "Façon de déplacer les pièces",
+  "parentsHowToPlayMoveHelp": "Dans les jeux où l'on amène une pièce à sa place (aujourd'hui, Ombres et À sa place). Toucher : on touche la pièce puis sa place ; cela aide les plus petits ou ceux qui ne maîtrisent pas encore bien leur doigt.",
+  "moveModeDrag": "Glisser",
+  "moveModeTap": "Toucher",
+  "moveModeBoth": "Les deux",
+  "parentsHowToPlayHandLabel": "Main avec laquelle il joue",
+  "parentsHowToPlayHandHelp": "Avec la gauche, téléphone à l'horizontale, les ombres et les places passent à droite pour que la main ne les cache pas, et la main qui guide est une main gauche.",
+  "playingHandRight": "Main droite",
+  "playingHandLeft": "Main gauche"
 }

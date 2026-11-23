@@ -1090,5 +1090,45 @@
   "parentsRestProblemTooClose": "Leave at least 2 hours between naps and between a nap and the night.",
   "@parentsRestProblemTooClose": {
     "description": "Kind message: naps and the night need at least 2 free hours between them."
+  },
+  "parentsHowToPlayTitle": "How they play",
+  "@parentsHowToPlayTitle": {
+    "description": "Row and screen title in the parents zone: how the child plays (drag or tap, dominant hand). HU-039, HU-031."
+  },
+  "parentsHowToPlayMoveLabel": "How pieces move",
+  "@parentsHowToPlayMoveLabel": {
+    "description": "Label of the drag / tap / both setting."
+  },
+  "parentsHowToPlayMoveHelp": "In the games where a piece goes to its place (today, Shadows and To its place). Tap: tap the piece, then its place; it helps the youngest children or those who do not yet control their finger well.",
+  "@parentsHowToPlayMoveHelp": {
+    "description": "Explains the drag / tap / both setting to parents. Game names must match the game titles in the menu."
+  },
+  "moveModeDrag": "Drag",
+  "@moveModeDrag": {
+    "description": "Option: pieces are moved by dragging. One short word."
+  },
+  "moveModeTap": "Tap",
+  "@moveModeTap": {
+    "description": "Option: tap the piece, then its place. One short word."
+  },
+  "moveModeBoth": "Both",
+  "@moveModeBoth": {
+    "description": "Option: both dragging and tapping work. One short word."
+  },
+  "parentsHowToPlayHandLabel": "Hand they play with",
+  "@parentsHowToPlayHandLabel": {
+    "description": "Label of the dominant hand setting (HU-031)."
+  },
+  "parentsHowToPlayHandHelp": "With the left hand, when the phone is sideways the shadows and places move to the right, so the hand does not cover them, and the guiding hand is a left hand.",
+  "@parentsHowToPlayHandHelp": {
+    "description": "Explains what changes with the left hand: in landscape the targets move to the right and the guiding hand is mirrored."
+  },
+  "playingHandRight": "Right hand",
+  "@playingHandRight": {
+    "description": "Option: the child plays with the right hand. Also used in the row summary."
+  },
+  "playingHandLeft": "Left hand",
+  "@playingHandLeft": {
+    "description": "Option: the child plays with the left hand. Also used in the row summary."
   }
 }

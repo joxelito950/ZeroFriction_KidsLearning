@@ -192,5 +192,15 @@
   "parentsRestProblemSameTimes": "시작 시간과 종료 시간은 달라야 합니다.",
   "parentsRestProblemNapLength": "낮잠은 30분에서 2시간 사이입니다.",
   "parentsRestProblemNapMidnight": "낮잠은 자정을 넘길 수 없습니다.",
-  "parentsRestProblemTooClose": "낮잠끼리, 그리고 낮잠과 밤 사이에 2시간 이상 비워 두세요."
+  "parentsRestProblemTooClose": "낮잠끼리, 그리고 낮잠과 밤 사이에 2시간 이상 비워 두세요.",
+  "parentsHowToPlayTitle": "노는 방법",
+  "parentsHowToPlayMoveLabel": "조각 옮기는 방법",
+  "parentsHowToPlayMoveHelp": "조각을 제자리로 옮기는 게임(현재 「그림자」와 「제자리로」)에서 쓰입니다. 탭: 조각을 누른 다음 그 자리를 누릅니다. 어린아이나 아직 손가락을 잘 쓰지 못하는 아이에게 도움이 됩니다.",
+  "moveModeDrag": "끌기",
+  "moveModeTap": "탭",
+  "moveModeBoth": "둘 다",
+  "parentsHowToPlayHandLabel": "사용하는 손",
+  "parentsHowToPlayHandHelp": "왼손을 고르면 휴대전화를 가로로 둘 때 그림자와 자리가 오른쪽으로 옮겨져 손에 가려지지 않고, 안내하는 손도 왼손이 됩니다.",
+  "playingHandRight": "오른손",
+  "playingHandLeft": "왼손"
 }

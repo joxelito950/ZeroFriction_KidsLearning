@@ -101,10 +101,16 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
       timeLimit: _timed ? position.timeLimit ?? _ladder.limitFor(position.round, position.level) : null,
       tutorialFalls: position.tutorialFalls,
     );
-    _deal(board: 0, fails: 0, elapsed: Duration.zero, timerStarted: false);
+    _deal(board: 0, fails: 0, moves: 0, elapsed: Duration.zero, timerStarted: false);
   }
 
-  void _deal({required int board, required int fails, required Duration elapsed, required bool timerStarted}) {
+  void _deal({
+    required int board,
+    required int fails,
+    required int moves,
+    required Duration elapsed,
+    required bool timerStarted,
+  }) {
     final OddBoard content = OddOneOut.board(
       _random,
       OddOneOut.levelAt(_position.level),
@@ -131,6 +137,7 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
       objects: content.objects,
       oddIndex: content.oddIndex,
       fails: fails,
+      moves: moves,
       elapsed: elapsed,
       timerStarted: timerStarted,
       hasMedal: _progress.bestMedal != null,
@@ -139,23 +146,35 @@ class OddOneOutCubit extends Cubit<OddOneOutState> {
   }
 
   /// Toca un objeto (R3): el diferente salta y sigue el siguiente tablero; otro
-  /// hace un «no» y cuenta como fallo.
+  /// hace un «no» y cuenta como fallo. Cada toque es un movimiento (HU-039 R7).
   void tap(int index) {
     if (state.phase != OddPhase.playing || index < 0 || index >= state.objects.length) return;
     _startTimerIfNeeded();
     if (index != state.oddIndex) {
-      emit(state.copyWith(fails: state.fails + 1, wrongIndex: index, wrongCount: state.wrongCount + 1));
+      emit(state.copyWith(
+        fails: state.fails + 1,
+        moves: state.moves + 1,
+        wrongIndex: index,
+        wrongCount: state.wrongCount + 1,
+      ));
       return;
     }
     if (state.board + 1 >= OddOneOut.boardsPerLevel) {
+      emit(state.copyWith(moves: state.moves + 1));
       _win();
       return;
     }
-    emit(state.copyWith(phase: OddPhase.solved));
+    emit(state.copyWith(phase: OddPhase.solved, moves: state.moves + 1));
     _transition?.cancel();
     _transition = Timer(solvedDuration, () {
       if (isClosed) return;
-      _deal(board: state.board + 1, fails: state.fails, elapsed: state.elapsed, timerStarted: state.timerStarted);
+      _deal(
+        board: state.board + 1,
+        fails: state.fails,
+        moves: state.moves,
+        elapsed: state.elapsed,
+        timerStarted: state.timerStarted,
+      );
     });
   }
 

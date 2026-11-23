@@ -192,5 +192,15 @@
   "parentsRestProblemSameTimes": "O horário de início e o de fim devem ser diferentes.",
   "parentsRestProblemNapLength": "Cada soneca dura entre 30 minutos e 2 horas.",
   "parentsRestProblemNapMidnight": "Uma soneca não pode passar da meia-noite.",
-  "parentsRestProblemTooClose": "Deixe pelo menos 2 horas entre as sonecas e entre uma soneca e a noite."
+  "parentsRestProblemTooClose": "Deixe pelo menos 2 horas entre as sonecas e entre uma soneca e a noite.",
+  "parentsHowToPlayTitle": "Como joga",
+  "parentsHowToPlayMoveLabel": "Jeito de mover as peças",
+  "parentsHowToPlayMoveHelp": "Nos jogos em que se leva uma peça ao seu lugar (hoje, Sombras e No seu lugar). Tocar: toca-se a peça e depois o lugar dela; ajuda os menores ou quem ainda não controla bem o dedo.",
+  "moveModeDrag": "Arrastar",
+  "moveModeTap": "Tocar",
+  "moveModeBoth": "Os dois",
+  "parentsHowToPlayHandLabel": "Mão com que joga",
+  "parentsHowToPlayHandHelp": "Com a esquerda, com o telefone na horizontal, as sombras e os lugares passam para a direita, para a mão não cobri-los, e a mão que guia é uma mão esquerda.",
+  "playingHandRight": "Mão direita",
+  "playingHandLeft": "Mão esquerda"
 }

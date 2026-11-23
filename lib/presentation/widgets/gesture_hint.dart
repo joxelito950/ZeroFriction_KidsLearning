@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../brand/brand_assets.dart';
+import '../../domain/settings/how_to_play.dart';
+import '../blocs/how_to_play/how_to_play_cubit.dart';
 import '../theme/app_palette.dart';
 
 /// Gesto que enseña la mano (HU-022 R1).
@@ -13,6 +16,10 @@ enum HintGesture {
 
   /// Llevar algo desde el objetivo hasta [GestureHint.dragTo] (Sombras, HU-007).
   drag,
+
+  /// Tocar el objetivo y después [GestureHint.dragTo]: lo que enseña un juego
+  /// de arrastrar cuando el adulto eligió «Tocar» (HU-039 §3.2).
+  tapThenTap,
 }
 
 /// Tutorial visual sin texto ni sonido (HU-022, D-034): si el niño no toca nada
@@ -41,12 +48,16 @@ class GestureHint extends StatefulWidget {
   static const Duration cycle = Duration(milliseconds: 2000);
 
   static const Duration _fadeOut = Duration(milliseconds: 150);
+
   /// Alto de la mano infantil (HU-013); el ancho sigue la proporción del dibujo.
   static const double handSize = 72;
   static const double handWidth = handSize * 208 / 256;
 
   /// Dónde está la yema del índice dentro del dibujo (fracción de ancho y alto).
   static const Offset fingertipAnchor = Offset(0.08, 0.07);
+
+  /// La yema en la mano reflejada, la de un zurdo (HU-031 R3).
+  static const Offset leftFingertipAnchor = Offset(1 - 0.08, 0.07);
 
   /// Cambia con cada tablero: la mano vuelve a estar disponible (R3).
   final Object boardId;
@@ -136,6 +147,7 @@ class _GestureHintState extends State<GestureHint> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final HowToPlay how = context.select<HowToPlayCubit?, HowToPlay>((cubit) => cubit?.state ?? const HowToPlay());
     return Stack(
       children: [
         Listener(behavior: HitTestBehavior.translucent, onPointerDown: _onPointerDown, child: widget.child),
@@ -147,7 +159,7 @@ class _GestureHintState extends State<GestureHint> with SingleTickerProviderStat
                 duration: GestureHint._fadeOut,
                 child: AnimatedBuilder(
                   animation: _cycle,
-                  builder: (context, _) => _buildHand(context),
+                  builder: (context, _) => _buildHand(context, how),
                 ),
               ),
             ),
@@ -157,25 +169,31 @@ class _GestureHintState extends State<GestureHint> with SingleTickerProviderStat
     );
   }
 
-  Widget _buildHand(BuildContext context) {
+  Widget _buildHand(BuildContext context, HowToPlay how) {
     final double t = _cycle.value;
     if (!_cycle.isAnimating || t == 0) return const SizedBox.shrink();
     final Rect? from = _rectOf(widget.target);
     if (from == null) return const SizedBox.shrink();
-    final Rect? to = widget.gesture == HintGesture.drag ? _rectOf(widget.dragTo) : null;
+    // Cómo juega (HU-039, HU-031): con «Tocar» un juego de arrastrar enseña
+    // los dos toques; con la mano izquierda, la mano se ve reflejada.
+    final HintGesture gesture =
+        widget.gesture == HintGesture.drag && how.moveMode == MoveMode.tap ? HintGesture.tapThenTap : widget.gesture;
+    final Rect? to = gesture == HintGesture.tap ? null : _rectOf(widget.dragTo);
     final bool still = MediaQuery.disableAnimationsOf(context);
 
     final HandPose pose = handPoseAt(
       t,
-      gesture: widget.gesture,
+      gesture: gesture,
       from: from.center,
       to: to?.center ?? from.center,
       still: still,
+      leftHanded: how.leftHanded,
     );
+    final Offset anchor = how.leftHanded ? GestureHint.leftFingertipAnchor : GestureHint.fingertipAnchor;
     final Widget? ghost = widget.dragGhost;
     return Stack(
       children: [
-        if (ghost != null && widget.gesture == HintGesture.drag)
+        if (ghost != null && gesture == HintGesture.drag)
           Positioned(
             left: pose.fingertip.dx - from.width / 2,
             top: pose.fingertip.dy - from.height / 2,
@@ -202,14 +220,18 @@ class _GestureHintState extends State<GestureHint> with SingleTickerProviderStat
             ),
           ),
         Positioned(
-          // La yema del índice (arriba a la izquierda del dibujo) cae en el objetivo.
-          left: pose.fingertip.dx - GestureHint.handWidth * GestureHint.fingertipAnchor.dx,
-          top: pose.fingertip.dy - GestureHint.handSize * GestureHint.fingertipAnchor.dy,
+          // La yema del índice (arriba a la izquierda del dibujo, o a la derecha
+          // en la mano reflejada) cae en el objetivo.
+          left: pose.fingertip.dx - GestureHint.handWidth * anchor.dx,
+          top: pose.fingertip.dy - GestureHint.handSize * anchor.dy,
           child: Opacity(
             opacity: pose.opacity,
             child: Transform.scale(
               scale: pose.scale,
-              child: const _Hand(key: ValueKey<String>('gesture-hint-hand')),
+              child: Transform.flip(
+                flipX: how.leftHanded,
+                child: const _Hand(key: ValueKey<String>('gesture-hint-hand')),
+              ),
             ),
           ),
         ),
@@ -240,6 +262,7 @@ HandPose handPoseAt(
   required Offset from,
   required Offset to,
   bool still = false,
+  bool leftHanded = false,
 }) {
   double phase(double start, double end) => ((t - start) / (end - start)).clamp(0.0, 1.0);
   final double fadeIn = phase(0, 0.12);
@@ -250,8 +273,8 @@ HandPose handPoseAt(
 
   switch (gesture) {
     case HintGesture.tap:
-      // Llega desde abajo a la derecha, presiona y suelta.
-      final Offset start = from + const Offset(36, 48);
+      // Llega desde abajo, del lado de la mano, presiona y suelta.
+      final Offset start = from + Offset(leftHanded ? -36 : 36, 48);
       final double approach = Curves.easeOut.transform(phase(0.12, 0.45));
       final double press = phase(0.45, 0.55) - phase(0.6, 0.7);
       return HandPose(
@@ -269,6 +292,23 @@ HandPose handPoseAt(
         opacity: opacity,
         scale: 1 - 0.15 * press,
         ripple: 0,
+      );
+    case HintGesture.tapThenTap:
+      // Toca el objeto, levanta el dedo y toca su sitio (HU-039).
+      final Offset start = from + Offset(leftHanded ? -36 : 36, 48);
+      final double approach = Curves.easeOut.transform(phase(0.12, 0.3));
+      final double travel = Curves.easeInOut.transform(phase(0.45, 0.62));
+      final double press = (phase(0.3, 0.36) - phase(0.38, 0.44)) + (phase(0.62, 0.68) - phase(0.7, 0.76));
+      final double ripple = t >= 0.33 && t < 0.45
+          ? phase(0.33, 0.45)
+          : t >= 0.65 && t < 0.85
+              ? phase(0.65, 0.85)
+              : 0;
+      return HandPose(
+        fingertip: Offset.lerp(Offset.lerp(start, from, approach)!, to, travel)!,
+        opacity: opacity,
+        scale: 1 - 0.15 * press,
+        ripple: ripple,
       );
   }
 }

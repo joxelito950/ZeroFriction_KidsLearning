@@ -151,7 +151,7 @@ Cada módulo nuevo (Shadow Matching, Clasificación, Zona de Padres) DEBE seguir
 - Campos de `ShadowProgressHiveModel` (HU-007, mismo formato que la memoria): 0 `currentLevel`, 1 `hasMedal`, 2 `bestStarsByLevel`, 3 `achievedAtByLevel`, 4 `lastPlayedAt` y, desde HU-037, los mismos 5 a 11 que la memoria. El próximo índice libre es 12. El récord por nivel (`LevelRecord`) y la pérdida de logros (`StarDecay.settle`) son comunes a los dos juegos.
 - Campos de `GameProgressHiveModel` (HU-037, HU-025): 0 `round`, 1 `level`, 2 `medals`, 3 `bestStarsByRoundLevel`, 4 `achievedAtByRoundLevel`, 5 `lastPlayedAt`, 6 `tutorialFalls` y, desde HU-034, 7 `stuckLevel` y 8 `stuckFalls`. El próximo índice libre es 9.
 - Campos de `PlayDayHiveModel` (HU-034 R3): 0 `day` (medianoche local), 1 `secondsByGame` (nombre de `GameId` → segundos; un juego desconocido se ignora al leer), 2 `outsideSeconds` (menú y pantallas comunes). Solo se guardan hoy y los 5 días anteriores: lo más antiguo se borra al leer. El próximo índice libre es 3.
-- Campos de `ParentalSettingsHiveModel` (HU-009): 0 `dailyLimitMinutes` (`null` es «sin límite»), 1 `playDay` (medianoche local del último día jugado), 2 `playedSeconds`, 3 `extraMinutes` (los «15 minutos más» de ese día). Desde HU-030: 4 `difficulty` (nombre de `GameDifficulty`; `null` es Normal) y 5 `timerDisabled`. Desde HU-016: 6 `keepStars` y 7 `starDecayResumedAt` (cuándo se volvió a activar la pérdida). Desde HU-038: 8 `nightFrom` y 9 `nightUntil` (la hora de dormir, en minutos desde la medianoche; `null` sin ella), 10 `naps` (`List<int>`: desde y hasta de cada siesta, seguidos; `null` sin siestas) y 11 `restAllowedUntil` (fin de los «15 minutos más» dados en un descanso). Un horario dañado o que no cumple las reglas se lee como apagado. El próximo índice libre es 12 (HU-039 y HU-031). Los cambios se guardan con `updateParentalSettings`, que lee y escribe sin `await` en medio para que el tiempo de hoy (HU-009) y los ajustes de los juegos no se pisen.
+- Campos de `ParentalSettingsHiveModel` (HU-009): 0 `dailyLimitMinutes` (`null` es «sin límite»), 1 `playDay` (medianoche local del último día jugado), 2 `playedSeconds`, 3 `extraMinutes` (los «15 minutos más» de ese día). Desde HU-030: 4 `difficulty` (nombre de `GameDifficulty`; `null` es Normal) y 5 `timerDisabled`. Desde HU-016: 6 `keepStars` y 7 `starDecayResumedAt` (cuándo se volvió a activar la pérdida). Desde HU-038: 8 `nightFrom` y 9 `nightUntil` (la hora de dormir, en minutos desde la medianoche; `null` sin ella), 10 `naps` (`List<int>`: desde y hasta de cada siesta, seguidos; `null` sin siestas) y 11 `restAllowedUntil` (fin de los «15 minutos más» dados en un descanso). Un horario dañado o que no cumple las reglas se lee como apagado. Desde HU-039 y HU-031: 12 `moveMode` (nombre de `MoveMode`; `null` es «Ambas») y 13 `playingHand` (nombre de `PlayingHand`; `null` es la derecha). El próximo índice libre es 14. Los cambios se guardan con `updateParentalSettings`, que lee y escribe sin `await` en medio para que el tiempo de hoy (HU-009) y los ajustes de los juegos no se pisen.
 - Los `typeId` y los índices `@HiveField` **NO DEBEN reutilizarse ni cambiar de significado**, porque romperían los datos ya guardados en los dispositivos. Un campo eliminado deja su índice reservado. El próximo `typeId` libre es **7** (el 4 es el progreso de Sombras, el 5 el progreso común de los juegos nuevos, HU-025, y el 6 el historial de juego, HU-034). Los juegos nuevos no necesitan typeId propio: usan la caja `game_progress` con su clave. `LevelState` (typeId 0) dejará de usarse cuando el juego pase a `MemoryProgress` (HU-001, entrega 3); su typeId queda reservado.
 - Identificadores de nivel en uso: `farm_easy`, `wild_medium`. Un `levelId` ya publicado NO DEBE renombrarse.
 
@@ -226,6 +226,19 @@ dart run tool/check_release_permissions.dart   # sin permisos (HU-014 R3)
 Antes de **subir** un AAB a Google Play: `dart run tool/check_upload_signature.dart` (HU-014 R2) y el resto de pasos de [docs/store/README.md](docs/store/README.md).
 
 Un cambio de UI DEBERÍA probarse además en un dispositivo real o en un emulador, en las dos orientaciones.
+
+**Prueba rápida en los emuladores (decidido el 2026-11-20, TD-015).** Cada desarrollo termina con una prueba de funcionamiento en los dos extremos que soporta la app, antes de abrir el PR:
+
+```powershell
+powershell -File tool/smoke.ps1      # LowEnd_API26 (Android 8.0) y Medium_Phone_API_37.0
+```
+
+| Emulador | Para qué |
+|---|---|
+| `LowEnd_API26` | La versión más antigua que se soporta (Android 8.0, API 26, D-026), con 2 núcleos, 2 GB, 720 × 1280 y GPU por software: también sirve para medir TD-013 |
+| `Medium_Phone_API_37.0` | La versión más reciente de Android |
+
+La prueba (`integration_test/smoke_test.dart`) arranca la app real, entra y sale de los cuatro juegos y abre el desafío de la Zona de Padres. Un cambio en un juego DEBERÍA añadir allí su comprobación más básica.
 
 ---
 
