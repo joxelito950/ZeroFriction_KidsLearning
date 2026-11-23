@@ -47,14 +47,20 @@ function Wait-Boot([string]$avd) {
 
 $failed = @()
 foreach ($avd in $Avds) {
+    $started = $false
     if (-not (Get-RunningAvds).ContainsKey($avd)) {
         Write-Host "Arrancando $avd..."
         Start-Process -FilePath $emulator -ArgumentList @('-avd', $avd, '-no-snapshot', '-no-boot-anim', '-no-audio') -WindowStyle Minimized
+        $started = $true
     }
     $serial = Wait-Boot $avd
+    # Un margen para que el sistema termine de arrancar sus servicios.
+    Start-Sleep -Seconds 20
     Write-Host "== $avd ($serial)"
     & flutter test integration_test/smoke_test.dart -d $serial
     if ($LASTEXITCODE -ne 0) { $failed += $avd }
+    # Uno cada vez: dos emuladores a la vez dejaban sin respuesta al de API 37.
+    if ($started) { & $adb -s $serial emu kill | Out-Null; Start-Sleep -Seconds 5 }
 }
 
 if ($failed.Count -gt 0) {

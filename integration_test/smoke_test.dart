@@ -31,7 +31,12 @@ void main() {
 
   testWidgets('menu, the four games and the parents gate', (tester) async {
     app.main();
-    await wait(tester, const Duration(seconds: 6));
+    // En un emulador lento el primer arranque tarda: se espera al menú, como mucho 45 s.
+    final DateTime limit = DateTime.now().add(const Duration(seconds: 45));
+    while (find.byType(MainMenuScreen).evaluate().isEmpty && DateTime.now().isBefore(limit)) {
+      await tester.pump(const Duration(milliseconds: 250));
+    }
+    await wait(tester);
     expect(find.byType(MainMenuScreen), findsOneWidget);
 
     for (final String game in ['memory', 'shadows', 'odd-one-out', 'vehicles']) {
