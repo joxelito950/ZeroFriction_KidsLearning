@@ -62,7 +62,15 @@ void main() {
       (widget) =>
           widget.key is ValueKey<String> && (widget.key! as ValueKey<String>).value.startsWith('activity-card-'),
     );
+    // En una pantalla pequeña los filtros ocupan todo: la lista solo se
+    // construye al bajar hasta ella.
+    for (var i = 0; i < 8 && card.evaluate().isEmpty; i++) {
+      await tester.drag(find.byKey(const ValueKey<String>('activities-list')), const Offset(0, -300));
+      await wait(tester, const Duration(milliseconds: 500));
+    }
     expect(card, findsWidgets, reason: 'with its activities');
+    await tester.ensureVisible(card.first);
+    await wait(tester, const Duration(milliseconds: 500));
     await tester.tap(card.first);
     await wait(tester);
     expect(find.byType(ActivityScreen), findsOneWidget, reason: 'an activity opens');
