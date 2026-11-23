@@ -1,0 +1,414 @@
+{
+  "activities": {
+    "search-color": {
+      "title": "Busca algo rojo",
+      "goal": "Reconocer colores y nombrarlos mientras se mueve por la casa.",
+      "materials": ["4 a 6 objetos grandes de colores (ropa, tazas de plástico, cojines)"],
+      "steps": [
+        "Deja a la vista varios objetos de colores distintos en una misma habitación.",
+        "Muéstrale algo rojo y dile: «¿Me traes algo rojo como esto?».",
+        "Cuando lo traiga, nombren juntos el color y el objeto.",
+        "Repite con otro color mientras tenga ganas."
+      ],
+      "variants": [
+        "Más fácil: busquen solo un color y deja ese objeto muy a la vista.",
+        "Más difícil: pide dos cosas a la vez, por ejemplo «algo azul y algo amarillo»."
+      ],
+      "safety": "Usa objetos más grandes que su boca y deja libre el camino para que no tropiece.",
+      "tags": ["colores", "ropa", "tazas", "cojines", "rápido", "en casa"]
+    },
+    "search-soft": {
+      "title": "Tesoro suave",
+      "goal": "Descubrir texturas con las manos y aprender las palabras suave y duro.",
+      "materials": ["Cosas suaves de la casa (toalla, peluche, cojín)", "Cosas duras y seguras (taza de plástico, cuchara de madera, caja)"],
+      "steps": [
+        "Toca con tu hijo una toalla y di despacio: «suave».",
+        "Toca una cuchara de madera y di: «duro».",
+        "Pídele que te traiga algo suave de la habitación.",
+        "Luego pídele algo duro, y comparen los dos con las manos."
+      ],
+      "variants": [
+        "Más fácil: pon tú tres cosas en el suelo y que elija la suave.",
+        "Más difícil: añadan otras palabras como áspero, liso o blandito."
+      ],
+      "safety": "Elige objetos sin piezas sueltas ni bordes cortantes y más grandes que su boca.",
+      "tags": ["texturas", "peluches", "toallas", "cojines", "antes de dormir", "tranquilo"]
+    },
+    "search-hidden-toy": {
+      "title": "¿Dónde está el osito?",
+      "goal": "Practicar la atención y entender que las cosas siguen ahí aunque no se vean.",
+      "materials": ["Un juguete grande que le guste (un osito, un coche grande, una muñeca)", "Una manta o una caja grande"],
+      "steps": [
+        "Enséñale el juguete y dile que se va a esconder.",
+        "Escóndelo mientras mira, debajo de una manta, y pregunta: «¿Dónde está?».",
+        "Cuando lo encuentre, celébrenlo con calma y cambien de escondite.",
+        "Después escóndelo mientras se tapa los ojos, siempre dejando una parte a la vista."
+      ],
+      "variants": [
+        "Más fácil: deja una pata o una rueda asomando.",
+        "Más difícil: dale pistas con palabras: «está cerca de la puerta», «está debajo de algo blando»."
+      ],
+      "safety": "Esconde el juguete solo en lugares bajos y a su alcance, nunca en armarios, cajones ni muebles altos.",
+      "tags": ["peluches", "coches", "escondite", "manta", "cajas", "con hermanos"]
+    },
+    "search-odd-one": {
+      "title": "¿Cuál no es igual?",
+      "goal": "Fijarse en los detalles para encontrar lo que es diferente, como en el juego «¿Cuál es diferente?».",
+      "materials": ["3 objetos iguales y 1 distinto (por ejemplo, tres cucharas de madera y una taza de plástico)"],
+      "steps": [
+        "Pon en fila tres objetos iguales y uno diferente.",
+        "Pregúntale: «¿Cuál no es igual?».",
+        "Cuando lo señale, pregúntale en qué es diferente.",
+        "Mezcla el orden y cambia el objeto diferente."
+      ],
+      "variants": [
+        "Más fácil: que el diferente sea muy distinto, como un calcetín entre tres tazas.",
+        "Más difícil: usa cuatro objetos casi iguales que solo cambien en el color o el tamaño."
+      ],
+      "safety": "Usa solo objetos de plástico, madera o tela, más grandes que su boca y que no se rompan.",
+      "tags": ["atención", "cocina", "cucharas", "tazas", "sin hacer ruido", "en la mesa"]
+    },
+    "sort-socks": {
+      "title": "Parejas de calcetines",
+      "goal": "Buscar parejas iguales y recordar dónde está cada una, como en el juego de Memoria.",
+      "materials": ["5 o 6 pares de calcetines limpios, mejor de colores o dibujos distintos"],
+      "steps": [
+        "Mezcla los calcetines en el suelo o sobre la cama.",
+        "Toma uno y pregúntale: «¿Dónde está su pareja?».",
+        "Cuando la encuentre, júntenlos y pónganlos a un lado.",
+        "Sigan hasta que no quede ningún calcetín solo."
+      ],
+      "variants": [
+        "Más fácil: empiecen con solo tres pares muy diferentes.",
+        "Más difícil: pon los calcetines boca abajo en fila y que levante dos cada vez, como en Memoria."
+      ],
+      "safety": "Usa calcetines limpios y sin adornos que se puedan arrancar.",
+      "tags": ["calcetines", "ropa", "parejas", "memoria", "sin hacer ruido", "colores"]
+    },
+    "sort-colors": {
+      "title": "Cada color a su cesta",
+      "goal": "Agrupar objetos por color y empezar a clasificar.",
+      "materials": ["2 o 3 cestas o cajas", "Objetos grandes de esos colores (ropa, juguetes grandes, tazas de plástico)"],
+      "steps": [
+        "Pon cada cesta en el suelo con un objeto de muestra dentro: uno rojo, uno azul.",
+        "Junta los demás objetos en un montón.",
+        "Pídele que lleve cada cosa a la cesta de su color.",
+        "Al terminar, revisen juntos cada cesta y nombren los colores."
+      ],
+      "variants": [
+        "Más fácil: usen solo dos colores muy distintos.",
+        "Más difícil: añadan un tercer color o clasifiquen por tipo (ropa, juguetes, cocina)."
+      ],
+      "safety": "Usa objetos más grandes que su boca y cestas bajas que no pesen al moverlas.",
+      "tags": ["colores", "cajas", "cestas", "juguetes", "ropa", "coches"]
+    },
+    "sort-sizes": {
+      "title": "Grande, mediano y pequeño",
+      "goal": "Comparar tamaños y ordenar de mayor a menor.",
+      "materials": ["3 a 5 tazas, vasos o recipientes de plástico de distintos tamaños"],
+      "steps": [
+        "Pon los recipientes sobre la mesa o el suelo, desordenados.",
+        "Muéstrale el más grande y el más pequeño, y nómbralos.",
+        "Pídele que los ponga en fila del más grande al más pequeño.",
+        "Después, que meta uno dentro de otro hasta formar una torre de encajar."
+      ],
+      "variants": [
+        "Más fácil: usen solo dos recipientes, uno grande y uno pequeño.",
+        "Más difícil: que guarde dentro de cada recipiente un juguete o un coche de su tamaño."
+      ],
+      "safety": "Usa solo recipientes de plástico, nunca de vidrio ni de cerámica.",
+      "tags": ["tamaños", "cocina", "tazas", "recipientes", "cajas", "coches"]
+    },
+    "sort-shadows": {
+      "title": "Sombras con la linterna",
+      "goal": "Relacionar cada objeto con su silueta, como en el juego de Sombras.",
+      "materials": ["Una linterna", "3 o 4 juguetes grandes con formas claras (animales, un coche, una muñeca)", "Una pared lisa y una habitación con poca luz"],
+      "steps": [
+        "Baja la luz de la habitación y siéntense frente a una pared lisa.",
+        "Sostén la linterna y pon un juguete delante para que se vea su sombra.",
+        "Esconde el juguete detrás de ti, deja otra vez la sombra y pregunta: «¿De quién es esta sombra?».",
+        "Que lo busque entre los juguetes y lo ponga delante de la luz para comprobarlo."
+      ],
+      "variants": [
+        "Más fácil: dejen los juguetes a la vista y que elija entre solo dos.",
+        "Más difícil: haz sombras de animales con tus manos y que adivine cuál es."
+      ],
+      "safety": "La linterna la sostienes siempre tú: no le dejes jugar con ella ni con su tapa de pilas.",
+      "tags": ["linterna", "sombras", "animales", "antes de dormir", "juguetes", "para un día de lluvia"]
+    },
+    "move-tape-line": {
+      "title": "Camino de cinta",
+      "goal": "Mejorar el equilibrio y el control del cuerpo al caminar sobre una línea.",
+      "materials": ["Cinta de pintor o cinta adhesiva ancha", "Un espacio libre en el suelo"],
+      "steps": [
+        "Pega en el suelo una línea recta de unos dos o tres pasos largos.",
+        "Camina tú primero por encima, despacio, con los brazos abiertos.",
+        "Invítale a caminar sobre la línea sin pisar fuera.",
+        "Cuando le salga, añade una curva o un zigzag."
+      ],
+      "variants": [
+        "Más fácil: hazla corta y ancha, con dos tiras de cinta juntas.",
+        "Más difícil: que camine de puntillas, hacia atrás o empujando un coche por la línea como si fuera una carretera."
+      ],
+      "safety": "Pega la cinta lejos de muebles con esquinas y retírala tú al terminar; nunca en la piel ni cerca de la boca.",
+      "tags": ["cinta", "equilibrio", "coches", "carretera", "para un día de lluvia", "moverse"]
+    },
+    "move-cushion-jumps": {
+      "title": "De cojín en cojín",
+      "goal": "Practicar el salto, el equilibrio y la coordinación de forma segura.",
+      "materials": ["3 o 4 cojines grandes", "Un espacio libre en el suelo"],
+      "steps": [
+        "Pon los cojines en el suelo formando un camino, un poco separados.",
+        "Enséñale a pasar de uno a otro con un paso grande o un saltito.",
+        "Dale la mano las primeras veces.",
+        "Canten una canción y que salte al ritmo de la música."
+      ],
+      "variants": [
+        "Más fácil: pon los cojines juntos para que solo camine encima.",
+        "Más difícil: sepáralos un poco más o di un color y que salte al cojín de ese color."
+      ],
+      "safety": "Juega solo en el suelo, lejos de esquinas de muebles, y nunca subiendo al sofá ni a la cama.",
+      "tags": ["cojines", "saltar", "música", "canciones", "para un día de lluvia", "moverse"]
+    },
+    "move-blanket-tunnel": {
+      "title": "Túnel de sábana",
+      "goal": "Gatear y moverse en un espacio nuevo, perdiendo el miedo y ganando coordinación.",
+      "materials": ["Una sábana o manta ligera", "Dos sillas firmes o el respaldo del sofá"],
+      "steps": [
+        "Pon una sábana sobre dos sillas para formar un túnel corto y abierto por los dos lados.",
+        "Ponte al otro lado y llámale por su nombre.",
+        "Que gatee por dentro hasta llegar a ti.",
+        "Repitan, ahora con un peluche esperando al final."
+      ],
+      "variants": [
+        "Más fácil: levanta tú la sábana con las manos para que vea la salida.",
+        "Más difícil: que lleve un peluche de un lado a otro sin que se caiga."
+      ],
+      "safety": "Usa una tela ligera, deja siempre los dos extremos abiertos y comprueba que las sillas no se puedan volcar.",
+      "tags": ["sábana", "manta", "túnel", "gatear", "para un día de lluvia", "con hermanos", "peluches"]
+    },
+    "move-animal-walk": {
+      "title": "Camina como un animal",
+      "goal": "Mover el cuerpo de formas distintas y asociar cada animal con su movimiento y su sonido.",
+      "materials": ["Ninguno, solo un espacio libre"],
+      "steps": [
+        "Elige un animal y muéstrale cómo se mueve: el pato, el gato, la rana.",
+        "Muévanse juntos por la habitación como ese animal.",
+        "Añadan el sonido del animal mientras caminan.",
+        "Deja que elija el siguiente animal."
+      ],
+      "variants": [
+        "Más fácil: usen solo dos animales y hagan los movimientos despacio.",
+        "Más difícil: pon música y, cuando pare, di un animal nuevo para cambiar de forma de caminar."
+      ],
+      "safety": "Despeja el suelo de juguetes y aléjense de esquinas de muebles y escaleras.",
+      "tags": ["animales", "moverse", "música", "sin materiales", "con hermanos", "rápido"]
+    },
+    "art-tape-shapes": {
+      "title": "Formas con cinta",
+      "goal": "Conocer formas básicas como el círculo, el cuadrado y el triángulo.",
+      "materials": ["Cinta de pintor o cinta de colores", "Una hoja grande de papel o una mesa"],
+      "steps": [
+        "Pega con cinta un cuadrado grande sobre el papel o la mesa.",
+        "Recorre con su dedo los lados y cuéntenlos juntos.",
+        "Haz un triángulo y pregúntale en qué se parece y en qué no.",
+        "Ofrécele tiras de cinta ya cortadas para que haga su propia forma."
+      ],
+      "variants": [
+        "Más fácil: haz tú las formas y que ponga un juguete dentro de cada una.",
+        "Más difícil: pega las formas en el suelo y di un nombre para que salte dentro de esa forma."
+      ],
+      "safety": "Corta tú la cinta; las tiras van en el papel o la mesa, nunca en la piel ni cerca de la boca.",
+      "tags": ["cinta", "formas", "papel", "manualidades", "en la mesa", "colores"]
+    },
+    "art-paper-tear": {
+      "title": "Rasgar y pegar papel",
+      "goal": "Fortalecer los dedos y crear una imagen propia con trozos de papel.",
+      "materials": ["Papel de seda, de cocina o revistas viejas", "Una hoja grande", "Cinta adhesiva o pegamento en barra para niños"],
+      "steps": [
+        "Enséñale a rasgar el papel con las dos manos, en trozos grandes.",
+        "Rasguen juntos un montón de trozos de colores.",
+        "Pega una tira de cinta con la parte pegajosa hacia arriba o pasa tú el pegamento sobre la hoja.",
+        "Que vaya pegando los trozos donde quiera y ponle nombre a su obra."
+      ],
+      "variants": [
+        "Más fácil: rasgar sin pegar, solo por el gusto del sonido y del gesto.",
+        "Más difícil: dibuja tú un contorno sencillo, como un árbol, y que lo rellene con papel."
+      ],
+      "safety": "Sin tijeras para el niño: el papel se rasga con las manos y recoge los trozos pequeños para que no se los lleve a la boca.",
+      "tags": ["papel", "cinta", "manualidades", "colores", "para un día de lluvia", "en la mesa"]
+    },
+    "art-water-paint": {
+      "title": "Pintar con agua",
+      "goal": "Explorar el trazo y el movimiento de la mano sin manchar.",
+      "materials": ["Una brocha ancha o una esponja grande", "Un poco de agua en un vaso de plástico", "Cartulina oscura o una baldosa oscura del patio"],
+      "steps": [
+        "Pon un poco de agua en el vaso, solo un dedo de altura.",
+        "Moja la brocha y pinta una línea: el dibujo aparece oscuro.",
+        "Dale la brocha y deja que pinte libremente.",
+        "Miren juntos cómo el dibujo se va borrando al secarse y vuelvan a pintar."
+      ],
+      "variants": [
+        "Más fácil: que pinte con los dedos mojados.",
+        "Más difícil: pinta tú una forma o una letra y que la repase con la brocha."
+      ],
+      "safety": "Usa muy poca agua, quédate siempre a su lado y seca el suelo al terminar para que no resbale.",
+      "tags": ["agua", "pintar", "brocha", "sin hacer ruido", "sin manchas", "en el patio"]
+    },
+    "art-sock-puppet": {
+      "title": "Títere de calcetín",
+      "goal": "Crear un personaje y darle voz, para imaginar y expresar emociones.",
+      "materials": ["Un calcetín limpio y grande", "Un marcador lavable (lo usa el adulto)"],
+      "steps": [
+        "Que elija un calcetín y decida qué animal o personaje será.",
+        "Dibuja tú los ojos y la boca con el marcador.",
+        "Pon el calcetín en tu mano y haz que salude con una voz graciosa.",
+        "Dale el títere y que le invente un nombre y una voz."
+      ],
+      "variants": [
+        "Más fácil: el títere lo mueves tú y solo le hace preguntas sencillas.",
+        "Más difícil: hagan dos títeres y que tengan una pequeña conversación."
+      ],
+      "safety": "No pegues ojos, cuentas ni adornos: dibuja la cara para que no haya piezas que se puedan soltar.",
+      "tags": ["calcetines", "títeres", "animales", "cuentos", "teatro", "con hermanos"]
+    },
+    "language-spoon-story": {
+      "title": "Cuento con cucharas",
+      "goal": "Inventar y contar una historia sencilla con personajes hechos de cucharas.",
+      "materials": ["2 o 3 cucharas de madera grandes", "Un paño de cocina como escenario"],
+      "steps": [
+        "Presenta cada cuchara como un personaje: «esta es la abuela cuchara».",
+        "Empieza un cuento corto: «Un día, la abuela cuchara salió a pasear…».",
+        "Pregúntale qué pasa después y sigue su idea.",
+        "Terminen el cuento con todos los personajes yéndose a dormir bajo el paño."
+      ],
+      "variants": [
+        "Más fácil: usa una sola cuchara que saluda, come y se duerme.",
+        "Más difícil: que sea quien cuente el cuento y tú solo hagas preguntas."
+      ],
+      "safety": "Usa cucharas de madera grandes y lisas, sin astillas, y evita los cubiertos de metal con filo.",
+      "tags": ["cuentos", "cucharas", "cocina", "imaginación", "antes de dormir", "tranquilo"]
+    },
+    "language-what-for": {
+      "title": "¿Para qué sirve?",
+      "goal": "Ampliar el vocabulario y entender para qué se usa cada cosa de la casa.",
+      "materials": ["4 o 5 objetos cotidianos y seguros (cepillo de pelo, cuchara de madera, toalla, zapato, peine grande)"],
+      "steps": [
+        "Pon los objetos delante, de uno en uno.",
+        "Pregunta: «¿Qué es esto? ¿Para qué sirve?».",
+        "Si no lo sabe, haz el gesto de usarlo y que lo imite.",
+        "Al final, pregunta al revés: «¿Con qué nos peinamos?»."
+      ],
+      "variants": [
+        "Más fácil: tú dices para qué sirve y que señale el objeto.",
+        "Más difícil: pregunta dónde se guarda cada cosa y que la lleve a su sitio."
+      ],
+      "safety": "Usa objetos sin filo ni cables y ninguno que quepa en su boca.",
+      "tags": ["palabras", "objetos de casa", "cepillo", "toalla", "rápido", "en la cocina"]
+    },
+    "language-mystery-bag": {
+      "title": "La bolsa misteriosa",
+      "goal": "Reconocer objetos por el tacto y describirlos con palabras.",
+      "materials": ["Una bolsa de tela o una funda de almohada", "3 o 4 objetos conocidos y grandes (peluche, cuchara de madera, calcetín, pelota blanda)"],
+      "steps": [
+        "Mete un objeto en la funda sin que lo vea.",
+        "Que meta la mano y lo toque sin mirar.",
+        "Pregúntale: «¿Es suave o duro? ¿Grande o pequeño? ¿Qué es?».",
+        "Saquen el objeto para comprobarlo y cambien de objeto."
+      ],
+      "variants": [
+        "Más fácil: muéstrale antes los objetos y que adivine cuál tocó.",
+        "Más difícil: que te describa el objeto sin decir su nombre y tú adivines."
+      ],
+      "safety": "Usa siempre una bolsa de tela o una funda de almohada, nunca una bolsa de plástico, y guárdala al terminar.",
+      "tags": ["tacto", "texturas", "peluches", "antes de dormir", "sin hacer ruido", "adivinanzas"]
+    },
+    "language-sounds": {
+      "title": "¿Qué suena así?",
+      "goal": "Escuchar con atención y relacionar cada sonido con el objeto que lo hace.",
+      "materials": ["Una olla, una tapa y una cuchara de madera", "2 o 3 recipientes de plástico"],
+      "steps": [
+        "Toca la olla con la cuchara y deja que escuche el sonido.",
+        "Prueba la tapa y un recipiente de plástico, y comparen cómo suenan.",
+        "Ponte de espaldas, haz un sonido y pregunta: «¿Qué suena así?».",
+        "Terminen haciendo música juntos, fuerte y luego muy suave."
+      ],
+      "variants": [
+        "Más fácil: haz el sonido mirándole y que señale el objeto.",
+        "Más difícil: imiten sonidos de animales y que adivine cuál es."
+      ],
+      "safety": "Usa solo ollas frías y recipientes de plástico, nunca vidrio, y no metas nada pequeño dentro para hacer sonajeros.",
+      "tags": ["música", "sonidos", "cocina", "ollas", "animales", "con hermanos"]
+    },
+    "routine-toy-home": {
+      "title": "Cada juguete a su casa",
+      "goal": "Aprender a recoger y a que cada cosa tiene su sitio, como en el juego «A su sitio».",
+      "materials": ["2 o 3 cajas o cestas (una para peluches, otra para coches, otra para bloques grandes)"],
+      "steps": [
+        "Pon una cosa de muestra en cada caja: un peluche, un coche.",
+        "Dile: «Los juguetes se van a dormir a su casa».",
+        "Dale los juguetes de uno en uno y que los lleve a su caja.",
+        "Al terminar, revisen juntos cada caja y dale las gracias."
+      ],
+      "variants": [
+        "Más fácil: usen una sola caja para todo.",
+        "Más difícil: pon un dibujo en cada caja y que guarde sin ayuda mirando el dibujo."
+      ],
+      "safety": "Usa cajas ligeras y sin tapas pesadas que puedan cerrarse sobre sus dedos.",
+      "tags": ["juguetes", "cajas", "coches", "peluches", "recoger", "antes de dormir"]
+    },
+    "routine-laundry": {
+      "title": "Ayudante de la ropa",
+      "goal": "Participar en las tareas de casa y practicar clasificar por persona o por tipo.",
+      "materials": ["Ropa limpia ya seca (calcetines, camisetas, toallas)", "Un cesto"],
+      "steps": [
+        "Pon la ropa limpia en el suelo o en la cama.",
+        "Pídele que encuentre primero toda su ropa.",
+        "Después, que junte los calcetines y las toallas en montones.",
+        "Lleven juntos cada montón a su sitio."
+      ],
+      "variants": [
+        "Más fácil: que solo saque las toallas del cesto.",
+        "Más difícil: que doble una toalla pequeña por la mitad, con tu ayuda."
+      ],
+      "safety": "Usa solo ropa limpia y seca, lejos de la lavadora, la plancha y los productos de limpieza.",
+      "tags": ["ropa", "calcetines", "toallas", "ayudar", "colores", "en casa"]
+    },
+    "routine-table": {
+      "title": "Poner la mesa",
+      "goal": "Contar, emparejar y sentirse parte de la familia ayudando a poner la mesa.",
+      "materials": ["Platos, vasos y cucharas de plástico (irrompibles)", "Servilletas de tela o de papel"],
+      "steps": [
+        "Cuenten juntos cuántas personas van a comer.",
+        "Dale los platos de uno en uno y que ponga uno en cada sitio.",
+        "Después los vasos, luego las cucharas y las servilletas.",
+        "Al sentarse, cuéntales a todos quién puso la mesa."
+      ],
+      "variants": [
+        "Más fácil: que ponga solo las servilletas.",
+        "Más difícil: que ponga cada cosa del color de cada persona o cuente en voz alta mientras reparte."
+      ],
+      "safety": "Usa solo cosas irrompibles, sin cuchillos, vidrio ni platos calientes.",
+      "tags": ["cocina", "platos", "cucharas", "contar", "ayudar", "en la cocina"]
+    },
+    "routine-shoe-pairs": {
+      "title": "Zapatos en pareja",
+      "goal": "Emparejar zapatos, distinguir tamaños y aprender a dejarlos ordenados.",
+      "materials": ["Zapatos de la familia, 3 o 4 pares"],
+      "steps": [
+        "Pon los zapatos mezclados en la entrada.",
+        "Pregúntale: «¿Dónde está la pareja de este zapato?».",
+        "Que coloque cada pareja junta, una al lado de otra.",
+        "Al final, que adivine de quién es cada par."
+      ],
+      "variants": [
+        "Más fácil: usen solo dos pares muy distintos.",
+        "Más difícil: que los ordene del más grande al más pequeño."
+      ],
+      "safety": "Usa zapatos sin cordones largos y quita de en medio los que tengan tacón o hebillas.",
+      "tags": ["zapatos", "parejas", "tamaños", "ordenar", "rápido", "con hermanos"]
+    }
+  },
+  "searchHints": ["calcetines", "cajas", "cinta", "animales", "coches", "música", "para un día de lluvia", "antes de dormir", "sin hacer ruido"],
+  "noResults": "No encontramos ideas con esa palabra. Prueba con otra o toca una de estas sugerencias."
+}
