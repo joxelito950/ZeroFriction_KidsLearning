@@ -83,7 +83,7 @@ void main() {
       // Cada tarjeta: título, categoría y minutos, y los primeros materiales.
       expect(find.descendant(of: card('art-water'), matching: find.text('Pintar con agua')), findsOneWidget);
       expect(find.descendant(of: card('art-water'), matching: find.text('Arte · 30 min')), findsOneWidget);
-      expect(find.descendant(of: card('art-water'), matching: find.text('Brocha, Agua, Vaso')), findsOneWidget);
+      expect(find.descendant(of: card('art-water'), matching: find.text('Brocha · Agua · Vaso')), findsOneWidget);
     });
 
     testWidgets('searches while typing, without accents or capitals, and clears', (tester) async {

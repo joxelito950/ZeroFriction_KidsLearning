@@ -90,7 +90,7 @@ class ActivityCard extends StatelessWidget {
             ),
             if (activity.materials.isNotEmpty)
               Text(
-                activity.materials.take(shownMaterials).join(', '),
+                activity.materials.take(shownMaterials).join(' · '),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodySmall,

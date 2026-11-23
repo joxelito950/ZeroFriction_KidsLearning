@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:toddler_logic/main.dart' as app;
+import 'package:toddler_logic/presentation/screens/activities_screen.dart';
+import 'package:toddler_logic/presentation/screens/activity_screen.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
 import 'package:toddler_logic/presentation/widgets/game_header.dart';
 
 /// Prueba rápida de funcionamiento en un emulador o un teléfono (TD-015,
 /// SPECIFICATION §5): la app real, con su Hive y su motor gráfico, abre el
-/// menú, entra y sale de los cuatro juegos y llega al desafío de la Zona de
-/// Padres. Se ejecuta con `tool/smoke.ps1` en los emuladores de la versión más
+/// menú, entra y sale de los cuatro juegos y de las actividades sin pantallas
+/// y llega al desafío de la Zona de Padres. Se ejecuta con `tool/smoke.ps1` en los emuladores de la versión más
 /// antigua (Android 8.0, API 26) y la más reciente.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +51,26 @@ void main() {
       await leaveGame(tester);
       expect(find.byType(MainMenuScreen), findsOneWidget, reason: 'back to the menu from $game');
     }
+
+    // Actividades sin pantallas (HU-047): la sección y una actividad.
+    final Finder activities = find.byKey(const ValueKey<String>('menu-activities'));
+    await tester.ensureVisible(activities);
+    await tester.tap(activities);
+    await wait(tester, const Duration(seconds: 3));
+    expect(find.byType(ActivitiesScreen), findsOneWidget, reason: 'the activities section opens');
+    final Finder card = find.byWidgetPredicate(
+      (widget) =>
+          widget.key is ValueKey<String> && (widget.key! as ValueKey<String>).value.startsWith('activity-card-'),
+    );
+    expect(card, findsWidgets, reason: 'with its activities');
+    await tester.tap(card.first);
+    await wait(tester);
+    expect(find.byType(ActivityScreen), findsOneWidget, reason: 'an activity opens');
+    await tester.binding.handlePopRoute();
+    await wait(tester, const Duration(seconds: 1));
+    await tester.binding.handlePopRoute();
+    await wait(tester);
+    expect(find.byType(MainMenuScreen), findsOneWidget, reason: 'back to the menu from the activities');
 
     final Finder parents = find.byKey(const ValueKey<String>('menu-parents-zone'));
     await tester.ensureVisible(parents);

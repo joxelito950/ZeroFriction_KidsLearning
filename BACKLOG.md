@@ -133,6 +133,7 @@ Actualizado el 2026-11-23.
    - **HU-039 + HU-031** (tocar o arrastrar, movimientos en todos los juegos y mano dominante), en la sección «Cómo juega»;
    - **TD-015** (prueba en el teléfono), que además mide TD-013.
    - **HU-047** (actividades sin pantallas), antes de HU-006 (decidido el 2026-11-20).
+   - **`1.0.0-rc.7` preparada el 2026-11-23** con todo lo anterior: probada en el moto g55 (sección de actividades, búsqueda, una actividad, tarjeta del día, cabecera con movimientos y tocar en Sombras) y en los emuladores de Android 8.0 y del más reciente.
 4. **Antes de producción:**
    - **TD-013:** medir en el emulador «Gama baja API 26» (Android 8.0, 2 núcleos, 2 GB, GPU por software), creado el 2026-11-20; el Android 10 del dueño tiene la pantalla rota;
    - **TD-010:** pantallazos de los padres testers que prueban solo en tablets (sin fallos reportados hasta ahora);

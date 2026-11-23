@@ -3,6 +3,7 @@
 # (además, algunas fichas tienen llaves dobles que Jekyll tomaría por Liquid).
 title: ToddlerLogic
 exclude:
+  - activities
   - brand
   - hu
   - i18n
