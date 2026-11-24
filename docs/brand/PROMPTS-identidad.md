@@ -162,6 +162,8 @@ Si las pelotas salen de colores distintos a su cesta, pedir: «Cada pelota es de
 
 Entregar como `assets/brand/sorting_icon.png`, 1024 × 1024 px con transparencia real.
 
+**Recibida el 2026-11-24** (`docs/brand/fuentes/icono-clasificar.png`, 1254 × 1254, transparencia real) y preparada a 256 px. Cumple: tres cestas de mayor a menor en coral, ámbar y teal, cada una con pelotas de su color, la pelota coral cayendo en la suya y contorno teal que la separa de la crema; a 48 px se lee «cada cosa a su cesta». Diferencias menores: la cesta pequeña es teal y no azul petróleo, y lleva dos trazos ámbar de movimiento junto a la pelota.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).

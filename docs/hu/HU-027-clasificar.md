@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista (2026-11-24)**: el dueño responde las preguntas el 2026-11-24 (sección 12). Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
+| **Estado** | **En desarrollo (2026-11-24)**: preguntas respondidas el 2026-11-24 (sección 12); **entrega 1 hecha** en `feature/hu-027-1-board` (sección 10). Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | M–L (3–4 días, 3 entregas) |
@@ -188,7 +188,7 @@ Análisis:
 
 | # | Entrega | Se puede publicar sola |
 |---|---|---|
-| 1 | **Motor común:** `PlaceBoardView` genérico con huecos y escala; «A su sitio» pasa a usarlo sin cambios visibles (sus tests en verde) | Sí: no cambia nada para el niño |
+| 1 | **Motor común:** `PlaceBoardView` genérico con huecos y escala; «A su sitio» pasa a usarlo sin cambios visibles (sus tests en verde). **Hecha el 2026-11-24:** `PlaceBoardView`/`PlaceBoardGeometry` (de 1 a 3 huecos, escala por pieza y por cesta), `PlaceDrop` común, `VehicleBoardView` como adaptador con las mismas claves; la regla de ayudas `Helps` (la mano solo en el tutorial y en bronce, en los cuatro juegos); los iconos de «Clasificar» y «¿Cuántos hay?» preparados. 2279 tests en verde y prueba rápida en los emuladores de Android 8.0 y API 37 | Sí: para el niño solo cambia que la mano no sale desde plata |
 | 2 | **Clasificar por color** (bronce, plata, esmeralda): dominio, pantalla, menú, progreso, «Nuevo», 9 idiomas. Las rondas de tamaño todavía juegan color | Sí: es la parte gratis |
 | 3 | **Tamaño y mezcla** (oro, rubí, zafiro, obsidiana, diamante), con las muestras por temática. El nivel 8 de diamante (4.3), detrás de su regla: si no cabe, como el 5 | Sí |
 
@@ -207,7 +207,7 @@ Análisis:
 | P5 | ¿Color y tamaño a la vez? | ✅ Decidido (2026-11-24): **desde obsidiana.** En diamante se alterna la pareja de tamaños (grande y pequeño, grande y mediano, mediano y pequeño). El nivel 8 con los 3 tamaños, todos los colores y una bandeja que se repone **se analiza** (4.3) |
 | P6 | ¿Qué muestra en las cestas de tamaño? | ✅ Decidido (2026-11-24): **un objeto de la temática del tablero**: osos 🐻 para animales, 🍎 para frutas, 🚗 para vehículos y un objeto igual para los variados. **Nunca uno de la bandeja**, para que no sea una ayuda fuera del tutorial y de bronce (5.2) |
 | P7 | ¿Color de la tarjeta del menú? | ✅ Decidido (2026-11-24): **crema con borde coral grueso y texto teal profundo**, para todos los juegos nuevos. Se confirma en el teléfono |
-| P8 | ¿Icono del juego? | **Ilustración 3D** (D-036) con el prompt de la **pieza 18** de `docs/brand/PROMPTS-identidad.md`: tres cestas de tres tamaños y colores con sus pelotas. La entrega el dueño. (La imagen que estaba en la raíz el 2026-11-24 es el icono de «¿Cuántos hay?», pieza 17) |
+| P8 | ¿Icono del juego? | **Ilustración 3D** (D-036) con el prompt de la **pieza 18** de `docs/brand/PROMPTS-identidad.md`: tres cestas de tres tamaños y colores con sus pelotas. **Recibido el 2026-11-24** (`docs/brand/fuentes/icono-clasificar.png` → `assets/brand/sorting_icon.png`) |
 | P9 | ¿Tamaños fijos (100 %, 70 %, 45 %)? | ✅ Decidido (2026-11-24): **sí**, y comprobar en el compacto que el pequeño no baja de 28 dp |
 
 ## 13. Criterios de aceptación
