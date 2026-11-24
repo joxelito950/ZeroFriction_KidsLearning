@@ -161,7 +161,10 @@ void main() {
     // HU-022, criterio 4: la mano toca una carta sin darle la vuelta ni arrancar el tiempo.
     testWidgets('an idle child sees a hand tapping a card, without flipping it or starting the time', (tester) async {
       final hand = find.byKey(const ValueKey<String>('gesture-hint-hand'));
-      await pumpScreen(tester, level: 3);
+      // La mano es una ayuda: solo en el tutorial y en bronce (Helps).
+      when(() => repository.readGameProgress(GameId.memory))
+          .thenAnswer((_) async => progressAt(3, round: GameDifficulty.bronze));
+      await pumpScreen(tester, level: 3, keepStub: true);
       expect(hand, findsNothing);
 
       await tester.pump(GestureHint.defaultFirstDelay);
@@ -174,6 +177,13 @@ void main() {
       await tapCard(tester, 0);
       await tester.pump(const Duration(seconds: 20));
       expect(hand, findsNothing, reason: 'it does not come back once the child plays');
+    });
+
+    testWidgets('from silver on there is no hand: helps only in the tutorial and bronze', (tester) async {
+      await pumpScreen(tester, level: 3);
+      await tester.pump(GestureHint.defaultFirstDelay);
+      await tester.pump(GestureHint.cycle * 0.6);
+      expect(find.byKey(const ValueKey<String>('gesture-hint-hand')), findsNothing);
     });
 
     testWidgets('resumes the saved level with its arrival time limit', (tester) async {

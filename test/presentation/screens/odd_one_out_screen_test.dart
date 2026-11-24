@@ -154,11 +154,18 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
   });
 
-  testWidgets('time up shows a helpful notice; the hand shows the odd one when nobody touches', (tester) async {
-    await pumpScreen(tester, level: 3);
+  testWidgets('in bronze the hand shows the odd one when nobody touches', (tester) async {
+    await pumpScreen(tester, level: 3, round: GameDifficulty.bronze);
     await tester.pump(GestureHint.defaultFirstDelay);
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.byKey(const ValueKey<String>('gesture-hint-hand')), findsOneWidget);
+  });
+
+  testWidgets('time up shows a helpful notice; from silver on there is no hand (Helps)', (tester) async {
+    await pumpScreen(tester, level: 3);
+    await tester.pump(GestureHint.defaultFirstDelay);
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.byKey(const ValueKey<String>('gesture-hint-hand')), findsNothing);
 
     final int odd = stateOf(tester).oddIndex;
     await tester.tap(card(odd == 0 ? 1 : 0));

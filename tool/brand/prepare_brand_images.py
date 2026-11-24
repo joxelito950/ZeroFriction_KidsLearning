@@ -14,6 +14,8 @@ Genera:
 - assets/brand/shadows_icon.png                 icono del juego Sombras (HU-007)
 - assets/brand/odd_one_out_icon.png             icono del juego ¿Cuál es diferente? (HU-025)
 - assets/brand/vehicles_icon.png                icono del juego «A su sitio» (PROMPTS §16, HU-052)
+- assets/brand/counting_icon.png                icono del juego «¿Cuántos hay?» (PROMPTS §17, HU-026)
+- assets/brand/sorting_icon.png                 icono del juego «Clasificar» (PROMPTS §18, HU-027)
 - assets/brand/hand_guide.png                   mano guía del tutorial (HU-022)
 - assets/brand/child_resting.png                el niño descansando (PROMPTS §11, HU-009)
 - assets/brand/child_sleeping.png               el niño durmiendo (PROMPTS §12, HU-038)
@@ -128,6 +130,12 @@ def main() -> None:
     )
     fit_box(Image.open(SRC / 'icono-a-su-sitio-camion.png'), 256).save(
         ROOT / 'assets/brand/vehicles_icon.png', optimize=True
+    )
+    fit_box(Image.open(SRC / 'icono-cuantos-hay.png'), 256).save(
+        ROOT / 'assets/brand/counting_icon.png', optimize=True
+    )
+    fit_box(Image.open(SRC / 'icono-clasificar.png'), 256).save(
+        ROOT / 'assets/brand/sorting_icon.png', optimize=True
     )
     # La mano se recorta igual que los iconos: la punta del índice queda en el
     # 12 % del ancho y el 8 % del alto (GestureHint.fingertip).

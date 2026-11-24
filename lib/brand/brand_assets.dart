@@ -18,6 +18,13 @@ abstract final class BrandAssets {
   /// Icono de «A su sitio» (HU-052): un camión de bomberos entrando en su casita.
   static const String vehiclesIcon = 'assets/brand/vehicles_icon.png';
 
+  /// Icono de «Clasificar» (HU-027, PROMPTS §18): tres cestas de tres tamaños
+  /// con sus pelotas.
+  static const String sortingIcon = 'assets/brand/sorting_icon.png';
+
+  /// Icono de «¿Cuántos hay?» (HU-026, PROMPTS §17): tres peces y tres patitos.
+  static const String countingIcon = 'assets/brand/counting_icon.png';
+
   /// Mano infantil de la ayuda (HU-022): sustituye al icono de Material.
   static const String handGuide = 'assets/brand/hand_guide.png';
 

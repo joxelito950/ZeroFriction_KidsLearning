@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/progress/game_progress.dart';
+import '../../domain/progress/helps.dart';
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
@@ -119,11 +120,14 @@ class _OddOneOutViewState extends State<_OddOneOutView> with WidgetsBindingObser
                   final GlobalKey hintKey = _hintKeyFor(state.round);
                   return Stack(
                     children: [
-                      // Tutorial (HU-022): si el niño no toca nada, la mano toca el diferente.
+                      // Tutorial (HU-022): si el niño no toca nada, la mano toca el diferente,
+                      // solo en el tutorial y en bronce ([Helps]).
                       GestureHint(
                         boardId: state.round,
                         target: hintKey,
-                        enabled: state.phase == OddPhase.playing && state.objects.isNotEmpty,
+                        enabled: Helps.allowedAt(state.gameRound, state.level) &&
+                            state.phase == OddPhase.playing &&
+                            state.objects.isNotEmpty,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                           child: Column(
