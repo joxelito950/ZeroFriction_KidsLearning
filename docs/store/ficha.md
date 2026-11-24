@@ -87,6 +87,22 @@ In 9 languages: English, Spanish, Portuguese, German, French, Italian, Japanese,
 
 ## Novedades de la versión (campo «Notas de la versión» de Play Console, máx. 500 caracteres)
 
+**`1.0.0-rc.7` · es-419:**
+
+> Nuevo: Actividades sin pantallas. Ideas para jugar en casa con cosas cotidianas, con buscador y una idea para cada día.
+> Hora de dormir y siestas: la app invita a descansar a la hora que elijas, con media hora de preparación tranquila.
+> Cómo juega: tocar o arrastrar las piezas, y la opción para zurdos.
+> Cada juego muestra sus movimientos.
+> Tus medallas y estrellas se conservan.
+
+**`1.0.0-rc.7` · en-US:**
+
+> New: Screen-free activities. Ideas to play at home with everyday things, with a search and an idea for each day.
+> Bedtime and naps: the app invites to rest at the time you choose, with a calm half hour to wind down.
+> How they play: tap or drag the pieces, and a left-handed option.
+> Every game shows its moves.
+> Your medals and stars are kept.
+
 **`1.0.0-rc.6` · es-419:**
 
 > Nuevo juego: A su sitio. Lleva cada vehículo a su sitio: por dónde va y a qué se dedica.

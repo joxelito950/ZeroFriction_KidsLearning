@@ -33,8 +33,12 @@ final class Activity {
     required this.tags,
   });
 
-  /// Tiempos que se ofrecen como filtro (P12).
-  static const List<int> durations = [5, 10, 15];
+  /// Filtros de tiempo «hasta N minutos» (P12). Una actividad puede durar
+  /// cualquier número de minutos.
+  static const List<int> durations = [5, 10, 15, 30];
+
+  /// Cuántas se recomiendan para seguir jugando (P11).
+  static const int recommendedCount = 3;
 
   final String id;
   final ActivityCategory category;
@@ -43,7 +47,9 @@ final class Activity {
   /// Edad mínima recomendada, en años.
   final int ageFrom;
 
-  /// Las 3 para seguir jugando, elegidas a mano (P11).
+  /// Las 3 para seguir jugando elegidas a mano (P11). Puede venir vacía: con
+  /// cientos de actividades, las que falten se eligen solas
+  /// ([ActivityLibrary.recommendedFor]).
   final List<String> recommended;
 
   final String title;
@@ -68,14 +74,23 @@ final class ActivityLibrary {
         _byId = {for (final Activity activity in activities) activity.id: activity};
 
   /// Lee la estructura (`catalog.json`) y los textos de un idioma. Una
-  /// actividad sin textos en ese idioma no se muestra.
-  factory ActivityLibrary.fromJson(Map<String, dynamic> catalog, Map<String, dynamic> texts) {
-    final Map<String, dynamic> byId = (texts['activities'] as Map).cast<String, dynamic>();
-    List<String> strings(Object? value) => [for (final Object? item in value as List) item as String];
+  /// actividad que aún no está traducida a ese idioma usa los textos de
+  /// [fallback] (el inglés); si tampoco está ahí, no se muestra. Así se puede
+  /// traducir poco a poco.
+  factory ActivityLibrary.fromJson(
+    Map<String, dynamic> catalog,
+    Map<String, dynamic> texts, {
+    Map<String, dynamic>? fallback,
+  }) {
+    Map<String, dynamic> activitiesOf(Map<String, dynamic>? file) =>
+        ((file?['activities'] as Map?) ?? const {}).cast<String, dynamic>();
+    final Map<String, dynamic> byId = activitiesOf(texts);
+    final Map<String, dynamic> fallbackById = activitiesOf(fallback);
+    List<String> strings(Object? value) => [for (final Object? item in (value as List?) ?? const []) item as String];
     return ActivityLibrary(
       activities: [
         for (final Object? raw in catalog['activities'] as List)
-          if (byId[(raw as Map)['id']] case final Map<dynamic, dynamic> text)
+          if ((byId[(raw as Map)['id']] ?? fallbackById[raw['id']]) case final Map<dynamic, dynamic> text)
             Activity(
               id: raw['id'] as String,
               category: ActivityCategory.fromName(raw['category'] as String),
@@ -91,8 +106,8 @@ final class ActivityLibrary {
               tags: strings(text['tags']),
             ),
       ],
-      searchHints: strings(texts['searchHints']),
-      noResults: texts['noResults'] as String,
+      searchHints: strings(texts['searchHints'] ?? fallback?['searchHints']),
+      noResults: (texts['noResults'] ?? fallback?['noResults'] ?? '') as String,
     );
   }
 
@@ -109,14 +124,52 @@ final class ActivityLibrary {
 
   Activity? byId(String id) => _byId[id];
 
-  /// Las recomendadas de [activity] que existen en este idioma (P11).
-  List<Activity> recommendedFor(Activity activity) =>
-      [for (final String id in activity.recommended) _byId[id]].nonNulls.toList();
+  /// Las 3 para seguir jugando (P11): primero las elegidas a mano; si faltan,
+  /// una de la misma categoría y el resto de otras, las que más materiales y
+  /// etiquetas comparten con [activity]. A igualdad, en el orden del catálogo.
+  List<Activity> recommendedFor(Activity activity) {
+    final List<Activity> chosen = [
+      for (final String id in activity.recommended)
+        if (_byId[id] case final Activity other when other.id != activity.id) other,
+    ];
+    if (chosen.length >= Activity.recommendedCount) return chosen.take(Activity.recommendedCount).toList();
+    final Set<String> words = _wordsOf(activity);
+    int shared(Activity other) => _wordsOf(other).intersection(words).length;
+    final List<Activity> ranked = [
+      for (final Activity other in activities)
+        if (other.id != activity.id && !chosen.contains(other)) other,
+    ];
+    // Estable: a igualdad de palabras compartidas, se respeta el catálogo.
+    final Map<Activity, int> order = {for (final (index, other) in ranked.indexed) other: index};
+    ranked.sort((a, b) {
+      final int byShared = shared(b).compareTo(shared(a));
+      return byShared != 0 ? byShared : order[a]!.compareTo(order[b]!);
+    });
+    if (!chosen.any((other) => other.category == activity.category)) {
+      final Activity? same = ranked.where((other) => other.category == activity.category).firstOrNull;
+      if (same != null) chosen.add(same);
+    }
+    for (final Activity other in ranked) {
+      if (chosen.length >= Activity.recommendedCount) break;
+      if (other.category != activity.category && !chosen.contains(other)) chosen.add(other);
+    }
+    return chosen;
+  }
+
+  final Map<String, Set<String>> _words = {};
+
+  /// Palabras de los materiales y las etiquetas, para comparar actividades.
+  Set<String> _wordsOf(Activity activity) => _words[activity.id] ??= {
+        for (final String word in normalize([...activity.materials, ...activity.tags].join(' ')).split(' '))
+          if (word.length > 3) word,
+      };
 
   /// El orden de las sugerencias del día: una de cada categoría por turno,
   /// para no repetir categoría dos días seguidos ni actividad hasta
   /// recorrerlas todas (P10).
-  List<Activity> get dailyOrder {
+  late final List<Activity> dailyOrder = _dailyOrder();
+
+  List<Activity> _dailyOrder() {
     final Map<ActivityCategory, List<Activity>> byCategory = {
       for (final ActivityCategory category in ActivityCategory.values)
         category: activities.where((activity) => activity.category == category).toList(),
@@ -140,13 +193,14 @@ final class ActivityLibrary {
 
   /// Busca por texto en el título, el objetivo, los materiales y las
   /// etiquetas; todas las palabras tienen que aparecer. Sin distinguir
-  /// mayúsculas ni tildes. Además, por categoría y por tiempo (P12).
-  List<Activity> search(String query, {ActivityCategory? category, int? minutes}) {
+  /// mayúsculas ni tildes. Además, por categoría y por tiempo: las que duran
+  /// como mucho [maxMinutes] (P12).
+  List<Activity> search(String query, {ActivityCategory? category, int? maxMinutes}) {
     final List<String> words = normalize(query).split(' ').where((word) => word.isNotEmpty).toList();
     return [
       for (final Activity activity in activities)
         if ((category == null || activity.category == category) &&
-            (minutes == null || activity.minutes == minutes) &&
+            (maxMinutes == null || activity.minutes <= maxMinutes) &&
             words.every(_haystackOf(activity).contains))
           activity,
     ];

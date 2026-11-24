@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:toddler_logic/domain/activities/activity.dart';
 import 'package:toddler_logic/domain/entities/app_language.dart';
 import 'package:toddler_logic/domain/entities/parental_settings.dart';
 import 'package:toddler_logic/domain/memory/memory_ladder.dart';
@@ -13,6 +14,7 @@ import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart'
 import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/blocs/parental_gate/parental_gate_cubit.dart';
+import 'package:toddler_logic/presentation/screens/activities_screen.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
 import 'package:toddler_logic/presentation/screens/memory_game_screen.dart';
 import 'package:toddler_logic/presentation/screens/parental_gate_screen.dart';
@@ -114,20 +116,30 @@ void main() {
             _usePhone(tester, phone, textScale);
 
             await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: locale));
+            // La idea del día (HU-047) llega al leer el perfil y los assets.
+            for (var frame = 0;
+                frame < 5 && find.byKey(const ValueKey<String>('menu-daily-activity')).evaluate().isEmpty;
+                frame++) {
+              await tester.pump();
+            }
 
             for (final label in [
               l10n.menuMemoryTitle,
               l10n.shadowsGameTitle,
               l10n.oddOneOutTitle,
+              l10n.activitiesTitle,
               l10n.menuParentsZone,
               l10n.menuExit,
             ]) {
               await tester.ensureVisible(find.text(label));
               expect(find.text(label).hitTestable(), findsOneWidget, reason: label);
             }
+            for (final key in ['menu-daily-activity', 'menu-daily-activity-hide']) {
+              await tester.ensureVisible(find.byKey(ValueKey<String>(key)));
+              expect(find.byKey(ValueKey<String>(key)).hitTestable(), findsOneWidget, reason: key);
+            }
 
-            final TextDirection direction =
-                Directionality.of(tester.element(find.byType(MainMenuScreen)));
+            final TextDirection direction = Directionality.of(tester.element(find.byType(MainMenuScreen)));
             // HU-023: las tarjetas, en orden fijo y de un tamaño que se reconoce,
             // sin desplazar la cuadrícula.
             final double memoryX = tester.getCenter(find.byKey(const ValueKey<String>('menu-memory'))).dx;
@@ -147,7 +159,8 @@ void main() {
             }
             expect(
               find.ancestor(
-                  of: find.byKey(const ValueKey<String>('menu-game-grid')), matching: find.byType(SingleChildScrollView)),
+                  of: find.byKey(const ValueKey<String>('menu-game-grid')),
+                  matching: find.byType(SingleChildScrollView)),
               findsNothing,
             );
           });
@@ -202,8 +215,7 @@ void main() {
               await tester.pumpWidget(
                 localizedApp(locale: locale, home: ParentalGateScreen(gate: ParentalGate(random: Random(3)))),
               );
-              final ParentalGateCubit cubit =
-                  tester.element(find.byType(ParentalKeypad)).read<ParentalGateCubit>();
+              final ParentalGateCubit cubit = tester.element(find.byType(ParentalKeypad)).read<ParentalGateCubit>();
               for (final char in '${cubit.state.challenge!.answer + 1}'.split('')) {
                 cubit.typeDigit(int.parse(char));
               }
@@ -238,6 +250,54 @@ void main() {
             final Rect body = tester.getRect(find.byType(SingleChildScrollView));
             for (final finder in [find.text(l10n.restTitle), find.byKey(const ValueKey<String>('rest-parents-zone'))]) {
               expect(tester.getCenter(finder).dx, moreOrLessEquals(body.center.dx, epsilon: 1));
+            }
+          });
+
+          // HU-047: la sección y una actividad caben, con el buscador, los
+          // filtros y todas sus partes al alcance.
+          testWidgets('screen-free activities section and an activity fit', (tester) async {
+            _usePhone(tester, phone, textScale);
+            await tester.pumpWidget(localizedApp(locale: locale, home: const ActivitiesScreen()));
+            await tester.pump();
+
+            // La lista de la pantalla de arriba: la de debajo sigue en el árbol.
+            Future<void> reach(Finder target) async {
+              await tester.scrollUntilVisible(target, 100, scrollable: find.byType(Scrollable).last);
+              await tester.ensureVisible(target);
+              await tester.pump();
+              // Una parte más alta que la pantalla se ve desde arriba.
+              expect(target.hitTestable(at: Alignment.topCenter), findsOneWidget, reason: '$target');
+            }
+
+            for (final key in [
+              'activities-safety',
+              'activities-search',
+              'activities-hint-0',
+              for (final category in ActivityCategory.values) 'activities-category-${category.name}',
+              for (final minutes in Activity.durations) 'activities-minutes-$minutes',
+              'activities-count',
+            ]) {
+              await reach(find.byKey(ValueKey<String>(key)));
+            }
+            final Finder firstCard = find.byWidgetPredicate((widget) =>
+                widget.key is ValueKey<String> && (widget.key! as ValueKey<String>).value.startsWith('activity-card-'));
+            final Finder firstTile = find.descendant(of: firstCard.first, matching: find.byType(ListTile));
+            await reach(firstTile);
+            await tester.tap(firstTile);
+            await tester.pump();
+            await tester.pump(const Duration(milliseconds: 500));
+
+            for (final key in [
+              'activity-title',
+              'activity-meta',
+              'activity-goal',
+              'activity-safety',
+              'activity-materials',
+              'activity-steps',
+              'activity-variants',
+              'activity-keep-playing',
+            ]) {
+              await reach(find.byKey(ValueKey<String>(key)));
             }
           });
 
@@ -277,7 +337,8 @@ void main() {
               for (final Element element in [...find.byType(Text).evaluate(), ...find.byType(Icon).evaluate()]) {
                 final Rect rect = tester.getRect(find.byWidget(element.widget));
                 expect(screen.contains(rect.topLeft) && screen.contains(rect.bottomRight - const Offset(0.01, 0.01)),
-                    isTrue, reason: '${overlay.key}: $rect outside $screen');
+                    isTrue,
+                    reason: '${overlay.key}: $rect outside $screen');
               }
             }
           });
@@ -295,8 +356,8 @@ void main() {
               repository: repository,
               home: Builder(
                 builder: (context) => TextButton(
-                  onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute<void>(builder: (_) => const ParentsZoneScreen())),
+                  onPressed: () =>
+                      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ParentsZoneScreen())),
                   child: const Text('open zone'),
                 ),
               ),
@@ -430,8 +491,7 @@ void main() {
           for (final level in MemoryLadder.levels) {
             testWidgets('memory level ${level.number} (${level.cards} cards) fits above the footer', (tester) async {
               _usePhone(tester, phone, textScale);
-              when(() => repository.readGameProgress(GameId.memory))
-                  .thenAnswer((_) async => progressAt(level.number));
+              when(() => repository.readGameProgress(GameId.memory)).thenAnswer((_) async => progressAt(level.number));
 
               await tester.pumpWidget(
                 localizedApp(

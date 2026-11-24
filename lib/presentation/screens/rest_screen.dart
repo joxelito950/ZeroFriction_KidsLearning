@@ -7,12 +7,14 @@ import '../../brand/brand_assets.dart';
 import '../../domain/parental/rest_schedule.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_palette.dart';
+import '../widgets/activity_widgets.dart';
 import '../widgets/parents_zone_button.dart';
 import '../widgets/protected_exit.dart';
 
 /// Pantalla de descanso (HU-009 R5, R6): tranquila, sin cuenta atrás, sin rojo
-/// y sin acceso a los juegos. Solo deja entrar a la Zona de Padres (doble toque
-/// y desafío), donde un adulto puede dar 15 minutos más. El «atrás» se protege
+/// y sin acceso a los juegos. Deja entrar a la Zona de Padres (doble toque y
+/// desafío), donde un adulto puede dar 15 minutos más, y a las actividades sin
+/// pantallas (HU-047 D4). El «atrás» se protege
 /// como en el menú (D-025).
 ///
 /// Con [kind], es la versión de la hora de dormir (HU-038 R3): el niño dormido
@@ -83,6 +85,14 @@ class RestScreen extends StatelessWidget {
                     ParentsZoneButton(
                       buttonKey: const ValueKey<String>('rest-parents-zone'),
                       foregroundColor: night ? AppPalette.warmCream : AppPalette.petrolBlue,
+                    ),
+                    const SizedBox(height: 12),
+                    // Las ideas sin pantalla se abren en todo momento, también
+                    // de noche, en la siesta o con el límite superado (HU-047 D4).
+                    ActivitiesButton(
+                      buttonKey: const ValueKey<String>('rest-activities'),
+                      foregroundColor: night ? AppPalette.warmCream : AppPalette.petrolBlue,
+                      iconSize: null,
                     ),
                     const SizedBox(height: 12),
                     // Salida directa, como en el menú: al llegar al límite el

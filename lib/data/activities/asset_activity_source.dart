@@ -13,7 +13,8 @@ class AssetActivitySource implements IActivitySource {
 
   static const String folder = 'assets/activities';
 
-  /// Si un idioma aún no tiene textos, se muestran en inglés.
+  /// Si un idioma aún no tiene textos, o le falta alguna actividad, se usa el
+  /// inglés.
   static const String fallbackLanguage = 'en';
 
   final AssetBundle _bundle;
@@ -23,13 +24,15 @@ class AssetActivitySource implements IActivitySource {
   Future<ActivityLibrary> load(String languageCode) async {
     if (_cache[languageCode] case final ActivityLibrary cached) return cached;
     final Map<String, dynamic> catalog = await _json('catalog');
+    final Map<String, dynamic> fallback = await _json(fallbackLanguage);
     Map<String, dynamic> texts;
     try {
-      texts = await _json(languageCode);
+      texts = languageCode == fallbackLanguage ? fallback : await _json(languageCode);
     } on FlutterError {
-      texts = await _json(fallbackLanguage);
+      texts = fallback;
     }
-    return _cache[languageCode] = ActivityLibrary.fromJson(catalog, texts);
+    // Lo que aún no está traducido sale en inglés, actividad por actividad.
+    return _cache[languageCode] = ActivityLibrary.fromJson(catalog, texts, fallback: fallback);
   }
 
   Future<Map<String, dynamic>> _json(String name) async =>

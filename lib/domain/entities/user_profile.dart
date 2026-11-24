@@ -7,6 +7,7 @@ class UserProfile {
     this.languageCode,
     this.discovery,
     this.highestSeenDate,
+    this.activityHiddenOn,
   });
 
   final bool isPremium;
@@ -25,6 +26,11 @@ class UserProfile {
   /// primer arranque con HU-042.
   final DateTime? highestSeenDate;
 
+  /// El día en que el adulto cerró la tarjeta de la actividad del día con la ✕
+  /// (HU-047 P13): ese día no se muestra; vuelve al día siguiente. `null` si
+  /// nunca se cerró.
+  final DateTime? activityHiddenOn;
+
   bool get soundEnabled => isSoundEnabled;
 
   /// Lo descubierto, con la regla de la instalación nueva aplicada.
@@ -36,6 +42,7 @@ class UserProfile {
     String? languageCode,
     Discovery? discovery,
     DateTime? highestSeenDate,
+    DateTime? activityHiddenOn,
   }) {
     return UserProfile(
       isPremium: isPremium ?? this.isPremium,
@@ -43,6 +50,7 @@ class UserProfile {
       languageCode: languageCode ?? this.languageCode,
       discovery: discovery ?? this.discovery,
       highestSeenDate: highestSeenDate ?? this.highestSeenDate,
+      activityHiddenOn: activityHiddenOn ?? this.activityHiddenOn,
     );
   }
 
@@ -54,9 +62,11 @@ class UserProfile {
         other.isSoundEnabled == isSoundEnabled &&
         other.languageCode == languageCode &&
         other.discovery == discovery &&
-        other.highestSeenDate == highestSeenDate;
+        other.highestSeenDate == highestSeenDate &&
+        other.activityHiddenOn == activityHiddenOn;
   }
 
   @override
-  int get hashCode => Object.hash(isPremium, isSoundEnabled, languageCode, discovery, highestSeenDate);
+  int get hashCode =>
+      Object.hash(isPremium, isSoundEnabled, languageCode, discovery, highestSeenDate, activityHiddenOn);
 }

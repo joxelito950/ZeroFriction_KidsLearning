@@ -62,12 +62,47 @@ void main() {
     expect(library.byId('untranslated'), isNull);
     expect(library.searchHints, ['calcetines', 'día de lluvia']);
     expect(library.noResults, isNotEmpty);
-    expect(Activity.durations, [5, 10, 15]);
+    expect(Activity.durations, [5, 10, 15, 30]);
     expect(ActivityCategory.fromName('art'), ActivityCategory.art);
   });
 
-  test('recommended ones are the existing ones, in their order (P11)', () {
-    expect(library.recommendedFor(library.byId('search-a')!).map((a) => a.id), ['search-b', 'sort-a']);
+  test('hand-picked ones first; the missing ones are chosen by shared materials and tags (P11)', () {
+    expect(library.recommendedFor(library.byId('search-b')!).map((a) => a.id), ['search-a', 'move-a', 'art-a']);
+    // «missing» no existe: falta una, y se elige la que más comparte de otra categoría.
+    final List<Activity> searchA = library.recommendedFor(library.byId('search-a')!);
+    expect(searchA.map((a) => a.id).take(2), ['search-b', 'sort-a']);
+    expect(searchA, hasLength(3));
+    expect(searchA.last.category, isNot(ActivityCategory.search));
+  });
+
+  test('without hand-picked ones: one of the same category and two of others, by what they share', () {
+    final ActivityLibrary auto = ActivityLibrary.fromJson({
+      'activities': [
+        for (final Object? raw in catalog['activities'] as List) {...(raw as Map), 'recommended': <String>[]},
+      ],
+    }, texts);
+    final List<Activity> picks = auto.recommendedFor(auto.byId('move-a')!);
+    expect(picks, hasLength(3));
+    expect(picks.every((a) => a.category != ActivityCategory.move), isTrue, reason: 'no other move activity exists');
+    final List<Activity> forSearch = auto.recommendedFor(auto.byId('search-b')!);
+    expect(forSearch.where((a) => a.category == ActivityCategory.search), hasLength(1));
+    expect(forSearch[1].id, 'move-a', reason: 'shares «cojines» with search-b');
+  });
+
+  test('an activity not yet translated uses the fallback texts, one by one', () {
+    final ActivityLibrary partial = ActivityLibrary.fromJson(
+      catalog,
+      {
+        'activities': {'search-a': texts['activities']['search-a']},
+        'searchHints': ['x'],
+        'noResults': 'Nada.'
+      },
+      fallback: texts,
+    );
+    expect(partial.activities, hasLength(7));
+    expect(partial.searchHints, ['x']);
+    final ActivityLibrary empty = ActivityLibrary.fromJson(catalog, {}, fallback: texts);
+    expect(empty.noResults, texts['noResults']);
   });
 
   group('suggestion of the day (P10)', () {
@@ -114,8 +149,9 @@ void main() {
     test('an empty search shows everything; category and time filter it', () {
       expect(library.search(''), hasLength(7));
       expect(ids(library.search('', category: ActivityCategory.search)), ['search-a', 'search-b']);
-      expect(ids(library.search('', minutes: 15)), ['art-a']);
-      expect(ids(library.search('colores', category: ActivityCategory.sort, minutes: 10)), ['sort-a']);
+      expect(ids(library.search('', maxMinutes: 5)), ['search-a', 'move-a', 'language-a']);
+      expect(library.search('', maxMinutes: 15), hasLength(7));
+      expect(ids(library.search('colores', category: ActivityCategory.sort, maxMinutes: 10)), ['sort-a']);
     });
 
     test('normalize folds the accents of the 9 languages that have them', () {

@@ -1130,5 +1130,102 @@
   "playingHandLeft": "Left hand",
   "@playingHandLeft": {
     "description": "Option: the child plays with the left hand. Also used in the row summary."
+  },
+  "activitiesTitle": "Screen-free activities",
+  "@activitiesTitle": {
+    "description": "Title of the screen-free activities section (HU-047) and of its button in the menu footer and on the rest screen. Ideas to play at home without a screen, read by an adult."
+  },
+  "activitiesSafetyWarning": "Always play with an adult nearby. Use objects bigger than their mouth, with no small parts, batteries or plastic bags.",
+  "@activitiesSafetyWarning": {
+    "description": "General safety warning, always at the top of the screen-free activities section (HU-047 D6). For the adult."
+  },
+  "activitiesSearchLabel": "Search by material, by what they like or by an idea",
+  "@activitiesSearchLabel": {
+    "description": "Label of the search field: tells the adult what they can type (HU-047 P12)."
+  },
+  "activitiesClearSearch": "Clear search",
+  "@activitiesClearSearch": {
+    "description": "Tooltip of the button that empties the search field."
+  },
+  "activitiesTryHints": "Try searching:",
+  "@activitiesTryHints": {
+    "description": "Short title above the tappable example searches (materials, likes and ideas) in the screen-free activities section."
+  },
+  "activitiesCategory": "{category, select, search{Search and find} sort{Match and sort} move{Movement} art{Art} language{Language} routine{Routine} other{Activity}}",
+  "@activitiesCategory": {
+    "description": "Name of an activity category (HU-047 D5), used in the filter chips and on each activity.",
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "activitiesUpToMinutes": "Up to {minutes} min",
+  "@activitiesUpToMinutes": {
+    "description": "Time filter chip: activities that last at most this many minutes (5, 10, 15 or 30). Keep it short.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "activitiesMinutes": "{minutes} min",
+  "@activitiesMinutes": {
+    "description": "How long an activity lasts, in minutes. Keep it short.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "activitiesCount": "{count, plural, =1{1 activity} other{{count} activities}}",
+  "@activitiesCount": {
+    "description": "How many activities match the search and filters.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activitiesFromAge": "From age {age}",
+  "@activitiesFromAge": {
+    "description": "Minimum recommended age of an activity, in years (2 to 5).",
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "activitiesGoal": "What they practise",
+  "@activitiesGoal": {
+    "description": "Heading on an activity: what the child practises."
+  },
+  "activitiesMaterials": "Materials",
+  "@activitiesMaterials": {
+    "description": "Heading on an activity: the list of materials."
+  },
+  "activitiesSteps": "How to play",
+  "@activitiesSteps": {
+    "description": "Heading on an activity: the numbered steps."
+  },
+  "activitiesVariants": "Variations",
+  "@activitiesVariants": {
+    "description": "Heading on an activity: two variations (easier or harder)."
+  },
+  "activitiesSafety": "Safety",
+  "@activitiesSafety": {
+    "description": "Heading of the safety note of one activity (HU-047 D6)."
+  },
+  "activitiesKeepPlaying": "To keep playing",
+  "@activitiesKeepPlaying": {
+    "description": "Heading at the end of an activity: three recommended activities to keep playing at home without screens (HU-047 P11)."
+  },
+  "activitiesDailyTitle": "Idea for today, screen-free",
+  "@activitiesDailyTitle": {
+    "description": "Small heading of the daily suggestion card in the main menu (HU-047 D1): an idea for the adult to play today without a screen."
+  },
+  "activitiesDailyHide": "Hide until tomorrow",
+  "@activitiesDailyHide": {
+    "description": "Tooltip of the small ✕ on the daily suggestion card: hides it until tomorrow (HU-047 P13)."
   }
 }
