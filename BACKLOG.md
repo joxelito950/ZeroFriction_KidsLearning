@@ -122,24 +122,24 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 
 ## Orden propuesto
 
-Actualizado el 2026-11-23.
+Actualizado el 2026-11-24.
 
-**Hecho:** pendientes técnicos (TD-001 a TD-004, TD-006 a TD-009), HU-001 (memoria), HU-002 y HU-016 (dorado y pérdida de estrellas), HU-004 (Zona de padres), HU-005 (sonidos), HU-007 (Sombras, sin pago), HU-009 (tiempo diario), HU-011 y HU-012 (idiomas), HU-013 (identidad visual), HU-021, HU-022 (tutorial visual), HU-025 (¿Cuál es diferente?), HU-030 (dificultad), HU-023 (menú en cuadrícula), HU-032 (enviar comentarios), HU-037 (rondas y medallas), HU-046 (Zona de Padres por filas), TD-011 para español e inglés. **Versión `1.0.0-rc.6`** (etiqueta `v1.0.0-rc.6`) **subida a la prueba cerrada el 2026-11-19**, con «A su sitio» y su edición de Navidad (HU-052, HU-042), «Nuevo» (HU-041) y la ronda en cada juego (HU-034, HU-048); la `rc.5` se publicó el 2026-11-18. HU-010, descartada por absorbida.
+**Hecho:** pendientes técnicos (TD-001 a TD-004, TD-006 a TD-009), HU-001 (memoria), HU-002 y HU-016 (dorado y pérdida de estrellas), HU-004 (Zona de padres), HU-005 (sonidos), HU-007 (Sombras, sin pago), HU-009 (tiempo diario), HU-011 y HU-012 (idiomas), HU-013 (identidad visual), HU-021, HU-022 (tutorial visual), HU-025 (¿Cuál es diferente?), HU-030 (dificultad), HU-023 (menú en cuadrícula), HU-032 (enviar comentarios), HU-037 (rondas y medallas), HU-046 (Zona de Padres por filas), TD-011 para español e inglés. **Versión `1.0.0-rc.7`** (etiqueta `v1.0.0-rc.7`) **subida a la prueba cerrada el 2026-11-24**, con las actividades sin pantallas (HU-047), la hora de dormir (HU-038), «Cómo juega» (HU-039, HU-031) y los movimientos en todos los juegos; antes, la `rc.6` (2026-11-19), con «A su sitio» y su edición de Navidad (HU-052, HU-042), «Nuevo» (HU-041) y la ronda en cada juego (HU-034, HU-048); la `rc.5` se publicó el 2026-11-18. HU-010, descartada por absorbida.
 
-1. **HU-014:** prueba cerrada con `1.0.0-rc.6` en marcha; cerrar HU-048 a HU-051 y HU-052 con lo que digan los testers.
-2. **Verificar en el teléfono con la `rc.6`:** desde el 20 de noviembre, el 🎄 en la tarjeta de «A su sitio», el trineo y los regalos 🎁 (HU-042); la celebración sin cinta (HU-048); la sugerencia de bajar de ronda tras 3 caídas (HU-034).
-3. **Mientras termina la prueba cerrada (decidido el 2026-11-19),** para una `1.0.0-rc.7` a los testers:
-   - **HU-038** (hora de dormir): desarrollada; falta verla en el teléfono;
-   - **HU-039 + HU-031** (tocar o arrastrar, movimientos en todos los juegos y mano dominante), en la sección «Cómo juega»;
-   - **TD-015** (prueba en el teléfono), que además mide TD-013.
-   - **HU-047** (actividades sin pantallas), antes de HU-006 (decidido el 2026-11-20).
-   - **`1.0.0-rc.7` preparada el 2026-11-23** con todo lo anterior: probada en el moto g55 (sección de actividades, búsqueda, una actividad, tarjeta del día, cabecera con movimientos y tocar en Sombras) y en los emuladores de Android 8.0 y del más reciente.
+1. **HU-014:** prueba cerrada con `1.0.0-rc.7` en marcha. Los 14 días se cumplen hacia el 2 de diciembre: entonces se pide el acceso a producción. Cerrar HU-031, HU-038, HU-039, HU-042, HU-047 y HU-048 a HU-052 con lo que digan los testers.
+2. **Ver en el teléfono con la `rc.7`:**
+   - los «15 minutos más» de noche (HU-038);
+   - «Tocar» y la mano izquierda en horizontal (HU-039, HU-031);
+   - la sugerencia de bajar de ronda tras 3 caídas (HU-034).
+3. **Siguiente, mientras termina la prueba cerrada (`rc.8`):**
+   - **un juego nuevo**, ya refinado (se elige el 2026-11-24);
+   - **HU-047 entrega 3:** las 24 actividades en los otros 7 idiomas, y la primera tanda hacia la meta de 1000;
+   - **TD-013:** medir el rendimiento en el emulador de Android 8.0 de gama baja.
 4. **Antes de producción:**
-   - **TD-013:** medir en el emulador «Gama baja API 26» (Android 8.0, 2 núcleos, 2 GB, GPU por software), creado el 2026-11-20; el Android 10 del dueño tiene la pantalla rota;
    - **TD-010:** pantallazos de los padres testers que prueban solo en tablets (sin fallos reportados hasta ahora);
    - **TD-012 medida:** 10,5 MB para instalar en Play, sin bloqueo;
    - el resto de TD-011 (7 idiomas, ahora también los nombres de vehículos y sitios de «A su sitio»).
-5. **HU-006** (pago, lista): se desarrolla **al salir a producción** (decidido el 2026-11-19). Hasta entonces, todo es gratis (D-040).
+5. **HU-006** (pago, lista): va en la **`rc.9` o la `rc.10`** (decidido el 2026-11-24; antes, «al salir a producción»). Hasta entonces, todo es gratis (D-040).
 6. **Después:** HU-054 y HU-055 (ideas del 2026-11-23, encajan con la hora de dormir y las actividades), HU-008, HU-024, HU-026 a HU-029, HU-036, HU-040, HU-043, HU-044, HU-053 y los juegos B y C de HU-052 (juegos), HU-033, HU-045 (padres), HU-035, HU-017, HU-015, HU-019, HU-020, TD-005, TD-014.
 
 **Pendiente del dueño:** verificar la cuenta de Play Console y configurarla (pasos en `docs/store/README.md`), reunir a los 15 testers y, opcional, la escena con varios juegos y las cartas con las esquinas redondeadas (HU-013). ✅ Hechos el 2026-11-06: GitHub Pages, el correo `toddler.logic.app@outlook.com` y la cuenta de Play Console.
