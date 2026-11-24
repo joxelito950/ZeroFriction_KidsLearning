@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En refinamiento (2026-11-24).** Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
+| **Estado** | **Lista (2026-11-24)**: el dueño responde las preguntas el 2026-11-24 (sección 12). Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | M–L (3–4 días, 3 entregas) |
@@ -28,7 +28,8 @@
 
 ### 3.1 El tablero
 
-- **Arriba (o a la izquierda en horizontal), las cestas:** tarjetas blancas con borde teal y, arriba, un **objeto de muestra** grande. La muestra dice qué va dentro: una 🍓 para lo rojo; un 🐻 grande, mediano o pequeño para cada tamaño. Abajo, **3 huecos** para lo que llega.
+- **Arriba (o a la izquierda en horizontal), las cestas:** tarjetas blancas con borde teal y, arriba, un **objeto de muestra** grande. La muestra dice qué va dentro: una 🍓 para lo rojo; para cada tamaño, un objeto de la temática del tablero en ese tamaño (sección 5.2). Abajo, **3 huecos** para lo que llega.
+- **La muestra no es una pista** (P6, 2026-11-24): fuera del tutorial y de los niveles 1 y 2 de bronce, la muestra **nunca** es uno de los objetos de la bandeja. Las ayudas solo van en el tutorial y en la ronda base (la misma regla de HU-026 P5).
 - **Abajo (o a la derecha), la bandeja** con los objetos, como en «A su sitio».
 - Con la mano izquierda y en horizontal, las cestas pasan al otro lado (HU-031), como en Sombras y «A su sitio».
 - El tablero se supera cuando la bandeja queda vacía.
@@ -82,13 +83,25 @@ En el tutorial (nivel 1), la mano lleva el primer objeto a su cesta: arrastrando
 | **Rubí** | Tamaño | Grande, mediano y pequeño | — | 60 % | Fija | Sí |
 | **Esmeralda** | Color | Los 4 + naranja y morado (P4). Objetos de la misma clase en colores distintos (🍎 rojo y 🍏 verde) | Sí | 65 % | Fija | Sí |
 | **Zafiro** | Tamaño | Tres tamaños, con dos emojis distintos en el tablero | — | 70 % | Fija | Sí |
-| **Obsidiana** | Color **o** tamaño, al azar en cada tablero (las cestas dicen cuál) | Todos | Sí, en color | 80 % | Al azar | Sí |
-| **Diamante** | Niveles 2–4, como obsidiana. Niveles 5–8, **color y tamaño a la vez**: 4 cestas (2 colores × grande y pequeño) (P5) | 2 colores × 2 tamaños | No | 90 % | Al azar | Sí |
+| **Obsidiana** | **Color y tamaño a la vez** (P5): 4 cestas, 2 colores × grande y pequeño | 2 colores × 2 tamaños | No | 80 % | Al azar | Sí |
+| **Diamante** | Color y tamaño a la vez, **alternando la pareja de tamaños** por nivel: grande y pequeño (niveles 2, 5), grande y mediano (3, 6), mediano y pequeño (4, 7). Nivel 8: se analiza (4.3) | 2 colores × 2 tamaños | No | 90 % | Al azar | Sí |
 
 - **Tiempo:** desde oro, con la tabla de tiempos de Sombras, como «A su sitio» (`ShadowLadder.timeLimitsFor`). Bronce y plata, sin tiempo: la muestra gratis es para los más pequeños. «Jugar sin tiempo» (HU-030) lo quita en todas.
 - **Estrellas:** como «A su sitio» (`VehicleStars`): con N objetos, 3★ con N fallos o menos, 2★ hasta 2N, 1★ con más.
 - **Medalla** al superar el nivel 8 de cada ronda. Si se acaba el tiempo, se baja de nivel con el aviso amable de siempre.
 - **Por qué este orden:** el color se ve de un vistazo y lo dominan antes los más pequeños; el tamaño relativo (sobre todo «mediano») llega hacia los 3–4 años. Las rondas mezcladas son para los de 5.
+- **Diamante con «mediano»** es lo más difícil del juego: grande y mediano (o mediano y pequeño) se distinguen por un solo paso de 1,5 veces. Se valida con niños de 5 años; si frustra, el mediano vuelve a salir solo en grande y pequeño.
+
+### 4.3 Nivel 8 de diamante: los 3 tamaños y todos los colores (a analizar)
+
+Propuesta del dueño (P5, 2026-11-24): el último nivel con **los 3 tamaños y todos los colores**, y los objetos **van apareciendo** en la bandeja a medida que el niño clasifica otro.
+
+Análisis:
+- **Todas las combinaciones no caben:** 6 colores × 3 tamaños son 18 cestas, y en el teléfono compacto caben como mucho 6 tarjetas legibles (2 filas de 3) con el pequeño a 28 dp.
+- **Propuesta viable:** **6 cestas** (2 colores × 3 tamaños) y una **bandeja que se repone**: hay 3 o 4 objetos a la vista y, al clasificar uno, entra otro, hasta 12. Los **2 colores cambian en cada partida**, así que a lo largo de la ronda salen todos.
+- **Alternativa más ambiciosa:** 3 cestas de tamaño y 6 de color en dos pasos (cada objeto primero a su tamaño y después a su color). Es otra mecánica: no entra en esta historia.
+- **Qué hay que medir** (entrega 3): que 6 tarjetas con su muestra y 3 huecos quepan en el compacto en vertical y en horizontal; que la bandeja que se repone no confunda (el objeto nuevo entra despacio, con el mismo vuelo de vuelta a la bandeja); y el tiempo, que se cuenta por objeto.
+- **Decisión:** se construye la propuesta viable detrás de la regla del nivel 8; si no cabe o frustra, el nivel 8 es como el 5.
 
 ## 5. Contenido (solo Emoji 5.0 o anterior, sin ZWJ, D-024 y D-026)
 
@@ -111,9 +124,18 @@ En el tutorial (nivel 1), la mano lleva el primer objeto a su cesta: arrastrando
 
 ### 5.2 Por tamaño
 
-- **Objetos:** 🍎 🍊 🍋 ⭐ ⚽ 🏀 🎈 🍓 🌻 🍪 🍩 🌸. Formas compactas que se reconocen pequeñas; ninguno tiene un tamaño real que choque.
-- **Muestra de las cestas: tres osos 🐻** (grande, mediano y pequeño, como en Ricitos de Oro), y la tarjeta de cada cesta también es grande, mediana o pequeña (P6).
-- **Diamante (color y tamaño):** solo parejas de la **misma forma en dos colores**, para que no se mezcle qué es cada cosa: hoy, solo 🍎 y 🍏. Muestras: 🍎 grande, 🍎 pequeña, 🍏 grande y 🍏 pequeña; en la bandeja, las dos manzanas en los dos tamaños. Con una sola pareja la ronda se repite: si se quiere más variedad, se busca otra pareja de la misma forma al validar los emojis (P5).
+- **Cada tablero de tamaño tiene una temática**, y la muestra de las cestas es de esa temática (P6, 2026-11-24). La muestra sale en sus tres tamaños, en tarjetas también de tres tamaños, y **no está entre los objetos de la bandeja**:
+
+| Temática | Objetos de la bandeja | Muestra de las cestas |
+|---|---|---|
+| Animales | 🐶 🐱 🐰 🐤 🐟 🐞 🐢 🐸 | 🐻 (los tres osos, como en Ricitos de Oro) |
+| Frutas | 🍊 🍋 🍓 🍐 🍌 🍑 | 🍎 |
+| Vehículos | 🚕 🚒 🚌 🚜 🚲 🚀 | 🚗 |
+| Variados (al azar) | ⭐ ⚽ 🏀 🎈 🌻 🍪 🍩 🌸 | Un objeto igual en los tres tamaños que no esté en la bandeja (por ejemplo, 🔵 o 🌙) |
+
+- Se compara dentro del tablero: el mismo emoji sale en todos los tamaños de la ronda, así que un 🐶 pequeño y un 🐶 grande no chocan con el mundo real. Se mantiene la regla de no poner animales de tamaño real muy marcado (🐘, 🐭, 🐳).
+- Los objetos nuevos (🐰 🐢 🚌 🚜 🚲 🚀 🍑 🔵) se comprueban en el emulador con Android 8, como el resto.
+- **Obsidiana y diamante (color y tamaño):** la muestra de cada cesta es un objeto de **ese color** en **ese tamaño**, que no está en la bandeja (🍓 grande para «rojo grande»). En la bandeja, objetos de los dos colores, cada uno en los dos tamaños del nivel (🍎 grande y 🍎 pequeño, 🍌 grande y 🍌 pequeño). Así ya no hace falta la pareja 🍎/🍏 de la misma forma, y hay variedad para todos los colores.
 
 ## 6. Accesibilidad e idiomas
 
@@ -141,7 +163,7 @@ En el tutorial (nivel 1), la mano lleva el primer objeto a su cesta: arrastrando
 - **Cestas:** blanco con borde teal profundo al 35 %; al recibir un objeto, borde ámbar (como los sitios de «A su sitio»).
 - **Bandeja:** crema cálida.
 - Los colores de las cestas son los **de los emojis de muestra**; **ningún color nuevo** en la interfaz.
-- **Tarjeta del menú (P7):** los cuatro juegos ya usan azul petróleo, teal profundo, blanco y ámbar. El coral no sirve para fondo con texto (C4) y el dorado es del progreso.
+- **Tarjeta del menú (P7, decidido el 2026-11-24):** **crema con borde coral grueso y texto teal profundo.** Los cuatro juegos ya usan azul petróleo, teal profundo, blanco y ámbar; el coral no sirve para fondo con texto (C4) y el dorado es del progreso. Es el color de los juegos nuevos (HU-026, HU-036, HU-056), con el icono como diferencia. Se confirma en el teléfono.
 
 ## 8. Acceso y «Nuevo»
 
@@ -157,7 +179,7 @@ En el tutorial (nivel 1), la mano lleva el primer objeto a su cesta: arrastrando
 | Motor común | Generalizar `VehicleBoardView` a un `PlaceBoardView` con `BoardPiece { id, symbol, scale }` y `BoardTarget { id, symbol, scale, slots }`: huecos configurables (2 en «A su sitio», 3 aquí) y escala por pieza. `VehicleDrop` pasa a ser el cálculo común de encaje. «A su sitio» se adapta sin cambiar su comportamiento |
 | Presentación | `SortGameScreen` y `SortGameCubit`/`SortGameState`, copiando la estructura de `VehicleGameCubit` (cronómetro, pausa en segundo plano, estrellas, medalla, bajada de nivel, tutorial e invitación). `GameHeader` con movimientos |
 | Persistencia | `GameId.sorting`, en el progreso común `GameProgressHiveModel` (typeId 5) con la clave `sorting`: sin tipos de Hive nuevos |
-| Menú | Tarjeta en `GameCatalog` (quinta: sigue sin scroll, HU-023 R2) con el icono 3D (P8) |
+| Menú | Tarjeta en `GameCatalog` (quinta: sigue sin scroll, HU-023 R2) con el icono 3D (P8, pieza 18 de `docs/brand/PROMPTS-identidad.md`, `assets/brand/sorting_icon.png`) |
 | Zona de Padres | El juego aparece en «Su progreso» (HU-034) con su ronda; sin Premium, solo bronce y plata |
 | Textos | Unas 8 claves + dos `select` (objetos y cestas) en los 9 idiomas |
 | Tests | Catálogo (Emoji 5.0, un color por objeto, sin objetos dudosos), sorteo con miles de semillas (como mucho 3 por cesta, cesta libre solo donde toca, nunca rojo y verde solos), escalera, pantalla (arrastre, toque, fallo, tamaño mínimo de 28 dp, lector), nivel 8 en el compacto en vertical y horizontal en 9 idiomas, regresión completa de «A su sitio» |
@@ -168,7 +190,7 @@ En el tutorial (nivel 1), la mano lleva el primer objeto a su cesta: arrastrando
 |---|---|---|
 | 1 | **Motor común:** `PlaceBoardView` genérico con huecos y escala; «A su sitio» pasa a usarlo sin cambios visibles (sus tests en verde) | Sí: no cambia nada para el niño |
 | 2 | **Clasificar por color** (bronce, plata, esmeralda): dominio, pantalla, menú, progreso, «Nuevo», 9 idiomas. Las rondas de tamaño todavía juegan color | Sí: es la parte gratis |
-| 3 | **Tamaño y mezcla** (oro, rubí, zafiro, obsidiana, diamante) | Sí |
+| 3 | **Tamaño y mezcla** (oro, rubí, zafiro, obsidiana, diamante), con las muestras por temática. El nivel 8 de diamante (4.3), detrás de su regla: si no cabe, como el 5 | Sí |
 
 ## 11. Tamaño estimado
 
@@ -178,21 +200,22 @@ En el tutorial (nivel 1), la mano lleva el primer objeto a su cesta: arrastrando
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿Nombre del juego en el menú? | **«Clasificar»**: corto, el adulto entiende qué practica y encaja con «Memoria» y «Sombras». Alternativa: «Colores y tamaños» |
-| P2 | ¿Un solo juego para color y tamaño, o dos? | **Uno**, con el color en bronce y plata y el tamaño desde oro (tabla 4.2). Dos juegos casi iguales llenarían el menú y repartirían las medallas |
-| P3 | ¿Generalizar el tablero de «A su sitio» o copiarlo? | **Generalizar** (entrega 1): la misma mecánica servirá para HU-024 y otros. Los tests de «A su sitio» cubren la regresión |
-| P4 | ¿Entran naranja y morado? | **Sí, desde esmeralda**: con solo 4 colores la ronda se repite. No antes: naranja y rojo se confunden a los 2–3 años |
-| P5 | ¿Color y tamaño a la vez en diamante (4 cestas: manzana roja grande, roja pequeña, verde grande, verde pequeña)? | **Sí, solo en diamante y en los niveles 5–8**, y validarlo con niños de 5 años. Si frustra, diamante alterna color y tamaño como obsidiana |
-| P6 | ¿Qué muestra en las cestas de tamaño? | **Tres osos 🐻 de tres tamaños, en tarjetas de tres tamaños** (Ricitos de Oro): el tamaño se ve en la muestra y en la propia cesta |
-| P7 | ¿Color de la tarjeta del menú? Los cuatro colores con texto ya están usados | **Crema con borde coral grueso y texto teal profundo**: se distingue del fondo por el borde y no añade colores. Se confirma en el teléfono |
-| P8 | ¿Icono del juego? | **Ilustración 3D** como los demás (D-036), con un prompt nuevo en `docs/brand/PROMPTS-identidad.md` (tres cestas con frutas de colores). La entrega el dueño; es necesaria para la tarjeta del menú, no para el resto |
-| P9 | ¿Tamaños fijos (100 %, 70 %, 45 %)? | **Sí**, y comprobar en el compacto que el pequeño no baja de 28 dp |
+| P1 | ¿Nombre del juego en el menú? | ✅ Decidido (2026-11-24): **«Clasificar»** |
+| P2 | ¿Un solo juego para color y tamaño, o dos? | ✅ Decidido (2026-11-24): **uno**, con el color en bronce y plata y el tamaño desde oro (tabla 4.2) |
+| P3 | ¿Generalizar el tablero de «A su sitio» o copiarlo? | ✅ Decidido (2026-11-24): **generalizar** (entrega 1) |
+| P4 | ¿Entran naranja y morado? | ✅ Decidido (2026-11-24): **sí, desde esmeralda** |
+| P5 | ¿Color y tamaño a la vez? | ✅ Decidido (2026-11-24): **desde obsidiana.** En diamante se alterna la pareja de tamaños (grande y pequeño, grande y mediano, mediano y pequeño). El nivel 8 con los 3 tamaños, todos los colores y una bandeja que se repone **se analiza** (4.3) |
+| P6 | ¿Qué muestra en las cestas de tamaño? | ✅ Decidido (2026-11-24): **un objeto de la temática del tablero**: osos 🐻 para animales, 🍎 para frutas, 🚗 para vehículos y un objeto igual para los variados. **Nunca uno de la bandeja**, para que no sea una ayuda fuera del tutorial y de bronce (5.2) |
+| P7 | ¿Color de la tarjeta del menú? | ✅ Decidido (2026-11-24): **crema con borde coral grueso y texto teal profundo**, para todos los juegos nuevos. Se confirma en el teléfono |
+| P8 | ¿Icono del juego? | **Ilustración 3D** (D-036) con el prompt de la **pieza 18** de `docs/brand/PROMPTS-identidad.md`: tres cestas de tres tamaños y colores con sus pelotas. La entrega el dueño. (La imagen que estaba en la raíz el 2026-11-24 es el icono de «¿Cuántos hay?», pieza 17) |
+| P9 | ¿Tamaños fijos (100 %, 70 %, 45 %)? | ✅ Decidido (2026-11-24): **sí**, y comprobar en el compacto que el pequeño no baja de 28 dp |
 
 ## 13. Criterios de aceptación
 
 1. Todos los objetos y muestras se ven en Android 8 y tienen el color de su cesta en el emulador y en el moto g55.
 2. Cada objeto tiene **una sola** cesta correcta en cada tablero (test con miles de sorteos).
-3. Bronce y plata son de color; oro, rubí y zafiro, de tamaño; obsidiana y diamante, mezclados (tabla 4.2).
+3. Bronce y plata son de color; oro, rubí y zafiro, de tamaño; obsidiana y diamante, color y tamaño a la vez, con la pareja de tamaños alternando en diamante (tabla 4.2).
+3b. Fuera del tutorial y de los niveles 1 y 2 de bronce, la muestra de una cesta nunca está en la bandeja; las de tamaño son de la temática del tablero.
 4. En los tableros de tamaño, el mismo emoji sale en todos los tamaños de la ronda, y el pequeño mide al menos 28 dp en el teléfono compacto.
 5. Arrastrar, tocar y ambas funcionan según el ajuste de HU-039; el lector de pantalla juega tocando.
 6. Un objeto en una cesta equivocada vuelve a la bandeja, sin sonido de error, y cuenta como fallo y como movimiento.

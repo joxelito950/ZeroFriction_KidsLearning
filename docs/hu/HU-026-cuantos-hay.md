@@ -166,8 +166,8 @@ En el tutorial (nivel 1: una carta con 1 y otra con 3, cada una dos veces), la m
 | P3 | ¿Objetos distintos en las dos cartas de una pareja? | ✅ Decidido (2026-11-24): **desde oro, de la misma temática** (3 manzanas y 3 peras); **desde esmeralda, de temáticas sin relación** (frutas y peces). Tabla 4.2 y temáticas en la sección 5 |
 | P4 | ¿Se mezclan objetos dentro de una carta (🍎🍌🍎)? | ✅ Decidido (2026-11-24): **sí, solo en diamante** |
 | P5 | ¿Destello uno a uno al juntar? | ✅ Decidido (2026-11-24): **sí, pero es una ayuda**, y las ayudas solo van en el tutorial y en la ronda base: aquí, **tutorial y bronce**. Con «reducir animaciones», nunca |
-| P6 | ¿Color de la tarjeta del menú? | Se decide una vez para los juegos nuevos (HU-023). El dueño pide el prompt de identidad (pieza 17), pensado para leerse sobre la tarjeta que se elija |
-| P7 | ¿Icono del juego? | ✅ Decidido (2026-11-24): **ilustración 3D** (D-036) con el prompt de la **pieza 17** de `docs/brand/PROMPTS-identidad.md`: dos cartas con tres peces y tres patitos. La entrega el dueño |
+| P6 | ¿Color de la tarjeta del menú? | ✅ Decidido (2026-11-24, HU-027 P7): **crema con borde coral grueso y texto teal profundo**, como todos los juegos nuevos. El icono (pieza 17) ya se recibió y se lee sobre ella |
+| P7 | ¿Icono del juego? | ✅ Decidido (2026-11-24): **ilustración 3D** (D-036) con el prompt de la **pieza 17** de `docs/brand/PROMPTS-identidad.md`: dos cartas con tres peces y tres patitos. Recibido el 2026-11-24: `docs/brand/fuentes/icono-cuantos-hay.png` |
 | P8 | ¿Un juego de «juntar con el número» más adelante? | ✅ Decidido (2026-11-24): **sí, pero no en esta historia.** La app no tiene edad máxima: los niños crecen y piden retos mayores. Se abre **HU-057, juegos de números y retos mayores**, todos Premium |
 
 ## 13. Criterios de aceptación
