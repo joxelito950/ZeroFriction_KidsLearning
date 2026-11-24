@@ -140,11 +140,21 @@ Si el camión sale rojo intenso, pedir: «El camión es coral suave #D9735F, no 
 
 Entregar como `assets/brand/vehicles_icon.png`, 1024 × 1024 px con transparencia real.
 
+## 17. Icono del juego «¿Cuántos hay?» (silueta cerrada para el dorado, HU-026)
+
+> [Bloque común]
+> **Dos cartas de juego** grandes, de plastilina, con las esquinas muy redondeadas, en blanco con un borde grueso en teal profundo #00454D, **un poco solapadas e inclinadas** hacia lados opuestos, como dos cartas que se juntan. En la carta de la izquierda, **tres peces** pequeños en coral suave #D9735F; en la de la derecha, **tres patitos** pequeños en ámbar #ECA463. En las dos cartas los tres objetos van **en diagonal, como los puntos de un dado**, del mismo tamaño, bien separados y sin tocarse. Los objetos son grandes para su carta: cada uno ocupa casi un tercio de su ancho. Contentos, sin caras exageradas. **Sin números, sin puntos de dado dibujados, sin el niño.** Fondo totalmente transparente. El conjunto forma **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes, centrada y ocupando el 80 % del lienzo. Que a 48 px se lea «dos cartas con la misma cantidad».
+> Se mostrará sobre la tarjeta del menú (crema claro #FFF2E2 o blanco): el borde teal de las cartas tiene que separarlas de ese fondo.
+
+Si los peces o los patitos salen de tamaños distintos, pedir: «Los seis objetos tienen el mismo tamaño: el tamaño no debe parecer cantidad». Si aparecen números o puntos, pedir: «Solo los objetos, sin números ni puntos».
+
+Entregar como `assets/brand/counting_icon.png`, 1024 × 1024 px con transparencia real.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2 y de la 4 a la 16 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2 y de la 4 a la 17 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 
