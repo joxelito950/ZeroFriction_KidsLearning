@@ -131,15 +131,15 @@ Actualizado el 2026-11-24.
    - los «15 minutos más» de noche (HU-038);
    - «Tocar» y la mano izquierda en horizontal (HU-039, HU-031);
    - la sugerencia de bajar de ronda tras 3 caídas (HU-034).
-3. **Siguiente, mientras termina la prueba cerrada:**
-   - **HU-006** (pago): se desarrolla al salir a producción (decidido el 2026-11-19), y la prueba cerrada termina hacia el 2 de diciembre. Propuesta del 2026-11-24: empezar ya las entregas 1 y 2 (dominio, tienda simulada y Google Play), que no cambian nada visible mientras dure D-040;
+3. **Siguiente, mientras termina la prueba cerrada (`rc.8`):**
+   - **un juego nuevo**, ya refinado (se elige el 2026-11-24);
    - **HU-047 entrega 3:** las 24 actividades en los otros 7 idiomas, y la primera tanda hacia la meta de 1000;
    - **TD-013:** medir el rendimiento en el emulador de Android 8.0 de gama baja.
 4. **Antes de producción:**
    - **TD-010:** pantallazos de los padres testers que prueban solo en tablets (sin fallos reportados hasta ahora);
    - **TD-012 medida:** 10,5 MB para instalar en Play, sin bloqueo;
    - el resto de TD-011 (7 idiomas, ahora también los nombres de vehículos y sitios de «A su sitio»).
-5. **HU-006** (pago, lista): se desarrolla **al salir a producción** (decidido el 2026-11-19). Hasta entonces, todo es gratis (D-040).
+5. **HU-006** (pago, lista): va en la **`rc.9` o la `rc.10`** (decidido el 2026-11-24; antes, «al salir a producción»). Hasta entonces, todo es gratis (D-040).
 6. **Después:** HU-054 y HU-055 (ideas del 2026-11-23, encajan con la hora de dormir y las actividades), HU-008, HU-024, HU-026 a HU-029, HU-036, HU-040, HU-043, HU-044, HU-053 y los juegos B y C de HU-052 (juegos), HU-033, HU-045 (padres), HU-035, HU-017, HU-015, HU-019, HU-020, TD-005, TD-014.
 
 **Pendiente del dueño:** verificar la cuenta de Play Console y configurarla (pasos en `docs/store/README.md`), reunir a los 15 testers y, opcional, la escena con varios juegos y las cartas con las esquinas redondeadas (HU-013). ✅ Hechos el 2026-11-06: GitHub Pages, el correo `toddler.logic.app@outlook.com` y la cuenta de Play Console.
