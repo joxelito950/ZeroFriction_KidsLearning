@@ -122,11 +122,11 @@ Fuente de verdad del trabajo pendiente. El **qué** del producto está en [READM
 
 ## Orden propuesto
 
-Actualizado el 2026-11-23.
+Actualizado el 2026-11-24.
 
-**Hecho:** pendientes técnicos (TD-001 a TD-004, TD-006 a TD-009), HU-001 (memoria), HU-002 y HU-016 (dorado y pérdida de estrellas), HU-004 (Zona de padres), HU-005 (sonidos), HU-007 (Sombras, sin pago), HU-009 (tiempo diario), HU-011 y HU-012 (idiomas), HU-013 (identidad visual), HU-021, HU-022 (tutorial visual), HU-025 (¿Cuál es diferente?), HU-030 (dificultad), HU-023 (menú en cuadrícula), HU-032 (enviar comentarios), HU-037 (rondas y medallas), HU-046 (Zona de Padres por filas), TD-011 para español e inglés. **Versión `1.0.0-rc.6`** (etiqueta `v1.0.0-rc.6`) **subida a la prueba cerrada el 2026-11-19**, con «A su sitio» y su edición de Navidad (HU-052, HU-042), «Nuevo» (HU-041) y la ronda en cada juego (HU-034, HU-048); la `rc.5` se publicó el 2026-11-18. HU-010, descartada por absorbida.
+**Hecho:** pendientes técnicos (TD-001 a TD-004, TD-006 a TD-009), HU-001 (memoria), HU-002 y HU-016 (dorado y pérdida de estrellas), HU-004 (Zona de padres), HU-005 (sonidos), HU-007 (Sombras, sin pago), HU-009 (tiempo diario), HU-011 y HU-012 (idiomas), HU-013 (identidad visual), HU-021, HU-022 (tutorial visual), HU-025 (¿Cuál es diferente?), HU-030 (dificultad), HU-023 (menú en cuadrícula), HU-032 (enviar comentarios), HU-037 (rondas y medallas), HU-046 (Zona de Padres por filas), TD-011 para español e inglés. **Versión `1.0.0-rc.7`** (etiqueta `v1.0.0-rc.7`) **subida a la prueba cerrada el 2026-11-24**, con las actividades sin pantallas (HU-047), la hora de dormir (HU-038), «Cómo juega» (HU-039, HU-031) y los movimientos en todos los juegos; antes, la `rc.6` (2026-11-19), con «A su sitio» y su edición de Navidad (HU-052, HU-042), «Nuevo» (HU-041) y la ronda en cada juego (HU-034, HU-048); la `rc.5` se publicó el 2026-11-18. HU-010, descartada por absorbida.
 
-1. **HU-014:** prueba cerrada con `1.0.0-rc.6` en marcha; cerrar HU-048 a HU-051 y HU-052 con lo que digan los testers.
+1. **HU-014:** prueba cerrada con `1.0.0-rc.7` en marcha. Los 14 días se cumplen hacia el 2 de diciembre: entonces se pide el acceso a producción. Cerrar HU-031, HU-038, HU-039, HU-042, HU-047 y HU-048 a HU-052 con lo que digan los testers.
 2. **Verificar en el teléfono con la `rc.6`:** desde el 20 de noviembre, el 🎄 en la tarjeta de «A su sitio», el trineo y los regalos 🎁 (HU-042); la celebración sin cinta (HU-048); la sugerencia de bajar de ronda tras 3 caídas (HU-034).
 3. **Mientras termina la prueba cerrada (decidido el 2026-11-19),** para una `1.0.0-rc.7` a los testers:
    - **HU-038** (hora de dormir): desarrollada; falta verla en el teléfono;
