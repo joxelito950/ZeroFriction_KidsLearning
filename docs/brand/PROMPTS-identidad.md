@@ -164,11 +164,20 @@ Entregar como `assets/brand/sorting_icon.png`, 1024 × 1024 px con transparencia
 
 **Recibida el 2026-11-24** (`docs/brand/fuentes/icono-clasificar.png`, 1254 × 1254, transparencia real) y preparada a 256 px. Cumple: tres cestas de mayor a menor en coral, ámbar y teal, cada una con pelotas de su color, la pelota coral cayendo en la suya y contorno teal que la separa de la crema; a 48 px se lee «cada cosa a su cesta». Diferencias menores: la cesta pequeña es teal y no azul petróleo, y lleva dos trazos ámbar de movimiento junto a la pelota.
 
+## 19. Icono del juego «Opuestos» (silueta cerrada para el dorado, HU-036)
+
+> [Bloque común]
+> **Un sol y una luna de plastilina abrazados**, mirándose contentos, como dos amigos opuestos. A la izquierda, **el sol**: un círculo grande en ámbar #ECA463 con rayos cortos, gruesos y redondeados alrededor, mejillas en coral suave #D9735F y ojos abiertos. A la derecha, **una luna creciente** en crema cálido #FFF2E2, del mismo tamaño que el sol, **con los ojos cerrados y una sonrisa tranquila** (dormida), y dos estrellitas redondeadas en dorado #A86B12 pegadas a su borde. Se abrazan con un rayo del sol y la punta de la luna, **un poco solapados en el centro**. Contorno suave en teal profundo #00454D en las dos figuras, para que se lean sobre crema, blanco, teal o azul petróleo. **Sin el niño, sin texto.** Fondo totalmente transparente. El conjunto forma **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes (los rayos, cortos y pegados al sol), centrada y ocupando el 80 % del lienzo. Que a 48 px se lea «el día y la noche juntos».
+
+Si los rayos salen finos y largos, pedir: «Rayos cortos, gruesos y redondeados, como gotas de plastilina pegadas al sol». Si la luna sale amarilla, pedir: «La luna es crema clara #FFF2E2, no amarilla: tiene que distinguirse del sol». Si salen cielo o nubes, pedir: «Solo el sol y la luna, sin fondo».
+
+Entregar como `assets/brand/opposites_icon.png`, 1024 × 1024 px con transparencia real.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2 y de la 4 a la 18 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2 y de la 4 a la 19 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 
