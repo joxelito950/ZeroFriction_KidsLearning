@@ -203,6 +203,7 @@ class _VehicleGameViewState extends State<_VehicleGameView> with WidgetsBindingO
             stars: state.stars ?? 0,
             badgeEarned: state.medal != null,
             medal: state.medal,
+            message: AppLocalizations.of(context).vehiclesVictoryMessage,
             festive: state.christmas,
           ),
         VehiclePhase.inviting => PlayInvitation(round: state.gameRound),

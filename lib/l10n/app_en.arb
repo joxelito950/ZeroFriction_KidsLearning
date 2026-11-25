@@ -594,6 +594,18 @@
   "@oddOneOutVictoryMessage": {
     "description": "Line under the celebration title when a level of Odd one out is won (the memory game says 'You found all the pairs'). The child found the different object on every board."
   },
+  "sortingVictoryMessage": "Everything is in its basket.",
+  "@sortingVictoryMessage": {
+    "description": "Subtitle of the celebration when a «Clasificar» board is finished: every object is in its basket."
+  },
+  "vehiclesVictoryMessage": "Every vehicle got to its place.",
+  "@vehiclesVictoryMessage": {
+    "description": "Subtitle of the celebration when an «A su sitio» board is finished: every vehicle is in its place."
+  },
+  "shadowsVictoryMessage": "Every object found its shadow.",
+  "@shadowsVictoryMessage": {
+    "description": "Subtitle of the celebration when a «Sombras» board is finished: every object found its shadow."
+  },
   "parentsSave": "Save",
   "@parentsSave": {
     "description": "Button of a parents zone settings screen (HU-046): applies the changes and goes back to the parents zone. Also in the unsaved-changes dialog."
@@ -985,11 +997,11 @@
   "@sortingGameTitle": {
     "description": "Name of the game «Clasificar» (HU-027 P1), on its menu card and in the game header. Short: the child does not read it."
   },
-  "sortingGameInstructions": "Drag each thing to the basket of its color.",
+  "sortingGameInstructions": "Drag each thing to its basket.",
   "@sortingGameInstructions": {
-    "description": "One line under the game title, for the adult next to the child: drag each object to the basket of its colour."
+    "description": "One line under the game title, for the adult next to the child: drag each object to its basket (by colour, by size or both)."
   },
-  "sortingObjectName": "{object, select, apple{Apple} strawberry{Strawberry} cherries{Cherries} tomato{Tomato} rose{Rose} ladybug{Ladybug} balloon{Balloon} fireEngine{Fire engine} crab{Crab} banana{Banana} corn{Corn} lemon{Lemon} chick{Chick} sunflower{Sunflower} cheese{Cheese} star{Star} taxi{Taxi} greenApple{Green apple} broccoli{Broccoli} cucumber{Cucumber} frog{Frog} turtle{Turtle} tree{Tree} clover{Clover} cactus{Cactus} avocado{Avocado} lizard{Lizard} droplet{Water drop} spoutingWhale{Spouting whale} dolphin{Dolphin} whale{Whale} jeans{Jeans} wave{Wave} fish{Fish} tangerine{Tangerine} carrot{Carrot} pumpkin{Pumpkin} fox{Fox} basketball{Basketball} grapes{Grapes} eggplant{Eggplant} crystalBall{Crystal ball} other{Object}}",
+  "sortingObjectName": "{object, select, apple{Apple} strawberry{Strawberry} cherries{Cherries} tomato{Tomato} rose{Rose} ladybug{Ladybug} balloon{Balloon} fireEngine{Fire engine} banana{Banana} corn{Corn} lemon{Lemon} chick{Chick} sunflower{Sunflower} cheese{Cheese} star{Star} taxi{Taxi} greenApple{Green apple} broccoli{Broccoli} cucumber{Cucumber} frog{Frog} turtle{Turtle} tree{Tree} clover{Clover} cactus{Cactus} avocado{Avocado} lizard{Lizard} droplet{Water drop} spoutingWhale{Spouting whale} dolphin{Dolphin} jeans{Jeans} wave{Wave} fish{Fish} tangerine{Tangerine} carrot{Carrot} pumpkin{Pumpkin} fox{Fox} basketball{Basketball} grapes{Grapes} eggplant{Eggplant} dog{Dog} cat{Cat} rabbit{Rabbit} pear{Pear} peach{Peach} bus{Bus} tractor{Tractor} bicycle{Bicycle} rocket{Rocket} soccerBall{Soccer ball} cookie{Cookie} doughnut{Doughnut} blossom{Blossom} bear{Bear} car{Car} blueCircle{Blue circle} closedUmbrella{Umbrella} other{Object}}",
   "@sortingObjectName": {
     "description": "Name of an object for the screen reader (not visible). One case per object of the game; keep the same keys.",
     "placeholders": {
@@ -1036,6 +1048,40 @@
   "sortingTimeUpFewerObjects": "Time's up! Let's try again with fewer things.",
   "@sortingTimeUpFewerObjects": {
     "description": "Shown when time runs out: a helpful message, never a punishment. The next board has fewer objects."
+  },
+  "sortingSizeName": "{size, select, big{large size} medium{medium size} small{small size} other{size}}",
+  "@sortingSizeName": {
+    "description": "A size for the screen reader (not visible), said after an object or a basket: big, medium or small.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "small"
+      }
+    }
+  },
+  "sortingSizeBasket": "Basket, {size}",
+  "@sortingSizeBasket": {
+    "description": "Screen-reader name (not visible) of a basket that sorts by size. {size} is the size, as in sortingSizeName.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "large size"
+      }
+    }
+  },
+  "sortingWithSize": "{name}, {size}",
+  "@sortingWithSize": {
+    "description": "Screen-reader label (not visible): an object or a coloured basket followed by its size, as in sortingSizeName.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Dog"
+      },
+      "size": {
+        "type": "String",
+        "example": "small size"
+      }
+    }
   },
   "newBadge": "New",
   "@newBadge": {
