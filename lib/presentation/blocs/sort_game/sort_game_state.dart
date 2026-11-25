@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 
 import '../../../domain/settings/game_difficulty.dart';
 import '../../../domain/sorting/sort_board.dart';
-import '../../../domain/sorting/sort_catalog.dart';
 
 /// Fase de un tablero de «Clasificar» (HU-027).
 enum SortPhase {
@@ -36,6 +35,7 @@ class SortGameState {
     this.board,
     this.basketsFirst = true,
     this.placed = const {},
+    this.traySlots = const [],
     this.fails = 0,
     this.moves = 0,
     this.elapsed = Duration.zero,
@@ -66,6 +66,14 @@ class SortGameState {
   /// que llegaron.
   final Set<String> placed;
 
+  /// Lo que hay en cada hueco de la bandeja, por id ([emptySlot] si nada). Sin
+  /// reponer, todos los objetos del tablero en su sitio fijo; en el nivel 8 de
+  /// diamante, los que están a la vista: al clasificar uno, entra otro en su
+  /// hueco (HU-027 4.3).
+  final List<String> traySlots;
+
+  static const String emptySlot = '';
+
   /// Objetos soltados en una cesta equivocada (las estrellas).
   final int fails;
 
@@ -92,20 +100,20 @@ class SortGameState {
 
   List<SortPiece> get pieces => board?.pieces ?? const [];
 
+  /// Objetos a la vista en la bandeja, en el orden de sus huecos.
   List<SortPiece> get trayPieces => [
-        for (final SortPiece piece in pieces)
-          if (!placed.contains(piece.id)) piece,
+        for (final String id in traySlots)
+          if (id != emptySlot && !placed.contains(id)) board!.pieceById(id),
       ];
 
   /// Objetos ya en [basket], en el orden en que llegaron: el primero ocupa el
   /// primer hueco.
-  List<SortPiece> placedAt(SortColor basket) => [
+  List<SortPiece> placedAt(SortBasket basket) => [
         for (final String id in placed)
-          if (board!.pieceById(id) case final SortPiece piece when piece.color == basket) piece,
+          if (board!.pieceById(id) case final SortPiece piece when basket.accepts(piece)) piece,
       ];
 
-  bool canDrag(String id) =>
-      phase == SortPhase.playing && pieces.any((piece) => piece.id == id) && !placed.contains(id);
+  bool canDrag(String id) => phase == SortPhase.playing && traySlots.contains(id) && !placed.contains(id);
 
   /// Fracción de tiempo restante (1 = barra llena), o `null` sin tiempo.
   double? get remainingFraction {
@@ -118,6 +126,7 @@ class SortGameState {
   SortGameState copyWith({
     SortPhase? phase,
     Set<String>? placed,
+    List<String>? traySlots,
     int? fails,
     int? moves,
     Duration? elapsed,
@@ -134,6 +143,7 @@ class SortGameState {
         board: board,
         basketsFirst: basketsFirst,
         placed: placed ?? this.placed,
+        traySlots: traySlots ?? this.traySlots,
         fails: fails ?? this.fails,
         moves: moves ?? this.moves,
         elapsed: elapsed ?? this.elapsed,

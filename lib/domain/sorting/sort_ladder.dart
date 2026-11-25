@@ -1,9 +1,6 @@
-/// Escalera de «Clasificar» (HU-027 4.1 y 4.2): 8 niveles (el 1 es el
-/// tutorial), las ocho rondas de HU-051 y sus estrellas.
-///
-/// Entrega 2: se clasifica por **color** en todas las rondas. El tamaño (oro,
-/// rubí y zafiro) y el color con el tamaño (obsidiana y diamante) llegan en la
-/// entrega 3; hasta entonces esas rondas juegan color con su tiempo y su imán.
+/// Escalera de «Clasificar» (HU-027 4.1 a 4.3): 8 niveles (el 1 es el
+/// tutorial), las ocho rondas de HU-051 y sus estrellas. Color primero, tamaño
+/// después y, al final, las dos cosas a la vez.
 library;
 
 import '../progress/helps.dart';
@@ -12,19 +9,31 @@ import '../settings/game_difficulty.dart';
 import '../shadows/shadow_ladder.dart';
 import 'sort_catalog.dart';
 
-/// Un nivel: cuántos objetos y cuántas cestas reciben alguno, y si lleva una
-/// cesta libre (desde esmeralda).
+/// Qué se clasifica en un tablero.
+enum SortCriterion {
+  /// Por color: bronce, plata y esmeralda.
+  color,
+
+  /// Por tamaño: oro, rubí y zafiro.
+  size,
+
+  /// Color y tamaño a la vez (P5): obsidiana y diamante.
+  colorAndSize,
+}
+
+/// Un nivel: cuántos objetos y cuántas cestas de color reciben alguno, y si
+/// lleva una cesta libre (desde esmeralda).
 final class SortLevel {
   const SortLevel({required this.number, required this.objects, required this.baskets, this.freeBasket = false});
 
   final int number;
   final int objects;
 
-  /// Cestas a las que va algún objeto del tablero.
+  /// Cestas de color a las que va algún objeto del tablero.
   final int baskets;
 
   /// Una cesta más de un color que no tiene ningún objeto: distrae, como el
-  /// sitio libre de «A su sitio». Solo cuenta desde esmeralda.
+  /// sitio libre de «A su sitio». Solo cuenta desde esmeralda y en color.
   final bool freeBasket;
 }
 
@@ -40,11 +49,42 @@ final class SortRules {
 
   bool _from(GameDifficulty first) => round.index >= first.index;
 
+  SortCriterion get criterion => switch (round) {
+        GameDifficulty.bronze || GameDifficulty.silver || GameDifficulty.emerald => SortCriterion.color,
+        GameDifficulty.gold || GameDifficulty.ruby || GameDifficulty.sapphire => SortCriterion.size,
+        GameDifficulty.obsidian || GameDifficulty.diamond => SortCriterion.colorAndSize,
+      };
+
   /// Los 4 colores; naranja y morado desde esmeralda (P4).
   List<SortColor> get colors => _from(GameDifficulty.emerald) ? SortColor.values : SortColor.basic;
 
-  /// Cesta libre desde esmeralda.
-  bool get freeBaskets => _from(GameDifficulty.emerald);
+  /// Los tamaños del tablero (4.2):
+  /// - oro y obsidiana: grande y pequeño;
+  /// - rubí y zafiro: los tres desde el nivel 3 (antes, grande y pequeño);
+  /// - diamante: la pareja de tamaños cambia con el nivel (grande y pequeño en
+  ///   el 2 y el 5, grande y mediano en el 3 y el 6, mediano y pequeño en el 4
+  ///   y el 7) y el nivel 8 tiene los tres (4.3).
+  List<SortSize> get sizes {
+    const List<SortSize> bigSmall = [SortSize.big, SortSize.small];
+    return switch (round) {
+      GameDifficulty.ruby || GameDifficulty.sapphire => level <= 2 ? bigSmall : SortSize.values,
+      GameDifficulty.diamond => switch (level) {
+          8 => SortSize.values,
+          3 || 6 => const [SortSize.big, SortSize.medium],
+          4 || 7 => const [SortSize.medium, SortSize.small],
+          _ => bigSmall,
+        },
+      _ => bigSmall,
+    };
+  }
+
+  /// Emojis distintos en un tablero de tamaño: uno en oro y rubí (se compara
+  /// la misma cosa), dos en zafiro.
+  int get sizeObjects => round == GameDifficulty.sapphire ? 2 : 1;
+
+  /// Cesta libre desde esmeralda, solo en color (en tamaño, una cesta
+  /// «mediana» vacía confundiría).
+  bool get freeBaskets => criterion == SortCriterion.color && _from(GameDifficulty.emerald);
 
   /// Sin tiempo en bronce y plata (la muestra gratis para los más pequeños,
   /// D-043); desde oro, salvo «Jugar sin tiempo».
@@ -61,6 +101,17 @@ final class SortRules {
   /// bandeja) solo en los niveles 1 y 2 de bronce: es una ayuda, y las ayudas
   /// solo van en el tutorial y en bronce ([Helps], HU-027 P6).
   bool get sampleInTray => round == Helps.baseRound && level <= 2;
+
+  /// Nivel 8 de diamante (4.3): 6 cestas (2 colores × 3 tamaños) y una bandeja
+  /// que se repone: [refillVisible] objetos a la vista y, al clasificar uno,
+  /// entra otro, hasta [refillTotal].
+  bool get refill => round == GameDifficulty.diamond && level == SortLadder.maxLevel;
+
+  static const int refillVisible = 4;
+  static const int refillTotal = 12;
+
+  /// El tiempo se cuenta por objeto: el nivel que se repone tiene más.
+  double get timeFactor => refill ? refillTotal / SortLadder.levelAt(level).objects : 1;
 
   @override
   bool operator ==(Object other) =>
