@@ -981,6 +981,62 @@
   "@vehiclesTimeUpFewerVehicles": {
     "description": "Shown when time runs out: a helpful message, never a punishment. The next board has fewer vehicles."
   },
+  "sortingGameTitle": "Sorting",
+  "@sortingGameTitle": {
+    "description": "Name of the game «Clasificar» (HU-027 P1), on its menu card and in the game header. Short: the child does not read it."
+  },
+  "sortingGameInstructions": "Drag each thing to the basket of its color.",
+  "@sortingGameInstructions": {
+    "description": "One line under the game title, for the adult next to the child: drag each object to the basket of its colour."
+  },
+  "sortingObjectName": "{object, select, apple{Apple} strawberry{Strawberry} cherries{Cherries} tomato{Tomato} rose{Rose} ladybug{Ladybug} balloon{Balloon} fireEngine{Fire engine} crab{Crab} banana{Banana} corn{Corn} lemon{Lemon} chick{Chick} sunflower{Sunflower} cheese{Cheese} star{Star} taxi{Taxi} greenApple{Green apple} broccoli{Broccoli} cucumber{Cucumber} frog{Frog} turtle{Turtle} tree{Tree} clover{Clover} cactus{Cactus} avocado{Avocado} lizard{Lizard} droplet{Water drop} spoutingWhale{Spouting whale} dolphin{Dolphin} whale{Whale} jeans{Jeans} wave{Wave} fish{Fish} tangerine{Tangerine} carrot{Carrot} pumpkin{Pumpkin} fox{Fox} basketball{Basketball} grapes{Grapes} eggplant{Eggplant} crystalBall{Crystal ball} other{Object}}",
+  "@sortingObjectName": {
+    "description": "Name of an object for the screen reader (not visible). One case per object of the game; keep the same keys.",
+    "placeholders": {
+      "object": {
+        "type": "String",
+        "example": "strawberry"
+      }
+    }
+  },
+  "sortingBasketName": "{color, select, red{Red basket} yellow{Yellow basket} green{Green basket} blue{Blue basket} orange{Orange basket} purple{Purple basket} other{Basket}}",
+  "@sortingBasketName": {
+    "description": "Name of a basket for the screen reader (not visible): the basket and its colour.",
+    "placeholders": {
+      "color": {
+        "type": "String",
+        "example": "red"
+      }
+    }
+  },
+  "sortingObjectSemantics": "{object} to take to its basket",
+  "@sortingObjectSemantics": {
+    "description": "Screen-reader label (not visible) of an object still in the tray. {object} is its name. With the screen reader the object is chosen first and then its basket.",
+    "placeholders": {
+      "object": {
+        "type": "String",
+        "example": "Strawberry"
+      }
+    }
+  },
+  "sortingBasketWithSemantics": "{basket}: {objects}",
+  "@sortingBasketWithSemantics": {
+    "description": "Screen-reader label (not visible) of a basket that already has objects: the basket and the objects in it, separated by commas.",
+    "placeholders": {
+      "basket": {
+        "type": "String",
+        "example": "Red basket"
+      },
+      "objects": {
+        "type": "String",
+        "example": "Strawberry, Tomato"
+      }
+    }
+  },
+  "sortingTimeUpFewerObjects": "Time's up! Let's try again with fewer things.",
+  "@sortingTimeUpFewerObjects": {
+    "description": "Shown when time runs out: a helpful message, never a punishment. The next board has fewer objects."
+  },
   "newBadge": "New",
   "@newBadge": {
     "description": "Small label on something that arrived with an update (a new game card in the menu, a new row in the parents zone), until it has been opened (HU-041). One short word."

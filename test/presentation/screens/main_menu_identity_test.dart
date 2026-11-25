@@ -5,6 +5,7 @@ import 'package:toddler_logic/l10n/app_localizations.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toddler_logic/main.dart';
 import 'package:toddler_logic/presentation/screens/main_menu_screen.dart';
+import 'package:toddler_logic/presentation/theme/app_palette.dart';
 import 'package:toddler_logic/presentation/widgets/game_icon.dart';
 import 'package:toddler_logic/presentation/widgets/liquid_gold.dart';
 
@@ -113,6 +114,28 @@ void main() {
     expect(find.byKey(const ValueKey<String>('menu-memory-new')), findsNothing);
     expect(find.bySemanticsLabel(RegExp('${l10n.vehiclesGameTitle}, ${l10n.newBadge}')), findsOneWidget);
     semantics.dispose();
+  });
+
+  testWidgets('«Clasificar» is the fifth card: cream with a thick coral border, teal title and «New» (HU-027 P7)',
+      (tester) async {
+    final repository = MockPersistenceRepository();
+    stubPersistenceRepository(repository);
+    when(() => repository.readUserProfile())
+        .thenAnswer((_) async => UserProfile(isPremium: false, isSoundEnabled: true, discovery: Discovery.beforeNews()));
+    await tester.pumpWidget(ToddlerLogicApp(repository: repository, locale: testLocale));
+    await tester.pump();
+    await tester.pump();
+    final Finder card = find.byKey(const ValueKey<String>('menu-sorting'));
+    await tester.ensureVisible(card);
+    final Material material = tester.widget<Material>(card);
+    expect(material.color, AppPalette.warmCream);
+    final RoundedRectangleBorder shape = material.shape! as RoundedRectangleBorder;
+    expect(shape.side.color, AppPalette.softCoral);
+    expect(shape.side.width, greaterThanOrEqualTo(3));
+    expect(tester.widget<Text>(find.descendant(of: card, matching: find.text(l10n.sortingGameTitle))).style!.color,
+        AppPalette.deepTeal);
+    expect(find.byKey(const ValueKey<String>('menu-sorting-icon')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('menu-sorting-new')), findsOneWidget);
   });
 
   testWidgets('during its edition the game card wears a tree, without text (HU-023 R8)', (tester) async {

@@ -338,6 +338,9 @@ class _GameCard extends StatelessWidget {
   /// completo, la medalla pisaba el icono).
   static const double iconShare = 0.85;
 
+  /// Grosor del borde de los juegos nuevos (HU-027 P7).
+  static const double borderWidth = 4;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -358,7 +361,13 @@ class _GameCard extends StatelessWidget {
       child: Material(
         key: ValueKey<String>('menu-${game.keyName}'),
         color: game.background,
-        borderRadius: BorderRadius.circular(24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: switch (game.border) {
+            final Color border => BorderSide(color: border, width: borderWidth),
+            null => BorderSide.none,
+          },
+        ),
         clipBehavior: Clip.antiAlias,
         elevation: 3,
         shadowColor: AppPalette.deepTeal.withValues(alpha: 0.4),

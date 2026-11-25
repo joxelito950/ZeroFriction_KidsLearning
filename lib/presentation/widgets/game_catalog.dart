@@ -5,11 +5,13 @@ import '../../domain/odd_one_out/odd_one_out.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/progress/round_ladder.dart';
 import '../../domain/shadows/shadow_ladder.dart';
+import '../../domain/sorting/sort_ladder.dart';
 import '../../domain/vehicles/vehicle_ladder.dart';
 import '../../l10n/app_localizations.dart';
 import '../screens/memory_game_screen.dart';
 import '../screens/odd_one_out_screen.dart';
 import '../screens/shadow_game_screen.dart';
+import '../screens/sort_game_screen.dart';
 import '../screens/vehicle_game_screen.dart';
 import '../theme/app_palette.dart';
 import 'game_icon.dart';
@@ -27,6 +29,7 @@ final class MenuGame {
     required this.background,
     required this.foreground,
     required this.screen,
+    this.border,
   });
 
   final GameId id;
@@ -44,6 +47,10 @@ final class MenuGame {
   final Color background;
   final Color foreground;
   final Widget Function() screen;
+
+  /// Borde grueso de la tarjeta: los juegos nuevos repiten el crema del fondo
+  /// y se distinguen por él (HU-027 P7, decidido el 2026-11-24).
+  final Color? border;
 }
 
 abstract final class GameCatalog {
@@ -93,6 +100,19 @@ abstract final class GameCatalog {
       background: AppPalette.amber,
       foreground: AppPalette.deepTeal,
       screen: () => const VehicleGameScreen(),
+    ),
+    MenuGame(
+      id: GameId.sorting,
+      keyName: 'sorting',
+      title: (l10n) => l10n.sortingGameTitle,
+      icon: (key, size) => GameIcon.sorting(key: key, size: size),
+      rounds: SortLadder.rounds,
+      // Los cuatro colores con texto ya están usados: crema con borde coral
+      // grueso y texto teal profundo, el estilo de los juegos nuevos (HU-027 P7).
+      background: AppPalette.warmCream,
+      foreground: AppPalette.deepTeal,
+      border: AppPalette.softCoral,
+      screen: () => const SortGameScreen(),
     ),
   ];
 }
