@@ -34,6 +34,10 @@
 | R8 | **Colores:** mano **blanca con contorno teal profundo** y círculo del toque en ámbar, con transparencia (paleta, D-032). Cambiado al verla en el moto g55: la mano en teal profundo con contorno blanco apenas se veía sobre las cartas en azul petróleo (1,74:1); blanca da 6,16:1 sobre las cartas y el contorno la separa del fondo crema (9,73:1). |
 | R9 | **Sin guardar nada:** no hace falta recordar si el tutorial ya se vio, porque solo aparece cuando el niño no toca nada (P3). |
 
+### Cambio del 2026-11-24: la mano es una ayuda
+
+El dueño decide (HU-026 P5, HU-027 P6) que **las ayudas solo van en el tutorial y en la ronda base, bronce**: desde plata, el niño juega solo. La mano guía es una ayuda, así que en los cuatro juegos solo aparece en el tutorial y en bronce. Regla común en `Helps.allowedAt` (`lib/domain/progress/helps.dart`), que usan también los juegos nuevos (el destello de «¿Cuántos hay?», la muestra igual de «Clasificar»). Hecho en la rama `feature/hu-027-1-board`.
+
 ## 4. Encaje con lo ya decidido
 
 | Decisión | Impacto |
