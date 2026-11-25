@@ -1,8 +1,8 @@
-# HU-056 · Juego: El semáforo
+# HU-056 · Juego: Semáforo
 
 | | |
 |---|---|
-| **Estado** | **En refinamiento (2026-11-24).** Es el juego B de HU-052 (sección 3), que pasa a tener su propia historia |
+| **Estado** | **Lista (2026-11-25)**: el dueño responde las preguntas el 2026-11-25 (sección 12). Es el juego B de HU-052 (sección 3), que pasa a tener su propia historia |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | L (5–6 días, 3 entregas) |
@@ -125,7 +125,7 @@ En el tutorial (nivel 1), la mano **espera quieta y abierta** junto a la fila mi
 ## 7. Colores (D-032)
 
 - **El semáforo necesita rojo y verde, que no están en la paleta** de la interfaz. Los únicos tonos cercanos son el **rubí `#8E1F3B`** y el **esmeralda `#1E7F5C`**, que hoy son **exclusivos de las medallas** (HU-051 3.4), y el **ámbar `#ECA463`**, que sí es de la paleta.
-- **Propuesta (P2):** una decisión nueva que permita usar el rubí y el esmeralda **también en las luces del semáforo, y solo ahí** (`TrafficLightView`), con `palette_test` actualizado. No se añade ningún color: se amplía el uso de dos que ya existen.
+- **Decidido (P2, 2026-11-25):** el rubí y el esmeralda se usan **también en las luces del semáforo, y solo ahí** (`TrafficLightView`), con `palette_test` actualizado. No se añade ningún color: se amplía el uso de dos que ya existen.
 - **Calle:** teal profundo al 15 % sobre crema; líneas y paso de cebra en blanco. **Aparcamiento:** huecos con borde ámbar al 50 %.
 - **Caja del semáforo:** teal profundo; luces apagadas, del mismo tono al 20 %.
 
@@ -163,16 +163,16 @@ En el tutorial (nivel 1), la mano **espera quieta y abierta** junto a la fila mi
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿Nombre del juego en el menú? | **«El semáforo»** |
-| P2 | ¿Rojo y verde fuera de la paleta? | **Decisión nueva:** usar el rubí y el esmeralda de las medallas **solo** en las luces del semáforo, con posición, brillo y forma para el daltonismo. Sin semáforo rojo y verde, el juego no enseña lo que promete |
-| P3 | ¿Hay luz ámbar? | **Sí, desde oro**, y cuenta como rojo. Antes no: con dos colores es más fácil esperar |
-| P4 | ¿Se puede arrastrar el coche en vez de tocar? | **No**: el reto es el **cuándo**, no el gesto. Un toque en cualquier coche de la fila mueve el primero |
-| P5 | ¿Los toques en rojo bajan las estrellas? | **Sí, con suavidad** (3★ hasta N ÷ 2 prisas), y solo cuentan los dos primeros de cada rojo. Si no contaran, aporrear sería la mejor forma de jugar y no se practicaría esperar. Nunca se ve como error |
-| P6 | ¿Tiempo desde oro, como los demás? | **Sí, pero calculado con el ciclo** (sobra al menos un ciclo). Un tiempo justo empujaría a tocar en rojo, que es lo contrario de lo que se quiere |
-| P7 | ¿Icono del juego? | **Ilustración 3D** (D-036) con un prompt nuevo: un semáforo de plastilina con un cochecito esperando. La entrega el dueño |
-| P8 | ¿Color de la tarjeta del menú? | Se decide una vez para los juegos nuevos (HU-023); si se aprueba P2, **teal profundo** con el icono del semáforo |
-| P9 | ¿Patitos en el paso de cebra? | **Sí**: dan sentido a esperar sin decir nada, y nunca se cruzan con un coche |
-| P10 | ¿Edición de Navidad como «A su sitio»? | **No en esta historia**: primero se valida la mecánica |
+| P1 | ¿Nombre del juego en el menú? | ✅ Decidido (2026-11-25): **«Semáforo»**, sin artículo, como «Memoria» y «Sombras» |
+| P2 | ¿Rojo y verde fuera de la paleta? | ✅ Decidido (2026-11-25): **el rubí y el esmeralda de las medallas, solo en las luces del semáforo**, con posición, brillo y forma para el daltonismo (sección 7) |
+| P3 | ¿Hay luz ámbar? | ✅ Decidido (2026-11-25): **sí, desde oro**, y cuenta como rojo |
+| P4 | ¿Se puede arrastrar el coche en vez de tocar? | ✅ Decidido (2026-11-25): **no**: un toque en cualquier coche de la fila mueve el primero |
+| P5 | ¿Los toques en rojo bajan las estrellas? | ✅ Decidido (2026-11-25): **sí, con suavidad** (3★ hasta N ÷ 2 prisas), y solo cuentan los dos primeros de cada rojo. Nunca se ve como error |
+| P6 | ¿Tiempo desde oro, como los demás? | ✅ Decidido (2026-11-25): **sí, calculado con el ciclo** (sobra al menos un ciclo) |
+| P7 | ¿Icono del juego? | ✅ Decidido (2026-11-25): **ilustración 3D** (D-036) con el prompt de la **pieza 20** de `docs/brand/PROMPTS-identidad.md`: un semáforo de plastilina con un cochecito esperando. La entrega el dueño |
+| P8 | ¿Color de la tarjeta del menú? | ✅ Decidido: **crema con borde coral grueso y texto teal profundo**, como todos los juegos nuevos (HU-027 P7, confirmado para todos el 2026-11-25). El 2026-11-25 se aceptó la recomendación de teal profundo, pero la decisión común la sustituye |
+| P9 | ¿Patitos en el paso de cebra? | ✅ Decidido (2026-11-25): **sí** |
+| P10 | ¿Edición de Navidad como «A su sitio»? | ✅ Decidido (2026-11-25): **no en esta historia** |
 
 ## 13. Criterios de aceptación
 
