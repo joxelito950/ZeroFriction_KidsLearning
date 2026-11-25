@@ -9,7 +9,7 @@ import 'package:toddler_logic/presentation/widgets/game_header.dart';
 
 /// Prueba rápida de funcionamiento en un emulador o un teléfono (TD-015,
 /// SPECIFICATION §5): la app real, con su Hive y su motor gráfico, abre el
-/// menú, entra y sale de los cuatro juegos y de las actividades sin pantallas
+/// menú, entra y sale de los cinco juegos y de las actividades sin pantallas
 /// y llega al desafío de la Zona de Padres. Se ejecuta con `tool/smoke.ps1` en los emuladores de la versión más
 /// antigua (Android 8.0, API 26) y la más reciente.
 void main() {
@@ -31,7 +31,7 @@ void main() {
     await wait(tester, const Duration(seconds: 2));
   }
 
-  testWidgets('menu, the four games and the parents gate', (tester) async {
+  testWidgets('menu, the five games and the parents gate', (tester) async {
     app.main();
     // En un emulador lento el primer arranque tarda: se espera al menú, como mucho 45 s.
     final DateTime limit = DateTime.now().add(const Duration(seconds: 45));
@@ -41,7 +41,7 @@ void main() {
     await wait(tester);
     expect(find.byType(MainMenuScreen), findsOneWidget);
 
-    for (final String game in ['memory', 'shadows', 'odd-one-out', 'vehicles']) {
+    for (final String game in ['memory', 'shadows', 'odd-one-out', 'vehicles', 'sorting']) {
       final Finder card = find.byKey(ValueKey<String>('menu-$game'));
       await tester.ensureVisible(card);
       await tester.tap(card);

@@ -16,6 +16,7 @@ final class GameSettingsState {
       GameId.shadows: GameDifficulty.bronze,
       GameId.oddOneOut: GameDifficulty.bronze,
       GameId.vehicles: GameDifficulty.bronze,
+      GameId.sorting: GameDifficulty.bronze,
     },
     this.timerDisabled = false,
     this.isPremium = false,
