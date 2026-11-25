@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/progress/game_progress.dart';
+import '../../domain/progress/helps.dart';
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../l10n/app_localizations.dart';
@@ -141,11 +142,14 @@ class _MemoryGameViewState extends State<_MemoryGameView> with WidgetsBindingObs
                 listener: (_, state) => _onState(state),
                 builder: (context, state) => Stack(
                   children: [
-                    // Tutorial visual: si el niño no toca nada, una mano toca una carta (HU-022).
+                    // Tutorial visual: si el niño no toca nada, una mano toca una carta (HU-022),
+                    // solo en el tutorial y en bronce ([Helps]).
                     GestureHint(
                       boardId: state.round,
                       target: _hintKeyFor(state.round),
-                      enabled: state.phase == MemoryRoundPhase.playing && state.cards.isNotEmpty,
+                      enabled: Helps.allowedAt(state.gameRound, state.level) &&
+                          state.phase == MemoryRoundPhase.playing &&
+                          state.cards.isNotEmpty,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
                         child: Column(

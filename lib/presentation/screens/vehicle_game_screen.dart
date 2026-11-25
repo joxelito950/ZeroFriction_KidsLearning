@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/progress/game_progress.dart';
+import '../../domain/progress/helps.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../domain/sound/game_sound.dart';
 import '../../domain/vehicles/vehicle_catalog.dart';
@@ -135,7 +136,7 @@ class _VehicleGameViewState extends State<_VehicleGameView> with WidgetsBindingO
                   return Stack(
                     children: [
                       // Tutorial (HU-022): si el niño no toca nada, una mano lleva
-                      // un vehículo a su sitio.
+                      // un vehículo a su sitio, solo en el tutorial y en bronce ([Helps]).
                       GestureHint(
                         boardId: state.round,
                         target: vehicleKey,
@@ -143,7 +144,9 @@ class _VehicleGameViewState extends State<_VehicleGameView> with WidgetsBindingO
                         dragTo: placeKey,
                         dragGhost:
                             hint == null ? null : FittedBox(child: Text(hint.symbol, textScaler: TextScaler.noScaling)),
-                        enabled: state.phase == VehiclePhase.playing && hint != null,
+                        enabled: Helps.allowedAt(state.gameRound, state.level) &&
+                            state.phase == VehiclePhase.playing &&
+                            hint != null,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                           child: Column(
