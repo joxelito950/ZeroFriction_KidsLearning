@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/odd_one_out/odd_one_out.dart';
+import '../../domain/sorting/sort_ladder.dart';
 import '../../domain/vehicles/vehicle_ladder.dart';
 import '../../domain/progress/game_progress.dart';
 import '../../domain/settings/game_difficulty.dart';
@@ -22,6 +23,7 @@ abstract final class ParentsGamesTexts {
         GameId.shadows => l10n.shadowsGameTitle,
         GameId.oddOneOut => l10n.oddOneOutTitle,
         GameId.vehicles => l10n.vehiclesGameTitle,
+        GameId.sorting => l10n.sortingGameTitle,
       };
 
   /// Resumen de la fila «Juegos» (HU-046 §4.1): la ronda de cada juego.
@@ -138,6 +140,7 @@ class _ParentsGamesPageState extends State<ParentsGamesPage> {
                         round.index <= switch (game) {
                           GameId.oddOneOut => OddOneOut.lastFreeRound,
                           GameId.vehicles => VehicleLadder.lastFreeRound,
+                          GameId.sorting => SortLadder.lastFreeRound,
                           _ => GameDifficulty.diamond,
                         }.index)
                       ChoiceChip(

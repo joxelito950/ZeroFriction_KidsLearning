@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../brand/brand_assets.dart';
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/odd_one_out/odd_one_out.dart';
+import '../../domain/sorting/sort_ladder.dart';
 import '../../domain/vehicles/vehicle_ladder.dart';
 import '../../domain/parental/play_history.dart';
 import '../../domain/parental/progress_summary.dart';
@@ -31,6 +32,7 @@ abstract final class ProgressGames {
         GameId.shadows => ShadowLadder.rounds,
         GameId.oddOneOut => OddOneOut.rounds,
         GameId.vehicles => VehicleLadder.rounds,
+        GameId.sorting => SortLadder.rounds,
       };
 
   static String iconOf(GameId game) => switch (game) {
@@ -38,6 +40,7 @@ abstract final class ProgressGames {
         GameId.shadows => BrandAssets.shadowsIcon,
         GameId.oddOneOut => BrandAssets.oddOneOutIcon,
         GameId.vehicles => BrandAssets.vehiclesIcon,
+        GameId.sorting => BrandAssets.sortingIcon,
       };
 }
 

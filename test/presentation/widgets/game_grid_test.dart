@@ -55,6 +55,6 @@ void main() {
   test('the catalog keeps the arrival order, without repeated games (R3, R6)', () {
     final ids = GameCatalog.all.map((game) => game.id).toList();
     expect(ids.toSet(), hasLength(ids.length));
-    expect(GameCatalog.all.map((game) => game.keyName), ['memory', 'shadows', 'odd-one-out', 'vehicles']);
+    expect(GameCatalog.all.map((game) => game.keyName), ['memory', 'shadows', 'odd-one-out', 'vehicles', 'sorting']);
   });
 }

@@ -2,6 +2,7 @@ import '../../../domain/sound/game_sound.dart';
 import '../memory_game/memory_ladder_state.dart';
 import '../odd_one_out/odd_one_out_state.dart';
 import '../shadow_game/shadow_game_state.dart';
+import '../sort_game/sort_game_state.dart';
 import '../vehicle_game/vehicle_game_state.dart';
 
 /// Qué sonido corresponde a un cambio de estado de los juegos (HU-005 R1, R2).
@@ -62,5 +63,14 @@ abstract final class GameSoundEvents {
     }
     if (previous.round != next.round || next.placed.length <= previous.placed.length) return null;
     return next.vehicles.every(next.placed.contains) ? null : GameSound.match;
+  }
+
+  /// «Clasificar» (HU-027): como «A su sitio».
+  static GameSound? sorting(SortGameState previous, SortGameState next) {
+    if (next.phase == SortPhase.celebrating && previous.phase != SortPhase.celebrating) {
+      return next.medal != null ? GameSound.badge : GameSound.complete;
+    }
+    if (previous.round != next.round || next.placed.length <= previous.placed.length) return null;
+    return next.pieces.every((piece) => next.placed.contains(piece.id)) ? null : GameSound.match;
   }
 }

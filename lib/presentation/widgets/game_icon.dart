@@ -36,6 +36,10 @@ class GameIcon extends StatefulWidget {
   const GameIcon.vehicles({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
       : this(key: key, asset: BrandAssets.vehiclesIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
 
+  /// «Clasificar» (HU-027): tres cestas de tres tamaños con sus pelotas.
+  const GameIcon.sorting({Key? key, required double size, double goldFraction = 0, bool animateGold = false})
+      : this(key: key, asset: BrandAssets.sortingIcon, size: size, goldFraction: goldFraction, animateGold: animateGold);
+
   final String asset;
   final double size;
   final double goldFraction;

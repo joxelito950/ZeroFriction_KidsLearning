@@ -55,6 +55,10 @@ void main() {
   }
 
   testWidgets('one row per option with what is chosen, in the order of HU-046 §4.1', (tester) async {
+    // Alto de sobra: con cinco juegos, el resumen de «Juegos» ocupa más líneas.
+    tester.view.physicalSize = const Size(1080, 3600);
+    tester.view.devicePixelRatio = 2.6;
+    addTearDown(tester.view.reset);
     when(() => repository.readGameProgress(GameId.shadows))
         .thenAnswer((_) async => progressAt(2, round: GameDifficulty.gold));
     await pumpZone(tester, settings: ParentalSettings(dailyLimitMinutes: 60));
