@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/progress/game_progress.dart';
+import '../../domain/progress/helps.dart';
 import '../../domain/memory/memory_ladder.dart';
 import '../../domain/repositories/i_persistence_repository.dart';
 import '../../domain/shadows/shadow_ladder.dart';
@@ -136,7 +137,8 @@ class _ShadowGameViewState extends State<_ShadowGameView> with WidgetsBindingObs
                   final String? hintSymbol = tray.isEmpty ? null : tray.first;
                   return Stack(
                     children: [
-                      // Tutorial (R15): si el niño no toca nada, una mano lleva un objeto a su sombra.
+                      // Tutorial (R15): si el niño no toca nada, una mano lleva un objeto a su sombra,
+                      // solo en el tutorial y en bronce ([Helps]).
                       GestureHint(
                         boardId: state.round,
                         target: objectKey,
@@ -145,7 +147,9 @@ class _ShadowGameViewState extends State<_ShadowGameView> with WidgetsBindingObs
                         dragGhost: hintSymbol == null
                             ? null
                             : FittedBox(child: Text(hintSymbol, textScaler: TextScaler.noScaling)),
-                        enabled: state.phase == ShadowRoundPhase.playing && hintSymbol != null,
+                        enabled: Helps.allowedAt(state.gameRound, state.level) &&
+                            state.phase == ShadowRoundPhase.playing &&
+                            hintSymbol != null,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                           child: Column(

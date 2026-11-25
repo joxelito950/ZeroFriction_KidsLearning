@@ -1,13 +1,12 @@
+import '../places/place_drop.dart';
 import '../shadows/shadow_drop.dart';
 import 'vehicle_catalog.dart';
 
-/// Qué pasa al soltar un vehículo (HU-052 7.1). Los sitios son tarjetas más
-/// grandes que el vehículo y reciben hasta 2, así que se mide qué parte **del
-/// vehículo** cae sobre cada sitio (en Sombras, qué parte de la sombra cubre el
-/// objeto). Reutiliza las cajas y los resultados de Sombras.
+/// Qué pasa al soltar un vehículo (HU-052 7.1): el cálculo común de los
+/// tableros de destinos ([PlaceDrop]) con los sitios de «A su sitio».
 abstract final class VehicleDrop {
   /// Parte de [vehicle] que cae sobre [place], de 0 a 1.
-  static double overlap(ShadowBox vehicle, ShadowBox place) => ShadowDrop.coverage(place, vehicle);
+  static double overlap(ShadowBox vehicle, ShadowBox place) => PlaceDrop.overlap(vehicle, place);
 
   /// Resultado de soltar un vehículo cuyo sitio es [target] en [vehicle].
   /// [places] son los sitios del tablero que aún admiten vehículos.
@@ -16,10 +15,6 @@ abstract final class VehicleDrop {
     required ShadowBox vehicle,
     required Map<Place, ShadowBox> places,
     required double threshold,
-  }) {
-    final ShadowBox? own = places[target];
-    if (own != null && overlap(vehicle, own) >= threshold) return ShadowDropOutcome.snapped;
-    final bool wrong = places.entries.any((entry) => entry.key != target && overlap(vehicle, entry.value) >= threshold);
-    return wrong ? ShadowDropOutcome.wrongShadow : ShadowDropOutcome.missed;
-  }
+  }) =>
+      PlaceDrop.evaluate<Place>(target: target, piece: vehicle, targets: places, threshold: threshold);
 }
