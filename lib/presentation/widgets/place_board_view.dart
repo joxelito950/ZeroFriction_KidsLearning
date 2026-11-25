@@ -494,9 +494,10 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                           child: _Emoji(
                             key: ValueKey<String>(_key('placed-$id')),
                             symbol: _piece(id).symbol,
-                            size: geometry.slotRect(target.id, 0).width *
-                                PlaceBoardGeometry.emojiFraction *
-                                _piece(id).scale,
+                            // Lo colocado llena su hueco: el tamaño ya lo dice
+                            // la cesta, que es más pequeña (visto en el moto g55:
+                            // con la escala de la pieza, apenas se veía).
+                            size: geometry.slotRect(target.id, 0).width * PlaceBoardGeometry.emojiFraction,
                           ),
                         ),
                         if (data.placedBadge case final String badge)
