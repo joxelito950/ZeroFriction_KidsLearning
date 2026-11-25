@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En refinamiento (2026-11-24)** |
+| **Estado** | **Lista (2026-11-25)**: el dueño responde las preguntas el 2026-11-25 (sección 12) |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | M (3 días, 3 entregas) |
@@ -71,13 +71,13 @@ En el tutorial (nivel 1, dos parejas de bronce), la mano toca ☀️ y después 
 | **Plata** | + rápido y lento, mayor y bebé | Dos columnas | No | No |
 | **Oro** | Los 6 anteriores | Mezcladas | No | Sí |
 | **Rubí** | + las variantes (🍦 y ☕, 🐳 y 🐜, 🚀 y 🐌) | Mezcladas | No | Sí |
-| **Esmeralda** | + abierto y cerrado, dormido y despierto | Mezcladas | No | Sí |
-| **Zafiro** | Todos los seguros | Mezcladas | No | Sí |
-| **Obsidiana** | Todos los seguros | Mezcladas | **Sí, una** (P5) | Sí |
-| **Diamante** | Todos, también los dudosos que pasen la validación (5.2) | Mezcladas | Sí, una | Sí |
+| **Esmeralda** | + abierto y cerrado, dormido y despierto | Mezcladas | **Sí, una** (P5) | Sí |
+| **Zafiro** | Todos los seguros | Mezcladas | Sí, una | Sí |
+| **Obsidiana** | Todos los seguros | Mezcladas | Sí, una | Sí |
+| **Diamante** | Todos, también los dudosos que pasen la validación (5.2) | Mezcladas | **Hasta dos**, que nunca son contrarias entre sí (P5) | Sí |
 
 - **Tiempo** desde oro: los tiempos de «¿Cuál es diferente?» por tablero, escalados al número de parejas. Propuesta: **12 s por pareja** en oro bajando hasta **6 s por pareja** en diamante (oro 12, rubí 11, esmeralda 10, zafiro 9, obsidiana 7, diamante 6). Se ajusta en el teléfono. «Jugar sin tiempo» (HU-030) lo quita.
-- **Carta sin pareja:** un dibujo cuyo contrario no está. El tablero se supera sin tocarla; tocarla y después otra carta cuenta como fallo.
+- **Carta sin pareja** (P5, 2026-11-25): un dibujo cuyo contrario no está. **Desde esmeralda, una; en diamante, hasta dos.** Las dos de diamante **nunca son contrarias entre sí**: quien ha llegado hasta ahí entendiendo los contrarios sabe que esas dos no van juntas. El tablero se supera sin tocarlas; tocar una y después otra carta cuenta como fallo.
 - **Estrellas**, con N parejas: 3★ con N ÷ 2 fallos o menos (redondeando hacia arriba), 2★ hasta N, 1★ con más. Es más estricto que «A su sitio» porque aquí se ve todo.
 - **Medalla** al superar el nivel 8 de cada ronda.
 
@@ -118,7 +118,7 @@ En el tutorial (nivel 1, dos parejas de bronce), la mano toca ☀️ y después 
   - grande y pequeño **con** alto y bajo;
   - contento y triste **con** dormido y despierto, y con ruido y silencio (todos son caras);
   - rápido y lento (🐇/🐢) **con** la variante 🚀/🐌.
-- Las mismas reglas valen para la carta sin pareja: nunca puede ser contraria de una carta del tablero.
+- Las mismas reglas valen para las cartas sin pareja: nunca pueden ser contrarias de una carta del tablero **ni entre sí** (en diamante hay dos), ni del mismo concepto cruzado (5.2).
 - Todo con test de sorteo (miles de semillas).
 
 ## 6. Accesibilidad e idiomas
@@ -144,7 +144,7 @@ En el tutorial (nivel 1, dos parejas de bronce), la mano toca ☀️ y después 
 
 - **Cartas:** blancas con borde teal profundo al 35 %; la elegida, halo ámbar (HU-039 R3); las emparejadas, con el borde dorado al 50 % y el emoji al 60 %.
 - **Fondo:** crema cálida. **Sin colores nuevos.**
-- **Tarjeta del menú:** se decide junto con los demás juegos nuevos (P6).
+- **Tarjeta del menú (P6):** ver la nota de P6 en la sección 12.
 
 ## 8. Acceso y «Nuevo»
 
@@ -167,8 +167,8 @@ En el tutorial (nivel 1, dos parejas de bronce), la mano toca ☀️ y después 
 | # | Entrega | Se puede publicar sola |
 |---|---|---|
 | 1 | **Motor de parejas a la vista** (dominio y vista genéricos) con tests, sin juego en el menú | Sí: no cambia nada visible |
-| 2 | **Opuestos de bronce a zafiro**: catálogo seguro, escalera, pantalla, tutorial, menú, progreso, «Nuevo», 9 idiomas | Sí |
-| 3 | **Obsidiana y diamante**: carta sin pareja y parejas dudosas que pasen la validación | Sí |
+| 2 | **Opuestos de bronce a zafiro**: catálogo seguro, escalera, pantalla, tutorial, menú, progreso, «Nuevo», 9 idiomas, y la carta sin pareja desde esmeralda | Sí |
+| 3 | **Obsidiana y diamante**: las dos cartas sin pareja de diamante y las parejas dudosas que pasen la validación | Sí |
 
 ## 11. Tamaño estimado
 
@@ -178,21 +178,21 @@ En el tutorial (nivel 1, dos parejas de bronce), la mano toca ☀️ y después 
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿Nombre del juego en el menú? | **«Opuestos»**: corto y claro para el adulto. Alternativa más infantil: «Al revés» |
-| P2 | ¿Las cartas se juntan tocando las dos, o arrastrando una sobre la otra? | **Tocando**: es un juego de tocar, como Memoria. Arrastrar añadiría el ajuste de HU-039 sin aportar nada |
-| P3 | ¿Dos columnas en bronce y plata? | **Sí**: reduce la búsqueda a la mitad para los de 3 años. Desde oro, mezcladas |
-| P4 | ¿Entran las parejas dudosas (12 a 14)? | **Solo en diamante y tras probarlas** con 3–5 niños de 4–5 años: si más de la mitad duda, se quitan. El juego no las necesita para salir |
-| P5 | ¿Carta sin pareja en obsidiana y diamante? | **Sí, una**: obliga a mirar la pareja entera y no ir por descarte. No antes |
-| P6 | ¿Color de la tarjeta del menú? | Se decide una vez para los juegos nuevos (HU-023). Propuesta: **teal profundo** o **azul petróleo** repetidos, con el icono como diferencia (en la cuadrícula, lo que reconoce el niño es el icono) |
-| P7 | ¿Icono del juego? | **Ilustración 3D** (D-036) con un prompt nuevo: un sol y una luna de plastilina abrazados. La entrega el dueño |
-| P8 | ¿Un tablero por nivel o tres, como «¿Cuál es diferente?»? | **Uno**: con 4–12 cartas cada tablero ya dura lo suficiente |
+| P1 | ¿Nombre del juego en el menú? | ✅ Decidido (2026-11-25): **«Opuestos»** |
+| P2 | ¿Las cartas se juntan tocando las dos, o arrastrando una sobre la otra? | ✅ Decidido (2026-11-25): **tocando** |
+| P3 | ¿Dos columnas en bronce y plata? | ✅ Decidido (2026-11-25): **sí**; desde oro, mezcladas |
+| P4 | ¿Entran las parejas dudosas (12 a 14)? | ✅ Decidido (2026-11-25): **solo en diamante y tras probarlas** con 3–5 niños de 4–5 años |
+| P5 | ¿Carta sin pareja? | ✅ Decidido (2026-11-25): **una desde esmeralda; en diamante, hasta dos**, que nunca son contrarias entre sí (4.2 y 5.2) |
+| P6 | ¿Color de la tarjeta del menú? | ✅ Aceptada (2026-11-25) la recomendación: **teal profundo o azul petróleo repetidos**, con el icono como diferencia. **Por confirmar:** el 2026-11-24 (HU-027 P7) se decidió crema con borde coral grueso para todos los juegos nuevos, y «Clasificar» ya lo usa. Se elige uno de los dos al desarrollar la entrega 2 |
+| P7 | ¿Icono del juego? | ✅ Decidido (2026-11-25): **ilustración 3D** (D-036) con el prompt de la **pieza 19** de `docs/brand/PROMPTS-identidad.md`: un sol y una luna de plastilina abrazados. La entrega el dueño |
+| P8 | ¿Un tablero por nivel o tres, como «¿Cuál es diferente?»? | ✅ Decidido (2026-11-25): **uno** |
 
 ## 13. Criterios de aceptación
 
 1. Todas las cartas se ven en Android 8 (emulador `LowEnd_API26`) y en el moto g55.
 2. Ningún tablero tiene dos respuestas posibles (test de sorteo con los conflictos de 5.2).
 3. Tocar una carta y su contraria las junta con sonido suave; una carta que no es la contraria hace el vaivén, sin sonido de error, y cuenta como fallo y como movimiento.
-4. Bronce y plata en dos columnas y sin tiempo; desde oro, mezcladas y con tiempo; carta sin pareja solo en obsidiana y diamante.
+4. Bronce y plata en dos columnas y sin tiempo; desde oro, mezcladas y con tiempo; una carta sin pareja desde esmeralda y hasta dos en diamante, nunca contrarias entre sí.
 5. Ocho rondas, estrellas y medallas como en los otros juegos.
 6. El nivel 8 (12 cartas) cabe sin desplazar en el compacto en vertical y horizontal, en 9 idiomas y con el texto al máximo.
 7. Sin texto para el niño; el lector nombra cartas y parejas en los 9 idiomas.
