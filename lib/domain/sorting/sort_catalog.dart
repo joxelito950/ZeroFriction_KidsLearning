@@ -4,7 +4,9 @@
 /// - **Por color (5.1):** cada objeto con color tiene **un solo** color, así
 ///   que en un tablero nunca hay dos cestas válidas. Fuera los de color dudoso
 ///   o distinto según la fuente (🍉, 🍑, 🐝, 🌈, 🦋, 🐦, 🚙, 💎, 🧢, ☂️, 🍍) y los
-///   corazones, que son símbolos.
+///   corazones, que son símbolos. Revisados en el moto g55 y en Android 8 el
+///   2026-11-25: fuera 🦀 (naranja en el g55), 🐋 (gris en el g55), 🔮 (azul en
+///   Android 8) y 🎈 como rojo (naranja en Android 8); entra 🌂 como morado.
 /// - **Por tamaño (5.2):** cada tablero tiene una temática, y la muestra de
 ///   las cestas es de esa temática pero nunca está en la bandeja.
 library;
@@ -61,9 +63,7 @@ enum SortObject {
   tomato('🍅', SortColor.red),
   rose('🌹', SortColor.red),
   ladybug('🐞', SortColor.red),
-  balloon('🎈', SortColor.red),
   fireEngine('🚒', SortColor.red),
-  crab('🦀', SortColor.red),
   banana('🍌', SortColor.yellow),
   corn('🌽', SortColor.yellow),
   lemon('🍋', SortColor.yellow),
@@ -85,7 +85,6 @@ enum SortObject {
   droplet('💧', SortColor.blue),
   spoutingWhale('🐳', SortColor.blue),
   dolphin('🐬', SortColor.blue),
-  whale('🐋', SortColor.blue),
   jeans('👖', SortColor.blue),
   wave('🌊', SortColor.blue),
   fish('🐟', SortColor.blue),
@@ -96,8 +95,9 @@ enum SortObject {
   basketball('🏀', SortColor.orange),
   grapes('🍇', SortColor.purple),
   eggplant('🍆', SortColor.purple),
-  crystalBall('🔮', SortColor.purple),
+  closedUmbrella('🌂', SortColor.purple),
   // Solo en los tableros de tamaño (5.2): su color no cuenta.
+  balloon('🎈'),
   dog('🐶'),
   cat('🐱'),
   rabbit('🐰'),

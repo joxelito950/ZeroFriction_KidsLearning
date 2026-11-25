@@ -18,7 +18,10 @@ void main() {
     });
 
     test('objects of doubtful colour never sort by colour', () {
-      const List<String> doubtful = ['🍉', '🍑', '🐝', '🌈', '🦋', '🐦', '🚙', '💎', '🧢', '☂️', '🍍', '❤️', '💛', '💚', '💙', '💜'];
+      // Vistos en el moto g55 y en Android 8 el 2026-11-25: 🦀 naranja, 🐋 gris,
+      // 🔮 azul y 🎈 naranja según la fuente.
+      const List<String> doubtful = ['🍉', '🍑', '🐝', '🌈', '🦋', '🐦', '🚙', '💎', '🧢', '☂️', '🍍', '❤️', '💛', '💚', '💙', '💜',
+        '🦀', '🐋', '🔮', '🎈'];
       for (final SortObject object in SortObject.values.where((object) => object.color != null)) {
         expect(doubtful, isNot(contains(object.symbol)), reason: object.name);
       }
