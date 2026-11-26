@@ -16,6 +16,8 @@ Genera:
 - assets/brand/vehicles_icon.png                icono del juego «A su sitio» (PROMPTS §16, HU-052)
 - assets/brand/counting_icon.png                icono del juego «¿Cuántos hay?» (PROMPTS §17, HU-026)
 - assets/brand/sorting_icon.png                 icono del juego «Clasificar» (PROMPTS §18, HU-027)
+- assets/brand/sorting_basket_back.png          la cesta de «Clasificar» entera, detrás de los objetos (PROMPTS §21, HU-027)
+- assets/brand/sorting_basket_front.png         su pared delantera con los huecos transparentes, delante de los objetos
 - assets/brand/hand_guide.png                   mano guía del tutorial (HU-022)
 - assets/brand/child_resting.png                el niño descansando (PROMPTS §11, HU-009)
 - assets/brand/child_sleeping.png               el niño durmiendo (PROMPTS §12, HU-038)
@@ -98,6 +100,41 @@ def feature_graphic() -> Image.Image:
     return out.convert('RGB')
 
 
+# La cesta de «Clasificar» (PROMPTS §21), en partes del lienzo, medidas en
+# docs/brand/fuentes/cesta-clasificar.png. El borde de arriba de la cuerda
+# delantera es la mitad de abajo de una elipse (centro, semiejes); por debajo
+# de ella va la capa delantera. Las mismas medidas están en SortBasketArt.
+BASKET_RIM_CENTER_Y = 0.471
+BASKET_RIM_HALF_WIDTH = 0.37
+BASKET_RIM_HALF_HEIGHT = 0.054
+BASKET_CUT_MARGIN = 0.008
+BASKET_SIZE = 480
+
+
+def is_basket_hole(r: int, g: int, b: int) -> bool:
+    """Marrón oscuro de los huecos de la rejilla: la herramienta pintó en ellos
+    la pared del fondo. Ni el naranja de las tiras ni el teal de la placa."""
+    return 60 < r < 150 and g < 75 and b < 35
+
+
+def basket_layers(source: Image.Image) -> tuple[Image.Image, Image.Image]:
+    """La cesta entera (detrás de lo colocado) y su parte delantera con los
+    huecos transparentes (delante): así lo colocado asoma por encima del borde
+    y se ve por los huecos. Sin recortar el lienzo: las medidas son fracciones."""
+    back = source.convert('RGBA').resize((BASKET_SIZE, BASKET_SIZE), Image.LANCZOS)
+    front = back.copy()
+    px = front.load()
+    for x in range(BASKET_SIZE):
+        dx = (x + 0.5) / BASKET_SIZE - 0.5
+        inside = max(0.0, 1 - (dx / BASKET_RIM_HALF_WIDTH) ** 2)
+        cut = (BASKET_RIM_CENTER_Y + BASKET_RIM_HALF_HEIGHT * math.sqrt(inside) - BASKET_CUT_MARGIN) * BASKET_SIZE
+        for y in range(BASKET_SIZE):
+            r, g, b, a = px[x, y]
+            if y < cut or is_basket_hole(r, g, b):
+                px[x, y] = (0, 0, 0, 0)
+    return back, front
+
+
 def main() -> None:
     GEN.mkdir(parents=True, exist_ok=True)
     (ROOT / 'assets/brand').mkdir(parents=True, exist_ok=True)
@@ -137,6 +174,9 @@ def main() -> None:
     fit_box(Image.open(SRC / 'icono-clasificar.png'), 256).save(
         ROOT / 'assets/brand/sorting_icon.png', optimize=True
     )
+    back, front = basket_layers(Image.open(SRC / 'cesta-clasificar.png'))
+    back.save(ROOT / 'assets/brand/sorting_basket_back.png', optimize=True)
+    front.save(ROOT / 'assets/brand/sorting_basket_front.png', optimize=True)
     # La mano se recorta igual que los iconos: la punta del índice queda en el
     # 12 % del ancho y el 8 % del alto (GestureHint.fingertip).
     fit_box(Image.open(SRC / 'mano-guia.png'), 256).save(ROOT / 'assets/brand/hand_guide.png', optimize=True)

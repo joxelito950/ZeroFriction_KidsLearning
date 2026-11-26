@@ -173,6 +173,8 @@ Si los rayos salen finos y largos, pedir: «Rayos cortos, gruesos y redondeados,
 
 Entregar como `assets/brand/opposites_icon.png`, 1024 × 1024 px con transparencia real.
 
+**Recibida el 2026-11-26** (`docs/brand/fuentes/icono-opuestos.png`, 1254 × 1254, transparencia real). Cumple: sol ámbar con rayos cortos y redondeados, mejillas coral y ojos abiertos; luna crema dormida y sonriente; abrazados y un poco solapados en el centro; contorno teal común que la separa de la crema; sin niño ni texto; silueta compacta, y a 48 px se lee «el día y la noche juntos». Diferencias menores que no impiden usarla: las estrellas son ámbar y no dorado #A86B12, el sol abraza con un brazo en vez de con un rayo, y ocupa el 97 % del lienzo (al integrarla se recorta a su contorno y se reduce a 256 px). Se integra con HU-036.
+
 ## 20. Icono del juego «Semáforo» (silueta cerrada para el dorado, HU-056)
 
 Es el único dibujo con rojo y verde: el dueño decidió (HU-056 P2) usar **solo en el semáforo** el rubí y el esmeralda de las medallas.
@@ -185,11 +187,28 @@ Si las luces salen en rojo y verde intensos, pedir: «La roja es rubí oscuro #8
 
 Entregar como `assets/brand/traffic_light_icon.png`, 1024 × 1024 px con transparencia real.
 
+## 21. La cesta de «Clasificar» (destino del juego, HU-027, 2026-11-26)
+
+Sustituye a la cesta dibujada con código, que «se nota forzada» (dueño, 2026-11-26). La app usa **una sola imagen dos veces**: entera detrás de los objetos y, recortada desde el borde delantero hacia abajo, delante de ellos. Por eso la rejilla de la pared delantera tiene que tener **huecos de verdad transparentes**: por ellos se ven los objetos que hay dentro. Va sobre fondo blanco, en 2 a 6 cestas por tablero.
+
+> [Bloque común, sin el niño]
+> **Una cesta de mimbre de juguete** de plastilina, **vacía**, vista **de frente y un poco desde arriba**, de modo que se vea el borde como un óvalo y, por dentro, la pared del fondo. Forma ancha y baja, un poco más estrecha abajo que arriba, con la base plana. **Un asa** en arco, gruesa y redondeada, que sale de los dos lados del borde.
+> **La pared delantera es una rejilla de tiras trenzadas** gruesas y redondeadas (unas 4 tiras horizontales y 6 verticales), con **huecos cuadrados grandes y totalmente transparentes** entre las tiras: a través de ellos se ve la pared del fondo de la cesta. Los huecos ocupan más o menos la mitad de la pared delantera. **La pared del fondo y la base son macizas**, sin huecos.
+> En el centro de la pared delantera, **una placa redonda lisa en crema cálido #FFF2E2** con borde teal profundo #00454D, sin nada dibujado: ahí la app pone el objeto de muestra. La placa ocupa un tercio del ancho de la cesta y tapa los huecos que tiene detrás.
+> Colores: tiras de mimbre en **ámbar #ECA463** con sombras en dorado #A86B12; el borde, un rollo trenzado más grueso del mismo ámbar; la pared del fondo, por dentro, en **ámbar más oscuro** para que se note la profundidad; contorno suave en teal profundo #00454D para separarla del fondo blanco. **Sin frutas ni nada dentro, sin cara, sin texto, sin el niño, sin sombra proyectada en el suelo.** Fondo totalmente transparente.
+> **Encuadre exacto** (la app recorta por estas líneas): la cesta centrada, con el **borde ocupando el 90 % del ancho del lienzo**; la **parte más alta del asa al 6 % del alto**; el **óvalo del borde entre el 44 % y el 56 % del alto**; la **base al 96 % del alto**. Nada se sale del lienzo.
+
+Si los huecos salen blancos o crema en vez de transparentes, pedir: «Los huecos de la rejilla tienen que ser transparentes, como el fondo: se tiene que ver a través de ellos». Si la cesta sale llena, pedir: «La cesta está vacía; la app pone los objetos». Si sale de lado o muy desde arriba, pedir: «De frente, con la cámara un poco más alta que el borde: se ve el óvalo del borde, pero no el fondo de la base».
+
+Entregar el original en `docs/brand/fuentes/cesta-clasificar.png`, 1024 × 1024 px con transparencia real. Al integrarla se miden en la imagen el óvalo del borde y la placa, y con esas medidas se colocan los objetos y la muestra.
+
+**Recibida e integrada el 2026-11-26** (1254 × 1254, transparencia real). Cumple el estilo: mimbre de plastilina, borde trenzado, asa, placa crema con borde teal y contorno teal. **Los huecos no salieron transparentes:** muestran la pared del fondo en marrón oscuro (el texto pedía las dos cosas a la vez). No hace falta repetirla: `tool/brand/prepare_brand_images.py` saca dos capas, `sorting_basket_back.png` (entera) y `sorting_basket_front.png` (por debajo del borde delantero, con el marrón de los huecos vuelto transparente). Encuadre real: asa al 2 %, boca entre el 41,5 % y el 52,5 % (borde delantero), base al 98 %; el mimbre es más naranja que el ámbar #ECA463. Vista en el emulador `Medium_Phone_API_37.0` con 2 y 3 cestas.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2 y de la 4 a la 20 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2 y de la 4 a la 21 tienen **transparencia real** (en la 21, también los huecos de la rejilla): al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 

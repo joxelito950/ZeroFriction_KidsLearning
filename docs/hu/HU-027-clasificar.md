@@ -28,7 +28,9 @@
 
 ### 3.1 El tablero
 
-- **Arriba (o a la izquierda en horizontal), las cestas:** tarjetas blancas con borde teal y, arriba, un **objeto de muestra** grande. La muestra dice qué va dentro: una 🍓 para lo rojo; para cada tamaño, un objeto de la temática del tablero en ese tamaño (sección 5.2). Abajo, **3 huecos** para lo que llega.
+- **Arriba (o a la izquierda en horizontal), las cestas:** **cestas dibujadas** (asa, borde y pared de mimbre) y, en la pared, una **etiqueta redonda con el objeto de muestra**. La muestra dice qué va dentro: una 🍓 para lo rojo; para cada tamaño, un objeto de la temática del tablero en ese tamaño (sección 5.2). Lo que llega se coloca **dentro**, en 3 huecos sobre el borde: cada objeto queda un tercio por detrás de la pared delantera, como si hubiera caído en la cesta, y se pinta casi del ancho de su hueco para que se vean varios a la vez.
+  - **Cambio del 2026-11-26** (decidido por el dueño): un tester no entendía qué era la cesta. Antes era una tarjeta crema con la muestra grande arriba, igual que una pieza de la bandeja, y con los huecos sin dibujar. Visto en el emulador `Medium_Phone_API_37.0`: la cesta se reconoce y lo colocado se ve dentro. «A su sitio» sigue con sus tarjetas.
+  - **Ilustración (2026-11-26):** la cesta dibujada con código «se notaba forzada» y no encajaba con la identidad; la sustituye una **cesta de mimbre de plastilina** con rejilla (pieza 21 de `docs/brand/PROMPTS-identidad.md`). La app la pinta entera detrás de los objetos y, recortada desde el borde delantero y con los huecos transparentes, delante de ellos: los objetos asoman casi dos tercios por encima del borde y el resto se ve por los huecos. La muestra va en la placa crema de la ilustración. Cuando el objeto arrastrado encajaría, un halo ámbar detrás de la cesta. Vista en el emulador con 2 y 3 cestas. En el moto g55, un emoji plano como 🐟 quedaba tapado por la cuerda delantera: los objetos ahora se hunden solo una quinta parte de su hueco y asoman cuatro quintos.
 - **La muestra no es una pista** (P6, 2026-11-24): fuera del tutorial y de los niveles 1 y 2 de bronce, la muestra **nunca** es uno de los objetos de la bandeja. Las ayudas solo van en el tutorial y en la ronda base (la misma regla de HU-026 P5).
 - **Abajo (o a la derecha), la bandeja** con los objetos, como en «A su sitio».
 - Con la mano izquierda y en horizontal, las cestas pasan al otro lado (HU-031), como en Sombras y «A su sitio».
@@ -160,7 +162,7 @@ Análisis:
 
 ## 7. Colores (D-032)
 
-- **Cestas:** blanco con borde teal profundo al 35 %; al recibir un objeto, borde ámbar (como los sitios de «A su sitio»).
+- **Cestas:** la ilustración de mimbre (pieza 21), con placa crema y borde teal para la muestra. Cuando el objeto arrastrado encajaría, un **halo ámbar** detrás (el borde ámbar de «A su sitio» no se vería sobre el mimbre). La interfaz no gana colores nuevos (2026-11-26).
 - **Bandeja:** crema cálida.
 - Los colores de las cestas son los **de los emojis de muestra**; **ningún color nuevo** en la interfaz.
 - **Tarjeta del menú (P7, decidido el 2026-11-24):** **crema con borde coral grueso y texto teal profundo.** Los cuatro juegos ya usan azul petróleo, teal profundo, blanco y ámbar; el coral no sirve para fondo con texto (C4) y el dorado es del progreso. Es el color de los juegos nuevos (HU-026, HU-036, HU-056), con el icono como diferencia. Se confirma en el teléfono.
