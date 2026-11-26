@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (desarrollo iniciado el 2026-11-09; las 4 entregas hechas; versión sin pago). Refinamiento cerrado el 2026-11-06 |
+| **Estado** | **Hecha (sin pago)**: las 4 entregas hechas desde el 2026-11-10 y publicada en la prueba cerrada; el pago llega con HU-006. Sus cambios posteriores van en HU-050, HU-051 y HU-040. Refinamiento cerrado el 2026-11-06 |
 | **Épica** | E4 · Nuevos juegos (y E3 · Premium) |
 | **Prioridad** | P2: es el próximo juego |
 | **Tamaño** | L (estimación previa; se confirma al cerrar el refinamiento) |

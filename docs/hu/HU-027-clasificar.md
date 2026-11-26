@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En desarrollo (2026-11-24)**: preguntas respondidas el 2026-11-24 (sección 12); **las tres entregas hechas** (sección 10); falta mirar en el teléfono los colores y el nivel 8 de diamante. Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
+| **Estado** | **En curso**: preguntas respondidas el 2026-11-24 (sección 12); **las tres entregas en `develop`** (sección 10) con los arreglos de la revisión en el moto g55 (mensaje de victoria propio, objetos que cambian de color con la fuente, objetos que llenan su hueco). Falta: los colores de los emojis en el emulador de Android 8 y en el moto g55, y el nivel 8 de diamante. Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | M–L (3–4 días, 3 entregas) |

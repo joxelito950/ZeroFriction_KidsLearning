@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (desarrollo iniciado el 2026-11-04; refinamiento cerrado el 2026-10-27) |
+| **Estado** | **Hecha**: probada por el dueño en el moto g55 el 2026-11-04 y fusionada (PR #72 y #74). Refinamiento cerrado el 2026-10-27 |
 | **Épica** | E2 · Zona de Padres |
 | **Prioridad** | P2 (sube el 2026-11-04: crea `ParentalSettings`, que necesitan HU-030, HU-016 y HU-031) |
 | **Tamaño** | M (3 días) |
