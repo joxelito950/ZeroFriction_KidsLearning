@@ -39,6 +39,33 @@ void main() {
       }
     });
 
+    test('in the basket the objects sit on the front rim, their bottom part inside, in a row around its middle', () {
+      final PlaceBoardGeometry geometry = PlaceBoardGeometry.compute(
+        size: const Size(400, 700),
+        placesFirst: true,
+        targets: baskets,
+        pieces: const ['a', 'b', 'c', 'd'],
+        devicePixelRatio: 2.6,
+        slots: 3,
+        baskets: true,
+      );
+      for (final BoardTarget basket in baskets) {
+        final Rect card = geometry.targetRects[basket.id]!;
+        final double rim = card.top + card.height * PlaceBoardGeometry.basketRim;
+        final List<Rect> slots = [for (var i = 0; i < 3; i++) geometry.slotRect(basket.id, i)];
+        for (final Rect slot in slots) {
+          expect(slot.width, closeTo(card.width * PlaceBoardGeometry.basketSlot, 1e-9));
+          expect(slot.bottom - rim, closeTo(slot.height * PlaceBoardGeometry.basketSink, 1e-9),
+              reason: '${basket.id}: its bottom part behind the lattice');
+          expect(slot.left >= card.left && slot.right <= card.right && slot.top >= card.top, isTrue);
+        }
+        expect(slots[1].center.dx, closeTo(card.center.dx, 1e-9), reason: 'the middle one, at the middle');
+        expect(slots[1].left - slots[0].left, closeTo(card.width * PlaceBoardGeometry.basketSlotStep, 1e-9));
+        expect(slots[2].left - slots[1].left, closeTo(card.width * PlaceBoardGeometry.basketSlotStep, 1e-9));
+        expect(geometry.slotRect(basket.id, 7), slots[2], reason: 'extra pieces share the last slot');
+      }
+    });
+
     test('two slots keep the «A su sitio» layout', () {
       final PlaceBoardGeometry geometry = compute(slots: 2);
       final Rect card = geometry.targetRects['big']!;

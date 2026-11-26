@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Desarrollada** (2026-11-18, rama `feature/hu-023-menu-grid`). Falta verla en el moto g55. Primera pieza del próximo release a la prueba cerrada |
+| **Estado** | **Hecha** (2026-11-18, PR #142): vista en el moto g55 en vertical y horizontal (iconos al 85 % para dejar libre la esquina de la medalla). «Nuevo» (R7) y el adorno de edición (R8) llegaron con HU-041 y HU-042 en `1.0.0-rc.6` |
 | **Épica** | E4 · Nuevos juegos |
 | **Prioridad** | P2: **condición para empezar el cuarto juego** (decidido el 2026-11-11). El tercero (HU-025) cabe aún en la lista de botones anchos |
 | **Tamaño** | M (estimación: 2–3 días) |

@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../brand/brand_assets.dart';
 import '../../domain/places/place_drop.dart';
 import '../../domain/shadows/shadow_drop.dart';
 import '../blocs/how_to_play/how_to_play_cubit.dart';
@@ -60,6 +61,9 @@ final class PlaceBoardData {
     required this.placesFirst,
     this.slots = 2,
     this.placedBadge,
+    this.trayLayout,
+    this.balanced = false,
+    this.baskets = false,
   });
 
   /// Cambia con cada tablero: al cambiar, se olvida lo que estaba en el aire.
@@ -80,6 +84,24 @@ final class PlaceBoardData {
 
   /// Un adorno junto a cada pieza colocada (el regalo de Navidad de HU-052 §6).
   final String? placedBadge;
+
+  /// Qué pieza va en cada hueco de la bandeja, en orden. Un id que no es de
+  /// ninguna pieza deja el hueco vacío. Sin él, todas las piezas, cada una en
+  /// su hueco fijo. Sirve para la bandeja que se repone de «Clasificar»
+  /// (HU-027 4.3): los huecos no se mueven al entrar una pieza nueva.
+  final List<String>? trayLayout;
+
+  /// Reparte el espacio entre destinos y bandeja buscando las piezas más
+  /// grandes, en vez de la proporción fija de «A su sitio». Lo usa
+  /// «Clasificar», con piezas pequeñas que no pueden bajar de 28 dp (HU-027
+  /// 3.4).
+  final bool balanced;
+
+  /// Los destinos son cestas dibujadas (HU-027 3.1, 2026-11-26): lo colocado
+  /// queda detrás de la pared delantera, como si hubiera caído dentro, y la
+  /// muestra es una etiqueta en esa pared. Un tester no veía que la tarjeta
+  /// con la muestra fuera una cesta: parecía un objeto más.
+  final bool baskets;
 }
 
 /// Dónde va cada cosa en un tablero de destinos, en coordenadas del propio
@@ -93,6 +115,7 @@ final class PlaceBoardGeometry {
     required this.trayRects,
     required this.pieceCell,
     required this.slots,
+    required this.baskets,
   });
 
   static const double gap = 12;
@@ -109,6 +132,29 @@ final class PlaceBoardGeometry {
   static const double slotFractionTwo = 0.4;
   static const double slotFractionThree = 0.28;
 
+  /// En la cesta (PROMPTS §21, medidas en partes de la ilustración, como en
+  /// `tool/brand/prepare_brand_images.py`): el borde de arriba de la cuerda
+  /// delantera en el centro, el lado de cada hueco y su separación, y la placa
+  /// de la muestra. Lo colocado asoma cuatro quintos de su hueco por encima
+  /// del borde; lo de abajo, detrás de la rejilla, se ve por sus huecos. Con
+  /// la mitad dentro, en el emulador apenas se veía; con un tercio, en el moto
+  /// g55 un emoji plano como 🐟 (su dibujo ocupa la franja central de la caja)
+  /// quedaba tapado por la cuerda. Los huecos se solapan un poco, como cosas
+  /// amontonadas en una cesta.
+  static const double basketRim = 0.525;
+  static const double basketSlot = 0.30;
+  static const double basketSlotStep = 0.22;
+  static const double basketSink = 0.2;
+  static const double basketPlateSide = 0.24;
+  static const Offset basketPlateCenter = Offset(0.494, 0.702);
+
+  /// En una cesta, el emoji llena casi todo su hueco: visto en el emulador,
+  /// con la parte de las tarjetas los objetos se veían pequeños dentro.
+  static const double basketEmojiFraction = 0.95;
+
+  /// Lo que ocupa el emoji de una pieza colocada en su hueco.
+  double get placedEmojiFraction => baskets ? basketEmojiFraction : emojiFraction;
+
   factory PlaceBoardGeometry.compute({
     required Size size,
     required bool placesFirst,
@@ -117,6 +163,8 @@ final class PlaceBoardGeometry {
     required double devicePixelRatio,
     int slots = 2,
     bool leftHanded = false,
+    bool balanced = false,
+    bool baskets = false,
   }) {
     RangeError.checkValueInInterval(slots, 1, 3, 'slots');
     final bool horizontal = size.width > size.height;
@@ -125,23 +173,40 @@ final class PlaceBoardGeometry {
     placesFirst = placesFirst != (horizontal && leftHanded);
     final int targetCount = math.max(targets.length, 1);
     final int pieceCount = math.max(pieces.length, 1);
-    // Los destinos llevan dentro sus piezas: reciben algo más de espacio.
-    final double share = (targetCount * 1.4) / (targetCount * 1.4 + pieceCount);
     final double main = (horizontal ? size.width : size.height) - gap;
-    final double targetMain = main * share;
-    final double trayMain = main - targetMain;
+    final double maxCell = maxEmojiPhysicalPx / devicePixelRatio / emojiFraction;
+    final bool first = placesFirst;
 
     Rect zone(double start, double length) =>
         horizontal ? Rect.fromLTWH(start, 0, length, size.height) : Rect.fromLTWH(0, start, size.width, length);
-    final Rect targetZone = placesFirst ? zone(0, targetMain) : zone(trayMain + gap, targetMain);
-    final Rect trayZone = placesFirst ? zone(targetMain + gap, trayMain) : zone(0, trayMain);
+    (Rect, Rect, double, double) split(double share) {
+      final double targetMain = main * share;
+      final double trayMain = main - targetMain;
+      final Rect targetZone = first ? zone(0, targetMain) : zone(trayMain + gap, targetMain);
+      final Rect trayZone = first ? zone(targetMain + gap, trayMain) : zone(0, trayMain);
+      final double targetCell = math.max(0, _bestCell(targetCount, targetZone.deflate(padding).size));
+      final double pieceCell = math.max(
+        0,
+        // Como mucho el 80 % del destino (el 90 % en el reparto equilibrado:
+        // la caja de soltar ya se limita al destino más pequeño).
+        [_bestCell(pieceCount, trayZone.deflate(padding).size), maxCell, targetCell * (balanced ? 0.9 : 0.8)]
+            .reduce(math.min),
+      );
+      return (targetZone, trayZone, targetCell, pieceCell);
+    }
 
-    final double maxCell = maxEmojiPhysicalPx / devicePixelRatio / emojiFraction;
-    final double targetCell = math.max(0, _bestCell(targetCount, targetZone.deflate(padding).size));
-    final double pieceCell = math.max(
-      0,
-      [_bestCell(pieceCount, trayZone.deflate(padding).size), maxCell, targetCell * 0.8].reduce(math.min),
-    );
+    // Los destinos llevan dentro sus piezas: reciben algo más de espacio.
+    var (Rect targetZone, Rect trayZone, double targetCell, double pieceCell) =
+        split((targetCount * 1.4) / (targetCount * 1.4 + pieceCount));
+    if (balanced) {
+      // La proporción con las piezas más grandes; a igualdad, destinos mayores.
+      for (var share = 0.2; share <= 0.8; share += 0.02) {
+        final (Rect, Rect, double, double) candidate = split(share);
+        if (candidate.$4 > pieceCell + 0.01 || (candidate.$4 > pieceCell - 0.01 && candidate.$3 > targetCell)) {
+          (targetZone, trayZone, targetCell, pieceCell) = candidate;
+        }
+      }
+    }
     final Map<String, Rect> cells =
         _place([for (final target in targets) target.id], targetZone.deflate(padding), targetCell);
     return PlaceBoardGeometry._(
@@ -154,6 +219,7 @@ final class PlaceBoardGeometry {
       trayRects: _place(pieces, trayZone.deflate(padding), pieceCell),
       pieceCell: pieceCell,
       slots: slots,
+      baskets: baskets,
     );
   }
 
@@ -168,10 +234,21 @@ final class PlaceBoardGeometry {
   /// Huecos de cada destino.
   final int slots;
 
+  /// Los destinos son cestas ([PlaceBoardData.baskets]).
+  final bool baskets;
+
   /// Hueco [index] de una pieza colocada en [target]. Si hay más piezas que
   /// huecos, las de más comparten el último.
   Rect slotRect(String target, int index) {
     final Rect card = targetRects[target]!;
+    if (baskets) {
+      // En fila sobre el borde, centrados en la boca de la cesta.
+      final double side = card.width * basketSlot;
+      final int at = math.min(index, slots - 1);
+      final double centerX = card.center.dx + (at - (slots - 1) / 2) * card.width * basketSlotStep;
+      final double rim = card.top + card.height * basketRim;
+      return Rect.fromLTWH(centerX - side / 2, rim - side * (1 - basketSink), side, side);
+    }
     final double side = card.width * (slots <= 2 ? slotFractionTwo : slotFractionThree);
     final double spacing = (card.width - slots * side) / (slots + 1);
     final int at = math.min(index, slots - 1);
@@ -269,6 +346,10 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
   Rect _flightFrom = Rect.zero;
   Rect _flightTo = Rect.zero;
 
+  /// El vuelo termina dentro de un destino (no vuelve a la bandeja): en las
+  /// cestas, cae por detrás de la pared delantera.
+  bool _flightIn = false;
+
   /// Pieza elegida tocando (o con el lector de pantalla), a la espera de su destino.
   String? _selected;
 
@@ -315,6 +396,24 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
   Rect _draggedRect(PlaceBoardGeometry geometry) =>
       Rect.fromCenter(center: _dragCenter, width: geometry.pieceCell, height: geometry.pieceCell);
 
+  /// Lo que cuenta al soltar: la parte visible de la pieza (una pieza pequeña
+  /// es pequeña, HU-027 3.4), nunca más grande que el destino más pequeño.
+  /// Así una pieza puede caer entera en una cesta pequeña. Con todas las
+  /// piezas y destinos al mismo tamaño («A su sitio») es la celda de siempre.
+  Rect _dropRect(PlaceBoardGeometry geometry, String piece) {
+    final double smallest =
+        geometry.targetRects.values.fold(double.infinity, (side, rect) => math.min(side, rect.width));
+    final double side =
+        math.min(geometry.pieceCell * math.max(_piece(piece).scale, minDropScale), smallest * maxDropShare);
+    return Rect.fromCenter(center: _dragCenter, width: side, height: side);
+  }
+
+  /// La caja de una pieza muy pequeña no baja de esta parte de su celda.
+  static const double minDropScale = 0.5;
+
+  /// La caja de la pieza, como mucho esta parte del destino más pequeño.
+  static const double maxDropShare = 0.9;
+
   Map<String, ShadowBox> _targetBoxes(PlaceBoardGeometry geometry) => {
         for (final entry in geometry.targetRects.entries) entry.key: PlaceBoardGeometry.boxOf(entry.value),
       };
@@ -323,9 +422,11 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
     final PlaceBoardGeometry? geometry = _geometry;
     if (_dragged != piece || geometry == null) return;
     final Rect from = _draggedRect(geometry);
-    final ShadowDropOutcome outcome = widget.onDrop(piece, PlaceBoardGeometry.boxOf(from), _targetBoxes(geometry));
-    final Rect to = outcome == ShadowDropOutcome.snapped ? _slotOf(geometry, piece) : geometry.trayRects[piece]!;
-    _fly(piece, from: from, to: to);
+    final ShadowDropOutcome outcome =
+        widget.onDrop(piece, PlaceBoardGeometry.boxOf(_dropRect(geometry, piece)), _targetBoxes(geometry));
+    final bool snapped = outcome == ShadowDropOutcome.snapped;
+    final Rect to = snapped ? _slotOf(geometry, piece) : geometry.trayRects[piece]!;
+    _fly(piece, from: from, to: to, into: snapped);
   }
 
   /// El hueco del destino donde queda [piece]: el siguiente libre. El estado
@@ -337,13 +438,14 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
     return geometry.slotRect(target, index);
   }
 
-  void _fly(String piece, {required Rect from, required Rect to}) {
+  void _fly(String piece, {required Rect from, required Rect to, required bool into}) {
     setState(() {
       _dragged = null;
       if (_reduceMotion) return;
       _flying = piece;
       _flightFrom = from;
       _flightTo = to;
+      _flightIn = into;
     });
     if (!_reduceMotion) _flight.forward(from: 0);
   }
@@ -354,7 +456,7 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
     final String? dragged = _dragged;
     if (dragged == null || _data.targetOf(dragged) != target) return false;
     return PlaceDrop.overlap(
-          PlaceBoardGeometry.boxOf(_draggedRect(geometry)),
+          PlaceBoardGeometry.boxOf(_dropRect(geometry, dragged)),
           PlaceBoardGeometry.boxOf(geometry.targetRects[target]!),
         ) >=
         _data.coverageToSnap;
@@ -380,9 +482,8 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
     final Rect? tray = geometry?.trayRects[selected];
     final Rect? at = geometry?.targetRects[target];
     if (tray == null || at == null || slotBefore == null) return;
-    _fly(selected,
-        from: outcome == ShadowDropOutcome.snapped ? tray : at,
-        to: outcome == ShadowDropOutcome.snapped ? slotBefore : tray);
+    final bool snapped = outcome == ShadowDropOutcome.snapped;
+    _fly(selected, from: snapped ? tray : at, to: snapped ? slotBefore : tray, into: snapped);
   }
 
   @override
@@ -402,13 +503,41 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
           size: constraints.biggest,
           placesFirst: data.placesFirst,
           targets: data.targets,
-          pieces: [for (final piece in data.pieces) piece.id],
+          pieces: data.trayLayout ?? [for (final piece in data.pieces) piece.id],
           devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
           slots: data.slots,
           leftHanded: how.leftHanded,
+          balanced: data.balanced,
+          baskets: data.baskets,
         );
         _geometry = geometry;
         final double pieceEmoji = geometry.pieceCell * PlaceBoardGeometry.emojiFraction;
+        // En las cestas, lo que cae dentro vuela por detrás de la pared delantera.
+        final bool flightBehind = data.baskets && _flightIn;
+
+        Widget flight() => AnimatedBuilder(
+              animation: _flight,
+              builder: (context, _) {
+                final double t = Curves.easeOutCubic.transform(_flight.value);
+                final Rect rect = Rect.lerp(_flightFrom, _flightTo, t)!;
+                final double scale = _piece(_flying!).scale;
+                // Lo que cae en una cesta acaba al tamaño de lo colocado.
+                final double size = flightBehind
+                    ? _flightFrom.width * PlaceBoardGeometry.emojiFraction * scale * (1 - t) +
+                        _flightTo.width * geometry.placedEmojiFraction * t
+                    : rect.width * PlaceBoardGeometry.emojiFraction * scale;
+                return Positioned.fromRect(
+                  rect: rect,
+                  child: IgnorePointer(
+                    child: _Emoji(
+                      key: ValueKey<String>(_key('flying')),
+                      symbol: _piece(_flying!).symbol,
+                      size: size,
+                    ),
+                  ),
+                );
+              },
+            );
 
         return Stack(
           clipBehavior: Clip.none,
@@ -426,6 +555,7 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                     target: target,
                     almostKey: _key('almost-${target.id}'),
                     almost: _wouldSnap(geometry, target.id),
+                    basket: data.baskets,
                     onActivate: _selected == null ? null : () => _onTargetActivated(target.id),
                   ),
                 ),
@@ -435,16 +565,19 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                 if (_flying != id)
                   Positioned.fromRect(
                     rect: geometry.slotRect(target.id, index),
-                    child: Stack(
+                    // Lo colocado no tapa los toques a su destino.
+                    child: IgnorePointer(
+                        child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         Positioned.fill(
                           child: _Emoji(
                             key: ValueKey<String>(_key('placed-$id')),
                             symbol: _piece(id).symbol,
-                            size: geometry.slotRect(target.id, 0).width *
-                                PlaceBoardGeometry.emojiFraction *
-                                _piece(id).scale,
+                            // Lo colocado llena su hueco: el tamaño ya lo dice
+                            // la cesta, que es más pequeña (visto en el moto g55:
+                            // con la escala de la pieza, apenas se veía).
+                            size: geometry.slotRect(target.id, 0).width * geometry.placedEmojiFraction,
                           ),
                         ),
                         if (data.placedBadge case final String badge)
@@ -458,12 +591,24 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                             ),
                           ),
                       ],
-                    ),
+                    )),
                   ),
+            if (_flying != null && flightBehind) flight(),
+            if (data.baskets)
+              for (final BoardTarget target in data.targets)
+                Positioned.fromRect(
+                  rect: geometry.targetRects[target.id]!,
+                  child: _BasketFront(
+                    key: ValueKey<String>(_key('basket-front-${target.id}')),
+                    sampleKey: ValueKey<String>(_key('sample-${target.id}')),
+                    symbol: target.symbol,
+                    symbolScale: target.symbolScale,
+                  ),
+                ),
             for (final BoardPiece piece in data.pieces)
               // El hueco sigue en el árbol mientras se arrastra (invisible): si se
               // quitara, su detector de gestos se perdería con el dedo encima.
-              if (!data.isPlaced(piece.id) && _flying != piece.id)
+              if (!data.isPlaced(piece.id) && _flying != piece.id && geometry.trayRects.containsKey(piece.id))
                 Positioned.fromRect(
                   rect: geometry.trayRects[piece.id]!,
                   child: _hintWrap(
@@ -506,23 +651,7 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                   ),
                 ),
               ),
-            if (_flying case final String flying)
-              AnimatedBuilder(
-                animation: _flight,
-                builder: (context, _) {
-                  final Rect rect = Rect.lerp(_flightFrom, _flightTo, Curves.easeOutCubic.transform(_flight.value))!;
-                  return Positioned.fromRect(
-                    rect: rect,
-                    child: IgnorePointer(
-                      child: _Emoji(
-                        key: ValueKey<String>(_key('flying')),
-                        symbol: _piece(flying).symbol,
-                        size: rect.width * PlaceBoardGeometry.emojiFraction * _piece(flying).scale,
-                      ),
-                    ),
-                  );
-                },
-              ),
+            if (_flying != null && !flightBehind) flight(),
           ],
         );
       },
@@ -562,12 +691,17 @@ class _TargetCard extends StatelessWidget {
     required this.almostKey,
     required this.almost,
     required this.onActivate,
+    this.basket = false,
   });
 
   final BoardTarget target;
   final String almostKey;
   final bool almost;
   final VoidCallback? onActivate;
+
+  /// Dibuja la parte de atrás de una cesta (asa e interior); la pared
+  /// delantera con la muestra va en [_BasketFront], por encima de lo colocado.
+  final bool basket;
 
   @override
   Widget build(BuildContext context) {
@@ -580,7 +714,9 @@ class _TargetCard extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onActivate,
-        child: LayoutBuilder(
+        child: basket
+            ? _BasketBack(almostKey: almostKey, almost: almost)
+            : LayoutBuilder(
           builder: (context, constraints) => DecoratedBox(
             key: almost ? ValueKey<String>(almostKey) : null,
             decoration: BoxDecoration(
@@ -600,6 +736,83 @@ class _TargetCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// La parte delantera de la cesta, encima de lo colocado (PROMPTS §21): la
+/// misma ilustración recortada desde el borde delantero, con los huecos de la
+/// rejilla transparentes. Lo colocado asoma por encima del borde y se ve por
+/// los huecos. En su placa va la muestra, que dice qué va dentro (HU-027 3.1).
+class _BasketFront extends StatelessWidget {
+  const _BasketFront({
+    super.key,
+    required this.sampleKey,
+    required this.symbol,
+    required this.symbolScale,
+  });
+
+  final Key sampleKey;
+  final String symbol;
+  final double symbolScale;
+
+  @override
+  Widget build(BuildContext context) => IgnorePointer(
+        child: ExcludeSemantics(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final Size size = constraints.biggest;
+              final double plate = size.width * PlaceBoardGeometry.basketPlateSide;
+              return Stack(
+                children: [
+                  Positioned.fill(child: Image.asset(BrandAssets.sortingBasketFront, fit: BoxFit.fill)),
+                  Positioned(
+                    left: size.width * PlaceBoardGeometry.basketPlateCenter.dx - plate / 2,
+                    top: size.height * PlaceBoardGeometry.basketPlateCenter.dy - plate / 2,
+                    width: plate,
+                    height: plate,
+                    child: _Emoji(key: sampleKey, symbol: symbol, size: plate * 0.72 * symbolScale),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+}
+
+/// La cesta entera, detrás de lo colocado. Cuando la pieza arrastrada
+/// encajaría, un halo ámbar suave detrás (el borde ámbar de las tarjetas no se
+/// vería sobre el mimbre ámbar).
+class _BasketBack extends StatelessWidget {
+  const _BasketBack({required this.almostKey, required this.almost});
+
+  final String almostKey;
+  final bool almost;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        fit: StackFit.expand,
+        children: [
+          if (almost) CustomPaint(key: ValueKey<String>(almostKey), painter: const _BasketGlowPainter()),
+          Image.asset(BrandAssets.sortingBasketBack, fit: BoxFit.fill),
+        ],
+      );
+}
+
+class _BasketGlowPainter extends CustomPainter {
+  const _BasketGlowPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawOval(
+      Rect.fromLTRB(0, size.height * 0.3, size.width, size.height),
+      Paint()
+        ..color = AppPalette.amber.withValues(alpha: 0.85)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, size.width * 0.06),
+    );
+  }
+
+  @override
+  bool shouldRepaint(_BasketGlowPainter old) => false;
 }
 
 /// Una pieza de la bandeja: el emoji en color sobre una tarjeta blanca.

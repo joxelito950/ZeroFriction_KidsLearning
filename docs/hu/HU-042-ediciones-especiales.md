@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Desarrollada** (2026-11-19, rama `feature/christmas-edition`) para la Navidad de «A su sitio», en `1.0.0-rc.6`. El candado del oro en adelante se verá cuando exista el pago (HU-006) |
+| **Estado** | **En curso**: la Navidad de «A su sitio» está desarrollada (2026-11-19) y publicada en `1.0.0-rc.6`; se cierra con lo que digan los testers. El candado del oro en adelante se verá cuando exista el pago (HU-006) |
 | **Épica** | E3 · Monetización |
 | **Prioridad** | P2: la **edición de Navidad** de «Cada vehículo a su casa» (HU-052) va en el próximo release a la prueba cerrada |
 | **Tamaño** | S para la primera edición (fechas fijas y su aspecto); M con el candado de después (HU-006) |

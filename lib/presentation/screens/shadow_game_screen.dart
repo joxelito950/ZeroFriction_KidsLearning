@@ -193,7 +193,11 @@ class _ShadowGameViewState extends State<_ShadowGameView> with WidgetsBindingObs
   Widget _overlayFor(BuildContext context, ShadowGameState state) {
     return switch (state.phase) {
       ShadowRoundPhase.celebrating =>
-        MemoryCelebration(stars: state.stars ?? 0, badgeEarned: state.medalEarned, medal: state.medal),
+        MemoryCelebration(
+            stars: state.stars ?? 0,
+            badgeEarned: state.medalEarned,
+            medal: state.medal,
+            message: AppLocalizations.of(context).shadowsVictoryMessage),
       ShadowRoundPhase.inviting => PlayInvitation(round: state.gameRound),
       ShadowRoundPhase.timeUp => MemoryTimeUpNotice(
           loss: switch (state.lossKind) {

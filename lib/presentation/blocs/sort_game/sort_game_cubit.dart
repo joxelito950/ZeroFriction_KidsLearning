@@ -13,7 +13,6 @@ import '../../../domain/settings/access_policy.dart';
 import '../../../domain/settings/game_difficulty.dart';
 import '../../../domain/shadows/shadow_drop.dart';
 import '../../../domain/sorting/sort_board.dart';
-import '../../../domain/sorting/sort_catalog.dart';
 import '../../../domain/sorting/sort_ladder.dart';
 import 'sort_game_state.dart';
 
@@ -93,14 +92,14 @@ class SortGameCubit extends Cubit<SortGameState> {
   }
 
   /// Suelta el objeto [id] en [box]. [basketBoxes] son las cajas en pantalla
-  /// de las cestas. Devuelve qué pasó para que la pantalla lo anime.
-  ShadowDropOutcome drop(String id, {required ShadowBox box, required Map<SortColor, ShadowBox> basketBoxes}) {
+  /// de las cestas, por su id. Devuelve qué pasó para que la pantalla lo anime.
+  ShadowDropOutcome drop(String id, {required ShadowBox box, required Map<String, ShadowBox> basketBoxes}) {
     final SortBoard? board = state.board;
     if (board == null || !state.canDrag(id)) return ShadowDropOutcome.missed;
     _startTimerIfNeeded();
     final SortPiece piece = board.pieceById(id);
-    final ShadowDropOutcome outcome = PlaceDrop.evaluate<SortColor>(
-      target: board.targetOf(piece),
+    final ShadowDropOutcome outcome = PlaceDrop.evaluate<String>(
+      target: board.targetOf(piece).id,
       piece: box,
       targets: basketBoxes,
       threshold: state.coverageToSnap,
@@ -109,13 +108,17 @@ class SortGameCubit extends Cubit<SortGameState> {
     return outcome;
   }
 
-  /// Tocando (o con el lector de pantalla): se eligió [id] y después [basket].
-  ShadowDropOutcome match(String id, SortColor basket) {
+  /// Tocando (o con el lector de pantalla): se eligió [id] y después la cesta
+  /// [basketId].
+  ShadowDropOutcome match(String id, String basketId) {
     final SortBoard? board = state.board;
-    if (board == null || !state.canDrag(id) || !board.baskets.contains(basket)) return ShadowDropOutcome.missed;
+    if (board == null || !state.canDrag(id) || !board.baskets.any((basket) => basket.id == basketId)) {
+      return ShadowDropOutcome.missed;
+    }
     _startTimerIfNeeded();
-    final ShadowDropOutcome outcome =
-        board.accepts(basket, board.pieceById(id)) ? ShadowDropOutcome.snapped : ShadowDropOutcome.wrongShadow;
+    final ShadowDropOutcome outcome = board.accepts(board.basketById(basketId), board.pieceById(id))
+        ? ShadowDropOutcome.snapped
+        : ShadowDropOutcome.wrongShadow;
     _apply(id, outcome);
     return outcome;
   }
@@ -126,13 +129,25 @@ class SortGameCubit extends Cubit<SortGameState> {
     switch (outcome) {
       case ShadowDropOutcome.snapped:
         final Set<String> placed = {...state.placed, id};
-        emit(state.copyWith(placed: placed, moves: state.moves + 1));
+        emit(state.copyWith(placed: placed, traySlots: _refill(id, placed), moves: state.moves + 1));
         if (state.pieces.every((piece) => placed.contains(piece.id))) _win();
       case ShadowDropOutcome.wrongShadow:
         emit(state.copyWith(fails: state.fails + 1, moves: state.moves + 1));
       case ShadowDropOutcome.missed:
         break;
     }
+  }
+
+  /// En el nivel que se repone, el hueco de [id] recibe el siguiente objeto
+  /// que aún no ha salido (HU-027 4.3). En los demás, los huecos no cambian.
+  List<String> _refill(String id, Set<String> placed) {
+    final SortBoard board = state.board!;
+    if (board.trayCapacity == null) return state.traySlots;
+    final Set<String> shown = {...state.traySlots, ...placed};
+    final String next = board.pieces
+        .map((piece) => piece.id)
+        .firstWhere((candidate) => !shown.contains(candidate), orElse: () => SortGameState.emptySlot);
+    return [for (final String slot in state.traySlots) slot == id ? next : slot];
   }
 
   void pause() => _paused = true;
@@ -146,18 +161,23 @@ class SortGameCubit extends Cubit<SortGameState> {
     final bool downgraded = round != saved.round;
     final int level = downgraded ? RoundLadder.firstTimedLevel : saved.level.clamp(1, SortLadder.maxLevel);
     _rules = SortRules(round: round, level: level, timerDisabled: timerDisabled);
+    // El nivel que se repone tiene más objetos: más tiempo, por objeto (4.3).
+    final Duration? limit = _ladder.limitFor(round, level, timed: _rules.timed);
     _position = RoundPosition(
       round: round,
       level: level,
-      timeLimit: _ladder.limitFor(round, level, timed: _rules.timed),
+      timeLimit: limit == null ? null : limit * _rules.timeFactor,
       tutorialFalls: downgraded ? 0 : saved.tutorialFalls,
     );
+    final SortBoard board = SortBoard.pick(_random, SortLadder.levelAt(level), _rules);
+    final List<String> ids = [for (final SortPiece piece in board.pieces) piece.id];
     emit(SortGameState(
       phase: SortPhase.playing,
       round: state.round + 1,
       level: level,
       timeLimit: _position.timeLimit,
-      board: SortBoard.pick(_random, SortLadder.levelAt(level), _rules),
+      board: board,
+      traySlots: board.trayCapacity == null ? ids : ids.take(board.trayCapacity!).toList(),
       basketsFirst: !_rules.randomLayout || _random.nextBool(),
       coverageToSnap: _rules.coverageToSnap,
       gameRound: round,
@@ -184,8 +204,7 @@ class SortGameCubit extends Cubit<SortGameState> {
     _stopTimer();
     final RoundPosition won = _position;
     // El tutorial no da estrellas (HU-037 P2).
-    final int stars =
-        won.isTutorial ? 0 : SortStars.forWin(objects: SortLadder.levelAt(won.level).objects, fails: state.fails);
+    final int stars = won.isTutorial ? 0 : SortStars.forWin(objects: state.pieces.length, fails: state.fails);
     final RoundStep step = _ladder.afterWin(won, timed: _rules.timed);
     _progress = _progress.recordWin(won: won, stars: stars, step: step, at: _now());
     unawaited(_saveProgress());

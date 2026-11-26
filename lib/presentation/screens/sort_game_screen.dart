@@ -198,6 +198,7 @@ class _SortGameViewState extends State<_SortGameView> with WidgetsBindingObserve
             stars: state.stars ?? 0,
             badgeEarned: state.medal != null,
             medal: state.medal,
+            message: AppLocalizations.of(context).sortingVictoryMessage,
           ),
         SortPhase.inviting => PlayInvitation(round: state.gameRound),
         SortPhase.timeUp => MemoryTimeUpNotice(

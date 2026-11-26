@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En refinamiento (2026-11-24)** |
+| **Estado** | **Lista (2026-11-25)**: el dueño responde las preguntas el 2026-11-25 (sección 12). Cambia el reparto por rondas: espejo desde esmeralda, boca abajo en zafiro, giro de 90° en obsidiana y todos al azar en diamante |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | S (1–1,5 días, 2 entregas) |
@@ -27,7 +27,8 @@
 
 - Igual que hoy: sombras arriba (o a un lado) y bandeja abajo. **Algunas sombras salen transformadas:**
   - **en espejo** (reflejada de izquierda a derecha): el 🐘 mira al otro lado;
-  - **boca abajo** (giro de 180°): la 🦒 está del revés.
+  - **boca abajo** (giro de 180°): la 🦒 está del revés;
+  - **tumbada** (giro de 90°, P3): el 🐊 está de pie o de lado.
 - **Los objetos de la bandeja nunca se transforman:** el niño ve el objeto normal y busca su sombra aunque esté dada la vuelta.
 
 ### 3.2 Gestos y encaje
@@ -38,20 +39,25 @@
 
 ### 3.3 Mano guía
 
-No hay tutorial nuevo: el nivel 1 nunca tiene sombras transformadas. La **primera vez** que aparece una sombra transformada (primer tablero de obsidiana), el objeto de esa sombra hace un pequeño giro en la bandeja hasta la postura de la sombra y vuelve (una sola vez, 1 s). Es la pista visual que sustituye a una explicación.
+No hay tutorial nuevo: el nivel 1 nunca tiene sombras transformadas.
+
+**Pista (P5, 2026-11-25):** en la ronda que presenta cada giro —**esmeralda** (espejo), **zafiro** (boca abajo) y **obsidiana** (90°)—, el objeto de la sombra transformada hace un pequeño giro en la bandeja hasta la postura de la sombra y vuelve (1 s), si el niño no toca nada en unos segundos. **En diamante no hay pistas.** Es una excepción decidida por el dueño a la regla común de ayudas (solo tutorial y bronce, `Helps`): cada giro nuevo se enseña en su ronda.
 
 ## 4. Niveles y rondas
 
 ### 4.1 Qué rondas y cuántas por tablero
 
-| Ronda | Niveles con sombras transformadas | Cuántas por tablero | Cuáles |
-|---|---|---|---|
-| Bronce a zafiro | Ninguno | 0 | — |
-| **Obsidiana** | 4 a 8 | **1** | Espejo |
-| **Diamante** | 4 a 5 | **1** | Espejo o boca abajo |
-| **Diamante** | 6 a 8 | **2** | Espejo y boca abajo (una de cada) |
+| Ronda | Niveles con sombras transformadas | Cuántas por tablero | Cuáles | Pista |
+|---|---|---|---|---|
+| Bronce a rubí | Ninguno | 0 | — | — |
+| **Esmeralda** | 4 a 8 | **1** | Espejo | Sí |
+| **Zafiro** | 4 a 8 | **1** | Boca abajo | Sí |
+| **Obsidiana** | 4 a 8 | **1** | Giro de 90° | Sí |
+| **Diamante** | 4 a 5 | **1** | Al azar: espejo, boca abajo o 90° | No |
+| **Diamante** | 6 a 8 | **2** | Al azar, dos distintas | No |
 
-- **El giro de 90° queda fuera** (P3): un objeto tumbado ocupa la celda de otra manera, cambia el encaje y es el giro más difícil a esta edad.
+- **Cada giro llega solo en su ronda** (P3 y P6, 2026-11-25): espejo en esmeralda, boca abajo en zafiro y 90° en obsidiana; en diamante, mezclados al azar.
+- **El giro de 90°** (P3): el objeto tumbado ocupa la celda de otra manera, así que la sombra se pinta girada dentro de su misma celda cuadrada y el encaje se mide igual. Solo con objetos que, tumbados, no se parecen a otro objeto del tablero (4.2).
 - **Las sombras libres** (distractores, desde oro) **nunca** se transforman: una sombra libre girada que se parezca a un objeto de la bandeja sería una trampa.
 - **Tiempo:** el de la tabla de Sombras (HU-051 3.2), **sin cambios** al principio. Si la validación muestra que se tarda más, +5 s por sombra transformada (P4).
 - **Imán, estrellas, medallas, disposición al azar y Premium:** sin cambios.
@@ -64,6 +70,7 @@ No hay tutorial nuevo: el nivel 1 nunca tiene sombras transformadas. La **primer
 | **La transformada nunca coincide con otra silueta del tablero** | El 🐊 reflejado no puede parecerse a otra sombra del mismo tablero (test con la lista de parecidos) |
 | **Nunca dos transformaciones a la vez** sobre la misma sombra | Espejo y boca abajo juntos es un giro distinto, más difícil |
 | **Solo en los niveles 4 a 8** | Los primeros niveles de cada ronda calientan con sombras normales |
+| **El giro de 90° solo con objetos alargados o con una dirección clara** (tabla 5) | Un objeto redondo tumbado no cambia; uno casi cuadrado parece otro |
 | **El objeto gira al encajar** | Enseña qué ha pasado: el niño no se queda con la duda |
 
 ## 5. Contenido (de `ShadowThemes`, Emoji 5.0 o anterior)
@@ -72,6 +79,7 @@ No hay tutorial nuevo: el nivel 1 nunca tiene sombras transformadas. La **primer
 |---|---|---|
 | **Espejo** | 🐘 🦒 🐢 🐌 🐟 🐳 🐊 🐇 🐓 🦆 🐈 🦕 🦖 🚗 🚲 🚁 🚀 ✈️ ⛵ 🚂 🚜 🍌 🔑 🔨 🔧 ☂️ | 🦋 🍐 🍇 🍒 🍎 🍉 🎈 ⏰ ✂️: casi simétricos de izquierda a derecha |
 | **Boca abajo** | 🐘 🦒 🐢 🐌 🐳 🐊 🐇 🐓 🦆 🐈 🦕 🦖 🚗 🚲 🚁 ⛵ 🚂 🚜 🍐 🍒 ☂️ 🎈 ⏰ 🔑 🔨 | 🍌 🔧 ✂️ 🍉 🍎 🍇 🦋 🐟: del revés se parecen demasiado a sí mismos (o a otro), y 🚀 ✈️ porque ya van inclinados en diagonal |
+| **Giro de 90°** (propuesta, P3) | 🦒 🐊 🦕 🦖 🐘 🐢 🐌 🐳 🚂 🚜 ⛵ 🔑 🔨 ☂️ | 🍎 🍉 🎈 ⏰ 🍇 🦋: redondos o casi cuadrados, tumbados no cambian; 🚀 ✈️ 🍌 🔧 ✂️: ya van en diagonal y tumbados parecen otra postura de sí mismos |
 
 - **La lista final se valida viendo cada sombra transformada** en el moto g55 y en el emulador con Android 8 (otra fuente de emojis), como pidió HU-007 4.5: una sombra transformada que se confunda con otra no entra.
 - Las fuentes dibujan los emojis mirando a lados distintos (el 🐘 de una fuente mira a la derecha y el de otra a la izquierda). No importa: la transformación es **respecto al dibujo de la bandeja**, que es la misma fuente.
@@ -79,20 +87,20 @@ No hay tutorial nuevo: el nivel 1 nunca tiene sombras transformadas. La **primer
 ## 6. Accesibilidad e idiomas
 
 - Sin texto para el niño.
-- **Lector de pantalla:** las sombras transformadas añaden la postura: «Sombra del elefante, al revés» (espejo) y «Sombra de la jirafa, boca abajo». Al encajar, como hoy («Elefante en su sombra»).
-- **Dos claves nuevas** en los 9 idiomas:
+- **Lector de pantalla:** las sombras transformadas añaden la postura: «Sombra del elefante, al revés» (espejo), «Sombra de la jirafa, boca abajo» y «Sombra del cocodrilo, tumbada» (90°). Al encajar, como hoy («Elefante en su sombra»).
+- **Tres claves nuevas** en los 9 idiomas:
 
-| Idioma | Espejo | Boca abajo |
-|---|---|---|
-| es | Sombra de {objeto}, al revés | Sombra de {objeto}, boca abajo |
-| en | {object} shadow, mirrored | {object} shadow, upside down |
-| fr | Ombre de {objet}, inversée | Ombre de {objet}, à l'envers |
-| it | Ombra di {oggetto}, a specchio | Ombra di {oggetto}, capovolta |
-| de | Schatten von {Objekt}, gespiegelt | Schatten von {Objekt}, auf dem Kopf |
-| pt | Sombra de {objeto}, espelhada | Sombra de {objeto}, de cabeça para baixo |
-| ja | {もの}のかげ、はんてん | {もの}のかげ、さかさま |
-| ko | {물건} 그림자, 좌우 반전 | {물건} 그림자, 거꾸로 |
-| ar | ظل {الشيء}، معكوس | ظل {الشيء}، مقلوب |
+| Idioma | Espejo | Boca abajo | 90° |
+|---|---|---|---|
+| es | Sombra de {objeto}, al revés | Sombra de {objeto}, boca abajo | Sombra de {objeto}, tumbada |
+| en | {object} shadow, mirrored | {object} shadow, upside down | {object} shadow, turned sideways |
+| fr | Ombre de {objet}, inversée | Ombre de {objet}, à l'envers | Ombre de {objet}, couchée |
+| it | Ombra di {oggetto}, a specchio | Ombra di {oggetto}, capovolta | Ombra di {oggetto}, sdraiata |
+| de | Schatten von {Objekt}, gespiegelt | Schatten von {Objekt}, auf dem Kopf | Schatten von {Objekt}, gekippt |
+| pt | Sombra de {objeto}, espelhada | Sombra de {objeto}, de cabeça para baixo | Sombra de {objeto}, deitada |
+| ja | {もの}のかげ、はんてん | {もの}のかげ、さかさま | {もの}のかげ、よこむき |
+| ko | {물건} 그림자, 좌우 반전 | {물건} 그림자, 거꾸로 | {물건} 그림자, 옆으로 누움 |
+| ar | ظل {الشيء}، معكوس | ظل {الشيء}، مقلوب | ظل {الشيء}، مائل على جنبه |
 
 - Con la mano izquierda (HU-031) el tablero se refleja como hoy; las sombras transformadas se calculan sobre el emoji, no sobre la disposición, así que no cambia nada.
 
@@ -109,9 +117,9 @@ Ninguno nuevo: la sombra sigue siendo el emoji en teal profundo (`ColorFilter` d
 
 | Área | Cambio |
 |---|---|
-| Dominio | `lib/domain/shadows/`: `enum ShadowTwist { none, mirror, upsideDown }`; listas de objetos válidos por transformación en `ShadowThemes` (tabla 5); `ShadowRules.twistsFor(level)` (tabla 4.1); `ShadowBoardContent.twists` (`Map<String, ShadowTwist>`), sorteado en `ShadowThemes.pick` respetando las reglas 4.2 |
-| Presentación | `ShadowBoard`: `_ShadowCell` y `_Emoji` aplican `Transform` (`Matrix4.diagonal3Values(-1, 1, 1)` para espejo, `Matrix4.rotationZ(pi)` para boca abajo) alrededor del centro; el objeto encajado anima el giro; la pista de la primera vez (3.3) se guarda en el propio progreso de Sombras o en `Discovery` |
-| Persistencia | Ninguna nueva: el progreso de Sombras (`GameProgressHiveModel`, clave `shadows`). Si se guarda la pista vista, un campo opcional nuevo (P5) |
+| Dominio | `lib/domain/shadows/`: `enum ShadowTwist { none, mirror, upsideDown, quarterTurn }`; listas de objetos válidos por transformación en `ShadowThemes` (tabla 5); `ShadowRules.twistsFor(level)` (tabla 4.1); `ShadowBoardContent.twists` (`Map<String, ShadowTwist>`), sorteado en `ShadowThemes.pick` respetando las reglas 4.2 |
+| Presentación | `ShadowBoard`: `_ShadowCell` y `_Emoji` aplican `Transform` (`Matrix4.diagonal3Values(-1, 1, 1)` para espejo, `Matrix4.rotationZ(pi)` para boca abajo, `Matrix4.rotationZ(pi / 2)` para 90°) alrededor del centro; el objeto encajado anima el giro; la pista (3.3) sale en esmeralda, zafiro y obsidiana y nunca en diamante |
+| Persistencia | Ninguna nueva: el progreso de Sombras. La pista depende de la ronda, no se guarda |
 | Interruptor | `ShadowRules.twistsEnabled` (constante) para apagarlo en una versión si la validación sale mal |
 | Tests | Sorteo con miles de semillas (solo obsidiana y diamante, solo niveles 4–8, como mucho 1 o 2, nunca en sombras libres, solo objetos válidos), pantalla (la sombra se pinta transformada, el objeto gira al encajar, el lector dice la postura), encaje igual con y sin transformación |
 
@@ -119,36 +127,37 @@ Ninguno nuevo: la sombra sigue siendo el emoji en teal profundo (`ColorFilter` d
 
 | # | Entrega | Se puede publicar sola |
 |---|---|---|
-| 1 | **Espejo en obsidiana y diamante** (1 por tablero, niveles 4–8): dominio, pintura, giro al encajar, lector, 9 idiomas | Sí |
-| 2 | **Boca abajo en diamante** y 2 transformaciones en los niveles 6–8, **después de la validación** (P2) | Sí |
+| 1 | **Espejo en esmeralda** (1 por tablero, niveles 4–8) con su pista: dominio, pintura, giro al encajar, lector, 9 idiomas | Sí |
+| 2 | **Boca abajo en zafiro, 90° en obsidiana y la mezcla de diamante** (1 o 2 por tablero, sin pistas), **después de la validación** con niños de 4–5 años (P2) | Sí |
 
 ## 11. Tamaño estimado
 
-**1–1,5 días:** medio día el dominio y el sorteo con sus tests, medio día la pintura, el giro y el lector, y lo que haga falta para revisar las sombras transformadas en el teléfono.
+**1,5–2 días:** medio día el dominio y el sorteo con sus tests, medio día la pintura, el giro y el lector, medio día el giro de 90° y su lista de objetos, y lo que haga falta para revisarlo en el teléfono.
 
 ## 12. Preguntas
 
 | # | Pregunta | Recomendación |
 |---|---|---|
-| P1 | ¿Nombre? No es un juego nuevo | **Sigue siendo «Sombras»**, sin nombre aparte. En «Su progreso», las rondas de obsidiana y diamante dicen «con sombras dadas la vuelta» |
-| P2 | ¿Cómo se valida con niños de 4–5 años? | **Antes de la entrega 2**, con 3–5 niños de 4–5 años (familia del dueño o testers), en obsidiana: se mira si terminan el tablero sin ayuda (8 de cada 10 al menos), si tardan más de 1,5 veces lo que tardan sin transformaciones y si dejan el juego. Si falla, solo espejo y solo en diamante |
-| P3 | ¿Giro de 90°? | **No por ahora:** cambia cómo ocupa la celda y es el giro más difícil a esta edad. Se puede revisar tras la validación |
-| P4 | ¿Más tiempo con sombras transformadas? | **No al principio**; si la validación lo pide, +5 s por sombra transformada |
-| P5 | ¿Pista de la primera vez (el objeto gira en la bandeja)? | **Sí, una vez por perfil**, guardada en el progreso de Sombras. Sin ella, el primer tablero puede parecer injusto |
-| P6 | ¿Las rondas de obsidiana y diamante o solo diamante? | **Obsidiana con espejo y diamante con los dos**, como propone 4.1: la dificultad llega de una en una (HU-051 3.3) |
+| P1 | ¿Nombre? No es un juego nuevo | ✅ Decidido (2026-11-25): **sigue siendo «Sombras»**. En «Su progreso», las rondas con giros dicen «con sombras dadas la vuelta» |
+| P2 | ¿Cómo se valida con niños de 4–5 años? | ✅ Decidido (2026-11-25): **antes de la entrega 2**, con 3–5 niños de 4–5 años: si terminan el tablero sin ayuda (8 de cada 10), si tardan más de 1,5 veces y si dejan el juego |
+| P3 | ¿Giro de 90°? | ✅ Decidido (2026-11-25): **sí**. Solo en obsidiana, y en diamante al azar con los otros giros |
+| P4 | ¿Más tiempo con sombras transformadas? | ✅ Decidido (2026-11-25): **no al principio**; +5 s por sombra si la validación lo pide |
+| P5 | ¿Pista (el objeto gira en la bandeja)? | ✅ Decidido (2026-11-25): **solo en esmeralda, zafiro y obsidiana**, las rondas que presentan cada giro. **En diamante, sin pistas** (3.3) |
+| P6 | ¿En qué rondas? | ✅ Decidido (2026-11-25): **espejo desde esmeralda, boca abajo en zafiro, 90° en obsidiana y todos al azar en diamante** (tabla 4.1) |
 
 ## 13. Criterios de aceptación
 
-1. Bronce a zafiro y los niveles 1 a 3 no tienen nunca sombras transformadas.
-2. Obsidiana tiene 1 sombra en espejo en los niveles 4 a 8; diamante, 1 (niveles 4–5) o 2 (niveles 6–8), espejo o boca abajo.
-3. Solo se transforman objetos de la tabla 5, nunca una sombra libre, y nunca queda parecida a otra sombra del tablero.
+1. Bronce a rubí y los niveles 1 a 3 no tienen nunca sombras transformadas.
+2. Esmeralda tiene 1 sombra en espejo, zafiro 1 boca abajo y obsidiana 1 girada 90°, en los niveles 4 a 8; diamante, 1 (niveles 4–5) o 2 distintas (niveles 6–8), al azar entre los tres giros.
+3. Solo se transforman objetos válidos para cada giro (tabla 5 y 4.2), nunca una sombra libre, y nunca queda parecida a otra sombra del tablero.
 4. El objeto encaja con el mismo imán que una sombra normal y gira hasta la postura de la sombra.
-5. El lector de pantalla dice «al revés» o «boca abajo» en los 9 idiomas.
-6. El tiempo, las estrellas, las medallas y el acceso de Sombras no cambian.
-7. La validación con niños de 4–5 años está hecha antes de publicar la entrega 2.
+5. La pista sale en esmeralda, zafiro y obsidiana, y nunca en diamante.
+6. El lector de pantalla dice «al revés», «boca abajo» o «tumbada» en los 9 idiomas.
+7. El tiempo, las estrellas, las medallas y el acceso de Sombras no cambian.
+8. La validación con niños de 4–5 años está hecha antes de publicar la entrega 2.
 
 ## 14. Fuera de alcance
 
-- Giros de 90° y otros ángulos.
+- Ángulos distintos de 90° y 180°, y dos giros a la vez sobre la misma sombra.
 - Transformar los objetos de la bandeja.
 - Sombras transformadas en «A su sitio» o en otros juegos.
