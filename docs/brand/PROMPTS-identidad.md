@@ -185,11 +185,26 @@ Si las luces salen en rojo y verde intensos, pedir: «La roja es rubí oscuro #8
 
 Entregar como `assets/brand/traffic_light_icon.png`, 1024 × 1024 px con transparencia real.
 
+## 21. La cesta de «Clasificar» (destino del juego, HU-027, 2026-11-26)
+
+Sustituye a la cesta dibujada con código, que «se nota forzada» (dueño, 2026-11-26). La app usa **una sola imagen dos veces**: entera detrás de los objetos y, recortada desde el borde delantero hacia abajo, delante de ellos. Por eso la rejilla de la pared delantera tiene que tener **huecos de verdad transparentes**: por ellos se ven los objetos que hay dentro. Va sobre fondo blanco, en 2 a 6 cestas por tablero.
+
+> [Bloque común, sin el niño]
+> **Una cesta de mimbre de juguete** de plastilina, **vacía**, vista **de frente y un poco desde arriba**, de modo que se vea el borde como un óvalo y, por dentro, la pared del fondo. Forma ancha y baja, un poco más estrecha abajo que arriba, con la base plana. **Un asa** en arco, gruesa y redondeada, que sale de los dos lados del borde.
+> **La pared delantera es una rejilla de tiras trenzadas** gruesas y redondeadas (unas 4 tiras horizontales y 6 verticales), con **huecos cuadrados grandes y totalmente transparentes** entre las tiras: a través de ellos se ve la pared del fondo de la cesta. Los huecos ocupan más o menos la mitad de la pared delantera. **La pared del fondo y la base son macizas**, sin huecos.
+> En el centro de la pared delantera, **una placa redonda lisa en crema cálido #FFF2E2** con borde teal profundo #00454D, sin nada dibujado: ahí la app pone el objeto de muestra. La placa ocupa un tercio del ancho de la cesta y tapa los huecos que tiene detrás.
+> Colores: tiras de mimbre en **ámbar #ECA463** con sombras en dorado #A86B12; el borde, un rollo trenzado más grueso del mismo ámbar; la pared del fondo, por dentro, en **ámbar más oscuro** para que se note la profundidad; contorno suave en teal profundo #00454D para separarla del fondo blanco. **Sin frutas ni nada dentro, sin cara, sin texto, sin el niño, sin sombra proyectada en el suelo.** Fondo totalmente transparente.
+> **Encuadre exacto** (la app recorta por estas líneas): la cesta centrada, con el **borde ocupando el 90 % del ancho del lienzo**; la **parte más alta del asa al 6 % del alto**; el **óvalo del borde entre el 44 % y el 56 % del alto**; la **base al 96 % del alto**. Nada se sale del lienzo.
+
+Si los huecos salen blancos o crema en vez de transparentes, pedir: «Los huecos de la rejilla tienen que ser transparentes, como el fondo: se tiene que ver a través de ellos». Si la cesta sale llena, pedir: «La cesta está vacía; la app pone los objetos». Si sale de lado o muy desde arriba, pedir: «De frente, con la cámara un poco más alta que el borde: se ve el óvalo del borde, pero no el fondo de la base».
+
+Entregar como `assets/brand/sorting_basket.png`, 1024 × 1024 px con transparencia real, y el original en `docs/brand/fuentes/cesta-clasificar.png`. Al integrarla se miden en la imagen el óvalo del borde y la placa, y con esas medidas se colocan los objetos y la muestra.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2 y de la 4 a la 20 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2 y de la 4 a la 21 tienen **transparencia real** (en la 21, también los huecos de la rejilla): al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 
