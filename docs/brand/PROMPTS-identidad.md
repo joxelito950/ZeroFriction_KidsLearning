@@ -173,11 +173,23 @@ Si los rayos salen finos y largos, pedir: «Rayos cortos, gruesos y redondeados,
 
 Entregar como `assets/brand/opposites_icon.png`, 1024 × 1024 px con transparencia real.
 
+## 20. Icono del juego «Semáforo» (silueta cerrada para el dorado, HU-056)
+
+Es el único dibujo con rojo y verde: el dueño decidió (HU-056 P2) usar **solo en el semáforo** el rubí y el esmeralda de las medallas.
+
+> [Bloque común, salvo la frase de los colores: aquí se añaden el rubí #8E1F3B y el esmeralda #1E7F5C, solo para las dos luces]
+> **Un semáforo de juguete** de plastilina, redondeado y simpático, con la caja en teal profundo #00454D y un poste corto y grueso del mismo color. Tres luces redondas en vertical: **arriba, la roja en rubí #8E1F3B, apagada** (mate y oscura) con una **mano abierta** dibujada en relieve suave; **en medio, la ámbar #ECA463, apagada**; **abajo, la verde en esmeralda #1E7F5C, encendida**, grande y luminosa, con un brillo suave alrededor y una **flecha hacia delante** en blanco. **Al pie del semáforo, a la izquierda**, un **cochecito** de plastilina en coral suave #D9735F, con ventanas crema #FFF2E2 y ruedas teal profundo, **contento y listo para salir**, mirando hacia la derecha. Sin caras exageradas. **Sin el niño, sin texto, sin calle.** Fondo totalmente transparente. El conjunto (semáforo y coche) forma **una silueta cerrada y compacta**, sin partes sueltas ni huecos grandes, centrada y ocupando el 80 % del lienzo. Que a 48 px se lea «un coche esperando al semáforo».
+> Se mostrará sobre la tarjeta del menú en crema claro #FFF2E2 con borde coral: el contorno teal del semáforo lo separa del fondo.
+
+Si las luces salen en rojo y verde intensos, pedir: «La roja es rubí oscuro #8E1F3B y la verde esmeralda #1E7F5C, los tonos de las medallas, no rojo ni verde chillones». Si las tres luces salen encendidas, pedir: «Solo la verde está encendida; la roja y la ámbar, apagadas y mate». Si no se ven la mano y la flecha, pedir: «Dentro de la luz roja, una mano abierta; dentro de la verde, una flecha: así se distinguen sin color».
+
+Entregar como `assets/brand/traffic_light_icon.png`, 1024 × 1024 px con transparencia real.
+
 ## Qué comprobar en cada resultado
 
 - El niño es el mismo en todas las piezas (cara, pelo y camiseta).
 - Sin texto, letras ni marcas.
-- Las piezas 2 y de la 4 a la 19 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
+- Las piezas 2 y de la 4 a la 20 tienen **transparencia real**: al abrirlas en un visor, el fondo se ve como un tablero de cuadros, no blanco.
 - En la pieza 2, nada se sale del círculo central del 60 %.
 - La mesa se lee como mesa, no como cuernos ni medialunas.
 

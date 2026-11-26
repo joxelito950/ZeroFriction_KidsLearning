@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **En desarrollo (2026-11-24)**: preguntas respondidas el 2026-11-24 (sección 12); **entregas 1 y 2 hechas** (sección 10). Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
+| **Estado** | **En desarrollo (2026-11-24)**: preguntas respondidas el 2026-11-24 (sección 12); **las tres entregas hechas** (sección 10); falta mirar en el teléfono los colores y el nivel 8 de diamante. Une HU-027 (clasificar por color) y HU-008 (por tamaño: grande, mediano y pequeño), que queda absorbida aquí |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | M–L (3–4 días, 3 entregas) |
@@ -190,7 +190,7 @@ Análisis:
 |---|---|---|
 | 1 | **Motor común:** `PlaceBoardView` genérico con huecos y escala; «A su sitio» pasa a usarlo sin cambios visibles (sus tests en verde). **Hecha el 2026-11-24:** `PlaceBoardView`/`PlaceBoardGeometry` (de 1 a 3 huecos, escala por pieza y por cesta), `PlaceDrop` común, `VehicleBoardView` como adaptador con las mismas claves; la regla de ayudas `Helps` (la mano solo en el tutorial y en bronce, en los cuatro juegos); los iconos de «Clasificar» y «¿Cuántos hay?» preparados. 2279 tests en verde y prueba rápida en los emuladores de Android 8.0 y API 37 | Sí: para el niño solo cambia que la mano no sale desde plata |
 | 2 | **Clasificar por color** (bronce, plata, esmeralda): dominio, pantalla, menú, progreso, «Nuevo», 9 idiomas. Las rondas de tamaño todavía juegan color. **Hecha el 2026-11-25** en `feature/hu-027-2-color`: 42 objetos en 6 colores, la muestra igual solo en los niveles 1 y 2 de bronce, la tarjeta crema con borde coral, 2342 tests en verde y prueba rápida en los emuladores de Android 8.0 y API 37. **Falta mirar los colores de los emojis** en el emulador de Android 8 y en el moto g55 (criterio 1) | Sí: es la parte gratis |
-| 3 | **Tamaño y mezcla** (oro, rubí, zafiro, obsidiana, diamante), con las muestras por temática. El nivel 8 de diamante (4.3), detrás de su regla: si no cabe, como el 5 | Sí |
+| 3 | **Tamaño y mezcla** (oro, rubí, zafiro, obsidiana, diamante), con las muestras por temática. El nivel 8 de diamante (4.3), detrás de su regla: si no cabe, como el 5. **Hecha el 2026-11-25** en `feature/hu-027-3-size`: temáticas con su muestra fuera de la bandeja, cestas de tres tamaños, color y tamaño desde obsidiana, la pareja de tamaños de diamante y el nivel 8 con 6 cestas y una bandeja de 4 que se repone hasta 12 (tiempo × 1,5). El tablero común reparte el espacio para que el objeto pequeño no baje de 28 dp y mide el encaje con el tamaño visible del objeto. Medido en tests: los tableros más grandes caben en el compacto en vertical y horizontal en los 9 idiomas, con el pequeño a 28 dp o más. 2418 tests en verde | Sí |
 
 ## 11. Tamaño estimado
 

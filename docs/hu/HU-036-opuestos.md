@@ -183,7 +183,7 @@ En el tutorial (nivel 1, dos parejas de bronce), la mano toca ☀️ y después 
 | P3 | ¿Dos columnas en bronce y plata? | ✅ Decidido (2026-11-25): **sí**; desde oro, mezcladas |
 | P4 | ¿Entran las parejas dudosas (12 a 14)? | ✅ Decidido (2026-11-25): **solo en diamante y tras probarlas** con 3–5 niños de 4–5 años |
 | P5 | ¿Carta sin pareja? | ✅ Decidido (2026-11-25): **una desde esmeralda; en diamante, hasta dos**, que nunca son contrarias entre sí (4.2 y 5.2) |
-| P6 | ¿Color de la tarjeta del menú? | ✅ Aceptada (2026-11-25) la recomendación: **teal profundo o azul petróleo repetidos**, con el icono como diferencia. **Por confirmar:** el 2026-11-24 (HU-027 P7) se decidió crema con borde coral grueso para todos los juegos nuevos, y «Clasificar» ya lo usa. Se elige uno de los dos al desarrollar la entrega 2 |
+| P6 | ¿Color de la tarjeta del menú? | ✅ Decidido (2026-11-25): **crema con borde coral grueso y texto teal profundo**, como todos los juegos nuevos (HU-027 P7) |
 | P7 | ¿Icono del juego? | ✅ Decidido (2026-11-25): **ilustración 3D** (D-036) con el prompt de la **pieza 19** de `docs/brand/PROMPTS-identidad.md`: un sol y una luna de plastilina abrazados. La entrega el dueño |
 | P8 | ¿Un tablero por nivel o tres, como «¿Cuál es diferente?»? | ✅ Decidido (2026-11-25): **uno** |
 
