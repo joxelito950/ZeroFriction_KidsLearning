@@ -135,14 +135,16 @@ final class PlaceBoardGeometry {
   /// En la cesta (PROMPTS §21, medidas en partes de la ilustración, como en
   /// `tool/brand/prepare_brand_images.py`): el borde de arriba de la cuerda
   /// delantera en el centro, el lado de cada hueco y su separación, y la placa
-  /// de la muestra. Lo colocado asoma casi dos tercios por encima del borde;
-  /// lo de abajo, detrás de la rejilla, se ve por sus huecos (con la mitad
-  /// dentro, en el emulador apenas se veía). Los huecos se solapan un poco,
-  /// como cosas amontonadas en una cesta.
+  /// de la muestra. Lo colocado asoma cuatro quintos de su hueco por encima
+  /// del borde; lo de abajo, detrás de la rejilla, se ve por sus huecos. Con
+  /// la mitad dentro, en el emulador apenas se veía; con un tercio, en el moto
+  /// g55 un emoji plano como 🐟 (su dibujo ocupa la franja central de la caja)
+  /// quedaba tapado por la cuerda. Los huecos se solapan un poco, como cosas
+  /// amontonadas en una cesta.
   static const double basketRim = 0.525;
   static const double basketSlot = 0.30;
   static const double basketSlotStep = 0.22;
-  static const double basketSink = 0.35;
+  static const double basketSink = 0.2;
   static const double basketPlateSide = 0.24;
   static const Offset basketPlateCenter = Offset(0.494, 0.702);
 
