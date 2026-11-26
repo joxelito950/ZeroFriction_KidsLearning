@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (integración desarrollada el 2026-11-05 en `feature/hu-013-identity`; falta verla en el moto g55). Refinamiento cerrado el 2026-10-26, ampliado el 2026-10-27 (paleta) y el 2026-11-05 (personaje e ilustración PNG, D-036) |
+| **Estado** | En curso: integración desarrollada el 2026-11-05 y publicada en la prueba cerrada desde la `1.0.0-rc.2`. **Solo falta** mirar en el moto g55 el icono monocromo con los iconos temáticos de Android 13 activados (2026-11-26). Refinamiento cerrado el 2026-10-26, ampliado el 2026-10-27 (paleta) y el 2026-11-05 (personaje e ilustración PNG, D-036) |
 | **Épica** | E6 · Publicación y distribución |
 | **Prioridad** | P2 |
 | **Tamaño** | M (2–3 días de integración), sin contar el tiempo de diseño, que hace el dueño del producto (P1) |

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso: entregas 1 y 2 hechas (2026-11-03); falta el correo de contacto de la política y activar GitHub Pages; las 3–5 esperan a HU-013 y a los testers (TD-003 ✅) |
+| **Estado** | En curso: **prueba cerrada con `1.0.0-rc.7`** (subida el 2026-11-24). Los 14 días se cumplen hacia el 2026-12-02; entonces se pide el acceso a producción. Correo, GitHub Pages y cuenta de Play Console hechos el 2026-11-06 |
 | **Épica** | E6 · Publicación y distribución |
 | **Prioridad** | P2 |
 | **Tamaño** | L: unas 3–4 semanas de calendario, de las que **14 días** son la prueba cerrada obligatoria; el trabajo técnico es de unos 4–5 días |

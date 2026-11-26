@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-18): P1 a P4 decididas. **Bases desarrolladas** (dominio y guardado, sin cambios visibles); el resto se termina con el próximo juego (P4) |
+| **Estado** | **Hecha** (2026-11-19): «Nuevo» en la tarjeta de «A su sitio» y en la fila «Su progreso», en `1.0.0-rc.6`. P1 a P4 decididas el 2026-11-18 |
 | **Épica** | E1 · Juegos y menú |
 | **Prioridad** | P3 (sube a P2 si el 4.º juego llega antes de la publicación) |
 | **Tamaño** | S (1 entrega, 1 día) |

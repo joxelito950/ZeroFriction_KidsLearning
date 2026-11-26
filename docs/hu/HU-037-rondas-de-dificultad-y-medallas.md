@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | Lista (2026-11-11): el dueño decidió P1 a P10 el 2026-11-10 y P14 a P16 el 2026-11-11. Quedan P11 a P13, que no bloquean y se desarrollan con su recomendación salvo que el dueño diga otra cosa |
+| **Estado** | **Hecha** (2026-11-18): publicada en `1.0.0-rc.4`; las tres rondas pasaron a ocho con HU-051 (D-042 sustituye a D-038). Antes, lista (2026-11-11): el dueño decidió P1 a P10 el 2026-11-10 y P14 a P16 el 2026-11-11. Quedan P11 a P13, que no bloquean y se desarrollan con su recomendación salvo que el dueño diga otra cosa |
 | **Épica** | E1 · Juegos (afecta a todos) y E2 · Zona de Padres |
 | **Prioridad** | P2: cambia el progreso guardado de todos los juegos; cuanto antes, menos datos que migrar |
 | **Tamaño** | L (estimación: 3–4 entregas) |

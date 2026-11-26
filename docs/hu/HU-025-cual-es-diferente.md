@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En curso (desarrollada el 2026-11-11 en `feature/hu-025-odd-one-out`, las 3 entregas; falta el moto g55). Refinamiento cerrado el 2026-11-11 |
+| **Estado** | **Hecha** (2026-11-18): publicada en `1.0.0-rc.4`; con HU-051 sus rondas son las ocho de bronce a diamante. Refinamiento cerrado el 2026-11-11 |
 | **Épica** | E4 · Nuevos juegos |
 | **Prioridad** | P2: candidato a tercer juego, el más barato de hacer después de Sombras |
 | **Tamaño** | M (estimación: 3–4 días) |

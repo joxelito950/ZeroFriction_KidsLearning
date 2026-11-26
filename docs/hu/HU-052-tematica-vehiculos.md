@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista** (2026-11-18): P1 a P7 decididas. El juego A se llama **«A su sitio»**. Falta el icono 3D (P7), que entrega el dueño. Propuesta del dueño el 2026-11-17 («juegos con temática de carros»); redirigida el 2026-11-18 a juegos nuevos con temática exclusiva de vehículos |
+| **Estado** | **En curso**: el juego A, **«A su sitio»**, tiene las 4 entregas hechas (2026-11-19) y está publicado en `1.0.0-rc.6`, con la edición de Navidad; se cierra con lo que digan los testers. El juego B es HU-056 (Semáforo). P1 a P7 decididas el 2026-11-18. Propuesta del dueño el 2026-11-17 («juegos con temática de carros»); redirigida el 2026-11-18 a juegos nuevos con temática exclusiva de vehículos |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | Por juego: M (2–3 días) si reutiliza el arrastre de Sombras; L si trae una mecánica nueva |
