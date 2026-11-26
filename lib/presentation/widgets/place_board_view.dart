@@ -62,6 +62,7 @@ final class PlaceBoardData {
     this.placedBadge,
     this.trayLayout,
     this.balanced = false,
+    this.baskets = false,
   });
 
   /// Cambia con cada tablero: al cambiar, se olvida lo que estaba en el aire.
@@ -94,6 +95,12 @@ final class PlaceBoardData {
   /// «Clasificar», con piezas pequeñas que no pueden bajar de 28 dp (HU-027
   /// 3.4).
   final bool balanced;
+
+  /// Los destinos son cestas dibujadas (HU-027 3.1, 2026-11-26): lo colocado
+  /// queda detrás de la pared delantera, como si hubiera caído dentro, y la
+  /// muestra es una etiqueta en esa pared. Un tester no veía que la tarjeta
+  /// con la muestra fuera una cesta: parecía un objeto más.
+  final bool baskets;
 }
 
 /// Dónde va cada cosa en un tablero de destinos, en coordenadas del propio
@@ -107,6 +114,7 @@ final class PlaceBoardGeometry {
     required this.trayRects,
     required this.pieceCell,
     required this.slots,
+    required this.baskets,
   });
 
   static const double gap = 12;
@@ -123,6 +131,20 @@ final class PlaceBoardGeometry {
   static const double slotFractionTwo = 0.4;
   static const double slotFractionThree = 0.28;
 
+  /// En una cesta: altura del borde (parte del alto de la tarjeta) y lado de
+  /// cada hueco (parte del ancho). Lo colocado baja del borde un tercio de su
+  /// hueco, que queda tapado por la pared delantera.
+  static const double basketRim = 0.57;
+  static const double basketSlot = 0.31;
+  static const double basketSink = 1 / 3;
+
+  /// En una cesta, el emoji llena casi todo su hueco: visto en el emulador,
+  /// con la parte de las tarjetas los objetos se veían pequeños dentro.
+  static const double basketEmojiFraction = 0.95;
+
+  /// Lo que ocupa el emoji de una pieza colocada en su hueco.
+  double get placedEmojiFraction => baskets ? basketEmojiFraction : emojiFraction;
+
   factory PlaceBoardGeometry.compute({
     required Size size,
     required bool placesFirst,
@@ -132,6 +154,7 @@ final class PlaceBoardGeometry {
     int slots = 2,
     bool leftHanded = false,
     bool balanced = false,
+    bool baskets = false,
   }) {
     RangeError.checkValueInInterval(slots, 1, 3, 'slots');
     final bool horizontal = size.width > size.height;
@@ -186,6 +209,7 @@ final class PlaceBoardGeometry {
       trayRects: _place(pieces, trayZone.deflate(padding), pieceCell),
       pieceCell: pieceCell,
       slots: slots,
+      baskets: baskets,
     );
   }
 
@@ -200,10 +224,21 @@ final class PlaceBoardGeometry {
   /// Huecos de cada destino.
   final int slots;
 
+  /// Los destinos son cestas ([PlaceBoardData.baskets]).
+  final bool baskets;
+
   /// Hueco [index] de una pieza colocada en [target]. Si hay más piezas que
   /// huecos, las de más comparten el último.
   Rect slotRect(String target, int index) {
     final Rect card = targetRects[target]!;
+    if (baskets) {
+      // En fila sobre el borde, metidos un tercio en la cesta.
+      final double side = card.width * basketSlot;
+      final double spacing = (card.width - slots * side) / (slots + 1);
+      final int at = math.min(index, slots - 1);
+      final double rim = card.top + card.height * basketRim;
+      return Rect.fromLTWH(card.left + spacing + at * (side + spacing), rim - side * (1 - basketSink), side, side);
+    }
     final double side = card.width * (slots <= 2 ? slotFractionTwo : slotFractionThree);
     final double spacing = (card.width - slots * side) / (slots + 1);
     final int at = math.min(index, slots - 1);
@@ -301,6 +336,10 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
   Rect _flightFrom = Rect.zero;
   Rect _flightTo = Rect.zero;
 
+  /// El vuelo termina dentro de un destino (no vuelve a la bandeja): en las
+  /// cestas, cae por detrás de la pared delantera.
+  bool _flightIn = false;
+
   /// Pieza elegida tocando (o con el lector de pantalla), a la espera de su destino.
   String? _selected;
 
@@ -375,8 +414,9 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
     final Rect from = _draggedRect(geometry);
     final ShadowDropOutcome outcome =
         widget.onDrop(piece, PlaceBoardGeometry.boxOf(_dropRect(geometry, piece)), _targetBoxes(geometry));
-    final Rect to = outcome == ShadowDropOutcome.snapped ? _slotOf(geometry, piece) : geometry.trayRects[piece]!;
-    _fly(piece, from: from, to: to);
+    final bool snapped = outcome == ShadowDropOutcome.snapped;
+    final Rect to = snapped ? _slotOf(geometry, piece) : geometry.trayRects[piece]!;
+    _fly(piece, from: from, to: to, into: snapped);
   }
 
   /// El hueco del destino donde queda [piece]: el siguiente libre. El estado
@@ -388,13 +428,14 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
     return geometry.slotRect(target, index);
   }
 
-  void _fly(String piece, {required Rect from, required Rect to}) {
+  void _fly(String piece, {required Rect from, required Rect to, required bool into}) {
     setState(() {
       _dragged = null;
       if (_reduceMotion) return;
       _flying = piece;
       _flightFrom = from;
       _flightTo = to;
+      _flightIn = into;
     });
     if (!_reduceMotion) _flight.forward(from: 0);
   }
@@ -431,9 +472,8 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
     final Rect? tray = geometry?.trayRects[selected];
     final Rect? at = geometry?.targetRects[target];
     if (tray == null || at == null || slotBefore == null) return;
-    _fly(selected,
-        from: outcome == ShadowDropOutcome.snapped ? tray : at,
-        to: outcome == ShadowDropOutcome.snapped ? slotBefore : tray);
+    final bool snapped = outcome == ShadowDropOutcome.snapped;
+    _fly(selected, from: snapped ? tray : at, to: snapped ? slotBefore : tray, into: snapped);
   }
 
   @override
@@ -458,9 +498,36 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
           slots: data.slots,
           leftHanded: how.leftHanded,
           balanced: data.balanced,
+          baskets: data.baskets,
         );
         _geometry = geometry;
         final double pieceEmoji = geometry.pieceCell * PlaceBoardGeometry.emojiFraction;
+        // En las cestas, lo que cae dentro vuela por detrás de la pared delantera.
+        final bool flightBehind = data.baskets && _flightIn;
+
+        Widget flight() => AnimatedBuilder(
+              animation: _flight,
+              builder: (context, _) {
+                final double t = Curves.easeOutCubic.transform(_flight.value);
+                final Rect rect = Rect.lerp(_flightFrom, _flightTo, t)!;
+                final double scale = _piece(_flying!).scale;
+                // Lo que cae en una cesta acaba al tamaño de lo colocado.
+                final double size = flightBehind
+                    ? _flightFrom.width * PlaceBoardGeometry.emojiFraction * scale * (1 - t) +
+                        _flightTo.width * geometry.placedEmojiFraction * t
+                    : rect.width * PlaceBoardGeometry.emojiFraction * scale;
+                return Positioned.fromRect(
+                  rect: rect,
+                  child: IgnorePointer(
+                    child: _Emoji(
+                      key: ValueKey<String>(_key('flying')),
+                      symbol: _piece(_flying!).symbol,
+                      size: size,
+                    ),
+                  ),
+                );
+              },
+            );
 
         return Stack(
           clipBehavior: Clip.none,
@@ -478,6 +545,7 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                     target: target,
                     almostKey: _key('almost-${target.id}'),
                     almost: _wouldSnap(geometry, target.id),
+                    basket: data.baskets,
                     onActivate: _selected == null ? null : () => _onTargetActivated(target.id),
                   ),
                 ),
@@ -487,7 +555,9 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                 if (_flying != id)
                   Positioned.fromRect(
                     rect: geometry.slotRect(target.id, index),
-                    child: Stack(
+                    // Lo colocado no tapa los toques a su destino.
+                    child: IgnorePointer(
+                        child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         Positioned.fill(
@@ -497,7 +567,7 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                             // Lo colocado llena su hueco: el tamaño ya lo dice
                             // la cesta, que es más pequeña (visto en el moto g55:
                             // con la escala de la pieza, apenas se veía).
-                            size: geometry.slotRect(target.id, 0).width * PlaceBoardGeometry.emojiFraction,
+                            size: geometry.slotRect(target.id, 0).width * geometry.placedEmojiFraction,
                           ),
                         ),
                         if (data.placedBadge case final String badge)
@@ -511,8 +581,21 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                             ),
                           ),
                       ],
-                    ),
+                    )),
                   ),
+            if (_flying != null && flightBehind) flight(),
+            if (data.baskets)
+              for (final BoardTarget target in data.targets)
+                Positioned.fromRect(
+                  rect: geometry.targetRects[target.id]!,
+                  child: _BasketFront(
+                    key: ValueKey<String>(_key('basket-front-${target.id}')),
+                    sampleKey: ValueKey<String>(_key('sample-${target.id}')),
+                    symbol: target.symbol,
+                    symbolScale: target.symbolScale,
+                    almost: _wouldSnap(geometry, target.id),
+                  ),
+                ),
             for (final BoardPiece piece in data.pieces)
               // El hueco sigue en el árbol mientras se arrastra (invisible): si se
               // quitara, su detector de gestos se perdería con el dedo encima.
@@ -559,23 +642,7 @@ class _PlaceBoardViewState extends State<PlaceBoardView> with SingleTickerProvid
                   ),
                 ),
               ),
-            if (_flying case final String flying)
-              AnimatedBuilder(
-                animation: _flight,
-                builder: (context, _) {
-                  final Rect rect = Rect.lerp(_flightFrom, _flightTo, Curves.easeOutCubic.transform(_flight.value))!;
-                  return Positioned.fromRect(
-                    rect: rect,
-                    child: IgnorePointer(
-                      child: _Emoji(
-                        key: ValueKey<String>(_key('flying')),
-                        symbol: _piece(flying).symbol,
-                        size: rect.width * PlaceBoardGeometry.emojiFraction * _piece(flying).scale,
-                      ),
-                    ),
-                  );
-                },
-              ),
+            if (_flying != null && !flightBehind) flight(),
           ],
         );
       },
@@ -615,12 +682,17 @@ class _TargetCard extends StatelessWidget {
     required this.almostKey,
     required this.almost,
     required this.onActivate,
+    this.basket = false,
   });
 
   final BoardTarget target;
   final String almostKey;
   final bool almost;
   final VoidCallback? onActivate;
+
+  /// Dibuja la parte de atrás de una cesta (asa e interior); la pared
+  /// delantera con la muestra va en [_BasketFront], por encima de lo colocado.
+  final bool basket;
 
   @override
   Widget build(BuildContext context) {
@@ -633,7 +705,13 @@ class _TargetCard extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onActivate,
-        child: LayoutBuilder(
+        child: basket
+            ? CustomPaint(
+                key: almost ? ValueKey<String>(almostKey) : null,
+                painter: _BasketBackPainter(almost: almost),
+                child: const SizedBox.expand(),
+              )
+            : LayoutBuilder(
           builder: (context, constraints) => DecoratedBox(
             key: almost ? ValueKey<String>(almostKey) : null,
             decoration: BoxDecoration(
@@ -653,6 +731,162 @@ class _TargetCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// La pared delantera de una cesta, encima de lo colocado: tapa la parte de
+/// abajo de cada objeto para que parezca que ha caído dentro. En ella va la
+/// muestra, como una etiqueta redonda, que dice qué va dentro (HU-027 3.1).
+class _BasketFront extends StatelessWidget {
+  const _BasketFront({
+    super.key,
+    required this.sampleKey,
+    required this.symbol,
+    required this.symbolScale,
+    required this.almost,
+  });
+
+  /// Centro de la etiqueta, en partes del alto de la cesta, y su diámetro en
+  /// partes del ancho.
+  static const double tagCenter = 0.78;
+  static const double tagSide = 0.32;
+
+  final Key sampleKey;
+  final String symbol;
+  final double symbolScale;
+  final bool almost;
+
+  @override
+  Widget build(BuildContext context) => IgnorePointer(
+        child: ExcludeSemantics(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final double width = constraints.maxWidth;
+              final double tag = width * tagSide;
+              return Stack(
+                children: [
+                  Positioned.fill(child: CustomPaint(painter: _BasketFrontPainter(almost: almost))),
+                  Positioned(
+                    left: (width - tag) / 2,
+                    top: constraints.maxHeight * tagCenter - tag / 2,
+                    width: tag,
+                    height: tag,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: AppPalette.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppPalette.deepTeal.withValues(alpha: 0.45), width: 2),
+                      ),
+                      child: _Emoji(key: sampleKey, symbol: symbol, size: tag * 0.6 * symbolScale),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+}
+
+/// Medidas comunes de la cesta dibujada, en partes de su tarjeta.
+abstract final class _Basket {
+  /// Borde: de lado a lado casi entero; la elipse tiene este alto.
+  static const double rimInset = 0.03;
+  static const double rimHeight = 0.12;
+
+  /// Fondo, más estrecho que el borde, y su altura.
+  static const double baseInset = 0.15;
+  static const double base = 0.97;
+
+  /// Lo alto que sube el asa.
+  static const double handleTop = 0.08;
+
+  static double rimY(Size size) => size.height * PlaceBoardGeometry.basketRim;
+
+  static Rect rim(Size size) => Rect.fromCenter(
+        center: Offset(size.width / 2, rimY(size)),
+        width: size.width * (1 - 2 * rimInset),
+        height: size.height * rimHeight,
+      );
+
+  /// El borde de la cesta: teal suave; ámbar cuando la pieza encajaría.
+  static Color edge(bool almost) => almost ? AppPalette.amber : AppPalette.deepTeal.withValues(alpha: 0.6);
+}
+
+/// Asa e interior de la cesta, detrás de lo colocado.
+class _BasketBackPainter extends CustomPainter {
+  const _BasketBackPainter({required this.almost});
+
+  final bool almost;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Rect rim = _Basket.rim(size);
+    final double stroke = size.width * 0.045;
+    final Path handle = Path()
+      ..moveTo(size.width * 0.14, rim.center.dy)
+      ..cubicTo(size.width * 0.14, size.height * _Basket.handleTop, size.width * 0.86,
+          size.height * _Basket.handleTop, size.width * 0.86, rim.center.dy);
+    canvas.drawPath(
+      handle,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = stroke
+        ..color = _Basket.edge(almost),
+    );
+    canvas.drawOval(rim, Paint()..color = AppPalette.deepTeal.withValues(alpha: 0.28));
+  }
+
+  @override
+  bool shouldRepaint(_BasketBackPainter old) => old.almost != almost;
+}
+
+/// Pared delantera de mimbre: tapa lo colocado por debajo del borde.
+class _BasketFrontPainter extends CustomPainter {
+  const _BasketFrontPainter({required this.almost});
+
+  final bool almost;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Rect rim = _Basket.rim(size);
+    final double bottom = size.height * _Basket.base;
+    final Path body = Path()
+      ..moveTo(rim.left, rim.center.dy)
+      // La mitad de delante del borde, curvada hacia abajo.
+      ..arcTo(rim, math.pi, -math.pi, false)
+      ..lineTo(size.width * (1 - _Basket.baseInset), bottom)
+      ..lineTo(size.width * _Basket.baseInset, bottom)
+      ..close();
+    // Opaca, para tapar lo de dentro: petróleo muy suave sobre blanco.
+    canvas.drawPath(body, Paint()..color = Color.alphaBlend(AppPalette.petrolBlue.withValues(alpha: 0.22), AppPalette.white));
+
+    // El mimbre: tiras horizontales y varillas, recortadas a la pared.
+    canvas.save();
+    canvas.clipPath(body);
+    final Paint weave = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = size.width * 0.018
+      ..color = AppPalette.deepTeal.withValues(alpha: 0.22);
+    for (double y = rim.bottom + size.height * 0.07; y < bottom; y += size.height * 0.09) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), weave);
+    }
+    for (double x = size.width * 0.1; x < size.width; x += size.width * 0.12) {
+      canvas.drawLine(Offset(x, rim.center.dy), Offset(size.width / 2 + (x - size.width / 2) * 0.8, bottom), weave);
+    }
+    canvas.restore();
+
+    final Paint edge = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeJoin = StrokeJoin.round
+      ..strokeWidth = size.width * (almost ? 0.05 : 0.03)
+      ..color = _Basket.edge(almost);
+    canvas.drawPath(body, edge);
+    canvas.drawArc(rim, math.pi, -math.pi, false, edge..strokeWidth = size.width * (almost ? 0.06 : 0.045));
+  }
+
+  @override
+  bool shouldRepaint(_BasketFrontPainter old) => old.almost != almost;
 }
 
 /// Una pieza de la bandeja: el emoji en color sobre una tarjeta blanca.

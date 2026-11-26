@@ -100,8 +100,11 @@ void main() {
     for (final SortBasket basket in state.board!.baskets) {
       final Finder card = find.byKey(ValueKey<String>('sort-place-${basket.id}'));
       expect(card, findsOneWidget);
-      expect(find.descendant(of: card, matching: find.text(basket.sample.symbol)), findsOneWidget,
+      final Finder sample = find.byKey(ValueKey<String>('sort-sample-${basket.id}'));
+      expect(find.descendant(of: sample, matching: find.text(basket.sample.symbol)), findsOneWidget,
           reason: 'the sample tells what goes in');
+      expect(tester.getRect(card).contains(tester.getCenter(sample)), isTrue,
+          reason: 'the sample is a tag on its basket');
     }
     for (final SortPiece piece in state.pieces) {
       expect(find.byKey(ValueKey<String>('sort-tray-${piece.id}')), findsOneWidget);

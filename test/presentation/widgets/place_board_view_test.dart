@@ -39,6 +39,31 @@ void main() {
       }
     });
 
+    test('in a drawn basket the objects sit on the rim, a third of them inside, side by side', () {
+      final PlaceBoardGeometry geometry = PlaceBoardGeometry.compute(
+        size: const Size(400, 700),
+        placesFirst: true,
+        targets: baskets,
+        pieces: const ['a', 'b', 'c', 'd'],
+        devicePixelRatio: 2.6,
+        slots: 3,
+        baskets: true,
+      );
+      for (final BoardTarget basket in baskets) {
+        final Rect card = geometry.targetRects[basket.id]!;
+        final double rim = card.top + card.height * PlaceBoardGeometry.basketRim;
+        final List<Rect> slots = [for (var i = 0; i < 3; i++) geometry.slotRect(basket.id, i)];
+        for (final Rect slot in slots) {
+          expect(slot.width, closeTo(card.width * PlaceBoardGeometry.basketSlot, 1e-9), reason: 'bigger than a card slot');
+          expect(slot.bottom - rim, closeTo(slot.height * PlaceBoardGeometry.basketSink, 1e-9),
+              reason: '${basket.id}: a third of it behind the front wall');
+          expect(slot.left >= card.left && slot.right <= card.right && slot.top >= card.top, isTrue);
+        }
+        expect(slots[0].right, lessThan(slots[1].left));
+        expect(slots[1].right, lessThan(slots[2].left));
+      }
+    });
+
     test('two slots keep the «A su sitio» layout', () {
       final PlaceBoardGeometry geometry = compute(slots: 2);
       final Rect card = geometry.targetRects['big']!;

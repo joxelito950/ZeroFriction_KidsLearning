@@ -77,6 +77,8 @@ class SortBoardView extends StatelessWidget {
         slots: SortLadder.maxPerBasket,
         // Con objetos pequeños, el reparto que da las piezas más grandes (3.4).
         balanced: true,
+        // Cestas dibujadas: lo colocado cae dentro (2026-11-26).
+        baskets: true,
         trayLayout: refill
             ? [
                 for (final (int index, String id) in state.traySlots.indexed)
