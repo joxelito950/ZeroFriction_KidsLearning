@@ -22,6 +22,12 @@ abstract final class BrandAssets {
   /// con sus pelotas.
   static const String sortingIcon = 'assets/brand/sorting_icon.png';
 
+  /// La cesta de «Clasificar» (HU-027, PROMPTS §21): entera, detrás de los
+  /// objetos colocados, y su parte delantera con los huecos de la rejilla
+  /// transparentes, delante de ellos. Salen de `cesta-clasificar.png`.
+  static const String sortingBasketBack = 'assets/brand/sorting_basket_back.png';
+  static const String sortingBasketFront = 'assets/brand/sorting_basket_front.png';
+
   /// Icono de «¿Cuántos hay?» (HU-026, PROMPTS §17): tres peces y tres patitos.
   static const String countingIcon = 'assets/brand/counting_icon.png';
 
@@ -49,6 +55,8 @@ abstract final class BrandAssets {
     shadowsIcon,
     oddOneOutIcon,
     vehiclesIcon,
+    sortingBasketBack,
+    sortingBasketFront,
     handGuide,
     childResting,
     childSleeping,

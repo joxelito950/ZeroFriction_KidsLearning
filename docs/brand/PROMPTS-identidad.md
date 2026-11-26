@@ -173,6 +173,8 @@ Si los rayos salen finos y largos, pedir: «Rayos cortos, gruesos y redondeados,
 
 Entregar como `assets/brand/opposites_icon.png`, 1024 × 1024 px con transparencia real.
 
+**Recibida el 2026-11-26** (`docs/brand/fuentes/icono-opuestos.png`, 1254 × 1254, transparencia real). Cumple: sol ámbar con rayos cortos y redondeados, mejillas coral y ojos abiertos; luna crema dormida y sonriente; abrazados y un poco solapados en el centro; contorno teal común que la separa de la crema; sin niño ni texto; silueta compacta, y a 48 px se lee «el día y la noche juntos». Diferencias menores que no impiden usarla: las estrellas son ámbar y no dorado #A86B12, el sol abraza con un brazo en vez de con un rayo, y ocupa el 97 % del lienzo (al integrarla se recorta a su contorno y se reduce a 256 px). Se integra con HU-036.
+
 ## 20. Icono del juego «Semáforo» (silueta cerrada para el dorado, HU-056)
 
 Es el único dibujo con rojo y verde: el dueño decidió (HU-056 P2) usar **solo en el semáforo** el rubí y el esmeralda de las medallas.
@@ -198,7 +200,9 @@ Sustituye a la cesta dibujada con código, que «se nota forzada» (dueño, 2026
 
 Si los huecos salen blancos o crema en vez de transparentes, pedir: «Los huecos de la rejilla tienen que ser transparentes, como el fondo: se tiene que ver a través de ellos». Si la cesta sale llena, pedir: «La cesta está vacía; la app pone los objetos». Si sale de lado o muy desde arriba, pedir: «De frente, con la cámara un poco más alta que el borde: se ve el óvalo del borde, pero no el fondo de la base».
 
-Entregar como `assets/brand/sorting_basket.png`, 1024 × 1024 px con transparencia real, y el original en `docs/brand/fuentes/cesta-clasificar.png`. Al integrarla se miden en la imagen el óvalo del borde y la placa, y con esas medidas se colocan los objetos y la muestra.
+Entregar el original en `docs/brand/fuentes/cesta-clasificar.png`, 1024 × 1024 px con transparencia real. Al integrarla se miden en la imagen el óvalo del borde y la placa, y con esas medidas se colocan los objetos y la muestra.
+
+**Recibida e integrada el 2026-11-26** (1254 × 1254, transparencia real). Cumple el estilo: mimbre de plastilina, borde trenzado, asa, placa crema con borde teal y contorno teal. **Los huecos no salieron transparentes:** muestran la pared del fondo en marrón oscuro (el texto pedía las dos cosas a la vez). No hace falta repetirla: `tool/brand/prepare_brand_images.py` saca dos capas, `sorting_basket_back.png` (entera) y `sorting_basket_front.png` (por debajo del borde delantero, con el marrón de los huecos vuelto transparente). Encuadre real: asa al 2 %, boca entre el 41,5 % y el 52,5 % (borde delantero), base al 98 %; el mimbre es más naranja que el ámbar #ECA463. Vista en el emulador `Medium_Phone_API_37.0` con 2 y 3 cestas.
 
 ## Qué comprobar en cada resultado
 
