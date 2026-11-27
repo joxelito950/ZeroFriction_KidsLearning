@@ -87,6 +87,20 @@ In 9 languages: English, Spanish, Portuguese, German, French, Italian, Japanese,
 
 ## Novedades de la versión (campo «Notas de la versión» de Play Console, máx. 500 caracteres)
 
+**`1.0.0-rc.8` · es-419:**
+
+> Nuevo juego: Clasificar. Lleva cada cosa a su cesta: por color, por tamaño o por los dos.
+> Sombras: desde la ronda esmeralda, una sombra aparece al revés, en espejo.
+> Mejoras en horizontal y pequeños arreglos.
+> Tus medallas y estrellas se conservan.
+
+**`1.0.0-rc.8` · en-US:**
+
+> New game: Sorting. Put each thing in its basket: by colour, by size or by both.
+> Shadows: from the emerald round, one shadow is mirrored.
+> Better landscape layout and small fixes.
+> Your medals and stars are kept.
+
 **`1.0.0-rc.7` · es-419:**
 
 > Nuevo: Actividades sin pantallas. Ideas para jugar en casa con cosas cotidianas, con buscador y una idea para cada día.
