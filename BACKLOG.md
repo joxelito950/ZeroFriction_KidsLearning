@@ -134,7 +134,7 @@ Actualizado el 2026-11-27.
    - **HU-027 (Clasificar)**, ya en `develop` con la cesta ilustrada: falta M1 (diamante en horizontal en el moto g55);
    - **HU-040 entrega 1** (sombras en espejo en esmeralda), en `feature/hu-040-1-twists`: falta M7 en el moto g55;
    - **HU-036 entrega 1** (motor de parejas, no cambia nada visible), en `feature/hu-036-1-pairs`;
-   - versión `1.0.0-rc.8+9`, etiqueta `v1.0.0-rc.8` y AAB a la prueba cerrada.
+   - versión `1.0.0-rc.8+9`, etiqueta `v1.0.0-rc.8` y AAB a la prueba cerrada. **Preparada el 2026-11-27**, con todo en `develop` (PR #174 a #178): probada en el moto g55 (Clasificar diamante en horizontal) y en el emulador de Android 8.0 (Sombras esmeralda y los colores de Clasificar). En el moto apareció un fallo de la bandeja en horizontal (las piezas se salían de su zona, también en Sombras), arreglado en `fix/hu-027-tray-columns`.
    - **Después (`rc.9`):** HU-036 entregas 2 y 3 (Opuestos), luego HU-026 (¿Cuántos hay?, sobre el mismo motor), HU-056 (Semáforo); HU-047 entrega 3; **TD-013**, ya lista: medir los cinco escenarios en `LowEnd_API26` (E6). La validación de HU-040 con 3–5 niños de 4–5 años abre su entrega 2.
 4. **Antes de producción:**
    - **TD-010:** pantallazos de los padres testers que prueban solo en tablets (sin fallos reportados hasta ahora);
@@ -164,7 +164,7 @@ Lo que está desarrollado y publicado pero aún no se ha mirado en un dispositiv
 
 | # | Historia | Qué mirar | Cierra |
 |---|---|---|---|
-| M1 | HU-027 Clasificar | El **nivel 8 de diamante** (los 3 tamaños y todos los colores, sección 4.3) **en horizontal**: en vertical ya se vio el 2026-11-26, con la cesta ilustrada | HU-027 |
+| M1 | HU-027 Clasificar | El **nivel 8 de diamante** (los 3 tamaños y todos los colores, sección 4.3). **Horizontal visto el 2026-11-27** (bandeja, cestas, colocar con toques; arreglado el desborde de la bandeja); vertical, el 2026-11-26. Falta solo llegar al nivel 8 | HU-027 |
 | M2 | HU-038 Hora de dormir | Llegar a la hora de dormir → pantalla de noche con el niño durmiendo, y «15 minutos más». **Después quitar la hora de prueba** (quedó en 15:45–7:00) | HU-038 |
 | M3 | HU-048, HU-049, HU-051 Medallas | Las 8 medallas se distinguen de un vistazo (metales con estrellas, gemas facetadas), gemas pequeñas en el menú, los 8 chips de la Zona de Padres, el paso entre rondas y el niño celebrando con la medalla en el pecho, en vertical y horizontal | HU-048, HU-049, HU-051 |
 | M4 | HU-039, HU-031 Cómo juega | «Tocar» en Sombras y «A su sitio» (objeto y después su sitio; un sitio equivocado cuenta como error); con «Izquierda» y en horizontal, sombras y sitios a la derecha y la mano guía reflejada | HU-039, HU-031 |
