@@ -42,6 +42,25 @@ void main() {
         }
       }
     });
+
+    test('after the validation (delivery 2): upside down in sapphire, a quarter turn in obsidian, a mix in diamond',
+        () {
+      for (var level = 4; level <= 8; level++) {
+        final ShadowTwistPlan sapphire = ShadowTwists.planFor(GameDifficulty.sapphire, level, late: true);
+        final ShadowTwistPlan obsidian = ShadowTwists.planFor(GameDifficulty.obsidian, level, late: true);
+        final ShadowTwistPlan diamond = ShadowTwists.planFor(GameDifficulty.diamond, level, late: true);
+        expect(sapphire.kinds, [ShadowTwist.upsideDown]);
+        expect((sapphire.count, sapphire.hint), (1, true));
+        expect(obsidian.kinds, [ShadowTwist.quarterTurn]);
+        expect((obsidian.count, obsidian.hint), (1, true));
+        expect(diamond.kinds,
+            unorderedEquals(const [ShadowTwist.mirror, ShadowTwist.upsideDown, ShadowTwist.quarterTurn]));
+        expect(diamond.count, level <= 5 ? 1 : 2);
+        expect(diamond.hint, isFalse, reason: 'no hints in diamond');
+      }
+      expect(ShadowTwists.planFor(GameDifficulty.emerald, 4, late: true).kinds, [ShadowTwist.mirror]);
+      expect(ShadowTwists.planFor(GameDifficulty.sapphire, 3, late: true).isEmpty, isTrue);
+    });
   });
 
   group('ShadowTwists.valid (table 5)', () {

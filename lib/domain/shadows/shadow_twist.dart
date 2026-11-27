@@ -51,12 +51,14 @@ abstract final class ShadowTwists {
   static const int firstLevel = 4;
 
   /// Tabla 4.1.
-  static ShadowTwistPlan planFor(GameDifficulty round, int level) {
+  /// [late] es [lateTwistsEnabled]; los tests lo encienden para probar la
+  /// tabla de la entrega 2.
+  static ShadowTwistPlan planFor(GameDifficulty round, int level, {bool late = lateTwistsEnabled}) {
     if (!enabled || level < firstLevel || round.index < GameDifficulty.emerald.index) return ShadowTwistPlan.none;
     if (round == GameDifficulty.emerald) {
       return const ShadowTwistPlan(kinds: [ShadowTwist.mirror], count: 1, hint: true);
     }
-    if (!lateTwistsEnabled) return const ShadowTwistPlan(kinds: [ShadowTwist.mirror], count: 1, hint: false);
+    if (!late) return const ShadowTwistPlan(kinds: [ShadowTwist.mirror], count: 1, hint: false);
     return switch (round) {
       GameDifficulty.sapphire => const ShadowTwistPlan(kinds: [ShadowTwist.upsideDown], count: 1, hint: true),
       GameDifficulty.obsidian => const ShadowTwistPlan(kinds: [ShadowTwist.quarterTurn], count: 1, hint: true),
