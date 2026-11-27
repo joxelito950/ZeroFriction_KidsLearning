@@ -10,6 +10,7 @@ import 'package:toddler_logic/domain/entities/user_profile.dart';
 import 'package:toddler_logic/domain/repositories/i_persistence_repository.dart';
 import 'package:toddler_logic/domain/settings/game_difficulty.dart';
 import 'package:toddler_logic/domain/shadows/shadow_ladder.dart';
+import 'package:toddler_logic/domain/shadows/shadow_twist.dart';
 import 'package:toddler_logic/presentation/blocs/shadow_game/shadow_game_cubit.dart';
 import 'package:toddler_logic/presentation/blocs/shadow_game/shadow_game_state.dart';
 import 'package:toddler_logic/presentation/screens/shadow_game_screen.dart';
@@ -374,6 +375,60 @@ void main() {
       expect(geometry.emojiSize, lessThanOrEqualTo(220 / 3));
       expect(geometry.shadowZone.top, greaterThan(geometry.trayZone.top), reason: 'shadows last: below');
       expect(geometry.shadowRects['a']!.size, geometry.trayRects['a']!.size);
+    });
+  });
+
+  group('twisted shadows (HU-040)', () {
+    Matrix4 twistOf(WidgetTester tester, String key) =>
+        tester.widget<Transform>(find.byKey(ValueKey<String>(key))).transform;
+
+    testWidgets('gold has no twisted shadows, even at level 4', (tester) async {
+      await pumpScreen(tester, level: 4);
+      expect(stateOf(tester).twists, isEmpty);
+      expect(find.byWidgetPredicate((widget) => '${widget.key}'.contains('shadow-twist')), findsNothing);
+    });
+
+    testWidgets('emerald level 4: one shadow mirrored, read as such; its object turns when it snaps', (tester) async {
+      final SemanticsHandle semantics = tester.ensureSemantics();
+      await pumpScreen(tester, level: 4, round: GameDifficulty.emerald, waitIntro: false);
+      final ShadowGameState state = stateOf(tester);
+      expect(state.twists.values, [ShadowTwist.mirror]);
+      expect(state.twistHint, isTrue);
+      final String twisted = state.twists.keys.single;
+      expect(twistOf(tester, 'shadow-twist-$twisted').storage[0], closeTo(-1, 1e-9), reason: 'mirrored silhouette');
+      expect(find.bySemanticsLabel('Sombra de $twisted, al revés'), findsOneWidget);
+      for (final String other in state.shadows.where((shadow) => shadow != twisted)) {
+        expect(find.byKey(ValueKey<String>('shadow-twist-$other')), findsNothing);
+      }
+
+      await dragTo(tester, twisted, twisted);
+      expect(stateOf(tester).placed, contains(twisted));
+      expect(find.byKey(ValueKey<String>('shadow-placed-$twisted')), findsOneWidget);
+      expect(twistOf(tester, 'shadow-twist-$twisted').storage[0], greaterThan(-1), reason: 'it arrives straight');
+      await tester.pump(ShadowBoard.twistDuration + const Duration(milliseconds: 50));
+      expect(twistOf(tester, 'shadow-twist-$twisted').storage[0], closeTo(-1, 1e-9), reason: 'and turns');
+      semantics.dispose();
+    });
+
+    testWidgets('emerald: if nobody touches anything, the object turns in the tray and back (3.3)', (tester) async {
+      await pumpScreen(tester, level: 4, round: GameDifficulty.emerald, waitIntro: false);
+      final String twisted = stateOf(tester).twists.keys.single;
+      final String key = 'shadow-twist-hint-$twisted';
+      expect(twistOf(tester, key).storage[0], closeTo(1, 1e-9));
+
+      await tester.pump(ShadowBoard.twistHintFirstDelay);
+      await tester.pump(ShadowBoard.twistHintDuration ~/ 2);
+      expect(twistOf(tester, key).storage[0], lessThan(0), reason: 'half way: facing the other side');
+      await tester.pump(ShadowBoard.twistHintDuration ~/ 2 + const Duration(milliseconds: 50));
+      expect(twistOf(tester, key).storage[0], closeTo(1, 1e-9), reason: 'back to how it was');
+    });
+
+    testWidgets('diamond has no hint (3.3)', (tester) async {
+      await pumpScreen(tester, level: 6, round: GameDifficulty.diamond, waitIntro: false);
+      final ShadowGameState state = stateOf(tester);
+      expect(state.twists, isNotEmpty);
+      expect(state.twistHint, isFalse);
+      expect(find.byKey(ValueKey<String>('shadow-twist-hint-${state.twists.keys.first}')), findsNothing);
     });
   });
 
