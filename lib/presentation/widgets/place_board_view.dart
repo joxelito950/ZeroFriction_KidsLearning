@@ -277,7 +277,10 @@ final class PlaceBoardGeometry {
   /// Reparte [items] en filas centradas dentro de [area].
   static Map<T, Rect> _place<T>(List<T> items, Rect area, double cell) {
     if (items.isEmpty || cell <= 0) return {for (final item in items) item: Rect.zero};
-    final int columns = math.max(1, math.min(items.length, ((area.width + gap) / (cell + gap)).floor()));
+    // Una milésima de holgura: la celda se calcula para que quepan justo N
+    // columnas, y el redondeo dejaba N − 1 y las piezas se salían de la zona
+    // (visto en el moto g55 en horizontal, «Clasificar» diamante).
+    final int columns = math.max(1, math.min(items.length, ((area.width + gap) / (cell + gap) + 1e-3).floor()));
     final int rows = (items.length / columns).ceil();
     final double top = area.top + (area.height - (rows * cell + (rows - 1) * gap)) / 2;
     final Map<T, Rect> rects = {};
