@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista (2026-11-25)**: el dueño responde las preguntas el 2026-11-25 (sección 12) |
+| **Estado** | **En curso (2026-11-27)**: entrega 1 hecha en `feature/hu-036-1-pairs` (motor de parejas a la vista, sin juego en el menú). Preguntas respondidas el 2026-11-25 (sección 12); el icono (pieza 19) ya está recibido |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | M (3 días, 3 entregas) |
@@ -169,6 +169,13 @@ En el tutorial (nivel 1, dos parejas de bronce), la mano toca ☀️ y después 
 | 1 | **Motor de parejas a la vista** (dominio y vista genéricos) con tests, sin juego en el menú | Sí: no cambia nada visible |
 | 2 | **Opuestos de bronce a zafiro**: catálogo seguro, escalera, pantalla, tutorial, menú, progreso, «Nuevo», 9 idiomas, y la carta sin pareja desde esmeralda | Sí |
 | 3 | **Obsidiana y diamante**: las dos cartas sin pareja de diamante y las parejas dudosas que pasen la validación | Sí |
+
+**Entrega 1, hecha el 2026-11-27** (`feature/hu-036-1-pairs`), lista para HU-026:
+
+- **Dominio común** (`lib/domain/pairs/pair_board.dart`): `PairBoard<T>` (cartas con un contenido de cualquier tipo, su pareja y su lado; `deal` reparte en dos columnas o mezcladas, con cartas sin pareja; `matches`, `partnerOf`, `isComplete`), `PairPlay` (las reglas de los toques de 3.2: elegir, soltar, cambiar en el mismo lado, juntar o fallar; fallos y movimientos) y `PairStars` (4.2).
+- **Vista** (`lib/presentation/widgets/pair_board_view.dart`): `PairBoardGeometry` (dos columnas, o dos filas en horizontal; mezcladas, la cuadrícula con las cartas más grandes; cartas cuadradas de 64 a 180 dp) y `PairBoardView` (carta blanca con borde teal al 35 %; elegida, crece con halo ámbar; emparejada, borde dorado al 50 % y contenido al 60 %; el vaivén del fallo y el saltito de la pareja, que se acercan y vuelven a su sitio; sin animación con «reducir movimiento»). El contenido de cada carta lo dibuja el juego (`cardBuilder`): un emoji aquí, un grupo de objetos en HU-026.
+- **Tests:** reparto, toques, estrellas, y 12 cartas de al menos 64 dp sin tocarse en los teléfonos compactos en vertical y en horizontal.
+- **Queda para la entrega 2:** el `PairGameCubit` (cronómetro, rondas, progreso), la pantalla, el catálogo y el menú.
 
 ## 11. Tamaño estimado
 

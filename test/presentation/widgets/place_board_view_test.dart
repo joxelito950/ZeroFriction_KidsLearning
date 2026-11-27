@@ -66,6 +66,36 @@ void main() {
       }
     });
 
+    // Visto en el moto g55 en horizontal (2026-11-27): con 5 piezas, el
+    // redondeo dejaba 2 columnas donde cabían 3 y la bandeja se salía de su zona.
+    test('the tray pieces always stay inside the tray, whatever the board size', () {
+      const List<BoardTarget> four = [
+        BoardTarget(id: 'a', symbol: '🍇', semanticLabel: 'a'),
+        BoardTarget(id: 'b', symbol: '🍇', semanticLabel: 'b', scale: 0.85),
+        BoardTarget(id: 'c', symbol: '🍊', semanticLabel: 'c'),
+        BoardTarget(id: 'd', symbol: '🍊', semanticLabel: 'd', scale: 0.85),
+      ];
+      for (var width = 600.0; width < 1200; width += 0.5) {
+        for (final double height in [250.0, 282.0, 300.0]) {
+          final PlaceBoardGeometry geometry = PlaceBoardGeometry.compute(
+            size: Size(width, height),
+            placesFirst: false,
+            targets: four,
+            pieces: const ['1', '2', '3', '4', '5'],
+            devicePixelRatio: 2.125,
+            slots: 3,
+            balanced: true,
+            baskets: true,
+          );
+          final Rect zone = geometry.trayZone.inflate(0.01);
+          for (final Rect piece in geometry.trayRects.values) {
+            expect(zone.contains(piece.topLeft) && zone.contains(piece.bottomRight), isTrue,
+                reason: 'board ${Size(width, height)}: $piece outside ${geometry.trayZone}');
+          }
+        }
+      }
+    });
+
     test('two slots keep the «A su sitio» layout', () {
       final PlaceBoardGeometry geometry = compute(slots: 2);
       final Rect card = geometry.targetRects['big']!;

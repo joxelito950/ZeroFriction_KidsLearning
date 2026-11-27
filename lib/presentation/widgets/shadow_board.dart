@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/shadows/shadow_drop.dart';
 import '../../domain/shadows/shadow_ladder.dart';
+import '../../domain/shadows/shadow_twist.dart';
 import '../../l10n/app_localizations.dart';
 import '../blocs/how_to_play/how_to_play_cubit.dart';
 import '../blocs/shadow_game/shadow_game_state.dart';
@@ -112,7 +114,10 @@ final class ShadowBoardGeometry {
   /// Reparte [items] en filas centradas dentro de [area].
   static Map<String, Rect> _place(List<String> items, Rect area, double cell) {
     if (items.isEmpty || cell <= 0) return {for (final item in items) item: Rect.zero};
-    final int columns = math.max(1, math.min(items.length, ((area.width + gap) / (cell + gap)).floor()));
+    // Una milésima de holgura: la celda se calcula para que quepan justo N
+    // columnas, y el redondeo dejaba N − 1 y las piezas se salían de la zona
+    // (visto en el moto g55 en horizontal, «Clasificar» diamante).
+    final int columns = math.max(1, math.min(items.length, ((area.width + gap) / (cell + gap) + 1e-3).floor()));
     final int rows = (items.length / columns).ceil();
     final double top = area.top + (area.height - (rows * cell + (rows - 1) * gap)) / 2;
     final rects = <String, Rect>{};
@@ -170,6 +175,26 @@ class ShadowBoard extends StatefulWidget {
   /// efecto de «levantar» el objeto y lo que se ve es lo que cuenta.
   static const double trayScale = 0.85;
 
+  /// Giro del objeto hasta la postura de su sombra al encajar (HU-040 3.2).
+  static const Duration twistDuration = Duration(milliseconds: 300);
+
+  /// Pista de las sombras dadas la vuelta (HU-040 3.3): si el niño no toca
+  /// nada, el objeto gira en la bandeja hasta la postura de su sombra y vuelve.
+  /// Como la mano guía: a los 4 s y después cada 8 s.
+  static const Duration twistHintFirstDelay = Duration(seconds: 4);
+  static const Duration twistHintRepeatEvery = Duration(seconds: 8);
+  static const Duration twistHintDuration = Duration(seconds: 1);
+
+  /// La transformación de una sombra con [twist], a medio camino según [t]
+  /// (0 = el dibujo de la bandeja, 1 = la postura de la sombra). El espejo se
+  /// estrecha y se abre del otro lado, como una tarjeta que se da la vuelta.
+  static Matrix4 twistMatrix(ShadowTwist twist, double t) => switch (twist) {
+        ShadowTwist.none => Matrix4.identity(),
+        ShadowTwist.mirror => Matrix4.diagonal3Values(1 - 2 * t, 1, 1),
+        ShadowTwist.upsideDown => Matrix4.rotationZ(math.pi * t),
+        ShadowTwist.quarterTurn => Matrix4.rotationZ(math.pi / 2 * t),
+      };
+
   @override
   State<ShadowBoard> createState() => _ShadowBoardState();
 }
@@ -183,6 +208,17 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
     ..addStatusListener((status) {
       if (status == AnimationStatus.completed) setState(() => _flying = null);
     });
+  late final AnimationController _twistHint =
+      AnimationController(vsync: this, duration: ShadowBoard.twistHintDuration)
+        ..addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            _twistHint.reset();
+            _scheduleTwistHint(ShadowBoard.twistHintRepeatEvery);
+          }
+        });
+
+  /// Espera de la pista de giro; se reinicia con cada toque (HU-040 3.3).
+  Timer? _twistHintTimer;
 
   ShadowBoardGeometry? _geometry;
   int? _introRound;
@@ -204,6 +240,7 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
   /// Tocar el objeto lo elige; tocarlo otra vez lo suelta; tocar otro cambia
   /// la elección (HU-039 R3).
   void _onObjectTapped(String symbol) {
+    _touched();
     if (_dragged != null || _flying != null || !widget.state.canDrag(symbol)) return;
     if (_selected != symbol) widget.onGrab(symbol);
     setState(() => _selected = _selected == symbol ? null : symbol);
@@ -213,6 +250,49 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
   void didChangeDependencies() {
     super.didChangeDependencies();
     _startIntroIfNeeded();
+    _syncTwistHint();
+  }
+
+  /// Si la pista de giro toca en este tablero: en su ronda, jugando, con la
+  /// sombra transformada aún sin su objeto y sin «reducir movimiento».
+  bool get _twistHintActive {
+    final ShadowGameState state = widget.state;
+    return state.twistHint &&
+        state.phase == ShadowRoundPhase.playing &&
+        state.twists.keys.any((symbol) => !state.placed.contains(symbol)) &&
+        !_reduceMotion;
+  }
+
+  void _syncTwistHint() {
+    if (!_twistHintActive) {
+      _twistHintTimer?.cancel();
+      _twistHintTimer = null;
+      if (_twistHint.isAnimating) _twistHint.reset();
+    } else if (_twistHintTimer == null && !_twistHint.isAnimating) {
+      _scheduleTwistHint(ShadowBoard.twistHintFirstDelay);
+    }
+  }
+
+  void _scheduleTwistHint(Duration delay) {
+    _twistHintTimer?.cancel();
+    if (!_twistHintActive) {
+      _twistHintTimer = null;
+      return;
+    }
+    _twistHintTimer = Timer(delay, () {
+      _twistHintTimer = null;
+      if (mounted && _twistHintActive && _dragged == null && _selected == null && _flying == null) {
+        _twistHint.forward(from: 0);
+      } else if (mounted) {
+        _scheduleTwistHint(ShadowBoard.twistHintRepeatEvery);
+      }
+    });
+  }
+
+  /// El niño tocó algo: la pista se calla y vuelve a esperar.
+  void _touched() {
+    if (_twistHint.isAnimating) _twistHint.reset();
+    if (_twistHintActive) _scheduleTwistHint(ShadowBoard.twistHintRepeatEvery);
   }
 
   @override
@@ -223,14 +303,20 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
       _flying = null;
       _selected = null;
       _flight.reset();
+      _twistHintTimer?.cancel();
+      _twistHintTimer = null;
+      _twistHint.reset();
     }
     _startIntroIfNeeded();
+    _syncTwistHint();
   }
 
   @override
   void dispose() {
+    _twistHintTimer?.cancel();
     _intro.dispose();
     _flight.dispose();
+    _twistHint.dispose();
     super.dispose();
   }
 
@@ -252,6 +338,7 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
   }
 
   void _onPanStart(String symbol, DragStartDetails details) {
+    _touched();
     if (_dragged != null || _flying != null || !widget.state.canDrag(symbol)) return;
     final Rect? slot = _geometry?.trayRects[symbol];
     if (slot == null) return;
@@ -311,6 +398,7 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
   void _onShadowActivated(String shadow) {
     final String? selected = _selected;
     final ShadowBoardGeometry? geometry = _geometry;
+    _touched();
     if (selected == null) return;
     setState(() => _selected = null);
     final ShadowDropOutcome outcome = widget.onMatch(selected, shadow);
@@ -361,12 +449,19 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
                   _ShadowCell(
                     key: ValueKey<String>('shadow-target-$shadow'),
                     symbol: shadow,
+                    twist: state.twistOf(shadow),
+                    twistDuration: _reduceMotion ? Duration.zero : ShadowBoard.twistDuration,
                     emojiSize: geometry.emojiSize,
                     filled: state.placed.contains(shadow) && !(_flying == shadow && _flyingToShadow),
                     almost: _dragged == shadow && _wouldSnap(geometry, shadow),
                     semanticLabel: state.placed.contains(shadow)
                         ? l10n.shadowsPlacedSemantics(shadow)
-                        : l10n.shadowsShadowSemantics(shadow),
+                        : switch (state.twistOf(shadow)) {
+                            ShadowTwist.none => l10n.shadowsShadowSemantics(shadow),
+                            ShadowTwist.mirror => l10n.shadowsShadowMirroredSemantics(shadow),
+                            ShadowTwist.upsideDown => l10n.shadowsShadowUpsideDownSemantics(shadow),
+                            ShadowTwist.quarterTurn => l10n.shadowsShadowTurnedSemantics(shadow),
+                          },
                     onActivate:
                         state.placed.contains(shadow) || _selected == null ? null : () => _onShadowActivated(shadow),
                   ),
@@ -396,11 +491,14 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
                         onPanCancel: dragEnabled ? () => _onPanEnd(object) : null,
                         child: Opacity(
                           opacity: _dragged == object ? 0 : 1,
-                          child: _TrayObject(
-                            symbol: object,
-                            cell: geometry.cell,
-                            emojiSize: geometry.emojiSize,
-                            selected: _selected == object,
+                          child: _twistHintWrap(
+                            object,
+                            _TrayObject(
+                              symbol: object,
+                              cell: geometry.cell,
+                              emojiSize: geometry.emojiSize,
+                              selected: _selected == object,
+                            ),
                           ),
                         ),
                       ),
@@ -475,6 +573,26 @@ class _ShadowBoardState extends State<ShadowBoard> with TickerProviderStateMixin
     ];
   }
 
+  /// El objeto de una sombra transformada gira hasta su postura y vuelve
+  /// (HU-040 3.3).
+  Widget _twistHintWrap(String symbol, Widget child) {
+    final ShadowTwist twist = widget.state.twistOf(symbol);
+    if (twist == ShadowTwist.none || !widget.state.twistHint) return child;
+    return AnimatedBuilder(
+      animation: _twistHint,
+      child: child,
+      builder: (context, child) => Transform(
+        key: ValueKey<String>('shadow-twist-hint-$symbol'),
+        alignment: Alignment.center,
+        // El toque cuenta aunque el objeto esté a medio girar (el espejo pasa
+        // por ancho 0).
+        transformHitTests: false,
+        transform: ShadowBoard.twistMatrix(twist, Curves.easeInOut.transform(math.sin(math.pi * _twistHint.value))),
+        child: child,
+      ),
+    );
+  }
+
   Widget _hintWrap(String symbol, GlobalKey? key, Widget child) =>
       symbol == widget.hintSymbol && key != null ? KeyedSubtree(key: key, child: child) : child;
 }
@@ -506,6 +624,8 @@ class _ShadowCell extends StatelessWidget {
   const _ShadowCell({
     super.key,
     required this.symbol,
+    required this.twist,
+    required this.twistDuration,
     required this.emojiSize,
     required this.filled,
     required this.semanticLabel,
@@ -514,6 +634,11 @@ class _ShadowCell extends StatelessWidget {
   });
 
   final String symbol;
+
+  /// Postura de la sombra (HU-040): la silueta se pinta así y el objeto, al
+  /// encajar, gira hasta ella en [twistDuration].
+  final ShadowTwist twist;
+  final Duration twistDuration;
   final double emojiSize;
   final bool filled;
 
@@ -540,11 +665,26 @@ class _ShadowCell extends StatelessWidget {
             border: Border.all(color: AppPalette.amber.withValues(alpha: almost ? 1 : 0), width: 4),
           ),
           child: Center(
-            child: _Emoji(
-              key: ValueKey<String>(filled ? 'shadow-placed-$symbol' : 'shadow-silhouette-$symbol'),
-              symbol: symbol,
-              size: emojiSize,
-              silhouette: !filled,
+            child: TweenAnimationBuilder<double>(
+              // Uno nuevo al encajar: el objeto llega derecho y gira.
+              key: ValueKey<bool>(filled),
+              tween: Tween<double>(begin: filled ? 0 : 1, end: 1),
+              duration: filled ? twistDuration : Duration.zero,
+              curve: Curves.easeInOut,
+              child: _Emoji(
+                key: ValueKey<String>(filled ? 'shadow-placed-$symbol' : 'shadow-silhouette-$symbol'),
+                symbol: symbol,
+                size: emojiSize,
+                silhouette: !filled,
+              ),
+              builder: (context, t, child) => twist == ShadowTwist.none
+                  ? child!
+                  : Transform(
+                      key: ValueKey<String>('shadow-twist-$symbol'),
+                      alignment: Alignment.center,
+                      transform: ShadowBoard.twistMatrix(twist, t),
+                      child: child,
+                    ),
             ),
           ),
         ),
