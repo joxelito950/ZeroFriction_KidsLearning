@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | En refinamiento (iniciado el 2026-11-10; preguntas en la sección 6) |
+| **Estado** | **Lista (2026-11-27)**: el dueño acepta el objetivo de P2. Iniciado el 2026-11-10 (preguntas en la sección 6) |
 | **Prioridad** | P2: antes de producción |
 | **Tamaño** | S (1–2 días, más lo que haya que corregir) |
 | **Depende de** | Nada. Conviene hacerlo con TD-012 |
@@ -55,7 +55,7 @@ Que la app se vea fluida en los teléfonos que tienen muchas familias: Android 8
 | # | Pregunta | Recomendación | Bloquea |
 |---|---|---|---|
 | P1 | ¿Hay algún teléfono real de gama baja disponible (de un tester o de la familia)? | Pedirlo a los testers de la prueba cerrada con «Enviar comentarios» (HU-032). Si no, basta el emulador limitado | No |
-| P2 | ¿Qué objetivo se fija? | El de la sección 3.3: 60 fps en el moto g55; 30 fps estables en gama baja | Sí |
+| P2 | ¿Qué objetivo se fija? | ✅ Decidido (2026-11-27): **el de la sección 3.3**, 60 fps en el moto g55 (ningún fotograma por encima de 16 ms) y 30 fps estables en gama baja, sin tirones de más de 100 ms al tocar | Sí |
 
 ## 7. Primera medida en un teléfono real (2026-11-19)
 
