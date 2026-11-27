@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Estado** | **Lista (2026-11-25)**: el dueño responde las preguntas el 2026-11-25 (sección 12). Cambia el reparto por rondas: espejo desde esmeralda, boca abajo en zafiro, giro de 90° en obsidiana y todos al azar en diamante |
+| **Estado** | **En curso (2026-11-27)**: entrega 1 hecha en `feature/hu-040-1-twists` (espejo en esmeralda con su pista, vista en el emulador de Android 8). Los tres giros están programados, pero boca abajo, 90° y la mezcla de diamante esperan la validación con niños (`ShadowTwists.lateTwistsEnabled = false`); mientras tanto, zafiro, obsidiana y diamante siguen con el espejo, sin pista. Preguntas respondidas el 2026-11-25 (sección 12) |
 | **Épica** | E4 · Juegos |
 | **Prioridad** | P2 |
 | **Tamaño** | S (1–1,5 días, 2 entregas) |
@@ -129,6 +129,15 @@ Ninguno nuevo: la sombra sigue siendo el emoji en teal profundo (`ColorFilter` d
 |---|---|---|
 | 1 | **Espejo en esmeralda** (1 por tablero, niveles 4–8) con su pista: dominio, pintura, giro al encajar, lector, 9 idiomas | Sí |
 | 2 | **Boca abajo en zafiro, 90° en obsidiana y la mezcla de diamante** (1 o 2 por tablero, sin pistas), **después de la validación** con niños de 4–5 años (P2) | Sí |
+
+**Entrega 1, hecha el 2026-11-27** (`feature/hu-040-1-twists`):
+
+- **Dominio:** `ShadowTwist`, `ShadowTwistPlan` y `ShadowTwists` (`lib/domain/shadows/shadow_twist.dart`): la tabla 4.1 (`planFor`), las listas de la tabla 5 (`valid`) y los parecidos de 4.2 (`lookAlikes`: 🦕 🦖, 🐟 🐳, 🐓 🦆, 🔨 🔧; se amplía con la validación). `ShadowThemes.pick` sortea las sombras transformadas solo entre los objetos de la bandeja (nunca una sombra libre), con giros distintos si hay dos; si la temática no tiene objetos que sirvan (las frutas tumbadas), vuelve a sortear el tablero.
+- **Pantalla:** la silueta se pinta transformada; al encajar, el objeto llega derecho y gira hasta la postura de su sombra en 300 ms (sin giro con «reducir movimiento»). **Pista:** a los 4 s sin tocar nada, y después cada 8 s, el objeto se da la vuelta en la bandeja y vuelve (1 s); solo en la ronda que presenta el giro, nunca en diamante, y no con «reducir movimiento». El toque cuenta aunque el objeto esté a medio girar.
+- **Lector de pantalla:** «Sombra de 🐳, al revés», «…, boca abajo» y «…, tumbada», en los 9 idiomas (tabla 6).
+- **Hasta la validación (P2):** `ShadowTwists.lateTwistsEnabled = false`. Zafiro, obsidiana y diamante llevan 1 sombra en espejo por tablero, sin pista, para que ninguna ronda sea más fácil que esmeralda. Al encenderlo, cada ronda tiene su giro (tabla 4.1) sin más cambios.
+- **Visto en el emulador de Android 8 (2026-11-27):** esmeralda nivel 4, la 🐳 en espejo; la pista la da la vuelta en la bandeja y, al encajar, gira hasta su sombra.
+- **Falta:** verla en el moto g55 (otra fuente de emojis, sección 5) y la validación con niños antes de la entrega 2.
 
 ## 11. Tamaño estimado
 

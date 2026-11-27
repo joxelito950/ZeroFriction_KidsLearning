@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../../domain/settings/game_difficulty.dart';
 import '../../../domain/shadows/shadow_ladder.dart';
+import '../../../domain/shadows/shadow_twist.dart';
 
 /// Fase de un tablero de Sombras (HU-007).
 enum ShadowRoundPhase {
@@ -47,6 +48,8 @@ class ShadowGameState {
     this.layout = ShadowLayout.shadowsFirst,
     this.objects = const [],
     this.shadows = const [],
+    this.twists = const {},
+    this.twistHint = false,
     this.placed = const {},
     this.fails = 0,
     this.moves = 0,
@@ -78,6 +81,16 @@ class ShadowGameState {
   /// Todas las sombras de la zona de sombras, en su orden: las de los objetos y
   /// las libres.
   final List<String> shadows;
+
+  /// Sombras dadas la vuelta (HU-040), por su emoji; las demás, normales.
+  final Map<String, ShadowTwist> twists;
+
+  /// En la ronda que presenta el giro (esmeralda, zafiro, obsidiana), el objeto
+  /// de la sombra transformada gira en la bandeja si el niño no toca nada
+  /// (HU-040 3.3). En diamante, nunca.
+  final bool twistHint;
+
+  ShadowTwist twistOf(String symbol) => twists[symbol] ?? ShadowTwist.none;
 
   /// Objetos ya encajados en su sombra (R17: no se pueden mover).
   final Set<String> placed;
@@ -173,6 +186,8 @@ class ShadowGameState {
       layout: layout,
       objects: objects,
       shadows: shadows,
+      twists: twists,
+      twistHint: twistHint,
       placed: placed ?? this.placed,
       fails: fails ?? this.fails,
       moves: moves ?? this.moves,

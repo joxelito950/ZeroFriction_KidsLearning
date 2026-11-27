@@ -12,6 +12,7 @@ import '../../../domain/settings/game_difficulty.dart';
 import '../../../domain/shadows/shadow_drop.dart';
 import '../../../domain/shadows/shadow_ladder.dart';
 import '../../../domain/shadows/shadow_themes.dart';
+import '../../../domain/shadows/shadow_twist.dart';
 import 'shadow_game_state.dart';
 import '../../../domain/settings/access_policy.dart';
 
@@ -190,7 +191,10 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
     _stopTimer();
     _position = position;
     final ShadowLevel level = ShadowLadder.levelAt(position.level);
-    final ShadowBoardContent content = ShadowThemes.pick(_random, level, freeShadows: _rules.freeShadows);
+    // Sombras dadas la vuelta desde esmeralda, en los niveles 4 a 8 (HU-040).
+    final ShadowTwistPlan twists = ShadowTwists.planFor(position.round, position.level);
+    final ShadowBoardContent content =
+        ShadowThemes.pick(_random, level, freeShadows: _rules.freeShadows, twists: twists);
     emit(ShadowGameState(
       phase: _rules.startAnimation ? ShadowRoundPhase.introducing : ShadowRoundPhase.playing,
       round: state.round + 1,
@@ -198,6 +202,8 @@ class ShadowGameCubit extends Cubit<ShadowGameState> {
       layout: _rules.layoutFor(_random),
       objects: List.of(content.objects)..shuffle(_random),
       shadows: content.shadows,
+      twists: content.twists,
+      twistHint: twists.hint && content.twists.isNotEmpty,
       premium: _rules.premium,
       coverageToSnap: _rules.coverageToSnap,
       hasMedal: _progress.bestMedal != null,

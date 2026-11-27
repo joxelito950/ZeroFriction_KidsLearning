@@ -476,6 +476,36 @@
       }
     }
   },
+  "shadowsShadowMirroredSemantics": "Shadow of {symbol}, mirrored",
+  "@shadowsShadowMirroredSemantics": {
+    "description": "Screen-reader label (not visible) of an empty shadow drawn mirrored left to right (HU-040). {symbol} is the emoji whose shape it has.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsShadowUpsideDownSemantics": "Shadow of {symbol}, upside down",
+  "@shadowsShadowUpsideDownSemantics": {
+    "description": "Screen-reader label (not visible) of an empty shadow drawn upside down, turned 180 degrees (HU-040). {symbol} is the emoji whose shape it has.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
+  "shadowsShadowTurnedSemantics": "Shadow of {symbol}, turned sideways",
+  "@shadowsShadowTurnedSemantics": {
+    "description": "Screen-reader label (not visible) of an empty shadow lying on its side, turned 90 degrees (HU-040). {symbol} is the emoji whose shape it has.",
+    "placeholders": {
+      "symbol": {
+        "type": "String",
+        "example": "🐘"
+      }
+    }
+  },
   "shadowsTimeUpFewerObjects": "Time's up! Let's try again with fewer pictures.",
   "@shadowsTimeUpFewerObjects": {
     "description": "Shown when time runs out (Premium only): a helpful message, never a punishment. The next board has fewer pictures."
