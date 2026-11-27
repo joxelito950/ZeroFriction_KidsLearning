@@ -376,6 +376,33 @@ void main() {
       expect(geometry.shadowZone.top, greaterThan(geometry.trayZone.top), reason: 'shadows last: below');
       expect(geometry.shadowRects['a']!.size, geometry.trayRects['a']!.size);
     });
+
+    // El mismo redondeo que sacaba de la bandeja las piezas de «Clasificar» en
+    // el moto g55 (2026-11-27).
+    test('shadows and objects always stay inside their zone, whatever the board size', () {
+      const List<String> objects = ['a', 'b', 'c', 'd', 'e', 'f'];
+      const List<String> shadows = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+      for (var width = 300.0; width < 1100; width += 0.5) {
+        for (final double height in [250.0, 282.0, 640.0]) {
+          final ShadowBoardGeometry geometry = ShadowBoardGeometry.compute(
+            size: Size(width, height),
+            layout: ShadowLayout.shadowsFirst,
+            shadows: shadows,
+            objects: objects,
+            devicePixelRatio: 2.125,
+          );
+          for (final (Rect zone, Iterable<Rect> rects) in [
+            (geometry.shadowZone, geometry.shadowRects.values),
+            (geometry.trayZone, geometry.trayRects.values),
+          ]) {
+            for (final Rect rect in rects) {
+              expect(zone.inflate(0.01).contains(rect.topLeft) && zone.inflate(0.01).contains(rect.bottomRight), isTrue,
+                  reason: '${Size(width, height)}: $rect outside $zone');
+            }
+          }
+        }
+      }
+    });
   });
 
   group('twisted shadows (HU-040)', () {
